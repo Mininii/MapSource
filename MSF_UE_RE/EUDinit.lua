@@ -28,24 +28,24 @@ function UnitEnableX(UnitID,MinCost,GasCost,BuildTime,SuppCost)
 	table.insert(PatchArrPrsv,SetMemoryW(0x660A70 + (UnitID *2),SetTo,5))
 	table.insert(PatchArr,SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
 	if MinCost ~= nil then
-	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- ¹Ì³×¶ö
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,MinCost)) -- ë¯¸ë„¤ë„
 	else
-	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0)) -- ¹Ì³×¶ö
+	table.insert(PatchArr,SetMemoryW(0x663888 + (UnitID *2),SetTo,0)) -- ë¯¸ë„¤ë„
 	end
 	if GasCost ~= nil then
-	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,GasCost)) -- °¡½º
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,GasCost)) -- ê°€ìŠ¤
 	else
-	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0)) -- °¡½º
+	table.insert(PatchArr,SetMemoryW(0x65FD00 + (UnitID *2),SetTo,0)) -- ê°€ìŠ¤
 	end
 	if BuildTime ~= nil then
-	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,BuildTime)) -- »ı»ê¼Óµµ
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,BuildTime)) -- ìƒì‚°ì†ë„
 	else
-	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1)) -- »ı»ê¼Óµµ
+	table.insert(PatchArr,SetMemoryW(0x660428 + (UnitID *2),SetTo,1)) -- ìƒì‚°ì†ë„
 	end
 	if SuppCost ~= nil then
-	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,SuppCost)) -- ¼­ÇÃ
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,SuppCost)) -- ì„œí”Œ
 	else
-	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0)) -- ¼­ÇÃ
+	table.insert(PatchArr,SetMemoryB(0x663CE8 + UnitID,SetTo,0)) -- ì„œí”Œ
 	end
 
 end
@@ -81,7 +81,7 @@ table.insert(PatchArr,SetMemoryW(0x65FD00+(UnitID*2), SetTo, 0))
 table.insert(PatchArr,SetMemoryW(0x663888+(UnitID*2), SetTo, Cost))
 end
 
-function SetUnitGrpToMarine(UnitID) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡°Ô¸¸ Àû¿ëÇÏ´Â°Í
+function SetUnitGrpToMarine(UnitID) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì—ê²Œë§Œ ì ìš©í•˜ëŠ”ê²ƒ
 table.insert(PatchArr,SetMemoryW(0x661FC0+(UnitID*2), SetTo, 0))
 table.insert(PatchArr,SetMemoryW(0x663C10+(UnitID*2), SetTo, 415))
 table.insert(PatchArr,SetMemoryW(0x661440+(UnitID*2), SetTo, 418))
@@ -89,12 +89,9 @@ table.insert(PatchArr,SetMemoryW(0x65FFB0+(UnitID*2), SetTo, 411))
 table.insert(PatchArr,SetMemoryW(0x662BF0+(UnitID*2), SetTo, 414))
 table.insert(PatchArr,SetMemoryW(0x663B38+(UnitID*2), SetTo, 407))
 table.insert(PatchArr,SetMemoryW(0x661EE8+(UnitID*2), SetTo, 410))
-table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 74))--¿ÜÇü °í½ºÆ®·Î º¯°æ
+table.insert(PatchArr,SetMemoryB(0x6644F8 + UnitID, SetTo, 74))--ì™¸í˜• ê³ ìŠ¤íŠ¸ë¡œ ë³€ê²½
 table.insert(PatchArr,SetMemoryW(0x662F88+(UnitID*2), SetTo, 13))
 end
-for j = 0, 6 do
-	table.insert(PatchArr,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
-	end
 	--194
 function SetUnitClassType(UnitID,Type)
 	if Type == 1 then 
@@ -110,18 +107,21 @@ function onInit_EUD()
 	--local ShTStrPtr = Create_VTable(7)
 	local VoidResetPtr = CreateVar2(FP, nil, nil, EPD(0x58F44A))
 	CIfOnce(FP,nil,{SetCVar(FP,CurrentSpeed[2],SetTo,4),SetMemory(0x5124F0,SetTo,SpeedV[4])}) -- OnPluginStart
+	for j = 0, 6 do
+		table.insert(PatchArr,Simple_CalcLoc("P"..j+1,0,0,32*10,32*10))
+		end
 	CWhile(FP,CV(VoidResetPtr,EPD(0x5967E8),AtMost))
 		CDoActions(FP,{TSetDeaths(VoidResetPtr,SetTo,0,0),AddV(VoidResetPtr,1)})
 	CWhileEnd()
 
---	f_Read(FP,0x58F500,"X",SelHPEPD) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
---	f_Read(FP,0x58F504,"X",MarHPEPD) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
---	f_Read(FP,0x58F508,"X",SelShEPD) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
---	f_Read(FP,0x58F50C,"X",SelOPEPD) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
-	--f_Read(FP,0x58F510,"X",UnitDataPtr) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
---	f_Read(FP,0x58F528,"X",B_5_C) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
---	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
-	--f_Read(FP,0x58F55C,"X",B_Id_C) -- ÇÃ¸³¿¡¼­ Àü¼Û¹ŞÀº ÇÃ¸³ º¯¼ö ÁÖ¼Ò¸¦ V¿¡ ÀÔ·Â
+--	f_Read(FP,0x58F500,"X",SelHPEPD) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+--	f_Read(FP,0x58F504,"X",MarHPEPD) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+--	f_Read(FP,0x58F508,"X",SelShEPD) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+--	f_Read(FP,0x58F50C,"X",SelOPEPD) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+	--f_Read(FP,0x58F510,"X",UnitDataPtr) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+--	f_Read(FP,0x58F528,"X",B_5_C) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+--	f_Read(FP,0x58F532,"X",XY_ArrHeader) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
+	--f_Read(FP,0x58F55C,"X",B_Id_C) -- í”Œë¦½ì—ì„œ ì „ì†¡ë°›ì€ í”Œë¦½ ë³€ìˆ˜ ì£¼ì†Œë¥¼ Vì— ì…ë ¥
 	
 	for i = 1, #HeroArr do
 		table.insert(CTrigPatchTable,SetVArrayX(VArr(HeroVArr,i-1),"Value",SetTo,HeroArr[i]))
@@ -141,8 +141,8 @@ function onInit_EUD()
 	TMem(FP,XY_ArrHeader,XY_ArrHeaderVoid)
 	local CurrentUID = CreateVar(FP)
 	CMov(FP,CurrentUID,0)
-	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  ¸ğµç À¯´ÖÀÇ ½ºÆĞ¼È ¾îºô¸®Æ¼ ÇÃ·¡±× ¼³Á¤
-	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{preserved}) -- ¾Æ ¹ßÅ°¸® Á» Àú¸®°¡¿ä
+	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  ëª¨ë“  ìœ ë‹›ì˜ ìŠ¤íŒ¨ì…œ ì–´ë¹Œë¦¬í‹° í”Œë˜ê·¸ ì„¤ì •
+	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{preserved}) -- ì•„ ë°œí‚¤ë¦¬ ì¢€ ì €ë¦¬ê°€ìš”
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Cantina = nil
 	CMov(FP,VRet,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
 	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
@@ -165,14 +165,14 @@ function onInit_EUD()
 	CAdd(FP,CurrentUID,1)
 	CWhileEnd()
 	CMov(FP,CurrentUID,0)
-	table.insert(PatchArr,SetMemoryW(0x660E00+(173*2), SetTo, 10000)) -- Æ÷¸ŞÀÌ¼Ç ½¯µå 1¸¸À¸·Î ¼³Á¤
+	table.insert(PatchArr,SetMemoryW(0x660E00+(173*2), SetTo, 10000)) -- í¬ë©”ì´ì…˜ ì‰´ë“œ 1ë§Œìœ¼ë¡œ ì„¤ì •
 
 
 	for i = 0, 227 do
-	SetUnitDefUpType(i,60) -- ¹æ¾÷ Àû¿ë ¹æÁö
-	SetToUnitDef(i,0) -- ¹æ¾î·Â ÀüºÎ 0À¸·Î ¼³Á¤ 
-	DefTypePatch(i,7) -- ¹æ¾îÅ¸ÀÔ ÀüºÎ 7·Î ¼³Á¤
-	SetUnitAdvFlag(i,0,0x4000) -- ¸ğµçÀ¯´Ö ¾îµå¹ê½ºµå ÇÃ·¡±× Áß ·Îº¸Æ½ ÀüºÎÁ¦°Å
+	SetUnitDefUpType(i,60) -- ë°©ì—… ì ìš© ë°©ì§€
+	SetToUnitDef(i,0) -- ë°©ì–´ë ¥ ì „ë¶€ 0ìœ¼ë¡œ ì„¤ì • 
+	DefTypePatch(i,7) -- ë°©ì–´íƒ€ì… ì „ë¶€ 7ë¡œ ì„¤ì •
+	SetUnitAdvFlag(i,0,0x4000) -- ëª¨ë“ ìœ ë‹› ì–´ë“œë°´ìŠ¤ë“œ í”Œë˜ê·¸ ì¤‘ ë¡œë³´í‹± ì „ë¶€ì œê±°
 end
 GunList = {131,132,133,130,151,201,148,173,152,142,135,140,141,138,139,137}
 for j,k in pairs(GunList) do
@@ -190,19 +190,19 @@ DTypeArr = {
 	UnitEnable2(19)
 
 	for i = 0, 129 do
-	WeaponTypePatch(i,0) -- ¹«±â Å¸ÀÔ ÀüºÎ 0À¸·Î ¼³Á¤(¹æ°¥¸² ¹æÁö)
+	WeaponTypePatch(i,0) -- ë¬´ê¸° íƒ€ì… ì „ë¶€ 0ìœ¼ë¡œ ì„¤ì •(ë°©ê°ˆë¦¼ ë°©ì§€)
 	end
 	PercentTable = {5,12,21,100,85,68,70,89,6,126,86,110,128,90,27,30}
 	PercentTable2 = {4000,5000,9999,3333,4444,11111,11111,6666,10000,22222,39999,1234,777,6666,9602/2,9602/2}
 	NormalClassTable = {84,47,77,78,28,17,21,27,86,88,80,25,76,79,220,150,52,62}
 	PercentClassTable = {19,29,98,75,87,68,81,23,74,74,57,69,11,30}
 	for j, k in pairs(PercentTable) do
-		WeaponTypePatch(k,2) -- ¹«±â Å¸ÀÔ °íÁ¤Çü
-		table.insert(PatchArr,SetMemoryW(0x656EB0 + (k*2),SetTo,PercentTable2[j])) -- ±âº»°ø°İ·Â
-		table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,0)) -- Ãß°¡°ø°İ·Â
+		WeaponTypePatch(k,2) -- ë¬´ê¸° íƒ€ì… ê³ ì •í˜•
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (k*2),SetTo,PercentTable2[j])) -- ê¸°ë³¸ê³µê²©ë ¥
+		table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,0)) -- ì¶”ê°€ê³µê²©ë ¥
 		for l, m in pairs(DTypeArr) do
 			if k==m then
-				table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,PercentTable2[j])) -- Ãß°¡°ø°İ·Â
+				table.insert(PatchArr,SetMemoryW(0x657678 + (k*2),SetTo,PercentTable2[j])) -- ì¶”ê°€ê³µê²©ë ¥
 			end
 		end
 	end
@@ -220,7 +220,7 @@ DTypeArr = {
 --roka7
 function EffUnitPatch(UnitID)
 	table.insert(PatchArr,SetMemoryB(0x6616E0 + UnitID,SetTo,130))
-	table.insert(PatchArr,SetMemoryB(0x663238 + UnitID,SetTo,11)) -- ½Ã¾ß
+	table.insert(PatchArr,SetMemoryB(0x663238 + UnitID,SetTo,11)) -- ì‹œì•¼
 	UnitSizePatch(UnitID,1)
 end
 EffUnitPatch(203)
@@ -237,58 +237,58 @@ EffUnitPatch(94)
 UnitSizePatch(84,1)
 UnitSizePatch(60,1)
 UnitSizePatch(121,10)
-UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
+UnitSizePatch(12,5) -- ë§ˆë¦° í¬ê¸° 5*5 ì„¤ì •
 -------
 --		table.insert(PatchArr,SetMemoryB(0x6564E0 + 21,SetTo,2))
-	--0~6 °ø¾÷¿ë??
-	--8~14 ¹æ¾÷¿ë??
+	--0~6 ê³µì—…ìš©??
+	--8~14 ë°©ì—…ìš©??
 
 	for i = 0, 6 do
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + (i*2),SetTo,288)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655A40 + (i*2),SetTo,418)) -- ÀÌ¸§
-	table.insert(PatchArr,SetMemoryW(0x655700 + (i*2),SetTo,255)) -- ¸Æ½º·¹º§
-	table.insert(PatchArr,SetMemoryW(0x655740 + (i*2),SetTo,0)) -- ¹Ì³×¶öº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6557C0 + (i*2),SetTo,0)) -- °¡½ºÁõ°¡·® 
-	table.insert(PatchArr,SetMemoryW(0x655840 + (i*2),SetTo,0)) -- °¡½ºº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x655940 + (i*2),SetTo,0)) -- ½Ã°£Áõ°¡·®
-	table.insert(PatchArr,SetMemoryW(0x655B80 + (i*2),SetTo,0)) -- ½Ã°£º£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6559C0 + (i*2),SetTo,AtkFactor)) -- ¹Ì³×¶ö Áõ°¡·® Áß¿äÇÔ 
-	table.insert(PatchArr,SetMemoryB(0x655BFC + (i),SetTo,1)) -- Á¾Á·(1¹ÙÀÌÆ®)
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + (i*2),SetTo,288)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655A40 + (i*2),SetTo,418)) -- ì´ë¦„
+	table.insert(PatchArr,SetMemoryW(0x655700 + (i*2),SetTo,255)) -- ë§¥ìŠ¤ë ˆë²¨
+	table.insert(PatchArr,SetMemoryW(0x655740 + (i*2),SetTo,0)) -- ë¯¸ë„¤ë„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6557C0 + (i*2),SetTo,0)) -- ê°€ìŠ¤ì¦ê°€ëŸ‰ 
+	table.insert(PatchArr,SetMemoryW(0x655840 + (i*2),SetTo,0)) -- ê°€ìŠ¤ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x655940 + (i*2),SetTo,0)) -- ì‹œê°„ì¦ê°€ëŸ‰
+	table.insert(PatchArr,SetMemoryW(0x655B80 + (i*2),SetTo,0)) -- ì‹œê°„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6559C0 + (i*2),SetTo,AtkFactor)) -- ë¯¸ë„¤ë„ ì¦ê°€ëŸ‰ ì¤‘ìš”í•¨ 
+	table.insert(PatchArr,SetMemoryB(0x655BFC + (i),SetTo,1)) -- ì¢…ì¡±(1ë°”ì´íŠ¸)
 
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + ((8+i)*2),SetTo,377)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655A40 + ((8+i)*2),SetTo,426)) -- ÀÌ¸§
-	table.insert(PatchArr,SetMemoryW(0x655700 + ((8+i)*2),SetTo,255)) -- ¸Æ½º·¹º§
-	table.insert(PatchArr,SetMemoryW(0x655740 + ((8+i)*2),SetTo,0)) -- ¹Ì³×¶öº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6557C0 + ((8+i)*2),SetTo,0)) -- °¡½ºÁõ°¡·® 
-	table.insert(PatchArr,SetMemoryW(0x655840 + ((8+i)*2),SetTo,0)) -- °¡½ºº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x655940 + ((8+i)*2),SetTo,0)) -- ½Ã°£Áõ°¡·®
-	table.insert(PatchArr,SetMemoryW(0x655B80 + ((8+i)*2),SetTo,0)) -- ½Ã°£º£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6559C0 + ((8+i)*2),SetTo,DefFactor)) -- ¹Ì³×¶ö Áõ°¡·® Áß¿äÇÔ 
-	table.insert(PatchArr,SetMemoryB(0x655BFC + ((8+i)),SetTo,1)) -- Á¾Á·(1¹ÙÀÌÆ®)
-	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + (i*2),SetTo,5)) --¿ä±¸»çÇ×
-	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + ((8+i)*2),SetTo,5)) --¿ä±¸»çÇ×
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + ((8+i)*2),SetTo,377)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655A40 + ((8+i)*2),SetTo,426)) -- ì´ë¦„
+	table.insert(PatchArr,SetMemoryW(0x655700 + ((8+i)*2),SetTo,255)) -- ë§¥ìŠ¤ë ˆë²¨
+	table.insert(PatchArr,SetMemoryW(0x655740 + ((8+i)*2),SetTo,0)) -- ë¯¸ë„¤ë„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6557C0 + ((8+i)*2),SetTo,0)) -- ê°€ìŠ¤ì¦ê°€ëŸ‰ 
+	table.insert(PatchArr,SetMemoryW(0x655840 + ((8+i)*2),SetTo,0)) -- ê°€ìŠ¤ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x655940 + ((8+i)*2),SetTo,0)) -- ì‹œê°„ì¦ê°€ëŸ‰
+	table.insert(PatchArr,SetMemoryW(0x655B80 + ((8+i)*2),SetTo,0)) -- ì‹œê°„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6559C0 + ((8+i)*2),SetTo,DefFactor)) -- ë¯¸ë„¤ë„ ì¦ê°€ëŸ‰ ì¤‘ìš”í•¨ 
+	table.insert(PatchArr,SetMemoryB(0x655BFC + ((8+i)),SetTo,1)) -- ì¢…ì¡±(1ë°”ì´íŠ¸)
+	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + (i*2),SetTo,5)) --ìš”êµ¬ì‚¬í•­
+	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + ((8+i)*2),SetTo,5)) --ìš”êµ¬ì‚¬í•­
 
 
 	end
 
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + (17*2),SetTo,289)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + (18*2),SetTo,290)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + (19*2),SetTo,291)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655AC0 + (20*2),SetTo,293)) -- ¾ÆÀÌÄÜ
-	table.insert(PatchArr,SetMemoryW(0x655A40 + (17*2),SetTo,419)) -- ÀÌ¸§
-	table.insert(PatchArr,SetMemoryW(0x655A40 + (18*2),SetTo,420)) -- ÀÌ¸§
-	table.insert(PatchArr,SetMemoryW(0x655A40 + (19*2),SetTo,413)) -- ÀÌ¸§
-	table.insert(PatchArr,SetMemoryW(0x655A40 + (20*2),SetTo,412)) -- ÀÌ¸§
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + (17*2),SetTo,289)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + (18*2),SetTo,290)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + (19*2),SetTo,291)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655AC0 + (20*2),SetTo,293)) -- ì•„ì´ì½˜
+	table.insert(PatchArr,SetMemoryW(0x655A40 + (17*2),SetTo,419)) -- ì´ë¦„
+	table.insert(PatchArr,SetMemoryW(0x655A40 + (18*2),SetTo,420)) -- ì´ë¦„
+	table.insert(PatchArr,SetMemoryW(0x655A40 + (19*2),SetTo,413)) -- ì´ë¦„
+	table.insert(PatchArr,SetMemoryW(0x655A40 + (20*2),SetTo,412)) -- ì´ë¦„
 	for i = 17, 20 do
-	table.insert(PatchArr,SetMemoryW(0x655700 + (i*2),SetTo,255)) -- ¸Æ½º·¹º§
-	table.insert(PatchArr,SetMemoryW(0x655740 + (i*2),SetTo,0)) -- ¹Ì³×¶öº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6557C0 + (i*2),SetTo,0)) -- °¡½ºÁõ°¡·® 
-	table.insert(PatchArr,SetMemoryW(0x655840 + (i*2),SetTo,0)) -- °¡½ºº£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x655940 + (i*2),SetTo,0)) -- ½Ã°£Áõ°¡·®
-	table.insert(PatchArr,SetMemoryW(0x655B80 + (i*2),SetTo,0)) -- ½Ã°£º£ÀÌ½º
-	table.insert(PatchArr,SetMemoryW(0x6559C0 + (i*2),SetTo,0)) -- ¹Ì³×¶ö Áõ°¡·® Áß¿äÇÔ 
-	table.insert(PatchArr,SetMemoryB(0x655BFC + (i),SetTo,1)) -- Á¾Á·(1¹ÙÀÌÆ®)
-	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + (i*2),SetTo,5)) --¿ä±¸»çÇ×
+	table.insert(PatchArr,SetMemoryW(0x655700 + (i*2),SetTo,255)) -- ë§¥ìŠ¤ë ˆë²¨
+	table.insert(PatchArr,SetMemoryW(0x655740 + (i*2),SetTo,0)) -- ë¯¸ë„¤ë„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6557C0 + (i*2),SetTo,0)) -- ê°€ìŠ¤ì¦ê°€ëŸ‰ 
+	table.insert(PatchArr,SetMemoryW(0x655840 + (i*2),SetTo,0)) -- ê°€ìŠ¤ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x655940 + (i*2),SetTo,0)) -- ì‹œê°„ì¦ê°€ëŸ‰
+	table.insert(PatchArr,SetMemoryW(0x655B80 + (i*2),SetTo,0)) -- ì‹œê°„ë² ì´ìŠ¤
+	table.insert(PatchArr,SetMemoryW(0x6559C0 + (i*2),SetTo,0)) -- ë¯¸ë„¤ë„ ì¦ê°€ëŸ‰ ì¤‘ìš”í•¨ 
+	table.insert(PatchArr,SetMemoryB(0x655BFC + (i),SetTo,1)) -- ì¢…ì¡±(1ë°”ì´íŠ¸)
+	--table.insert(PatchArrPrsv,SetMemoryW(0x6558C0 + (i*2),SetTo,5)) --ìš”êµ¬ì‚¬í•­
 
 	for j = 0, 6 do
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (j * 46) + i,SetTo,255))
@@ -313,53 +313,53 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i,SetTo,255))
 	table.insert(PatchArr,SetMemoryB(0x58D088 + (i * 46) + i+8,SetTo,255))
 
-		DefTypePatch(MarID[i+1],i) -- ¸¶¸°ÀÇ ¹æ¾îÅ¸ÀÔÀ» P1ºÎÅÍ P7±îÁö Â÷·Ê´ë·Î ¹èºĞ
-		SetUnitClass(MarID[i+1],199) -- ¸¶¸° °è±Ş¼³Á¤. Ã¼·Âº¸ÀÌ°Ô ÇÏ±â À§ÇÔ
-		SetUnitClass(63,199) -- ¸¶¸° °è±Ş¼³Á¤. Ã¼·Âº¸ÀÌ°Ô ÇÏ±â À§ÇÔ
-		SetUnitClass(10,199) -- ¸¶¸° °è±Ş¼³Á¤. Ã¼·Âº¸ÀÌ°Ô ÇÏ±â À§ÇÔ
+		DefTypePatch(MarID[i+1],i) -- ë§ˆë¦°ì˜ ë°©ì–´íƒ€ì…ì„ P1ë¶€í„° P7ê¹Œì§€ ì°¨ë¡€ëŒ€ë¡œ ë°°ë¶„
+		SetUnitClass(MarID[i+1],199) -- ë§ˆë¦° ê³„ê¸‰ì„¤ì •. ì²´ë ¥ë³´ì´ê²Œ í•˜ê¸° ìœ„í•¨
+		SetUnitClass(63,199) -- ë§ˆë¦° ê³„ê¸‰ì„¤ì •. ì²´ë ¥ë³´ì´ê²Œ í•˜ê¸° ìœ„í•¨
+		SetUnitClass(10,199) -- ë§ˆë¦° ê³„ê¸‰ì„¤ì •. ì²´ë ¥ë³´ì´ê²Œ í•˜ê¸° ìœ„í•¨
 		
-		SetUnitClass(15,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
-		SetUnitClass(74,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
-		SetUnitClass(68,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
-		SetUnitClass(87,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
-		SetUnitClass(186,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
-		SetUnitClass(12,199) -- º¸½º¸÷ Ã¼·Âº¸ÀÌ°ÔÇÏ±â
+		SetUnitClass(15,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
+		SetUnitClass(74,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
+		SetUnitClass(68,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
+		SetUnitClass(87,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
+		SetUnitClass(186,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
+		SetUnitClass(12,199) -- ë³´ìŠ¤ëª¹ ì²´ë ¥ë³´ì´ê²Œí•˜ê¸°
 
-		SetShield(MarID[i+1]) -- ¸¶¸° ½¯µå ¼³Á¤. ½¯µå È°¼ºÈ­ + ½¯µå 1000 ¼³Á¤
-		UnitSizePatch(MarID[i+1],5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
+		SetShield(MarID[i+1]) -- ë§ˆë¦° ì‰´ë“œ ì„¤ì •. ì‰´ë“œ í™œì„±í™” + ì‰´ë“œ 1000 ì„¤ì •
+		UnitSizePatch(MarID[i+1],5) -- ë§ˆë¦° í¬ê¸° 5*5 ì„¤ì •
 		UnitEnable2(MarID[i+1])
-		SetUnitGrpToMarine(MarID[i+1]) -- ¸¶¸° ±×·¡ÇÈ ÀüºÎ ¸¶¸°À¸·Î ¼³Á¤
-		SetUnitAdvFlag(MarID[i+1],0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
+		SetUnitGrpToMarine(MarID[i+1]) -- ë§ˆë¦° ê·¸ë˜í”½ ì „ë¶€ ë§ˆë¦°ìœ¼ë¡œ ì„¤ì •
+		SetUnitAdvFlag(MarID[i+1],0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
 
-		SetWepTargetFlags(MarWep[i+1],0x020 + 1 + 2) -- ÇÃ·¹ÀÌ¾î ¸¶¸° °ø°İ ºñ ·Îº¸Æ½ ¼³Á¤
-		SetWepUpType(MarWep[i+1],0+i) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¹«±â¿¡ °¢°¢ ´Ù¸¥ °ø¾÷ Àû¿ë
-		table.insert(PatchArr,SetMemoryB(0x656FB8+(MarWep[i+1] *1),SetTo,255)) -- °ø¼Ó ±âº» 255
+		SetWepTargetFlags(MarWep[i+1],0x020 + 1 + 2) -- í”Œë ˆì´ì–´ ë§ˆë¦° ê³µê²© ë¹„ ë¡œë³´í‹± ì„¤ì •
+		SetWepUpType(MarWep[i+1],0+i) -- í”Œë ˆì´ì–´ ë§ˆë¦°ë¬´ê¸°ì— ê°ê° ë‹¤ë¥¸ ê³µì—… ì ìš©
+		table.insert(PatchArr,SetMemoryB(0x656FB8+(MarWep[i+1] *1),SetTo,255)) -- ê³µì† ê¸°ë³¸ 255
 		
-		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i+1]*2),SetTo,MarDamageAmount)) -- ±âº»°ø°İ·Â
-		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i+1]*2),SetTo,MarDamageFactor)) -- Ãß°¡°ø°İ·Â
+		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i+1]*2),SetTo,MarDamageAmount)) -- ê¸°ë³¸ê³µê²©ë ¥
+		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i+1]*2),SetTo,MarDamageFactor)) -- ì¶”ê°€ê³µê²©ë ¥
 		table.insert(PatchArr,SetMemoryB(0x6564E0 + MarWep[i+1],SetTo,2))
-		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- Áö»ó¹«±â
-		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- °øÁß¹«±â
-		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- ½Ã¾ß
+		table.insert(PatchArr,SetMemoryB(0x6616E0 + MarID[i+1],SetTo,MarWep[i+1])) -- ì§€ìƒë¬´ê¸°
+		table.insert(PatchArr,SetMemoryB(0x6636B8 + MarID[i+1],SetTo,MarWep[i+1])) -- ê³µì¤‘ë¬´ê¸°
+		table.insert(PatchArr,SetMemoryB(0x663238 + MarID[i+1],SetTo,11)) -- ì‹œì•¼
 		table.insert(PatchArr,SetMemory(0x657470 + (MarWep[i+1]*4) ,SetTo,32*10))
-		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- ºÎ°¡»ç°Å¸®
-		--table.insert(PatchArr,SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,10000)) -- ½¯µå
+		table.insert(PatchArr,SetMemoryB(0x662DB8 + MarID[i+1],SetTo,6)) -- ë¶€ê°€ì‚¬ê±°ë¦¬
+		--table.insert(PatchArr,SetMemoryW(0x660E00 + (MarID[i+1]*2),SetTo,10000)) -- ì‰´ë“œ
 	end
-	SetUnitAdvFlag(7,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetUnitAdvFlag(10,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetUnitAdvFlag(125,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetUnitAdvFlag(126,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetUnitAdvFlag(12,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetUnitAdvFlag(124,0x4000,0x4000) -- ÇÃ·¹ÀÌ¾î ¸¶¸°¿¡ ·Îº¸Æ½ ºÎ¿©
-	SetWepTargetFlags(0,0x020 + 1 + 2) -- ÇÃ·¹ÀÌ¾î ¸¶¸° °ø°İ ºñ ·Îº¸Æ½ ¼³Á¤
-	SetWepTargetFlags(92,0x020 + 1 + 2) -- ÇÃ·¹ÀÌ¾î ¸¶¸° °ø°İ ºñ ·Îº¸Æ½ ¼³Á¤
-	SetWepTargetFlags(93,0x020 + 1 + 2) -- ÇÃ·¹ÀÌ¾î ¸¶¸° °ø°İ ºñ ·Îº¸Æ½ ¼³Á¤
+	SetUnitAdvFlag(7,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetUnitAdvFlag(10,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetUnitAdvFlag(125,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetUnitAdvFlag(126,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetUnitAdvFlag(12,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetUnitAdvFlag(124,0x4000,0x4000) -- í”Œë ˆì´ì–´ ë§ˆë¦°ì— ë¡œë³´í‹± ë¶€ì—¬
+	SetWepTargetFlags(0,0x020 + 1 + 2) -- í”Œë ˆì´ì–´ ë§ˆë¦° ê³µê²© ë¹„ ë¡œë³´í‹± ì„¤ì •
+	SetWepTargetFlags(92,0x020 + 1 + 2) -- í”Œë ˆì´ì–´ ë§ˆë¦° ê³µê²© ë¹„ ë¡œë³´í‹± ì„¤ì •
+	SetWepTargetFlags(93,0x020 + 1 + 2) -- í”Œë ˆì´ì–´ ë§ˆë¦° ê³µê²© ë¹„ ë¡œë³´í‹± ì„¤ì •
 
 		table.insert(PatchArr,SetMemoryB(0x6564E0,SetTo,2))
 	--for i = 0, 6 do
-	--	table.insert(PatchArr,SetMemoryB(0x58D2B0+(i*46)+0+i,SetTo,NMarDamageAmount)) -- ±âº»°ø°İ·Â
+	--	table.insert(PatchArr,SetMemoryB(0x58D2B0+(i*46)+0+i,SetTo,NMarDamageAmount)) -- ê¸°ë³¸ê³µê²©ë ¥
 	--end
-	table.insert(PatchArr,SetMemoryW(0x663888 + (28 *2),SetTo,50000)) -- ¸¶¸°°¡°İ
+	table.insert(PatchArr,SetMemoryW(0x663888 + (28 *2),SetTo,50000)) -- ë§ˆë¦°ê°€ê²©
 
 
 		UnitEnable2(15)
@@ -385,10 +385,10 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	end
 
 	for i = 0, 6 do
-		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 È°¼ºÈ­ÇÏ°í ºñÈ°¼ºÈ­ÇÒ À¯´Ö ÀÎµ¦½º
-		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+70,SetTo,0)) -- 9, 34 È°¼ºÈ­ÇÏ°í ºñÈ°¼ºÈ­ÇÒ À¯´Ö ÀÎµ¦½º
-		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 È°¼ºÈ­ÇÏ°í ºñÈ°¼ºÈ­ÇÒ À¯´Ö ÀÎµ¦½º
-		--table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 È°¼ºÈ­ÇÏ°í ºñÈ°¼ºÈ­ÇÒ À¯´Ö ÀÎµ¦½º
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+64,SetTo,0)) -- 9, 34 í™œì„±í™”í•˜ê³  ë¹„í™œì„±í™”í•  ìœ ë‹› ì¸ë±ìŠ¤
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+70,SetTo,0)) -- 9, 34 í™œì„±í™”í•˜ê³  ë¹„í™œì„±í™”í•  ìœ ë‹› ì¸ë±ìŠ¤
+		table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+68,SetTo,0)) -- 9, 34 í™œì„±í™”í•˜ê³  ë¹„í™œì„±í™”í•  ìœ ë‹› ì¸ë±ìŠ¤
+		--table.insert(PatchArr,SetMemoryB(0x57F27C+(228*i)+48,SetTo,0)) -- 9, 34 í™œì„±í™”í•˜ê³  ë¹„í™œì„±í™”í•  ìœ ë‹› ì¸ë±ìŠ¤
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + MarID[i+1],SetTo,2))
 	end
 		table.insert(PatchArr,SetMemoryB(0x663CE8 + 12,SetTo,2))
@@ -406,8 +406,8 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	local ZergArr = {37,38,39,45,44,43,48,49,56,55,53,57,51,54,104}
 	for j, k in pairs(ZergArr) do
 		
-	--UnitSizePatch(k,3) -- Àú±× À¯´Ö Å©±â 10*10 ¼³Á¤
---	SetUnitAdvFlag(k,4,4) -- °øÁßÀ¯´ÖÀ¸·Î¼³Á¤
+	--UnitSizePatch(k,3) -- ì €ê·¸ ìœ ë‹› í¬ê¸° 10*10 ì„¤ì •
+--	SetUnitAdvFlag(k,4,4) -- ê³µì¤‘ìœ ë‹›ìœ¼ë¡œì„¤ì •
 	end
 
 	--UnitSizePatch(11,1)
@@ -437,36 +437,36 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	DefTypePatch(173,9)
 
 
-	Trigger { -- ÆÛ¼¾Æ® µ¥¹ÌÁö ¼¼ÆÃ
+	Trigger { -- í¼ì„¼íŠ¸ ë°ë¯¸ì§€ ì„¸íŒ…
 		players = {P8},
 		actions = {
-			SetMemory(0x515B88,SetTo,256);---------Å©±â 0 ÀÏ¹İÇü P1 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515B8C,SetTo,256);---------Å©±â 1 ÀÏ¹İÇü P2 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515B90,SetTo,256);---------Å©±â 2 ÀÏ¹İÇü P3 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515B94,SetTo,256);---------Å©±â 3 ÀÏ¹İÇü P4 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515B98,SetTo,256);---------Å©±â 4 ÀÏ¹İÇü P5 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515B9C,SetTo,256);---------Å©±â 5 ÀÏ¹İÇü P6 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BA0,SetTo,256);---------Å©±â 6 ÀÏ¹İÇü P7 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BA4,SetTo,256);---------Å©±â 7 ÀÏ¹İÇü 
-			SetMemory(0x515BA8,SetTo,256);---------Å©±â 8 ÀÏ¹İÇü
-			SetMemory(0x515BAC,SetTo,0);---------Å©±â 9 ÀÏ¹İÇü º¸³Ê½º ÀÚ¿ø·ù µô ¹«Á¶°Ç 1·Î µé¾î°¡°Ô ¼³Á¤ÇÒ°Í. 
-			SetMemory(0x515BB0,SetTo,256);---------Å©±â 0 Áøµ¿Çü P1 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BB4,SetTo,256);---------Å©±â 1 Áøµ¿Çü P2 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BB8,SetTo,256);---------Å©±â 2 Áøµ¿Çü P3 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BBC,SetTo,256);---------Å©±â 3 Áøµ¿Çü P4 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BC0,SetTo,256);---------Å©±â 4 Áøµ¿Çü P5 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BC4,SetTo,256);---------Å©±â 5 Áøµ¿Çü P6 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BC8,SetTo,256);---------Å©±â 6 Áøµ¿Çü P7 ÀÍ½Ãµå ¸¶¸°
-			SetMemory(0x515BCC,SetTo,256);---------Å©±â 7 Áøµ¿Çü ÀÏ¹İ¸¶¸°
-			SetMemory(0x515BD0,SetTo,256);---------Å©±â 8 Áøµ¿Çü º¡Ä¿ ÅÍ·¿ µîÀ¸·Î ¾µµí
-			SetMemory(0x515BD4,SetTo,256);---------Å©±â 9 Áøµ¿Çü	SCV, Áøµ¿Çü ÆÛµ©À¯´ÖÇÑÅÙ Á×À½ ¤µ¤¡
-			SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8ÄÃ·¯f
-			SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 ¹Ì´Ï¸Ê
+			SetMemory(0x515B88,SetTo,256);---------í¬ê¸° 0 ì¼ë°˜í˜• P1 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515B8C,SetTo,256);---------í¬ê¸° 1 ì¼ë°˜í˜• P2 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515B90,SetTo,256);---------í¬ê¸° 2 ì¼ë°˜í˜• P3 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515B94,SetTo,256);---------í¬ê¸° 3 ì¼ë°˜í˜• P4 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515B98,SetTo,256);---------í¬ê¸° 4 ì¼ë°˜í˜• P5 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515B9C,SetTo,256);---------í¬ê¸° 5 ì¼ë°˜í˜• P6 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BA0,SetTo,256);---------í¬ê¸° 6 ì¼ë°˜í˜• P7 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BA4,SetTo,256);---------í¬ê¸° 7 ì¼ë°˜í˜• 
+			SetMemory(0x515BA8,SetTo,256);---------í¬ê¸° 8 ì¼ë°˜í˜•
+			SetMemory(0x515BAC,SetTo,0);---------í¬ê¸° 9 ì¼ë°˜í˜• ë³´ë„ˆìŠ¤ ìì›ë¥˜ ë”œ ë¬´ì¡°ê±´ 1ë¡œ ë“¤ì–´ê°€ê²Œ ì„¤ì •í• ê²ƒ. 
+			SetMemory(0x515BB0,SetTo,256);---------í¬ê¸° 0 ì§„ë™í˜• P1 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BB4,SetTo,256);---------í¬ê¸° 1 ì§„ë™í˜• P2 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BB8,SetTo,256);---------í¬ê¸° 2 ì§„ë™í˜• P3 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BBC,SetTo,256);---------í¬ê¸° 3 ì§„ë™í˜• P4 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BC0,SetTo,256);---------í¬ê¸° 4 ì§„ë™í˜• P5 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BC4,SetTo,256);---------í¬ê¸° 5 ì§„ë™í˜• P6 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BC8,SetTo,256);---------í¬ê¸° 6 ì§„ë™í˜• P7 ìµì‹œë“œ ë§ˆë¦°
+			SetMemory(0x515BCC,SetTo,256);---------í¬ê¸° 7 ì§„ë™í˜• ì¼ë°˜ë§ˆë¦°
+			SetMemory(0x515BD0,SetTo,256);---------í¬ê¸° 8 ì§„ë™í˜• ë²™ì»¤ í„°ë › ë“±ìœ¼ë¡œ ì“¸ë“¯
+			SetMemory(0x515BD4,SetTo,256);---------í¬ê¸° 9 ì§„ë™í˜•	SCV, ì§„ë™í˜• í¼ë€ìœ ë‹›í•œí… ì£½ìŒ ã……ã„±
+			SetMemoryX(0x581DAC,SetTo,128*65536,0xFF0000), --P8ì»¬ëŸ¬f
+			SetMemoryX(0x581DDC,SetTo,128*256,0xFF00); --P8 ë¯¸ë‹ˆë§µ
 		},
 	}
-	DoActions2(FP,PatchArr,1) -- À§¿¡¼­ ¹ŞÀº Å×ÀÌºí Á¤º¸¸¦ ÇÑ¹ø¿¡ ½î´Â°Í
+	DoActions2(FP,PatchArr,1) -- ìœ„ì—ì„œ ë°›ì€ í…Œì´ë¸” ì •ë³´ë¥¼ í•œë²ˆì— ì˜ëŠ”ê²ƒ
 	
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limit¼³Á¤
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),}) -- Limitì„¤ì •
 	if Limit == 1 then
 		DoActions(FP,SetSwitch("Switch 231",Set))
 	end
@@ -505,13 +505,13 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 			},
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
-				--SetDeaths(Player,SetTo,1,11),--ÀÌ°Å³ÖÀºÃ¤·Î Å×½ºÅÍ ¸ğÁıÇÏÁö¸¶¼À ÀÛ»ì³²
-				--SetDeaths(Player,SetTo,1000000,35)--ÀÌ°Å³ÖÀºÃ¤·Î Å×½ºÅÍ ¸ğÁıÇÏÁö¸¶¼À ÀÛ»ì³²
+				--SetDeaths(Player,SetTo,1,11),--ì´ê±°ë„£ì€ì±„ë¡œ í…ŒìŠ¤í„° ëª¨ì§‘í•˜ì§€ë§ˆì…ˆ ì‘ì‚´ë‚¨
+				--SetDeaths(Player,SetTo,1000000,35)--ì´ê±°ë„£ì€ì±„ë¡œ í…ŒìŠ¤í„° ëª¨ì§‘í•˜ì§€ë§ˆì…ˆ ì‘ì‚´ë‚¨
 				
 			}
 		}
 	end
-		for i = 0, 6 do -- Á¤¹ö¾Æ´Ñµ¥ ÇÃ·¹ÀÌ¾îÁß ÇØ´çÇÏ´Â ´Ğ³×ÀÓ ¾øÀ¸¸é °×Æ¨±è
+		for i = 0, 6 do -- ì •ë²„ì•„ë‹Œë° í”Œë ˆì´ì–´ì¤‘ í•´ë‹¹í•˜ëŠ” ë‹‰ë„¤ì„ ì—†ìœ¼ë©´ ê²œíŠ•ê¹€
 			InputTesterID(i,"GALAXY_BURST")
 			InputTesterID(i,"_Mininii")
 			InputTesterID(i,"RonaRonaChan")
@@ -523,14 +523,14 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 
 	end
 	
-	Trigger { -- ¹è¼Ó¹æÁö
+	Trigger { -- ë°°ì†ë°©ì§€
 		players = {FP},
 		conditions = {
 			Memory(0x51CE84,AtLeast,1001);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1B¹æ Á¦¸ñ¿¡¼­ ¹è¼Ó ¿É¼ÇÀ» Á¦°ÅÇØ ÁÖ½Ê½Ã¿À. \n\x13\x1B¶Ç´Â °ÔÀÓ ¹İÀÀ¼Óµµ(ÅÏ·¹ÀÌÆ®)¸¦ ÃÖ´ë·Î ¿Ã·ÁÁÖ½Ê½Ã¿À.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayTextX("\x13\x1Bë°© ì œëª©ì—ì„œ ë°°ì† ì˜µì…˜ì„ ì œê±°í•´ ì£¼ì‹­ì‹œì˜¤. \n\x13\x1Bë˜ëŠ” ê²Œì„ ë°˜ì‘ì†ë„(í„´ë ˆì´íŠ¸)ë¥¼ ìµœëŒ€ë¡œ ì˜¬ë ¤ì£¼ì‹­ì‹œì˜¤.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -538,14 +538,14 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 		}
 	}
 	for i = 0, 6 do
-		Trigger { -- °ÔÀÓ¿À¹ö
+		Trigger { -- ê²Œì„ì˜¤ë²„
 			players = {FP},
 			conditions = {
 				MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
 			},
 			actions = {
 				RotatePlayer({
-				DisplayTextX("\x13\x1B»ç¶÷ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ÄÄÇ»ÅÍ ³ÖÁö¸¶¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+				DisplayTextX("\x13\x1Bì‚¬ëŒ ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ì»´í“¨í„° ë„£ì§€ë§ˆì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 				Defeat();
 				},HumanPlayers,FP);
 				Defeat();
@@ -554,56 +554,56 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 			}
 		}
 	end
-	Trigger { -- °ÔÀÓ¿À¹ö
+	Trigger { -- ê²Œì„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			MemoryX(0x57EEE8 + 36*7,Exactly,0,0xFF);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1BÄÄÇ»ÅÍ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayTextX("\x13\x1Bì»´í“¨í„° ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œì‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	Trigger { -- °ÔÀÓ¿À¹ö
+	Trigger { -- ê²Œì„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			MemoryX(0x57EEE8 + 36*7,Exactly,2,0xFF);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1BÄÄÇ»ÅÍ ½½·Ô º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayTextX("\x13\x1Bì»´í“¨í„° ìŠ¬ë¡¯ ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œì‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	Trigger { -- °ÔÀÓ¿À¹ö
+	Trigger { -- ê²Œì„ì˜¤ë²„
 		players = {FP},
 		conditions = {
 			MemoryX(0x57EEE0 + (36*7)+8,AtLeast,1*256,0xFF00);
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1BÄÄÇ»ÅÍ Á¾Á· º¯°æÀÌ °¨ÁöµÇ¾ú½À´Ï´Ù. ´Ù½Ã ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayTextX("\x13\x1Bì»´í“¨í„° ì¢…ì¡± ë³€ê²½ì´ ê°ì§€ë˜ì—ˆìŠµë‹ˆë‹¤. ë‹¤ì‹œ ì‹œì‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		}
 	}
-	--		Trigger { -- ½Ì±ÛÇÃ ºÒ°¡´É ¸Ê
+	--		Trigger { -- ì‹±ê¸€í”Œ ë¶ˆê°€ëŠ¥ ë§µ
 	--			players = {FP},
 	--			conditions = {
 	--				Memory(0x57F0B4, Exactly, 0);
 	--		},
 	--			actions = {
 	--				RotatePlayer({
-	--				DisplayTextX("\x13\x04½Ì±ÛÇÃ·¹ÀÌ·Î´Â ÇÃ·¹ÀÌÇÒ ¼ö ¾ø½À´Ï´Ù. ¸ÖÆ¼ÇÃ·¹ÀÌ·Î ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+	--				DisplayTextX("\x13\x04ì‹±ê¸€í”Œë ˆì´ë¡œëŠ” í”Œë ˆì´í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë©€í‹°í”Œë ˆì´ë¡œ ì‹œì‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 	--				Defeat();
 	--				},HumanPlayers,FP);
 	--				Defeat();
@@ -611,7 +611,7 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	--		},
 	--		}
 	--	
-		Trigger { -- È¤½Ã ½Ì±ÛÀÌ½Å°¡¿ä?
+		Trigger { -- í˜¹ì‹œ ì‹±ê¸€ì´ì‹ ê°€ìš”?
 			players = {FP},
 			conditions = {
 				Label(0);
@@ -620,7 +620,7 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 			actions = {
 				--SetCDeaths(FP,SetTo,1,isSingle);
 					RotatePlayer({
-					DisplayTextX("\x13\x04½Ì±ÛÇÃ·¹ÀÌ·Î´Â ÇÃ·¹ÀÌÇÒ ¼ö ¾ø½À´Ï´Ù. ¸ÖÆ¼ÇÃ·¹ÀÌ·Î ½ÃÀÛÇØÁÖ¼¼¿ä.\n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+					DisplayTextX("\x13\x04ì‹±ê¸€í”Œë ˆì´ë¡œëŠ” í”Œë ˆì´í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë©€í‹°í”Œë ˆì´ë¡œ ì‹œì‘í•´ì£¼ì„¸ìš”.\n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 					Defeat();
 					},HumanPlayers,FP);
 					Defeat();
@@ -632,13 +632,13 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	local SinglePatch = {}
 	for i = 0, 6 do
 		table.insert(SinglePatch,SetMemoryB(0x57F27C + (i * 228) + 70,SetTo,0))
-		--table.insert(SinglePatch2,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 È°¼ºÈ­ÇÏ°í ºñÈ°¼ºÈ­ÇÒ À¯´Ö ÀÎµ¦½º
+		--table.insert(SinglePatch2,SetMemoryB(0x57F27C+(228*i)+64,SetTo,1)) -- 9, 34 í™œì„±í™”í•˜ê³  ë¹„í™œì„±í™”í•  ìœ ë‹› ì¸ë±ìŠ¤
 	end
 	CIfX(FP,CDeaths(FP,AtLeast,1,isSingle))
 
 		DoActions(FP,{
-			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ÄÃ·¯f
-			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ¹Ì´Ï¸Ê
+			SetMemoryX(0x581DAC,SetTo,254*65536,0xFF0000), --P8ì»¬ëŸ¬f
+			SetMemoryX(0x581DDC,SetTo,254*256,0xFF00); --P8 ë¯¸ë‹ˆë§µ
 			--SetMemoryX(0x664080 + (MarID[1]*4),SetTo,0x8000,0x8000)
 		})
 	CElseX()
@@ -658,7 +658,7 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 
 	CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
 	
-	CFor(FP, 0, 130, 1) -- °ø°İ·Â Á¤º¸ ¹é¾÷
+	CFor(FP, 0, 130, 1) -- ê³µê²©ë ¥ ì •ë³´ ë°±ì—…
 	CI = CForVariable()
 	local CI2 = CreateVar(FP)
 	CMul(FP,CI2,CI,2)
@@ -680,11 +680,11 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,7,0,0xFF)})
 			f_SaveCp()
-			-- À¯´ÖÁ¤º¸¸¦ ±æÀÌ 8¹ÙÀÌÆ®ÀÇ µ¥ÀÌÅÍ ¹è¿­¿¡ ÀúÀåÇÔ
+			-- ìœ ë‹›ì •ë³´ë¥¼ ê¸¸ì´ 8ë°”ì´íŠ¸ì˜ ë°ì´í„° ë°°ì—´ì— ì €ì¥í•¨
 			-- 0xYYYYXXXX 0xLLIIPPUU
-			-- X = ÁÂÇ¥ X, Y = ÁÂÇ¥ Y, L = À¯´Ö ½Äº°ÀÚ, I = ¹«Àû ÇÃ·¡±×, P = ÇÃ·¹ÀÌ¾îID, U = À¯´ÖID
+			-- X = ì¢Œí‘œ X, Y = ì¢Œí‘œ Y, L = ìœ ë‹› ì‹ë³„ì, I = ë¬´ì  í”Œë˜ê·¸, P = í”Œë ˆì´ì–´ID, U = ìœ ë‹›ID
 			CunitHP = CreateVar(FP)
-			CIf(FP,{TTMemoryX(_Add(BackupCp,6),NotSame,58,0xFF)}) -- ¹ßÅ°¸® Àú¸®°¡
+			CIf(FP,{TTMemoryX(_Add(BackupCp,6),NotSame,58,0xFF)}) -- ë°œí‚¤ë¦¬ ì €ë¦¬ê°€
 				f_Read(FP,_Sub(BackupCp,9),CPos)
 				f_Read(FP,_Sub(BackupCp,17),CunitHP)
 				f_Div(FP,CunitHP,_Mov(256))
@@ -714,7 +714,7 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 				TSetDeathsX(CurrentPlayer,SetTo,_Mul(CunitP,_Mov(0x100)),0,0xFF00),
 				TSetDeathsX(CurrentPlayer,SetTo,_Mul(Gun_LV,_Mov(0x1000000)),0,0xFF000000),
 				})
-				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 ¹«ÀûÇÃ·¡±×
+				CTrigger(FP,{TMemoryX(_Add(BackupCp,36),Exactly,0x04000000,0x04000000)},{SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0x10000)},1) -- 0x10000 ë¬´ì í”Œë˜ê·¸
 
 			CIfEnd()
 			f_LoadCp()
@@ -726,7 +726,7 @@ UnitSizePatch(12,5) -- ¸¶¸° Å©±â 5*5 ¼³Á¤
 	CMov(FP,RepHeroIndex,0)
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
 	--
-	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{preserved}) -- ¹ßÅ°¸® ³ª°¡
+	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{preserved}) -- ë°œí‚¤ë¦¬ ë‚˜ê°€
 	CDoActions(FP,{
 		TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),
 		TRemoveUnit(RepHeroIndex,AllPlayers),
@@ -749,7 +749,7 @@ function onInit_EUD2()
 	CIfOnce(FP)
 	CMov(FP,0x6509B0,UnitDataPtr)
 	CWhile(FP,Deaths(CurrentPlayer,AtLeast,1,0))
-		CallTrigger(FP,f_Replace)-- µ¥ÀÌÅÍÈ­ ÇÑ À¯´Ö Àç¹èÄ¡ÇÏ´Â ÄÚµå
+		CallTrigger(FP,f_Replace)-- ë°ì´í„°í™” í•œ ìœ ë‹› ì¬ë°°ì¹˜í•˜ëŠ” ì½”ë“œ
 		CAdd(FP,0x6509B0,2)
 	CWhileEnd()
 	CMov(FP,0x6509B0,FP)

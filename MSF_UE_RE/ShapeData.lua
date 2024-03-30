@@ -81,14 +81,14 @@ function Install_ShapeData()
 	S1 = CSMakePolygon(4,45,45,13,0)
 	S2 = CS_MoveXY(S1,700,0)
 	M1 = CS_Merge(S2,C1,1,0)
-	SS1 = CS_KaleidoscopeX(M1,20,0,0) --- Å«¹ÙÄû--
+	SS1 = CS_KaleidoscopeX(M1,20,0,0) --- í°ë°”í€´--
 
 	C2 = CSMakeCircle(8,45,0,122,50)
 	S3 = CSMakeLineX(3,70,0,35,15)
-	SS2 = CS_Merge(S3,C2,1,0) --- ÀÛÀº¹ÙÄû--
+	SS2 = CS_Merge(S3,C2,1,0) --- ì‘ì€ë°”í€´--
 
 	MM = CS_Merge(SS1,SS2,1,0)
-	SS3 = CS_RemoveStack(MM,5,0) -------20°³ Åé´Ï¹ÙÄû--
+	SS3 = CS_RemoveStack(MM,5,0) -------20ê°œ í†±ë‹ˆë°”í€´--
 	function S1_Vector(X,Y) return {X+Y,X-Y} end--
 	WheelA = CS_Vector2D(SS3,1,"S1_Vector")--
 	GC2 = CS_MoveXY(CS_RatioXY(WheelA,1.4,2.6),48*32,96*32)

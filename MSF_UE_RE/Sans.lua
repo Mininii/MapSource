@@ -33,7 +33,7 @@ function Install_SansBoss()
 		TriggerX(FP,{CD(BWait,1)},{SetV(CB[3],250)},{preserved})--CD(TestMode,1),
 		--TriggerX(FP,{CD(BWait,0)},{SetInvincibility(Disable, 96, FP, 64)},{preserved})
 		DoActionsX(FP,SetV(CB[6],1))
-		CIf(FP,{CV(CB[3],0)}) -- º¸½ºÆĞÅÏ ÀÛ¼º±¸°£
+		CIf(FP,{CV(CB[3],0)}) -- ë³´ìŠ¤íŒ¨í„´ ì‘ì„±êµ¬ê°„
 
 		if Limit == 1 then
 			BossPhaseTestNum = 0
@@ -75,7 +75,7 @@ function Install_SansBoss()
 				
 				Trigger2X(FP,{CD(PattC[3],100)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg"),PlayWAVX("staredit\\wav\\SE2.ogg")},HumanPlayers,FP)},{preserved})
 				CIf(FP,{CD(PattC[3],100,AtLeast),CD(PattC[3],100+180,AtMost)},{SetFlingySpeed(158,(20*32)*4)})
-					SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={8,8,8},RemoveAfter=64},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
+					SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={8,8,8},RemoveAfter=64},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
 					f_Lengthdir(FP, 5*32, PattV[1], CPosX, CPosY)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,2912), FP)
 					CreateBullet(210, 20, 192, 1216, _Add(CPosY,3232), FP)
@@ -103,7 +103,7 @@ function Install_SansBoss()
 
 			CIf(FP,{CV(CA[1],1)},{SetFlingySpeed(158,(20*32))})
 				DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
+				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
 				CIf(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 150)})
 
 					local P2Act={} 
@@ -141,7 +141,7 @@ function Install_SansBoss()
 
 			CIf(FP,{CV(CA[1],2)},{SetFlingySpeed(158,(20*32))})
 			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
+			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=255},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
 			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 150)},{preserved})
 			DoActions(FP, {SetSwitch("Switch 100",Random),SetSwitch("Switch 1",Random)})
 			for i = 0, 3 do
@@ -161,7 +161,7 @@ function Install_SansBoss()
 			
 			CIf(FP,{CV(CA[1],3)},{SetFlingySpeed(158,(20*32)*2)})
 			DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=128},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
+			SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=128},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
 			TriggerX(FP,{CD(PattC[2],0,AtMost)},{SetCD(PattC[2], 70)},{preserved})
 			
 			DoActions(FP, {SetSwitch("Switch 100",Random),SetSwitch("Switch 1",Random),SetSwitch("Switch 101",Random)})
@@ -189,11 +189,11 @@ function Install_SansBoss()
 
 
 			CIf(FP,{CV(CA[1],4)},{SetFlingySpeed(158,(20*32)*6),
-				SetMemoryB(0x669E28+541, SetTo, 10),--¾ß¸¶Åä»ö»ó
+				SetMemoryB(0x669E28+541, SetTo, 10),--ì•¼ë§ˆí† ìƒ‰ìƒ
 			})
 				DoActionsX(FP,{SubCD(PattC[2],1),AddCD(PattC[3],1)})
-				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
-				--CallTrigger(FP, Call_CreateBullet_EPD) -- Å¸°Ù Åº¸· ÀÛµ¿
+				SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
+				--CallTrigger(FP, Call_CreateBullet_EPD) -- íƒ€ê²Ÿ íƒ„ë§‰ ì‘ë™
 				CIf(FP,{CD(PattC[3],1)},{SetCD(WRSE,1)})
 					CMov(FP,PattV[1],f_CRandNum(360))
 					CMov(FP,PattV[2],_Div(_Mul(_Div(_Mul(PattV[1],100000),360),256),100000))
@@ -242,7 +242,7 @@ function Install_SansBoss()
 		if Limit == 1 then
 			--CTrigger(FP,{CD(TestMode,1),Deaths(Force1,AtLeast,1,208)},{SetV(CB[2],0)},1)
 		end
-		--CV(CB[2],8320000,AtMost) --LHPÀÇ ÇÇ°¡ ´Ù±ğ¿´À»°æ¿ì
+		--CV(CB[2],8320000,AtMost) --LHPì˜ í”¼ê°€ ë‹¤ê¹ì˜€ì„ê²½ìš°
 
 		
 
@@ -279,14 +279,14 @@ function Install_SansBoss()
 	CIf(FP,{CD(SBossStart,1,AtLeast)},{AddCD(SBossStart,Dt)})
 
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\SE4.ogg"),PlayWAVX("staredit\\wav\\SE4.ogg")},HumanPlayers,FP)})
-	DoActions(FP,{MoveUnit(All,96,FP,64,64)})--º¸½ºÀ§Ä¡°íÁ¤
+	DoActions(FP,{MoveUnit(All,96,FP,64,64)})--ë³´ìŠ¤ìœ„ì¹˜ê³ ì •
 	DoActionsX(FP,{SetCD(BWait,1),SetCD(CUnitFlag,1),SetCD(MarDup,1),SetCD(MarDup2,1),
-	SetMemoryW(0x666160+(511*2), SetTo, 961),--·²Ä¿°¡½ÃÀÌ¹ÌÁö
-	SetMemoryB(0x669E28+961, SetTo, 17),--·²Ä¿°¡½Ã»ö»ó
-	SetMemoryB(0x669E28+541, SetTo, 16),--¾ß¸¶Åä»ö»ó
-	SetMemoryB(0x669E28+374, SetTo, 17),--ÇÒ·ç½Ãµ¥½º»ö»ó
-	SetMemoryB(0x669E28+375, SetTo, 17),--ÇÒ·ç½Ãµ¥½º»ö»ó
-	SetMemoryB(0x669E28+376, SetTo, 17),--ÇÒ·ç½Ãµ¥½º»ö»ó
+	SetMemoryW(0x666160+(511*2), SetTo, 961),--ëŸ´ì»¤ê°€ì‹œì´ë¯¸ì§€
+	SetMemoryB(0x669E28+961, SetTo, 17),--ëŸ´ì»¤ê°€ì‹œìƒ‰ìƒ
+	SetMemoryB(0x669E28+541, SetTo, 16),--ì•¼ë§ˆí† ìƒ‰ìƒ
+	SetMemoryB(0x669E28+374, SetTo, 17),--í• ë£¨ì‹œë°ìŠ¤ìƒ‰ìƒ
+	SetMemoryB(0x669E28+375, SetTo, 17),--í• ë£¨ì‹œë°ìŠ¤ìƒ‰ìƒ
+	SetMemoryB(0x669E28+376, SetTo, 17),--í• ë£¨ì‹œë°ìŠ¤ìƒ‰ìƒ
 },1)
 	local TempActT = {}
 		for i = 0, 6 do
@@ -314,26 +314,26 @@ function Install_SansBoss()
 	CIfOnce(FP,{CD(SBossStart,1000,AtLeast)})
 	CDoActions(FP, {
 		CreateUnit(1,96,64,FP),RotatePlayer({CenterView(64)},HumanPlayers,FP),
-		SetMemoryB(0x669E28+151, SetTo, 0),--»ö»óº¹±¸
+		SetMemoryB(0x669E28+151, SetTo, 0),--ìƒ‰ìƒë³µêµ¬
 		SetInvincibility(Enable, 96, FP, 64)
 	})
 	CIfEnd()
 
-	StoryPrintS(5000+(2500*0),"\x04Á¤¸» ¾Æ¸§´Ù¿î ³¯ÀÌ¾ß.")
-	StoryPrintS(5000+(2500*1),"\x04»õµéÀº ÁöÀú±Í°í, ²ÉµéÀº ÇÇ¾î³ª°í...")
-	StoryPrintS(5000+(2500*2),"\x04ÀÌ·± ³¯¿£, ³ÊÈñ °°Àº ·©Ä¿µéÀº...")
+	StoryPrintS(5000+(2500*0),"\x04ì •ë§ ì•„ë¦„ë‹¤ìš´ ë‚ ì´ì•¼.")
+	StoryPrintS(5000+(2500*1),"\x04ìƒˆë“¤ì€ ì§€ì €ê·€ê³ , ê½ƒë“¤ì€ í”¼ì–´ë‚˜ê³ ...")
+	StoryPrintS(5000+(2500*2),"\x04ì´ëŸ° ë‚ ì—”, ë„ˆí¬ ê°™ì€ ë­ì»¤ë“¤ì€...")
 	SetBright(5000+(2500*3)+0,0)
 	Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+0,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg")},HumanPlayers,FP),RemoveUnit(96,FP)})
 	SetBright(5000+(2500*3)+500,31)
 	Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+500,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg"),PlayWAVX("staredit\\wav\\SE1.ogg")},HumanPlayers,FP),SetV(TalkTimer,6)})
-	StoryPrintS(5000+(2500*3)+1000,"\x081ÃşÀ¸·Î ¶³¾îÁ®¾ß ÇØ.")
+	StoryPrintS(5000+(2500*3)+1000,"\x081ì¸µìœ¼ë¡œ ë–¨ì–´ì ¸ì•¼ í•´.")
 	
 
 
 	CIfOnce(FP,{CD(SBossStart,5000+(2500*3)+500,AtLeast)})
 	local CryAct = {SetMemoryB(0x669E28+958, SetTo, 16)}
 	--1216 2736
-	local OrderLocAct = {}--»ö»ó
+	local OrderLocAct = {}--ìƒ‰ìƒ
 	local CLX = 1216
 	local CRX = 1856
 	local CLY = 2736
@@ -381,9 +381,9 @@ function Install_SansBoss()
 	f_Read(FP,0x628438,nil,Nextptrs)
 	CMov(FP,SBossPtr,Nextptrs)
 	CDoActions(FP, {
-		SetMemoryB(0x669E28+151, SetTo, 16),--»ö»ó
+		SetMemoryB(0x669E28+151, SetTo, 16),--ìƒ‰ìƒ
 		CreateUnit(1,96,64,FP),RotatePlayer({CenterView(64)},HumanPlayers,FP),
-		SetMemoryB(0x669E28+151, SetTo, 0),--»ö»óº¹±¸
+		SetMemoryB(0x669E28+151, SetTo, 0),--ìƒ‰ìƒë³µêµ¬
 	})
 	CIfEnd()
 
@@ -399,7 +399,7 @@ function Install_SansBoss()
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode)},{SetCD(SBossStart,5000+(2500*3)+4200)})
 	end
-	StoryPrintS(5000+(2500*3)+4200,"\x04¹¹? ³»°¡ µôÂï´©¸¦ Çã¿ëÇÒ °Å¶ó »ı°¢Çß¾î?",CD(TalkCond,1))
+	StoryPrintS(5000+(2500*3)+4200,"\x04ë­? ë‚´ê°€ ë”œì°ëˆ„ë¥¼ í—ˆìš©í•  ê±°ë¼ ìƒê°í–ˆì–´?",CD(TalkCond,1))
 	Trigger2X(FP,{CD(SBossStart,5000+(2500*3)+4200,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg"),PlayWAVX("staredit\\wav\\GBl2.ogg")},HumanPlayers,FP)})
 	CIf(FP,{CD(SBossStart,5000+(2500*3)+4200,AtLeast),CV(BossP,32*11,AtMost)},{SetV(TalkTimer,3),SetCD(BWait,0),SetMemoryB(0x669E28+429, SetTo, 17),})
 		CFor(FP,0,360,15)
@@ -431,8 +431,8 @@ function Install_SansBoss()
 
 
 	CIf(FP,{CD(DCheck,1,AtLeast),CD(DCheck,60,AtMost)},{
-		SetMemoryW(0x666160+(294*2), SetTo, 233),--ÀÌ¹ÌÁö
-		SetMemory(0x66EC48+(4*233), SetTo, 131),--½ºÅ©¸³Æ®
+		SetMemoryW(0x666160+(294*2), SetTo, 233),--ì´ë¯¸ì§€
+		SetMemory(0x66EC48+(4*233), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 		SetMemoryB(0x669E28+233, SetTo, 0),
 		AddCD(DCheck,1)
 	})
@@ -463,13 +463,13 @@ function Install_SansBoss()
 	CAdd(FP,TempDv,-1)
 	CIfEnd()
 	CTrigger(FP, {CD(DCheck,1,AtLeast)}, {AddCD(DTimer,Dt),SetV(TalkTimer,4)}, 1)
-	StoryPrintS2(6000,"...±×·¡...")
-	StoryPrintS2(6000+(3000*1),"°á±¹... ÀÌ·¸°Ô, µÇ´Â°Ç°¡?")
-	StoryPrintS2(6000+(3000*2),"¹¹.. ±×¸±ºñ³ª °¡¾ß°Ú±º.")
+	StoryPrintS2(6000,"...ê·¸ë˜...")
+	StoryPrintS2(6000+(3000*1),"ê²°êµ­... ì´ë ‡ê²Œ, ë˜ëŠ”ê±´ê°€?")
+	StoryPrintS2(6000+(3000*2),"ë­.. ê·¸ë¦´ë¹„ë‚˜ ê°€ì•¼ê² êµ°.")
 	for i = 30,0,-1 do
 		SetBright2((6000+(3000*2)+3000)-(i*100),i)
 	end
-	StoryPrintS2(6000+(3000*3),"ÆÄÇÇ·ç½º, ¹¹ ¸Ô°í½ÍÀº°Å ¾ø¾î?")
+	StoryPrintS2(6000+(3000*3),"íŒŒí”¼ë£¨ìŠ¤, ë­ ë¨¹ê³ ì‹¶ì€ê±° ì—†ì–´?")
 	Trigger2X(FP, {CD(DTimer,6000+(20000),AtLeast)}, {RotatePlayer({PlayWAVX("staredit\\wav\\SDth.ogg"),PlayWAVX("staredit\\wav\\SDth.ogg"),SetCD(SBossStart,0)},HumanPlayers,FP),RemoveUnit(96, FP)})
 	
 
@@ -481,7 +481,7 @@ function Install_SansBoss()
 		--GetLocCenter(73, CPosX, CPosY)
 		--AngleRand = f_CRandNum(360)
         --TS_SendX(Deaths(Force1,AtLeast,1,41), BlasterBullet, {96*16,192*16,CPosX,CPosY,1,AngleRand})
-		--Trigger2X(FP,{Deaths(Force1,AtLeast,1,41)},{RotatePlayer({DisplayTextX("\x0D\x0D!H´ë»ç Ãâ·Â Å×½ºÆ®,        ³ª´Â »÷Áî",4)},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
+		--Trigger2X(FP,{Deaths(Force1,AtLeast,1,41)},{RotatePlayer({DisplayTextX("\x0D\x0D!HëŒ€ì‚¬ ì¶œë ¥ í…ŒìŠ¤íŠ¸,        ë‚˜ëŠ” ìƒŒì¦ˆ",4)},HumanPlayers,FP),SetCD(GBl1SE,0)},{preserved})
 		--TS_SendX(Deaths(Force1,AtLeast,1,41), BoneBullet, {CPosX,CPosY})
 		--DoActions(FP, SetDeaths(Force1,SetTo,0,41))
 		

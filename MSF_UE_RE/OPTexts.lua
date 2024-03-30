@@ -10,9 +10,9 @@ function OPText()
 		end
 		TriggerX(FP,{CDeaths(FP,AtLeast,(i*5) + OPOprand,IntroT)},{
 			RotatePlayer({
-			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-			DisplayTextX("\n\n"..string.rep("   ", i).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n\n\n\n\n",4);
-			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+			DisplayTextX("\n\n"..string.rep("   ", i).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n\n\n\n\n",4);
+			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 			DisplayTextX("\n\n",4);
 			},HumanPlayers,FP);
 		})
@@ -20,18 +20,18 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,100,IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 	})
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*1),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x043ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x043ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
@@ -39,18 +39,18 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*2),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x042ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x042ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
 	})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*3),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ªÄ>¤µ<)ªÄ\n"..string.rep("   ", 20).."\x041ÃÊ ÈÄ ½ÃÀÛÇÕ´Ï´Ù.\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+		DisplayTextX("\n\n"..string.rep("   ", 20).."\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x1F==\n"..string.rep("   ", 20).."\x02"..VerText.."\n"..string.rep("   ", 20).."\x1FSTRCtrig \x04Assembler \x07v5.4\x04 \x04in Used \x19(ã¤>ã……<)ã¤\n"..string.rep("   ", 20).."\x041ì´ˆ í›„ ì‹œìž‘í•©ë‹ˆë‹¤.\n\n",4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX(string.rep("   ", 20).."\x03Made \x06by \x04GALAXY_BURST\n\n",4);
 		},HumanPlayers,FP);
 		SetCDeaths(FP,Add,1,countdownSound);
@@ -58,9 +58,9 @@ function OPText()
 	
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT)},{
 		RotatePlayer({
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX("\n\n\n\n\n\n\n",4);
-		DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
+		DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
 		DisplayTextX("\n\n",4);
 		},HumanPlayers,FP);
 	})
@@ -92,8 +92,8 @@ function OPText()
 	TriggerX(FP,{CDeaths(FP,AtMost,(150+(48*4))-1,IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV1},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,150+(48*4),IntroT),CDeaths(FP,Exactly,0,isSingle)},{CV2})
 
-	--local Formation = "\n\n\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(ªÄ>¤µ<)ªÄ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04ÀÌ ¹®±¸°¡ ¶ã °æ¿ì \x07Á¤½Ä¹öÀü\x04ÀÔ´Ï´Ù. \n\x13\x04¹«´Ü ¼öÁ¤¸ÊÀ» ÁÖÀÇÇØÁÖ¼¼¿ä.\n\x14\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
-	local Formation = "\t\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\n\x13\x04Ã³À½ÇÏ½Ã´Â ºÐµéÀº InsertÅ° ¼÷Áö ÇÊ¼öÀÔ´Ï´Ù. ²À È®ÀÎÇÏ¼¼¿ä\n\n\x13\x04Ã³À½ÇÏ½Ã´Â ºÐµéÀº InsertÅ° ¼÷Áö ÇÊ¼öÀÔ´Ï´Ù. ²À È®ÀÎÇÏ¼¼¿ä\n\n\x13\x04Ã³À½ÇÏ½Ã´Â ºÐµéÀº InsertÅ° ¼÷Áö ÇÊ¼öÀÔ´Ï´Ù. ²À È®ÀÎÇÏ¼¼¿ä\n\n\x13\x04Ã³À½ÇÏ½Ã´Â ºÐµéÀº InsertÅ° ¼÷Áö ÇÊ¼öÀÔ´Ï´Ù. ²À È®ÀÎÇÏ¼¼¿ä\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	--local Formation = "\n\n\n\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x14\n\x14\n\x13\x07C\x04ustom \x07P\x04lib \x1FLock \x17Protector \x07v1.0 \x04in Used. \x19(ã¤>ã……<)ã¤ \n\x13\x1FThanks \x04to \x1BNinfia\n\x13\x04ì´ ë¬¸êµ¬ê°€ ëœ° ê²½ìš° \x07ì •ì‹ë²„ì „\x04ìž…ë‹ˆë‹¤. \n\x13\x04ë¬´ë‹¨ ìˆ˜ì •ë§µì„ ì£¼ì˜í•´ì£¼ì„¸ìš”.\n\x14\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
+	local Formation = "\t\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\n\x13\x04ì²˜ìŒí•˜ì‹œëŠ” ë¶„ë“¤ì€ Insertí‚¤ ìˆ™ì§€ í•„ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í™•ì¸í•˜ì„¸ìš”\n\n\x13\x04ì²˜ìŒí•˜ì‹œëŠ” ë¶„ë“¤ì€ Insertí‚¤ ìˆ™ì§€ í•„ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í™•ì¸í•˜ì„¸ìš”\n\n\x13\x04ì²˜ìŒí•˜ì‹œëŠ” ë¶„ë“¤ì€ Insertí‚¤ ìˆ™ì§€ í•„ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í™•ì¸í•˜ì„¸ìš”\n\n\x13\x04ì²˜ìŒí•˜ì‹œëŠ” ë¶„ë“¤ì€ Insertí‚¤ ìˆ™ì§€ í•„ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í™•ì¸í•˜ì„¸ìš”\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 	TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT)},{RotatePlayer({DisplayTextX(Formation,4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
 	--TriggerX(FP,{CDeaths(FP,AtLeast,30*48,IntroT),CDeaths(FP,AtMost,30*52,IntroT)},{CopyCpAction({MinimapPing(10)},HumanPlayers,FP)},{preserved})
 	CIfEnd()

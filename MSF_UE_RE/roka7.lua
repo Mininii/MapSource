@@ -41,8 +41,8 @@ function Install_Roka7Boss()
 	local CunitX225 = CreateVar(FP)
 
 
-	CIfX(FP,{Bring(FP,AtLeast,1, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--´ÙÅ©¾ÆÄ­ ¿¡³ÊÁö ½ºÅ©¸³Æ® ´ºÅ¬¸®¾î·Î º¯°æ
-	TriggerX(FP,{Memory(0x58F524,AtLeast,1)},{SetInvincibility(Disable, 87, FP, 64)},{preserved})--Ã¹ ÆÛÁö±âÆĞÅÏ½Ã ¹«ÀûÇØÁ¦
+	CIfX(FP,{Bring(FP,AtLeast,1, "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",64)},{SetCVar(FP,VResetSw[2],SetTo,0),SetMemory(0x66FABC, SetTo, 131)})--ë‹¤í¬ì•„ì¹¸ ì—ë„ˆì§€ ìŠ¤í¬ë¦½íŠ¸ ë‰´í´ë¦¬ì–´ë¡œ ë³€ê²½
+	TriggerX(FP,{Memory(0x58F524,AtLeast,1)},{SetInvincibility(Disable, 87, FP, 64)},{preserved})--ì²« í¼ì§€ê¸°íŒ¨í„´ì‹œ ë¬´ì í•´ì œ
 	CIf(FP,{CV(B_5_C,1,AtLeast)})
 --	if Limit == 1 then
 --		CIf(FP,{CD(TestMode,1)})
@@ -84,7 +84,7 @@ function Install_Roka7Boss()
 	CSub(FP,F2BDT,F2BDY,F2BDX)
 	CIf(FP,{TTOR({_TNVar(F2BRT, AtMost, F2BRU),_TNVar(F2XT1, AtMost, F2XT2)})})
 		CIf(FP,{CV(F2BDT,1*256,AtLeast),CV(F2BDT,0x7FFFFFFF,AtMost)},{})
-			 -- ±âÁ¸ °ø¹İÆĞÅÏ ÁÖ¼®È­
+			 -- ê¸°ì¡´ ê³µë°˜íŒ¨í„´ ì£¼ì„í™”
 
 		--	SetMemory(0x58DC60,SetTo,0),
 		--	SetMemory(0x58DC64,SetTo,0),
@@ -186,8 +186,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 10*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 10*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -197,8 +197,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-					SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-					SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+					SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+					SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -208,8 +208,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -218,8 +218,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -229,8 +229,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -239,8 +239,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 13*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 13*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -250,8 +250,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -261,8 +261,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 0*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 0*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -276,8 +276,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 10*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 10*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -287,8 +287,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 17*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(4,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -298,8 +298,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -308,8 +308,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -319,8 +319,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 6*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -329,8 +329,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 13*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 13*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 18*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -340,8 +340,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 16*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -351,8 +351,8 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 	
 			CTrigger(FP,{--[[CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741),]]},{
-				SetMemoryX(0x66A1F4, SetTo, 0*16777216,0xFF000000); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ³ôÀÌ
+				SetMemoryX(0x66A1F4, SetTo, 0*16777216,0xFF000000); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x66321C, SetTo, 19*1,0xFF); -- ë†’ì´
 				CreateUnit(1,204, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -440,7 +440,7 @@ end
 					}
 				}
 			
-				-- XColor : ¡İWhite  / ¡ÜBlack  / ¢º¢¸ Violet / ¡ä¡â YGreen / ¢Ã Blue(¼ÒÈ¯) / ¢Ô Red(°ø¹İ) : (¾ÈÀüÁö´ë)
+				-- XColor : â—White  / â—Black  / â–¶â—€ Violet / â–½â–³ YGreen / â–£ Blue(ì†Œí™˜) / â€¡ Red(ê³µë°˜) : (ì•ˆì „ì§€ëŒ€)
 	
 			end
 			CAPlot({SHX1a},FP,nilunit,"Location 1",nil,1,0,{V(0x2003+VARI),0,0,0,4,V(0x2001+VARI),nil,V(0x2002+VARI),nil},"X1func",FP,CVar(FP,LevelT2[2],AtLeast,1),{SetNext("X",X1func2),SetNext(X1func2+1,"X",1)},nil)
@@ -458,9 +458,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 13*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 13*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -471,9 +471,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -484,9 +484,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -497,9 +497,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -508,9 +508,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -519,9 +519,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -530,9 +530,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -542,9 +542,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -553,9 +553,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -564,9 +564,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -576,9 +576,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 16*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 0*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -587,9 +587,9 @@ end
 --            f_Read(FP,0x628438,nil,V(Nextptrs[2]),0xFFFFFF)
 			CTrigger(FP,{CVar("X",Nextptrs[2],AtLeast,19025),CVar("X",Nextptrs[2],AtMost,161741)},{
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
-				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ¸®¸ÊÇÎ
-				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ³ôÀÌ
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
+				SetMemoryX(0x66A1C4, SetTo, 6*256,0xFF00); -- ë¦¬ë§µí•‘
+				SetMemoryX(0x663218, SetTo, 1*16777216,0xFF000000); -- ë†’ì´
 				CreateUnit(1,203, "Location 1",FP);
 --                TSetMemoryX(Vi(Nextptrs[2],55),SetTo,0x200104,0x300104);
 --                TSetMemory(Vi(Nextptrs[2],57),SetTo,0)
@@ -636,7 +636,7 @@ end
 					CDeaths(FP,Exactly,0,BossStart);
 				},
 				actions = {SetMemoryX(0x669FE8, SetTo, 3*256,0xFF00);
-					RotatePlayer({DisplayTextX("\n\n\n\x13\x04¡º¡Ù¢ª.*¡¤¡£¢ª££7»ç´ÜÀ» ÆÄ±«Çß½À´Ï´Ù. \x05¡£+.¢ª¡£¢ª¡¤*¢«¡£¡Ú¡»\n\n\n",4)},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX("\n\n\n\x13\x04ã€â˜†Ëš.*Â·ã€‚Ëšï¼ƒ7ì‚¬ë‹¨ì„ íŒŒê´´í–ˆìŠµë‹ˆë‹¤. \x05ã€‚+.Ëšã€‚ËšÂ·*Ë™ã€‚â˜…ã€\n\n\n",4)},HumanPlayers,FP);
 					SetCDeaths(FP,SetTo,1,BossStart);
 					Simple_SetLoc(164,4096,352,4160,480);
 					SetMemory(0x6509B0,SetTo,FP);
@@ -652,7 +652,7 @@ end
 			players = {FP},
 			actions = {
 				Simple_SetLoc(0,0,0,0,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");
 				PreserveTrigger();
 			}
 		}
@@ -775,7 +775,7 @@ end
 		CSPlot(SHX1d2,FP,23,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		CSPlot(SHX1d3,FP,121,"Location 1",nil,1,32,FP,{Void(41,Exactly,4),Memory(0x58F518,Exactly,7),Void(1506,AtMost,2)},{SetVoid(1506,Add,1),SetMemory(0x6509B0,SetTo,FP);RunAIScriptAt(JYD, 64)},1)
 		
-		-- Void / 0x58F524 : Type / Void 1543 : Type Save / 0x58F520 : °ø¹İ Check / Void 1547 : System / Delay : 90 -> 94 & 91->93 / Void 1545 Current Type
+		-- Void / 0x58F524 : Type / Void 1543 : Type Save / 0x58F520 : ê³µë°˜ Check / Void 1547 : System / Delay : 90 -> 94 & 91->93 / Void 1545 Current Type
 	CMov(FP,0x6509B0,FP)
 			Trigger {
 				players = {FP},
@@ -1657,7 +1657,7 @@ end
 		CIfXEnd()
 		
 		
-		-- void 91 : ¼ÒÈ¯ Delay / 0x58F490 : ÆĞÅÏ System
+		-- void 91 : ì†Œí™˜ Delay / 0x58F490 : íŒ¨í„´ System
 		CIf(FP,{Void(1545,AtLeast,1),Void(1545,AtMost,4),Void(94,Exactly,0),TMemory(0x58F524,Exactly,0)})
 			f_Read(FP,0x58DC60+0*0x14,V(0x1FE0))
 			f_Read(FP,0x58DC64+0*0x14,V(0x1FE1))
@@ -1685,7 +1685,7 @@ end
 							CreateUnit(1,84,"CLoc165",FP),
 							SetInvincibility(Enable,84,FP,"Anywhere");
 							
-			}) -- #ÀÎ¼Á
+			}) -- #ì¸ì…‰
 			Trigger {
 				players = {FP},
 				conditions = {
@@ -2239,7 +2239,7 @@ end
 			SetLoc("Location 1",0x0,SetTo,0);
 			SetLoc("Location 1",0xC,SetTo,0);
 			SetLoc("Location 1",0x8,SetTo,0);
-			MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere")})
+			MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere")})
 	
 		local RW1 = {336,352,368,384} -- Black
 		local RW2 = {384*2,384*2,384*2,384*2}
@@ -2335,7 +2335,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[1]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[1]));
@@ -2349,7 +2349,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[2]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[2]));
@@ -2363,7 +2363,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[3]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[3]));
@@ -2377,7 +2377,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[4]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[4]));
@@ -2392,7 +2392,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[1]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[1]));
@@ -2406,7 +2406,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[2]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[2]));
@@ -2420,7 +2420,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[3]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[3]));
@@ -2434,7 +2434,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[4]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[4]));
@@ -2452,7 +2452,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[1]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[1]));
@@ -2467,7 +2467,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[2]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[2]));
@@ -2482,7 +2482,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[3]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[3]));
@@ -2497,7 +2497,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x0,Add,Vi(XTemp,-RR[4]));
 				TSetLoc("Location 1",0x4,Add,-384*2);
 				TSetLoc("Location 1",0x8,Add,Vi(XTemp,RR[4]));
@@ -2515,7 +2515,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[1]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[1]));
@@ -2530,7 +2530,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[2]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[2]));
@@ -2545,7 +2545,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[3]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[3]));
@@ -2560,7 +2560,7 @@ end
 				SetLoc("Location 1",0x0,SetTo,0);
 				SetLoc("Location 1",0xC,SetTo,0);
 				SetLoc("Location 1",0x8,SetTo,0);
-				MoveLocation("Location 1", "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",FP,"Anywhere");	
+				MoveLocation("Location 1", "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",FP,"Anywhere");	
 				TSetLoc("Location 1",0x4,Add,Vi(XTemp,-RR[4]));
 				TSetLoc("Location 1",0x0,Add,-384*2);
 				TSetLoc("Location 1",0xC,Add,Vi(XTemp,RR[4]));
@@ -3186,7 +3186,7 @@ end
 	
 	CunitCtrig_Part2()
 	CunitCtrig_Part3X()
-	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+	for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
 	CunitCtrig_Part4X(i,{
 		DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 		DeathsX(EPDF(0x628298-0x150*i+(19*4)),Exactly,7,0,0xFF),
@@ -3217,7 +3217,7 @@ end
 		flag = {preserved}
 	}
 
-	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))
+	CElseIfX({CVar(FP,VResetSw[2],Exactly,0),Bring(FP,AtMost,0, "ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     ",64)},SetCVar(FP,VResetSw[2],SetTo,1))
 	DoActionsX(FP,{KillUnit(84,FP),SetCDeaths(FP,Add,1,rokaClear)})
 	roka7ResetTable = {}
 	local VTable = {B5_V1[2],B5_V2[2],B5_XY[2],B5_YZ[2],B5_ZX[2],Del[2],Loc[2],Num[2],LocX[2],LocY[2],F1LocX[2],F1LocY[2],0x1FE9,

@@ -39,12 +39,12 @@ function StoryPrint(T,Print,Flag,AddTrig,StoryCcode)
 CIf(FP,CDeaths(FP,AtLeast,1,StoryT))
 --CAdd(FP,_Ccode("X",StoryT),Dt)
 CTrigger(FP,{CVar(FP,Dt[2],AtMost,2500)},{TSetCDeaths(FP,Add,Dt,StoryT)},1)
-Id_T0 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02ÄÚ½ºÅ© Ãæµé\x04ÀÇ \x08·¹°¥ ¼º \x15¼­¹® ¿ä»õ\x04°¡ \x07¹è°íÇÂ ¸¶¸°µé\x04¿¡°Ô \x08ÇÔ¶ô\x04µÇ¾ú½À´Ï´Ù."
-Id_T1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F¹è\x02°íÇÂ \x11¸¶\x03¸°µé \x07::\r\n\x1B¿©±â\x04°¡ \x08³ğ\x04ÀÇ º»°ÅÁö±º. ÁøÁøÂ¥¶ó¸¦ ³»³õ¾Æ¶ó \x08Å¸¸².\r\n\r\n  "
-Id_T2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ÁøÁø \x1BÂ¥¶óÀÇ ÁÖÀÎ \x08Å¸\x15¸² \x08::\r\n\x08¹ö·¯Áö\x1B°°Àº \x06±×Áöµé ÁÖÁ¦\x1B¿¡ °¨È÷ ¾îµğ¼­ ±× ÀÌ¸§À» ÀÔ¿¡ ÇÔºÎ·Î ³î¸®´Â °ÍÀÌ³Ä?\r\n\r\n "
-Id_T3 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1F¹è\x02°íÇÂ \x11¸¶\x03¸°µé \x07::\r\n\x08´ÚÃÄ¶ó. \x1B°ßµô ¼ö ¾ø´Â Çã±â\x04°¡ \x1B¸ô·Á¿À´Â °Í\x04À» ´õ ÀÌ»ó µÎ°í º¼ ¼ö ¾ø´Ù.\r\n\x15Å¸¸², \x04³×³ğÀÇ \x1B±× ¶ó¸é\x04À» °¡Á®°¡°Ú´Ù.\r\n\r\n  "
-Id_T4 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ÁøÁø \x1BÂ¥¶óÀÇ ÁÖÀÎ \x08Å¸\x15¸² \x08::\r\n\x1B¾îÂ¿ ¼ö ¾ø±º. ³»°¡ Á÷Á¢ ³ª¼­¼­ \x08Àú ±×Áö ³ğµé\x1BÀ» Ã³¸®ÇÏ°Ú´Ù.\r\n\r\n "
-Id_T5 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x11ÁøÁø \x15Â¥¶óÀÇ \x1BÁÖÀÎ \x08Å¸\x06¸²\x04ÀÌ \x08µîÀå\x04ÇÏ¿´½À´Ï´Ù.\r\n\x13\x1FS\x04heild \x022,000 \x03/// \x07H\x04ealth \x1D??,???,???\r\n\x13\x1B\"³»°¡ Á÷Á¢ ³ª¼­¼­ Àú ºô¾î¸ÔÀ» ±×Áö»õ³¢µéÀ» ÇÑ ³ğµµ ºüÁü¾øÀÌ ¶ó¸éÅë¿¡ ÃÄ¹Ú¾ÆÁÖ¸¶.\""
+Id_T0 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02ì½”ìŠ¤í¬ ì¶©ë“¤\x04ì˜ \x08ë ˆê°ˆ ì„± \x15ì„œë¬¸ ìš”ìƒˆ\x04ê°€ \x07ë°°ê³ í”ˆ ë§ˆë¦°ë“¤\x04ì—ê²Œ \x08í•¨ë½\x04ë˜ì—ˆìŠµë‹ˆë‹¤."
+Id_T1 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1Fë°°\x02ê³ í”ˆ \x11ë§ˆ\x03ë¦°ë“¤ \x07::\r\n\x1Bì—¬ê¸°\x04ê°€ \x08ë†ˆ\x04ì˜ ë³¸ê±°ì§€êµ°. ì§„ì§„ì§œë¼ë¥¼ ë‚´ë†“ì•„ë¼ \x08íƒ€ë¦¼.\r\n\r\n  "
+Id_T2 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ì§„ì§„ \x1Bì§œë¼ì˜ ì£¼ì¸ \x08íƒ€\x15ë¦¼ \x08::\r\n\x08ë²„ëŸ¬ì§€\x1Bê°™ì€ \x06ê·¸ì§€ë“¤ ì£¼ì œ\x1Bì— ê°íˆ ì–´ë””ì„œ ê·¸ ì´ë¦„ì„ ì…ì— í•¨ë¶€ë¡œ ë†€ë¦¬ëŠ” ê²ƒì´ëƒ?\r\n\r\n "
+Id_T3 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x07 :: \x1Fë°°\x02ê³ í”ˆ \x11ë§ˆ\x03ë¦°ë“¤ \x07::\r\n\x08ë‹¥ì³ë¼. \x1Bê²¬ë”œ ìˆ˜ ì—†ëŠ” í—ˆê¸°\x04ê°€ \x1Bëª°ë ¤ì˜¤ëŠ” ê²ƒ\x04ì„ ë” ì´ìƒ ë‘ê³  ë³¼ ìˆ˜ ì—†ë‹¤.\r\n\x15íƒ€ë¦¼, \x04ë„¤ë†ˆì˜ \x1Bê·¸ ë¼ë©´\x04ì„ ê°€ì ¸ê°€ê² ë‹¤.\r\n\r\n  "
+Id_T4 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ì§„ì§„ \x1Bì§œë¼ì˜ ì£¼ì¸ \x08íƒ€\x15ë¦¼ \x08::\r\n\x1Bì–´ì©” ìˆ˜ ì—†êµ°. ë‚´ê°€ ì§ì ‘ ë‚˜ì„œì„œ \x08ì € ê·¸ì§€ ë†ˆë“¤\x1Bì„ ì²˜ë¦¬í•˜ê² ë‹¤.\r\n\r\n "
+Id_T5 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x11ì§„ì§„ \x15ì§œë¼ì˜ \x1Bì£¼ì¸ \x08íƒ€\x06ë¦¼\x04ì´ \x08ë“±ì¥\x04í•˜ì˜€ìŠµë‹ˆë‹¤.\r\n\x13\x1FS\x04heild \x022,000 \x03/// \x07H\x04ealth \x1D??,???,???\r\n\x13\x1B\"ë‚´ê°€ ì§ì ‘ ë‚˜ì„œì„œ ì € ë¹Œì–´ë¨¹ì„ ê·¸ì§€ìƒˆë¼ë“¤ì„ í•œ ë†ˆë„ ë¹ ì§ì—†ì´ ë¼ë©´í†µì— ì³ë°•ì•„ì£¼ë§ˆ.\""
 
 StoryPrint(6000*(0),{
 	PlayWAVX("staredit\\wav\\button3.wav");
@@ -78,7 +78,7 @@ StoryPrint(6000*(4),{
 },Id_T4C) 
 StoryPrint(6000*(5),{
 },Id_T5C,{SetCDeaths(FP,SetTo,1,StoryT2)}) 
-CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2)) -- ¼ÒÈ¯
+CIf(FP,CDeaths(FP,AtLeast,1,StoryT2),SetCDeaths(FP,SetTo,0,StoryT2)) -- ì†Œí™˜
 f_Read(FP,0x628438,nil,Nextptrs,0xFFFFFF)
 CDoActions(FP,{
 	CreateUnit(1,68,29,FP),
@@ -215,7 +215,7 @@ Trigger { -- No comment (4347C6C8)
 	},
 }
 
--- Ä¿¼¼¾î »ı¼º -> x1~4 Lv & 480±îÁö (¼Óµµ ·£´ı)
+-- ì»¤ì„¸ì–´ ìƒì„± -> x1~4 Lv & 480ê¹Œì§€ (ì†ë„ ëœë¤)
 Trigger { -- No comment (4347C6C8)
 	players = {FP},
 	conditions = {
@@ -231,7 +231,7 @@ Trigger { -- No comment (4347C6C8)
 		PreserveTrigger();
 	},
 }
---Ä¿¼¼¾î »ı¼º±¸°£
+--ì»¤ì„¸ì–´ ìƒì„±êµ¬ê°„
         FX = CreateVar(FP)
         FY = CreateVar(FP)
         FA = CreateVar(FP)
@@ -451,7 +451,7 @@ Trigger { -- No comment (4347C6C8)
 		PreserveTrigger();
 	},
 }
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Memory(0x58F564,Exactly,2);
@@ -462,7 +462,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 1);
@@ -475,7 +475,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 1);
@@ -487,7 +487,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 2);
@@ -500,7 +500,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 2);
@@ -512,7 +512,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 3);
@@ -525,7 +525,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 3);
@@ -537,7 +537,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 4);
@@ -550,7 +550,7 @@ Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
 	},
 }
 
-Trigger { -- ¸®Äİ ¾ÆÄ­¿¡ »ı¼º
+Trigger { -- ë¦¬ì½œ ì•„ì¹¸ì— ìƒì„±
 	players = {FP},
 	conditions = {
 		Void(41,Exactly, 4);
@@ -587,7 +587,7 @@ Trigger { -- No comment (4347C6C8)
 		SetMemory(0x6509B0,SetTo,FP);
 		RunAIScriptAt(JYD, "Anywhere");
 		SetInvincibility(Disable,"Tarim, Lord Of Regal Castle", FP, 64),
-		RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ÁøÁø \x1BÂ¥¶óÀÇ ÁÖÀÎ \x08Å¸\x15¸² \x08::\r\n\x1BÁâ°ÅÇÏ¶ó.\r\n\r\n ",4),TalkingPortrait(68, 2000),
+		RotatePlayer({DisplayTextX("\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n   \x08:: \x11ì§„ì§„ \x1Bì§œë¼ì˜ ì£¼ì¸ \x08íƒ€\x15ë¦¼ \x08::\r\n\x1Bì¤´ê±°í•˜ë¼.\r\n\r\n ",4),TalkingPortrait(68, 2000),
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);
 		PreserveTrigger();
 	},
@@ -623,7 +623,7 @@ Trigger { -- No comment (4347C6C8)
 		PreserveTrigger();
 	},
 }
--- Ä¿¼¼¾î »óÇÏÁÂ¿ì/Áß½É ¹æÇâÀ¸·Î Remove
+-- ì»¤ì„¸ì–´ ìƒí•˜ì¢Œìš°/ì¤‘ì‹¬ ë°©í–¥ìœ¼ë¡œ Remove
 Trigger { -- No comment (4347C6C8)
 	players = {FP},
 	conditions = {

@@ -4,41 +4,41 @@ function Install_Destr0yer()
 	local IdenSiege,SMine,YamatoShuttle,HackBattle = CreateCcodes(4)
 	local ResetCodeT = {IdenSiege,SMine,YamatoShuttle,HackBattle}
 	local Lyrics = {
-		{"\x0D\x0D!H\x13\x06¡Ø \x04Ladies and Gentlemen \x06¡Ø",2,222},
-		{"\x0D\x0D!H\x13\x06¡Ø \x07Let's start \x06¡Ø",5,0},
-		{"\x0D\x0D!H\x13\x06¡Ø \x04Only is in Memories \x06¡Ø",8,0},
-		{"\x0D\x0D!H\x13\x06¡Ø \x08Tonight. \x06¡Ø",12,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I wonder why things have \x03happened\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ¿Ö \x03ÀÌ·± ÀÏµé\x04ÀÌ ÀÏ¾î³µ´ÂÁö ±Ã±İÇØ. \x07¢Ü",60-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 \x1DCould you imagine \x04the world is \x1Cboring\x04? \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ÀÌ ¼¼»óÀº \x1CµûºĞÇÑ \x04°É, \x1D³Í ¾Ë°í ÀÖ´Ï? \x07¢Ü",68-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x08 Stereotype \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x08 °íÁ¤°ü³ä \x07¢Ü",76-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x0E Sham \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x0E ¾ûÅÍ¸® \x07¢Ü",78-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x0F Brain Freeze \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x0F ºê·¹ÀÎ ÇÁ¸®Áî \x07¢Ü",79-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x10 Collusion \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x10 °ø¸ğ \x07¢Ü",80-3,222},
-		{"\x0D\x0D!H\x13\x07¢Ü\x1F Mental block \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x1F Á¤½ÅÀû ºí·Ï \x07¢Ü",82-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 The world is \x1Bfading\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ¼¼°è´Â \x1B»ç¶óÁ® °¡°í\x04, \x07¢Ü",83-3,222},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I know the \x08( \x11£Æ\x04£á£ô£å \x08)\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ±× \x08( \x11¿î\x04¸í \x08)\x04 Àº ³­ ¾Ë°í ÀÖ¾î. \x07¢Ü",86-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 The world is \x1Bfading\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ¼¼°è´Â \x1B»ç¶óÁö°í\x04, \x07¢Ü",88-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I know the \x08( \x11£Æ\x04£á£ô£å \x08)\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ª´Â ±× \x08( \x11¿î\x04¸í \x08)\x04 À» ¾Æ´Â°É. \x07¢Ü",90-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I know \x07all of you\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ª´Â ³ÊÈñ¸¦ \x07¸ğµÎ ¾Æ´Âµ¥\x04, \x07¢Ü",91-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 Have you, you, \x10followed me\x04? \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ÊÈñ´Â, ³ÊÈñ´Â, ³¯ \x10ÂÑ¾Æ¿À±â¶óµµ Çß´Ï\x04? \x07¢Ü",95-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 Me in your mind is the \x1Fdream\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ÊÈñ ¸¶À½ ¼ÓÀÇ ³ª´Â \x1F²Ş\x04ÀÎ°É. \x07¢Ü",99-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 The dream of the \x10 ( \x11£Ğ\x04£á£ó£ô \x10) \x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 \x10 ( \x11°ú\x04°Å \x10) \x04ÀÇ ²Ş. \x07¢Ü",105-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 So I would \x08forget \x04you. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³­ ³ÊÈñ¸¦ \x08ÀØÀ»\x04Å×´Ï, \x07¢Ü",107-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x11 Let you forget me. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x11 ³ÊÈñµµ ³¯ ÀØ¾îÁà. \x07¢Ü",111-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 'Cause I'm \x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù£å£ò\x07 ¡» \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ¿Ö³Ä¸é ³ª´Â \x07¡º \x08ÆÄ\x10±«\x04ÀÚ\x07 ¡» \x04ÀÌ´Ï±î. \x07¢Ü",115-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x08 I kill us all. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x08 ´Ù ³¡Àå³»°Ú¾î. \x07¢Ü",138-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x10 It's the only way. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x10 ÀÌ ±æ »ÓÀÌ¾ß. \x07¢Ü",151-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x06 It's over. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x06 ´Ù ³¡³µ¾î. \x07¢Ü",153-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x08 I will kill. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x08 ³¡Àå³»°Ú¾î. \x07¢Ü",159-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I will \x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù\x07 ¡»\x04 the world. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³»°¡ ¼¼»óÀ» \x07¡º \x08ÆÄ\x10±«\x07 ¡» \x04ÇÏ°Ú¾î. \x07¢Ü",161-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 No matter what you do, \x0FI don't stop\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ÊÈñ°¡ ¹¹·¡µµ, \x0F¸ØÃßÁö ¾Ê¾Æ\x04. \x07¢Ü",165-3,500},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I'm the only one \x1Fwho's right\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ª¸¸ÀÌ \x1FÁø¸®\x04ÀÌ±â¿¡. \x07¢Ü",168-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x08 I will kill. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x08 ³¡Àå³»°Ú¾î. \x07¢Ü",175-3,333},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 I will \x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù\x07 ¡»\x04 the world. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³»°¡ ¼¼»óÀ» \x07¡º \x08ÆÄ\x10±«\x07 ¡» \x04ÇÏ°Ú¾î. \x07¢Ü",177-3,444},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 No matter what you do, \x0FI don't stop\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ³ÊÈñ°¡ ¹¹·¡µµ, \x0F¸ØÃßÁö ¾Ê¾Æ\x04. \x07¢Ü",181-3,500},
-		{"\x0D\x0D!H\x13\x07¢Ü\x15 It is what it is. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x15 ¹¹ ¾îÂ¼°Ú¾î. \x07¢Ü",184-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x1E It is what it is. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x1E ¿ø·¡ ÀÌ·¨´Â°É. \x07¢Ü",188-3,0},
-		{"\x0D\x0D!H\x13\x07¢Ü\x04 It is not. It's not \x08my fault\x04. \x07¢Ü\n\x0D\x0D!H\x13\x07¢Ü\x04 ¾Æ³Ä. \x08³» Àß¸ø\x04ÀÌ ¾Æ³Ä. \x07¢Ü",192-3,0},
+		{"\x0D\x0D!H\x13\x06â€» \x04Ladies and Gentlemen \x06â€»",2,222},
+		{"\x0D\x0D!H\x13\x06â€» \x07Let's start \x06â€»",5,0},
+		{"\x0D\x0D!H\x13\x06â€» \x04Only is in Memories \x06â€»",8,0},
+		{"\x0D\x0D!H\x13\x06â€» \x08Tonight. \x06â€»",12,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I wonder why things have \x03happened\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì™œ \x03ì´ëŸ° ì¼ë“¤\x04ì´ ì¼ì–´ë‚¬ëŠ”ì§€ ê¶ê¸ˆí•´. \x07â™ª",60-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 \x1DCould you imagine \x04the world is \x1Cboring\x04? \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì´ ì„¸ìƒì€ \x1Cë”°ë¶„í•œ \x04ê±¸, \x1Dë„Œ ì•Œê³  ìˆë‹ˆ? \x07â™ª",68-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x08 Stereotype \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x08 ê³ ì •ê´€ë… \x07â™ª",76-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x0E Sham \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x0E ì—‰í„°ë¦¬ \x07â™ª",78-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x0F Brain Freeze \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x0F ë¸Œë ˆì¸ í”„ë¦¬ì¦ˆ \x07â™ª",79-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x10 Collusion \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x10 ê³µëª¨ \x07â™ª",80-3,222},
+		{"\x0D\x0D!H\x13\x07â™ª\x1F Mental block \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x1F ì •ì‹ ì  ë¸”ë¡ \x07â™ª",82-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 The world is \x1Bfading\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì„¸ê³„ëŠ” \x1Bì‚¬ë¼ì ¸ ê°€ê³ \x04, \x07â™ª",83-3,222},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I know the \x08( \x11ï¼¦\x04ï½ï½”ï½… \x08)\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ê·¸ \x08( \x11ìš´\x04ëª… \x08)\x04 ì€ ë‚œ ì•Œê³  ìˆì–´. \x07â™ª",86-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 The world is \x1Bfading\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì„¸ê³„ëŠ” \x1Bì‚¬ë¼ì§€ê³ \x04, \x07â™ª",88-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I know the \x08( \x11ï¼¦\x04ï½ï½”ï½… \x08)\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚˜ëŠ” ê·¸ \x08( \x11ìš´\x04ëª… \x08)\x04 ì„ ì•„ëŠ”ê±¸. \x07â™ª",90-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I know \x07all of you\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚˜ëŠ” ë„ˆí¬ë¥¼ \x07ëª¨ë‘ ì•„ëŠ”ë°\x04, \x07â™ª",91-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 Have you, you, \x10followed me\x04? \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë„ˆí¬ëŠ”, ë„ˆí¬ëŠ”, ë‚  \x10ì«“ì•„ì˜¤ê¸°ë¼ë„ í–ˆë‹ˆ\x04? \x07â™ª",95-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 Me in your mind is the \x1Fdream\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë„ˆí¬ ë§ˆìŒ ì†ì˜ ë‚˜ëŠ” \x1Fê¿ˆ\x04ì¸ê±¸. \x07â™ª",99-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 The dream of the \x10 ( \x11ï¼°\x04ï½ï½“ï½” \x10) \x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 \x10 ( \x11ê³¼\x04ê±° \x10) \x04ì˜ ê¿ˆ. \x07â™ª",105-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 So I would \x08forget \x04you. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚œ ë„ˆí¬ë¥¼ \x08ìŠì„\x04í…Œë‹ˆ, \x07â™ª",107-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x11 Let you forget me. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x11 ë„ˆí¬ë„ ë‚  ìŠì–´ì¤˜. \x07â™ª",111-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 'Cause I'm \x07ã€ \x08ï¼¤\x04ï½…ï½“ï½”ï½’\x10ï¼\x04ï½™ï½…ï½’\x07 ã€ \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì™œëƒë©´ ë‚˜ëŠ” \x07ã€ \x08íŒŒ\x10ê´´\x04ì\x07 ã€ \x04ì´ë‹ˆê¹Œ. \x07â™ª",115-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x08 I kill us all. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x08 ë‹¤ ëì¥ë‚´ê² ì–´. \x07â™ª",138-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x10 It's the only way. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x10 ì´ ê¸¸ ë¿ì´ì•¼. \x07â™ª",151-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x06 It's over. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x06 ë‹¤ ëë‚¬ì–´. \x07â™ª",153-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x08 I will kill. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x08 ëì¥ë‚´ê² ì–´. \x07â™ª",159-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I will \x07ã€ \x08ï¼¤\x04ï½…ï½“ï½”ï½’\x10ï¼\x04ï½™\x07 ã€\x04 the world. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚´ê°€ ì„¸ìƒì„ \x07ã€ \x08íŒŒ\x10ê´´\x07 ã€ \x04í•˜ê² ì–´. \x07â™ª",161-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 No matter what you do, \x0FI don't stop\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë„ˆí¬ê°€ ë­ë˜ë„, \x0Fë©ˆì¶”ì§€ ì•Šì•„\x04. \x07â™ª",165-3,500},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I'm the only one \x1Fwho's right\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚˜ë§Œì´ \x1Fì§„ë¦¬\x04ì´ê¸°ì—. \x07â™ª",168-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x08 I will kill. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x08 ëì¥ë‚´ê² ì–´. \x07â™ª",175-3,333},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 I will \x07ã€ \x08ï¼¤\x04ï½…ï½“ï½”ï½’\x10ï¼\x04ï½™\x07 ã€\x04 the world. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë‚´ê°€ ì„¸ìƒì„ \x07ã€ \x08íŒŒ\x10ê´´\x07 ã€ \x04í•˜ê² ì–´. \x07â™ª",177-3,444},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 No matter what you do, \x0FI don't stop\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ë„ˆí¬ê°€ ë­ë˜ë„, \x0Fë©ˆì¶”ì§€ ì•Šì•„\x04. \x07â™ª",181-3,500},
+		{"\x0D\x0D!H\x13\x07â™ª\x15 It is what it is. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x15 ë­ ì–´ì©Œê² ì–´. \x07â™ª",184-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x1E It is what it is. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x1E ì›ë˜ ì´ë¬ëŠ”ê±¸. \x07â™ª",188-3,0},
+		{"\x0D\x0D!H\x13\x07â™ª\x04 It is not. It's not \x08my fault\x04. \x07â™ª\n\x0D\x0D!H\x13\x07â™ª\x04 ì•„ëƒ. \x08ë‚´ ì˜ëª»\x04ì´ ì•„ëƒ. \x07â™ª",192-3,0},
 		}
 	local BGMArr = {}
 	for i = 1, 272 do
@@ -196,24 +196,24 @@ Trigger {
 		CX_Rotate(_Div(XAngle,CXTemp2),_Div(YAngle,CXTemp2),_Div(ZAngle,CXTemp2))
 		
 		TriggerX(FP, {CVar("X",CA[11],AtLeast,0x80000000)},{
-			SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- È­¸éÃâ·Â
-			SetMemoryX(0x66321C, SetTo, 0*16777216,0xFF000000); -- ³ôÀÌ
+			SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- í™”ë©´ì¶œë ¥
+			SetMemoryX(0x66321C, SetTo, 0*16777216,0xFF000000); -- ë†’ì´
 		},{preserved})
 		TriggerX(FP, {CVar("X",CA[11],AtMost,0x7FFFFFFF)},{
-			SetMemoryX(0x669FB4, SetTo, 16*16777216,0xFF000000); -- È­¸éÃâ·Â
-			SetMemoryX(0x66321C, SetTo, 20*16777216,0xFF000000); -- ³ôÀÌ
+			SetMemoryX(0x669FB4, SetTo, 16*16777216,0xFF000000); -- í™”ë©´ì¶œë ¥
+			SetMemoryX(0x66321C, SetTo, 20*16777216,0xFF000000); -- ë†’ì´
 		},{preserved})
 		TriggerX(FP, {
 			CDeaths(FP,Exactly,0,BlackBox);
 			CVar("X",CA[11],Exactly,0x0);}, {
-				SetMemoryX(0x669FB4, SetTo, 17*16777216,0xFF000000); -- È­¸éÃâ·Â
-				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- ³ôÀÌ
+				SetMemoryX(0x669FB4, SetTo, 17*16777216,0xFF000000); -- í™”ë©´ì¶œë ¥
+				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- ë†’ì´
 			},{preserved})
 		TriggerX(FP, {
 			CDeaths(FP,Exactly,1,BlackBox);
 			CVar("X",CA[11],Exactly,0x0);}, {
-				SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- È­¸éÃâ·Â
-				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- ³ôÀÌ
+				SetMemoryX(0x669FB4, SetTo, 10*16777216,0xFF000000); -- í™”ë©´ì¶œë ¥
+				SetMemoryX(0x66321C, SetTo, 12*16777216,0xFF000000); -- ë†’ì´
 			},{preserved})
 		CIf(FP,Memory(0x628438,AtLeast,1))
 		f_Read(FP,0x628438,nil,Nextptrs)
@@ -249,7 +249,7 @@ Trigger {
 	for j, k in pairs(Lyrics) do
 		local TempCcode = CreateCcode()
 		table.insert(LyricsCCode,TempCcode)
-		Trigger { -- »ó½Ãºê±İ
+		Trigger { -- ìƒì‹œë¸Œê¸ˆ
 			players = {FP},
 			conditions = {
 				Label(0);
@@ -546,13 +546,13 @@ Trigger {
 			CIfEnd()
 		end
 		DTotalDmg["fwc"] = true
-		DisplayPrint(HumanPlayers, {"\x13\x1F£Â\x04£ï£ó£ó \x08£Â\x04£á£ô£ô£ì£å \x07£Â\x04£ï£î£õ£ó : \x07",DTotalDmg})
+		DisplayPrint(HumanPlayers, {"\x13\x1Fï¼¢\x04ï½ï½“ï½“ \x08ï¼¢\x04ï½ï½”ï½”ï½Œï½… \x07ï¼¢\x04ï½ï½ï½•ï½“ : \x07",DTotalDmg})
 		DoActionsX(FP,{SetCVar(FP,DPtr[2],SetTo,0),SetCVar(FP,DHP[2],SetTo,0),SetCVar(FP,DcurHP[2],SetTo,0),SetCVar(FP,DTotalDmg[2],SetTo,0)})
 		DoActionsX(FP,{CreateUnitWithProperties(1,94,"DCenter",FP,{hallucinated = true}),RemoveUnit(186,FP),KillUnit(94,FP),ModifyUnitEnergy(All,"Any unit",FP,64,0),RemoveUnit("Any unit",FP)})
 	CIfEnd()
 
 	for i = 0, #BGMArr-1 do
-		Trigger { -- »ó½Ãºê±İ
+		Trigger { -- ìƒì‹œë¸Œê¸ˆ
 			players = {FP},
 			conditions = {
 				Label(0);
@@ -628,8 +628,8 @@ Trigger {
 	f_ArrReset()
 	CIfXEnd()
 	CIf(FP,CDeaths(FP,AtLeast,1,Destr0yerClear))
-		local ClearText1 = "\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\n\x13\x04\x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù£å£ò\x07 ¡» \x04¿¡°Ô¼­ »ì¾Æ³²À¸¼Ì½À´Ï´Ù.\x14\n\n\n\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
-		local ClearText2 = "\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\x14\n\x14\n\x13\x04Á¡¼ö¸¦ °è»êÁßÀÔ´Ï´Ù...\n\x14\n\x14\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+		local ClearText1 = "\n\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x07ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\n\x13\x04\x07ã€ \x08ï¼¤\x04ï½…ï½“ï½”ï½’\x10ï¼\x04ï½™ï½…ï½’\x07 ã€ \x04ì—ê²Œì„œ ì‚´ì•„ë‚¨ìœ¼ì…¨ìŠµë‹ˆë‹¤.\x14\n\n\n\x13\x04ï¼ï¼ï¼ã€€\x07ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
+		local ClearText2 = "\n\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\x14\n\x14\n\x13\x04ì ìˆ˜ë¥¼ ê³„ì‚°ì¤‘ì…ë‹ˆë‹¤...\n\x14\n\x14\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 		local ClearTimer = CreateCcode()
 		local ClearSw1 = CreateCcode()
 		local ClearSw2 = CreateCcode()
@@ -642,22 +642,22 @@ Trigger {
 			CallTrigger(FP,Call_ScorePrint,{SetCDeaths(FP,SetTo,1,isDBossClear)})
 		CIfEnd()
 		CIf(FP,CDeaths(FP,AtLeast,3000+6000,ClearTimer))
-		CIfX(FP,{TTNVar(TotalScore, iAtLeast, OutputPoint)}) --  Á¡¼ö¸¸Á·½Ã
+		CIfX(FP,{TTNVar(TotalScore, iAtLeast, OutputPoint)}) --  ì ìˆ˜ë§Œì¡±ì‹œ
 
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,1,Destr0yerClear2)})
 
 
-		CElseX()--  Á¡¼öºÒ¸¸Á·½Ã
+		CElseX()--  ì ìˆ˜ë¶ˆë§Œì¡±ì‹œ
 		DoActions2(FP,RotatePlayer({
 			DisplayTextX(string.rep("\n", 20),4),
-			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4),
-			DisplayTextX("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4),
+			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+			DisplayTextX("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4),
 			DisplayTextX("\n",4),
-			DisplayTextX("\x13\x15Á¡¼ö°¡ ÃæºĞÇÏÁö ¾Ê¾Æ °ÔÀÓÀ» Å¬¸®¾îÇÏÁö ¸øÇß½À´Ï´Ù....\n",4);
-			DisplayTextX("\x13\x05°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.",4);
+			DisplayTextX("\x13\x15ì ìˆ˜ê°€ ì¶©ë¶„í•˜ì§€ ì•Šì•„ ê²Œì„ì„ í´ë¦¬ì–´í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤....\n",4);
+			DisplayTextX("\x13\x05ê²Œì„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.",4);
 			DisplayTextX("\n",4),
-			DisplayTextX("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4),
-			DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4),
+			DisplayTextX("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4),
+			DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
 			PlayWAVX("staredit\\wav\\Game_Over.ogg")
 		},HumanPlayers,FP)) 
 		DoActionsX(FP,{SetCDeaths(FP,SetTo,1,Win)})
@@ -673,5 +673,5 @@ Trigger {
 --	CIfEnd()
 	--SetMemoryX(0x663788, SetTo, ,0xFF);
 	--staredit\wav\LV10_001.ogg -- 272
---SetMemoryX(0x66655C, SetTo, 65536*961,0xFFFF0000) -- º¹±¸ÇÒ¶§
+--SetMemoryX(0x66655C, SetTo, 65536*961,0xFFFF0000) -- ë³µêµ¬í• ë•Œ
 end

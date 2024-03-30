@@ -49,10 +49,10 @@ SetCall(FP)
 	OCU_Check = def_sIndex()
 	NJump(FP,OCU_Check,CVar(FP,UpCompleted[2],Exactly,0),{
 		TSetMemory(0x6509B0,SetTo,UpgradeCP),
-		DisplayText("\x12\x07¡º \x04ÀÜ¾×ÀÌ ºÎÁ·ÇÕ´Ï´Ù. \x07¡»",4),
+		DisplayText("\x12\x07ã€ \x04ì”ì•¡ì´ ë¶€ì¡±í•©ë‹ˆë‹¤. \x07ã€",4),
 		SetMemory(0x6509B0,SetTo,FP)
 	})
-	DisplayPrint(UpgradeCP, {"\x12\x07¡º \x1F",UpCost," \x04¹Ì³×¶öÀ» ¼ÒºñÇÏ¿© ÃÑ \x19",UpCompleted," \x04È¸ ¾÷±×·¹ÀÌµå¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù. \x07¡»"})
+	DisplayPrint(UpgradeCP, {"\x12\x07ã€ \x1F",UpCost," \x04ë¯¸ë„¤ë„ì„ ì†Œë¹„í•˜ì—¬ ì´ \x19",UpCompleted," \x04íšŒ ì—…ê·¸ë ˆì´ë“œë¥¼ ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€"})
 	NJumpEnd(FP,OCU_Check)
 	DoActionsX(FP,{
 		SetCVar(FP,TempUpgradeMaskRet[2],SetTo,0),
@@ -69,7 +69,7 @@ function CGiveJYD_P9(Condition,UnitID)
 	CallTriggerX(FP,Call_CGiveP9,Condition,{SetCVar(FP,CGiveUnitID[2],SetTo,UnitID),SetInvincibility(Disable, UnitID, P9, 64)})
 end
 SetCall(FP)
-CMov(FP,0x6509B0,19025+19) --CUnit ½ÃÀÛÁöÁ¡ +19 (0x4C)
+CMov(FP,0x6509B0,19025+19) --CUnit ì‹œì‘ì§€ì  +19 (0x4C)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+19 + (84*1699)))
 CIf(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,8,0,0xFF)})
 	DoActions(FP,MoveCp(Add,6*4))
@@ -141,12 +141,12 @@ InstallGunData()
 
 
 
-f_Gun = SetCallForward() -- °ÇÀÛÇÔ¼ö
+f_Gun = SetCallForward() -- ê±´ì‘í•¨ìˆ˜
 SetCall(FP)
 
 
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
-	CIf(FP,{CVar(FP,Var_TempTable[54][2],AtMost,255)}) -- ·¹¾î³ª ÇÏÀÌºê µîÀÇ °ÇÀÛÀÏ °æ¿ì
+	CIf(FP,{CVar(FP,Var_TempTable[54][2],AtMost,255)}) -- ë ˆì–´ë‚˜ í•˜ì´ë¸Œ ë“±ì˜ ê±´ì‘ì¼ ê²½ìš°
 		Case_OverCocoon()
 		Case_Overmind()
 		Case_Daggoth()
@@ -179,7 +179,7 @@ SetCall(FP)
 		CWhileEnd()
 		if Limit == 1 then
 			CIf(FP,CD(TestMode,1))
-			DisplayPrint(HumanPlayers, {"¡º \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : ",f_GunNum," \x07¡»"})
+			DisplayPrint(HumanPlayers, {"ã€ \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ",f_GunNum," \x07ã€"})
 			CIfEnd()
 		end
 	CIfEnd()
@@ -212,7 +212,7 @@ SetCall(FP)
 	
 	if Limit == 1 then
 	CIf(FP,CD(TestMode,1))
-	DisplayPrint(HumanPlayers, {"\x07¡º \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ",G_CA," \x07¡»"})
+	DisplayPrint(HumanPlayers, {"\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ",G_CA," \x07ã€"})
 	CIfEnd()
 	end
 	CElseX()
@@ -331,7 +331,7 @@ SetCall(FP)
 	CElseX()
 	CDoActions(FP,{
 	TCreateUnitWithProperties(1, RepHeroIndex, 1, CunitP,{energy = 100})})
-	CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ¹«ÀûÇÃ·¡±× 1ÀÏ°æ¿ì ¹«Àû»óÅÂ·Î ¹Ù²Ş
+	CTrigger(FP,{TMemoryX(_Add(BackupCp,1),Exactly,0x10000,0x10000)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},1) -- ë¬´ì í”Œë˜ê·¸ 1ì¼ê²½ìš° ë¬´ì ìƒíƒœë¡œ ë°”ê¿ˆ
 	CIfXEnd()
 	f_LoadCp()
 	CElseX()
@@ -385,7 +385,7 @@ SetCallEnd()
 				},
 			
 			actions = {
-				RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10¡¼ \x06£Ô\x04£ï£ô£á£ì¡¡\x1F£Ó£ã£ï£ò£å \x10¡½",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+				RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x10ã€ \x06ï¼´\x04ï½ï½”ï½ï½Œã€€\x1Fï¼³ï½ƒï½ï½’ï½… \x10ã€‘",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
 				PreserveTrigger();
 			},
 		}
@@ -394,7 +394,7 @@ SetCallEnd()
 		CIf(FP,CVar(FP,BarPos[i][2],AtLeast,1))
 		CAdd(FP,TotalScore,ExScore[i])
 		ExScore[i]["fwc"]=true
-		DisplayPrint(HumanPlayers, {"\x13\x03¢Ó ",PName(i-1)," \x04: \x1F",ExScore[i]," \x03¢Ó"})
+		DisplayPrint(HumanPlayers, {"\x13\x03â€  ",PName(i-1)," \x04: \x1F",ExScore[i]," \x03â€ "})
 		CIfEnd()
 		end
 		CIf(FP,CDeaths(FP,AtLeast,1,Win))
@@ -410,20 +410,20 @@ SetCallEnd()
 					f_Mul(FP,ReadScore,_Mov(2))
 
 					
-					CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --¾Æ¸¶ ÀÌº¥Æ®¿ë
-						f_Mul(FP,ReadScore,MulPoint)--Ãß°¡ Æ÷ÀÎÆ® Áö±Ş
+					CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --ì•„ë§ˆ ì´ë²¤íŠ¸ìš©
+						f_Mul(FP,ReadScore,MulPoint)--ì¶”ê°€ í¬ì¸íŠ¸ ì§€ê¸‰
 					CIfEnd()
 
 					--CMul(FP,ReadScore,_Div(Level,_Mov(10)))
 					CDoActions(FP,{TSetDeaths(i,Add,ReadScore,4),SetDeaths(i,SetTo,1,14)})
 					CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
-					DisplayText("\x13\x1F!!!£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä \x07¢¦ Å³ ½ºÄÚ¾î ±â·Ï°»½Å! ¢¦ \x1F£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä !!!",4),
+					DisplayText("\x13\x1F!!!ï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ \x07ï½ í‚¬ ìŠ¤ì½”ì–´ ê¸°ë¡ê°±ì‹ ! ï½ \x1Fï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ !!!",4),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 					SetMemory(0x6509B0,SetTo,FP)},1)
 					ReadScore["fwc"]=true 
-					DisplayPrint(i, {"\x13\x10¡¼ \x07Å³ ½ºÄÚ¾î°¡ \x19±¸¹öÀü ½ºÅÈ Æ÷ÀÎÆ®\x04·Î ÀüÈ¯µÇ¾ú½À´Ï´Ù. ±¸ ¹öÀü¿¡¼­ ÀÌ¿ë°¡´ÉÇÕ´Ï´Ù. \x04: ",ReadScore," \x10¡½"})
+					DisplayPrint(i, {"\x13\x10ã€ \x07í‚¬ ìŠ¤ì½”ì–´ê°€ \x19êµ¬ë²„ì „ ìŠ¤íƒ¯ í¬ì¸íŠ¸\x04ë¡œ ì „í™˜ë˜ì—ˆìŠµë‹ˆë‹¤. êµ¬ ë²„ì „ì—ì„œ ì´ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤. \x04: ",ReadScore," \x10ã€‘"})
 				CIfEnd()
 			end
 
@@ -434,7 +434,7 @@ SetCallEnd()
 	CIf(FP,CDeaths(FP,AtLeast,1,isDBossClear),SetCDeaths(FP,SetTo,0,isDBossClear))
 --end
 		
-		DisplayPrint(HumanPlayers, {"\x13\x10¡¼ \x07P\x04layer \x06T\x04otal \x1FS\x04core : ",ClearLamp[2],TotalScore," \x04/ \x1D",OutputPoint,"  \x10¡½"})
+		DisplayPrint(HumanPlayers, {"\x13\x10ã€ \x07P\x04layer \x06T\x04otal \x1FS\x04core : ",ClearLamp[2],TotalScore," \x04/ \x1D",OutputPoint,"  \x10ã€‘"})
 	CIfEnd()
 	
 
@@ -470,13 +470,13 @@ SetCallEnd()
 		CAdd(FP,0x6509B0,1)
 		CIf(FP,DeathsX(CurrentPlayer,Exactly,7*256,0,0xFF00))
 			local PointJump = def_sIndex()
-			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- Æ÷ÀÎÆ®À¯´Ö ¸®Á¨ »èÁ¦
-			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- Æ÷ÀÎÆ®À¯´Ö ¸®Á¨ »èÁ¦
-			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,221,0,0xFF)}) -- Æ÷ÀÎÆ®À¯´Ö ¸®Á¨ »èÁ¦
---			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],AtLeast,7),DeathsX(CurrentPlayer,Exactly,131,0,0xFF)}) -- ÇØÃ³¸®·¹¾î ¸®Á¨¾øÀ½
---			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],Exactly,10),DeathsX(CurrentPlayer,Exactly,132,0,0xFF)}) -- ÇØÃ³¸®·¹¾î ¸®Á¨¾øÀ½
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,150,0,0xFF)}) -- í¬ì¸íŠ¸ìœ ë‹› ë¦¬ì   ì‚­ì œ
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,220,0,0xFF)}) -- í¬ì¸íŠ¸ìœ ë‹› ë¦¬ì   ì‚­ì œ
+			NJumpX(FP,PointJump,{CD(initStart,0),DeathsX(CurrentPlayer,Exactly,221,0,0xFF)}) -- í¬ì¸íŠ¸ìœ ë‹› ë¦¬ì   ì‚­ì œ
+--			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],AtLeast,7),DeathsX(CurrentPlayer,Exactly,131,0,0xFF)}) -- í•´ì²˜ë¦¬ë ˆì–´ ë¦¬ì  ì—†ìŒ
+--			NJumpX(FP,PointJump,{CVar(FP,LevelT[2],Exactly,10),DeathsX(CurrentPlayer,Exactly,132,0,0xFF)}) -- í•´ì²˜ë¦¬ë ˆì–´ ë¦¬ì  ì—†ìŒ
 			CSub(FP,0x6509B0,1)
-			CallTrigger(FP,f_Replace)-- µ¥ÀÌÅÍÈ­ ÇÑ À¯´Ö Àç¹èÄ¡ÇÏ´Â ÄÚµå.
+			CallTrigger(FP,f_Replace)-- ë°ì´í„°í™” í•œ ìœ ë‹› ì¬ë°°ì¹˜í•˜ëŠ” ì½”ë“œ.
 			CAdd(FP,0x6509B0,1)
 			NJumpXEnd(FP,PointJump)
 		CIfEnd()
@@ -515,7 +515,7 @@ SetCallEnd()
 	--TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,9)},{ShUnitLimitT2},{preserved})
 
 	
-	CMov(FP,CunitIndex,0)-- ¸ğµç À¯´Ö ¿µÀÛÀ¯´Ö ÇÃ·¡±× ¸®¼Â
+	CMov(FP,CunitIndex,0)-- ëª¨ë“  ìœ ë‹› ì˜ì‘ìœ ë‹› í”Œë˜ê·¸ ë¦¬ì…‹
 	CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
 		CDoActions(FP,{
 			Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0),
@@ -580,10 +580,10 @@ SetCallEnd()
 	for j, k in pairs(UpVarWepArr) do
 		SetLevelUpAtk(k)
 	end
-	OAtk1 = "\x07¡Ú \x19¿øÅ¬¸¯ \x0F°ø°İ·Â \x04¾÷±×·¹ÀÌµå 255È¸ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03A\x04) \x07¡Ú"
-	OAtk2 = "\x07¡Ú \x19¿øÅ¬¸¯ \x0F°ø°İ·Â \x04¾÷±×·¹ÀÌµå 10È¸ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03Q\x04) \x07¡Ú"
-	OHP1 = "\x07¡Ú \x19¿øÅ¬¸¯ \x08Ã¼·Â \x04¾÷±×·¹ÀÌµå 255È¸ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03D\x04) \x07¡Ú"
-	OHP2 = "\x07¡Ú \x19¿øÅ¬¸¯ \x08Ã¼·Â \x04¾÷±×·¹ÀÌµå 10È¸ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03E\x04) \x07¡Ú"
+	OAtk1 = "\x07â˜… \x19ì›í´ë¦­ \x0Fê³µê²©ë ¥ \x04ì—…ê·¸ë ˆì´ë“œ 255íšŒ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03A\x04) \x07â˜…"
+	OAtk2 = "\x07â˜… \x19ì›í´ë¦­ \x0Fê³µê²©ë ¥ \x04ì—…ê·¸ë ˆì´ë“œ 10íšŒ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03Q\x04) \x07â˜…"
+	OHP1 = "\x07â˜… \x19ì›í´ë¦­ \x08ì²´ë ¥ \x04ì—…ê·¸ë ˆì´ë“œ 255íšŒ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03D\x04) \x07â˜…"
+	OHP2 = "\x07â˜… \x19ì›í´ë¦­ \x08ì²´ë ¥ \x04ì—…ê·¸ë ˆì´ë“œ 10íšŒ \x04(\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D Ore\x04) (\x0D\x0D\x0D\x0D\x0D/\x1C\x0D\x0D\x0D\x0D\x0D\x04) \x04(\x03E\x04) \x07â˜…"
 	
 	
 	
@@ -594,39 +594,39 @@ SetCallEnd()
 
 	t01 = MakeiStrVoid(30).."\x04 - \x1C0000.0%\x04 - "..MakeiStrVoid(20)
 	t02 = MakeiStrVoid(30).."\x1F - \x1F0000.0%\x04 - "..MakeiStrVoid(20)
-	t03 = "\x07¡º \x18ATK \x1FÇÑ°èµ¹ÆÄ \x04¾÷±×·¹ÀÌµå (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07¡»"
-	t04 = "\x07¡º \x08HP \x1FÇÑ°èµ¹ÆÄ \x04¾÷±×·¹ÀÌµå (000\x04/\x1C832\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07¡»"
-	t05 = "\x07¡º \x08°ø°İ\x0F¼Óµµ \x04¾÷±×·¹ÀÌµå (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D) \x03(Q) \x07¡»"
-	t06 = "\x07¡º \x08°ø°İ\x1F½ºÅ³ \x04¾÷±×·¹ÀÌµå (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D\x0D\x0D) \x03(A) \x07¡»"
+	t03 = "\x07ã€ \x18ATK \x1Fí•œê³„ëŒíŒŒ \x04ì—…ê·¸ë ˆì´ë“œ (000\x04/\x1C256\x04) \x1F(Cost:"..P_AtkExceed..") \x03(A) \x07ã€"
+	t04 = "\x07ã€ \x08HP \x1Fí•œê³„ëŒíŒŒ \x04ì—…ê·¸ë ˆì´ë“œ (000\x04/\x1C832\x04) \x1F(Cost:"..P_HPExceed..") \x03(D) \x07ã€"
+	t05 = "\x07ã€ \x08ê³µê²©\x0Fì†ë„ \x04ì—…ê·¸ë ˆì´ë“œ (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D) \x03(Q) \x07ã€"
+	t06 = "\x07ã€ \x08ê³µê²©\x1FìŠ¤í‚¬ \x04ì—…ê·¸ë ˆì´ë“œ (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D\x0D\x0D\x0D) \x03(A) \x07ã€"
 	iStrSize2 = GetiStrSize(0,t01)
 	iStrSize3 = GetiStrSize(0,t02)
 
 
-	iStrSize4 = GetiStrSize(0,"\x07¡º \x08´ºÅ¬¸®¾î \x04º¸À¯·® :\x04 0000000000 \x07¡»")
-	iStrSize5 = GetiStrSize(0,"\x07¡º \x07±¸¹öÀü Æ÷ÀÎÆ® \x04º¸À¯·® :\x04 0000000000 \x07¡»")
-	iStrSize6 = GetiStrSize(0,"\x07¡º "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07¡»\x0D\x0D\x0D\x0D\x0D\x0D")
+	iStrSize4 = GetiStrSize(0,"\x07ã€ \x08ë‰´í´ë¦¬ì–´ \x04ë³´ìœ ëŸ‰ :\x04 0000000000 \x07ã€")
+	iStrSize5 = GetiStrSize(0,"\x07ã€ \x07êµ¬ë²„ì „ í¬ì¸íŠ¸ \x04ë³´ìœ ëŸ‰ :\x04 0000000000 \x07ã€")
+	iStrSize6 = GetiStrSize(0,"\x07ã€ "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07ã€\x0D\x0D\x0D\x0D\x0D\x0D")
 	
-	iStrSize7 = GetiStrSize(0,"\x07¡º \x18ATK \x1FÇÑ°èµ¹ÆÄ \x04¾÷±×·¹ÀÌµå (000\x04/\x1C256\x04) \x1F(Cost:10) \x03(A) \x07¡»")
-	iStrSize8 = GetiStrSize(0,"\x07¡º \x08HP \x1FÇÑ°èµ¹ÆÄ \x04¾÷±×·¹ÀÌµå (000\x04/\x1C832\x04) \x1F(Cost:35) \x03(D) \x07¡»")
-	iStrSize9 = GetiStrSize(0,"\x07¡º \x08°ø°İ\x0F¼Óµµ \x04¾÷±×·¹ÀÌµå (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07¡»")
+	iStrSize7 = GetiStrSize(0,"\x07ã€ \x18ATK \x1Fí•œê³„ëŒíŒŒ \x04ì—…ê·¸ë ˆì´ë“œ (000\x04/\x1C256\x04) \x1F(Cost:10) \x03(A) \x07ã€")
+	iStrSize8 = GetiStrSize(0,"\x07ã€ \x08HP \x1Fí•œê³„ëŒíŒŒ \x04ì—…ê·¸ë ˆì´ë“œ (000\x04/\x1C832\x04) \x1F(Cost:35) \x03(D) \x07ã€")
+	iStrSize9 = GetiStrSize(0,"\x07ã€ \x08ê³µê²©\x0Fì†ë„ \x04ì—…ê·¸ë ˆì´ë“œ (\x0D\x0D\x0D\x0D\x04/\x1C10\x04) \x1F(Cost:\x0D\x0D\x0D\x0D) \x03(Q) \x07ã€")
 	iStrSize10 = GetiStrSize(0,t06)
 	
 
-	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-	S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- ´ÜÃàÅ°¾øÀ½
-	S6 = MakeiTblString(1480,"ÀÏ¹İ¸í·É",'A',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
-	S7 = MakeiTblString(1481,"ÀÏ¹İ¸í·É",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
-	S8 = MakeiTblString(1478,"ÀÏ¹İ¸í·É",'Q',MakeiStrLetter("\x0D",iStrSize9+5),"Base",1)
+	S1 = MakeiTblString(1501,"None",'None',MakeiStrLetter("\x0D",iStrSize2+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+	S2 = MakeiTblString(831,"None",'None',MakeiStrLetter("\x0D",iStrSize3+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+	S3 = MakeiTblString(816,"None",'None',MakeiStrLetter("\x0D",iStrSize4+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+	S4 = MakeiTblString(129,"None",'None',MakeiStrLetter("\x0D",iStrSize5+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+	S5 = MakeiTblString(MarID[1]+1,"None",'None',MakeiStrLetter("\x0D",iStrSize6+5),"Base",1) -- ë‹¨ì¶•í‚¤ì—†ìŒ
+	S6 = MakeiTblString(1480,"ì¼ë°˜ëª…ë ¹",'A',MakeiStrLetter("\x0D",iStrSize7+5),"Base",1)
+	S7 = MakeiTblString(1481,"ì¼ë°˜ëª…ë ¹",'D',MakeiStrLetter("\x0D",iStrSize8+5),"Base",1)
+	S8 = MakeiTblString(1478,"ì¼ë°˜ëª…ë ¹",'Q',MakeiStrLetter("\x0D",iStrSize9+5),"Base",1)
 
-	S9 = MakeiTblString(1370,"ÀÏ¹İ¸í·É",'A',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk1)+5),"Base",1)
-	S10 = MakeiTblString(1368,"ÀÏ¹İ¸í·É",'Q',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk2)+5),"Base",1)
-	S11 = MakeiTblString(1372,"ÀÏ¹İ¸í·É",'D',MakeiStrLetter("\x0D",GetiStrSize(0,OHP1)+5),"Base",1)
-	S12 = MakeiTblString(1371,"ÀÏ¹İ¸í·É",'E',MakeiStrLetter("\x0D",GetiStrSize(0,OHP2)+5),"Base",1)
+	S9 = MakeiTblString(1370,"ì¼ë°˜ëª…ë ¹",'A',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk1)+5),"Base",1)
+	S10 = MakeiTblString(1368,"ì¼ë°˜ëª…ë ¹",'Q',MakeiStrLetter("\x0D",GetiStrSize(0,OAtk2)+5),"Base",1)
+	S11 = MakeiTblString(1372,"ì¼ë°˜ëª…ë ¹",'D',MakeiStrLetter("\x0D",GetiStrSize(0,OHP1)+5),"Base",1)
+	S12 = MakeiTblString(1371,"ì¼ë°˜ëª…ë ¹",'E',MakeiStrLetter("\x0D",GetiStrSize(0,OHP2)+5),"Base",1)
 
-	S13 = MakeiTblString(1474,"ÀÏ¹İ¸í·É",'A',MakeiStrLetter("\x0D",iStrSize10+5),"Base",1)
+	S13 = MakeiTblString(1474,"ì¼ë°˜ëª…ë ¹",'A',MakeiStrLetter("\x0D",iStrSize10+5),"Base",1)
 
 	
 	iTbl1 = GetiTblId(FP,1501,S1) 
@@ -654,13 +654,13 @@ SetCallEnd()
 	--CA__lItoCustom(SVA1(Str1,0),KillW,nil,nil,10,1,nil,{"\x1F\x0D","\x08\x0D","\x040"},{0x04,0x04,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x2,0x1E,0x1E,0x1E,0x05,0x05,0x05}
 	--,{0,1,3,4,5,7,8,9,11,12,13,15,16,17,19,20,21,23,24,25},nil,{0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 	Str3, Str3a, Str3s = SaveiStrArr(FP,t01)
-	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04³²Àº \x08´ºÅ¬¸®¾î\x04 : 0000000000  \x14\x0D\x14\x0D\x14\x0D\x14\x0D")
-	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07¡º \x07±¸¹öÀü Æ÷ÀÎÆ® \x04º¸À¯·® :\x04 0000000000 \x07¡»")
+	Str4, Str4a, Str4s = SaveiStrArr(FP,"\x04ë‚¨ì€ \x08ë‰´í´ë¦¬ì–´\x04 : 0000000000  \x14\x0D\x14\x0D\x14\x0D\x14\x0D")
+	Str5, Str5a, Str5s = SaveiStrArr(FP,"\x07ã€ \x07êµ¬ë²„ì „ í¬ì¸íŠ¸ \x04ë³´ìœ ëŸ‰ :\x04 0000000000 \x07ã€")
 	MarStr = {}
 	MarStra = {}
 	MarStrs = {}
 	for i = 0, 6 do
-		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07¡º "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07¡»\x0D\x0D\x0D\x0D\x0D")
+		MarStr[i+1], MarStra[i+1], MarStrs[i+1] = SaveiStrArr(FP,"\x07ã€ "..MakeiStrVoid(20).."\x04\'s \x1FExceeD \x1BM\x04arine \x07ã€\x0D\x0D\x0D\x0D\x0D")
 	end
 	Str6, Str6a, Str6s = SaveiStrArr(FP,t03)
 	Str7, Str7a, Str7s = SaveiStrArr(FP,t04)
@@ -731,7 +731,7 @@ SetCallEnd()
 	CIfXEnd()
 
 	CIfEnd()
-	--µµÂøÁ¡ -(iSub) ½ÃÀÛÁ¡
+	--ë„ì°©ì  -(iSub) ì‹œì‘ì 
 	NIfNot(FP,{CV(TS_VarArr[1],TS_VarArr[3])})
 	CIfX(FP,{TTNVar(TS_VarArr[1], "<", TS_VarArr[3])})
 		CMov(FP,TS_VarArr[17],_Div(_Sub(TS_VarArr[3], TS_VarArr[1]),5),1)
@@ -751,35 +751,35 @@ SetCallEnd()
 		CSub(FP,TS_VarArr[2],TS_VarArr[18])
 	CIfXEnd()
 	NIfNotEnd()
-	--,SetTo,928 ÀÌ¹ÌÁö
-	--, SetTo, 131 ½ºÅ©¸³Æ® 
-	--¸Ó¸® ÀÌ¹ÌÁö
-	--SetMemoryW(0x666160+(294*2), SetTo, 928),--ÀÌ¹ÌÁö
-	--SetMemory(0x66EC48+(4*928), SetTo, 131),--½ºÅ©¸³Æ®
-	--SetMemoryB(0x669E28+928, SetTo, 17),--»ö»ó
+	--,SetTo,928 ì´ë¯¸ì§€
+	--, SetTo, 131 ìŠ¤í¬ë¦½íŠ¸ 
+	--ë¨¸ë¦¬ ì´ë¯¸ì§€
+	--SetMemoryW(0x666160+(294*2), SetTo, 928),--ì´ë¯¸ì§€
+	--SetMemory(0x66EC48+(4*928), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
+	--SetMemoryB(0x669E28+928, SetTo, 17),--ìƒ‰ìƒ
 
 
-	--´ºÅ©´åÀÌ¹ÌÁö
-	--SetMemoryW(0x666160+(294*2), SetTo, 233),--ÀÌ¹ÌÁö
-	--SetMemory(0x66EC48+(4*233), SetTo, 131),--½ºÅ©¸³Æ®
+	--ë‰´í¬ë‹·ì´ë¯¸ì§€
+	--SetMemoryW(0x666160+(294*2), SetTo, 233),--ì´ë¯¸ì§€
+	--SetMemory(0x66EC48+(4*233), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 
 
-	--SetMemoryW(0x666160+(294*2), SetTo, 399),--ÀÌ¹ÌÁöº¹±¸
-	--SetMemory(0x66EC48+(4*928), SetTo, 368),--½ºÅ©¸³Æ®º¹±¸
-	--SetMemory(0x66EC48+(4*233), SetTo, 74),--½ºÅ©¸³Æ®º¹±¸
-	--SetMemoryB(0x669E28+928, SetTo, 9),--»ö»óº¹±¸
+	--SetMemoryW(0x666160+(294*2), SetTo, 399),--ì´ë¯¸ì§€ë³µêµ¬
+	--SetMemory(0x66EC48+(4*928), SetTo, 368),--ìŠ¤í¬ë¦½íŠ¸ë³µêµ¬
+	--SetMemory(0x66EC48+(4*233), SetTo, 74),--ìŠ¤í¬ë¦½íŠ¸ë³µêµ¬
+	--SetMemoryB(0x669E28+928, SetTo, 9),--ìƒ‰ìƒë³µêµ¬
 
 
 	CIf(FP,Memory(0x628438,AtLeast,1))
 	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*10), TS_VarArr[6], CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
-	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
 	CDoActions(FP,{
-		SetMemoryW(0x666160+(294*2), SetTo, 928),--ÀÌ¹ÌÁö
-		SetMemory(0x66EC48+(4*928), SetTo, 131),--½ºÅ©¸³Æ®
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--ì´ë¯¸ì§€
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
@@ -790,12 +790,12 @@ SetCallEnd()
 	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[6],6), CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
-	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
 	CDoActions(FP,{
-		SetMemoryW(0x666160+(294*2), SetTo, 928),--ÀÌ¹ÌÁö
-		SetMemory(0x66EC48+(4*928), SetTo, 131),--½ºÅ©¸³Æ®
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--ì´ë¯¸ì§€
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
@@ -806,21 +806,21 @@ SetCallEnd()
 	f_Lengthdir(FP, _Add(TS_VarArr[9],-32*11), _Add(TS_VarArr[6],-6), CPosX, CPosY)
 	Simple_SetLocX(FP, 0, _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]), _Add(CPosX,TS_VarArr[1]), _Add(CPosY,TS_VarArr[2]))--
 	f_Read(FP,0x628438,nil,Nextptrs)
-	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--»ö»ó
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+928, SetTo, 16)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+928, SetTo, 17)},{preserved})--ìƒ‰ìƒ
 	CDoActions(FP,{
-		SetMemoryW(0x666160+(294*2), SetTo, 928),--ÀÌ¹ÌÁö
-		SetMemory(0x66EC48+(4*928), SetTo, 131),--½ºÅ©¸³Æ®
+		SetMemoryW(0x666160+(294*2), SetTo, 928),--ì´ë¯¸ì§€
+		SetMemory(0x66EC48+(4*928), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
 	})
 	CIfEnd()
 	
-	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+233, SetTo, 15)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+233, SetTo, 0)},{preserved})--»ö»ó
-	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+233, SetTo, 17)},{preserved})--»ö»ó
+	TriggerX(FP,{CV(TS_VarArr[5],1)},{SetMemoryB(0x669E28+233, SetTo, 15)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],0)},{SetMemoryB(0x669E28+233, SetTo, 0)},{preserved})--ìƒ‰ìƒ
+	TriggerX(FP,{CV(TS_VarArr[5],2)},{SetMemoryB(0x669E28+233, SetTo, 17)},{preserved})--ìƒ‰ìƒ
 
 
 	--NIfNot(FP, {CV(TS_VarArr[5],2)})
@@ -834,8 +834,8 @@ SetCallEnd()
 
 	f_Read(FP,0x628438,nil,Nextptrs)
 	CDoActions(FP,{
-		SetMemoryW(0x666160+(294*2), SetTo, 233),--ÀÌ¹ÌÁö
-		SetMemory(0x66EC48+(4*233), SetTo, 131),--½ºÅ©¸³Æ®
+		SetMemoryW(0x666160+(294*2), SetTo, 233),--ì´ë¯¸ì§€
+		SetMemory(0x66EC48+(4*233), SetTo, 131),--ìŠ¤í¬ë¦½íŠ¸
 		CreateUnit(1,207, 1,FP),
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
@@ -847,15 +847,15 @@ SetCallEnd()
 
 
 	DoActions(FP, {
-		SetMemoryW(0x666160+(294*2), SetTo, 399),--ÀÌ¹ÌÁöº¹±¸
-		SetMemory(0x66EC48+(4*928), SetTo, 368),--½ºÅ©¸³Æ®º¹±¸
-		SetMemory(0x66EC48+(4*233), SetTo, 74),--½ºÅ©¸³Æ®º¹±¸
-		SetMemoryB(0x669E28+928, SetTo, 9),--»ö»óº¹±¸
+		SetMemoryW(0x666160+(294*2), SetTo, 399),--ì´ë¯¸ì§€ë³µêµ¬
+		SetMemory(0x66EC48+(4*928), SetTo, 368),--ìŠ¤í¬ë¦½íŠ¸ë³µêµ¬
+		SetMemory(0x66EC48+(4*233), SetTo, 74),--ìŠ¤í¬ë¦½íŠ¸ë³µêµ¬
+		SetMemoryB(0x669E28+928, SetTo, 9),--ìƒ‰ìƒë³µêµ¬
 	})
 
 --	TS_Suspend({TSLine(3, AtLeast, 25)})
 	
-	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])},{SetMemoryB(0x669E28+533, SetTo, 17),SetMemoryB(0x6636B8+208,SetTo,116)})--ÆÄ±«ÀÚ¿¡¼­ ›§´ø µ¥ÀÌÅÍ ¼öÁ¤ÈÄ Àç»ç¿ë
+	CIf(FP,{CV(TS_VarArr[1],TS_VarArr[3]),CV(TS_VarArr[2],TS_VarArr[4])},{SetMemoryB(0x669E28+533, SetTo, 17),SetMemoryB(0x6636B8+208,SetTo,116)})--íŒŒê´´ìì—ì„œ ì»ë˜ ë°ì´í„° ìˆ˜ì •í›„ ì¬ì‚¬ìš©
 	TriggerX(FP,{CV(TS_VarArr[8],0),CV(TS_VarArr[5],1,AtMost)},{SetCD(GBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
 	TriggerX(FP,{CV(TS_VarArr[8],0),CV(TS_VarArr[5],2)},{SetCD(SGBl2SE,1),SetV(TS_VarArr[9],1)},{preserved})
 	
@@ -901,7 +901,7 @@ SetCallEnd()
 		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00104,0xA00104),
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
 		TSetMemoryX(_Add(Nextptrs,68),SetTo,25,0xFFFF),
-	}, 1)--ÄÉÀÌ´Ù¸°Å©¸®½ºÅ»»ö»ó
+	}, 1)--ì¼€ì´ë‹¤ë¦°í¬ë¦¬ìŠ¤íƒˆìƒ‰ìƒ
 	CIfEnd()
 	CIfEnd()
 	
@@ -929,7 +929,7 @@ SetCallEnd()
 		TSetMemory(_Add(Nextptrs,57),SetTo,0),
 		TSetMemoryX(_Add(Nextptrs,68),SetTo,10,0xFFFF),
 		KillUnitAt(All, "Men", 1, Force1)
-	}, 1)--ÄÉÀÌ´Ù¸°Å©¸®½ºÅ»»ö»ó
+	}, 1)--ì¼€ì´ë‹¤ë¦°í¬ë¦¬ìŠ¤íƒˆìƒ‰ìƒ
 
 	CIfEnd()
 	CIfEnd()
@@ -942,11 +942,11 @@ SetCallEnd()
 	Call_CDPrint = SetCallForward()
 	SetCall(FP)
 	SpCodeBase = 0x8080E200 
-	SpCode0 = 0x8880E200 -- ½Äº°ÀÚ (ÅØ½ºÆ® ¹ÌÃâ·Â ¶óÀÎÀº Ã¹ 1¹ÙÀÌÆ®°¡ 00À¸·Î °íÁ¤µÊ) 
+	SpCode0 = 0x8880E200 -- ì‹ë³„ì (í…ìŠ¤íŠ¸ ë¯¸ì¶œë ¥ ë¼ì¸ì€ ì²« 1ë°”ì´íŠ¸ê°€ 00ìœ¼ë¡œ ê³ ì •ë¨) 
 	SpCode3 = 0x8B80E200 -- \x0D\x0D!H
 	TC = CreateCcode()
 	DoActionsX(FP,{SubCD(TC,1)})
-	function HTextEff() -- ScanChat -> 11ÁÙ ÀüÃ¼¸¦ utf8 -> iutf8È­ (½Äº°ÀÚ·Î Áßº¹¹æÁö) 
+	function HTextEff() -- ScanChat -> 11ì¤„ ì „ì²´ë¥¼ utf8 -> iutf8í™” (ì‹ë³„ìë¡œ ì¤‘ë³µë°©ì§€) 
 	CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
 	CA__SetNext(HStr4,8,SetTo,0,54-1,0)
 	CMov(FP,HLine,0)
@@ -964,7 +964,7 @@ SetCallEnd()
 		CurLiV = CreateVar(FP)
 		EffCV = CreateVArr(11, FP)
 		CIf(FP,{NVar(HCheck,AtLeast,3),NVar(HCheck,AtMost,4)})
-		CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 ÀÎ½Ä
+		CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 ì¸ì‹
 			CMovX(FP,VArr(EffCV,HLine),0)
 			CMov(FP,CurLiV, _Mul(HLine,54*604))
 			CA__SetValue(HStr2,MakeiStrLetter("\x0D",53),0xFFFFFFFF,CurLiV,1,1) 
@@ -1150,7 +1150,7 @@ SetCallEnd()
 --	CJump(FP,CBullet_ArrCheck)
 --	NElseX()
 --	
---	CBulletErrT = "\x07¡º \x08ERROR \x04: CreateBullet_EPD ¸ñ·ÏÀÌ °¡µæ Â÷ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÏÁö ¸øÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+--	CBulletErrT = "\x07ã€ \x08ERROR \x04: CreateBullet_EPD ëª©ë¡ì´ ê°€ë“ ì°¨ ë°ì´í„°ë¥¼ ì…ë ¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 --	DoActions2(FP,{RotatePlayer({DisplayTextX(CBulletErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 --	
 --	NIfXEnd()

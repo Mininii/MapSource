@@ -2,13 +2,13 @@ function Gun_System()
 
 
 	--[[
-	EXCunit Àû¿ë
-	1¹øÁÙ : °ÇÀÛÀÇ ·¹º§
-	9¹øÁÙ : ¿µÀÛÀ¯´Ö Ç¥½Ä
-	10¹øÁÙ : ¸¶¸° µ¥½º°ª Áßº¹Àû¿ë ¹æÁö¿ë
+	EXCunit ì ìš©
+	1ë²ˆì¤„ : ê±´ì‘ì˜ ë ˆë²¨
+	9ë²ˆì¤„ : ì˜ì‘ìœ ë‹› í‘œì‹
+	10ë²ˆì¤„ : ë§ˆë¦° ë°ìŠ¤ê°’ ì¤‘ë³µì ìš© ë°©ì§€ìš©
 	]]
 	EXCC_Part1(DUnitCalc)
-	--CunitCtrig_Part1(FP) -- Á×ÀºÀ¯´Ö ÀÎ½Ä ´Ü¶ô ½ÃÀÛ
+	--CunitCtrig_Part1(FP) -- ì£½ì€ìœ ë‹› ì¸ì‹ ë‹¨ë½ ì‹œì‘
 	DoActions(FP,MoveCp(Subtract,6*4))
 	Check_P8 = def_sIndex()
 	NJump(FP,Check_P8,DeathsX(CurrentPlayer,Exactly,7,0,0xFF))
@@ -19,14 +19,14 @@ function Gun_System()
 
 	NJumpEnd(FP,Check_P8)
 	DoActions(FP,MoveCp(Add,6*4))
-	CIf(FP,Cond_EXCC(8,AtLeast,1)) -- ¿µÀÛÀ¯´ÖÀÎ½Ä
+	CIf(FP,Cond_EXCC(8,AtLeast,1)) -- ì˜ì‘ìœ ë‹›ì¸ì‹
 	f_SaveCp()
 	InstallHeroPoint()
 	CIfEnd()
 	CMov(FP,Gun_Type,0)
 	CIf(FP,{TTOR({CVar(FP,LevelT[2],AtMost,3),CVar(FP,LevelT[2],Exactly,10)})})
-	for j, k in pairs({142,135,140,141,138,139,137,146,144,143}) do -- Àâ°ÇÀÛ ¸ñ·Ï
-		f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = Àâ°ÇÀÛ ÇÃ·¡±×
+	for j, k in pairs({142,135,140,141,138,139,137,146,144,143}) do -- ì¡ê±´ì‘ ëª©ë¡
+		f_GSend(k,{SetCVar(FP,Gun_Type[2],SetTo,256)}) -- GunType = ì¡ê±´ì‘ í”Œë˜ê·¸
 	end
 	CIfEnd()
 
@@ -39,7 +39,7 @@ function Gun_System()
 	f_GSend(148)
 	f_GSend(173)
 	f_GSend(152)
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- ´ÙÅ©¾ÆÄ­ Æø¹ßÀÌÆåÆ®
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,193,0,0xFF)}) -- ë‹¤í¬ì•„ì¹¸ í­ë°œì´í™íŠ¸
 		f_SaveCp()
 		f_Read(FP,_Sub(BackupCp,15),CPos)
 		Convert_CPosXY()
@@ -63,7 +63,7 @@ function Gun_System()
 	--DoActionsXI(FP,EXCC_Forward)
 	EXCC_Part3X()
 	--CunitCtrig_Part3X()
-	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+	for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
 	EXCC_Part4X(i,{
 	DeathsX(19025+(84*i)+40,AtLeast,1*16777216,0,0xFF000000),
 	DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
@@ -130,7 +130,7 @@ function Gun_System()
 	EXCC_Part2()
 	EXCC_Part3X()
 	
-	for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+	for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
 	EXCC_Part4X(i,{
 		
 		CVar("X", "X", AtLeast, 1);
@@ -196,29 +196,29 @@ for i = 1, 7 do
 
 
 
---21¿¡¼­ 33À¸·Î ÀÌµ¿ÇÏ¿© ÄğÅ½ 1Æ½ Â÷°¨ÈÄ º¹±Í
+--21ì—ì„œ 33ìœ¼ë¡œ ì´ë™í•˜ì—¬ ì¿¨íƒ 1í‹± ì°¨ê°í›„ ë³µê·€
 	--DoActions(FP, {SetMemory(0x6509B0, Add, 12),SetDeathsX(CurrentPlayer, Subtract, 1, 0, 0xFFFF),SetMemory(0x6509B0, Subtract, 12)})
 	CDoActions(FP, {TSetMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),Subtract,1)})
 	BreakCalc({DeathsX(CurrentPlayer,AtMost,18*256,0,0xFF00),DeathsX(CurrentPlayer,AtMost,18*65536,0,0xFF0000)})
 	
 	CSub(FP,0x6509B0,2)
-	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00)})})--°ø°İ, È¦µå, ÀÎº¡Ä¿ Ã¼Å©
+	CIf(FP,{TTOR({DeathsX(CurrentPlayer,Exactly,10*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,107*256,0,0xFF00),DeathsX(CurrentPlayer,Exactly,5*256,0,0xFF00)})})--ê³µê²©, í™€ë“œ, ì¸ë²™ì»¤ ì²´í¬
 		CAdd(FP,0x6509B0,4)
-		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})--´ë»ó Á¸Àç Ã¼Å©
+		CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,0)})--ëŒ€ìƒ ì¡´ì¬ ì²´í¬
 
-			CIf(FP,{CV(MSkillP[i],1,AtLeast),Memory(0x628438,AtLeast,1),TMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),AtMost,0),Bring(FP, AtLeast, 1, 147, 64)},{SetV(MarSkillP,i-1)})--ÄğÅ¸ÀÓ,Äµ³´ Ã¼Å©
+			CIf(FP,{CV(MSkillP[i],1,AtLeast),Memory(0x628438,AtLeast,1),TMemory(_Add(MarSkillTimerArr,MarSkillTimerPtr),AtMost,0),Bring(FP, AtLeast, 1, 147, 64)},{SetV(MarSkillP,i-1)})--ì¿¨íƒ€ì„,ìº”ë‚« ì²´í¬
 			CSub(FP,0x6509B0,4)
 			CallTrigger(FP,CallMarSkill)
 			CAdd(FP,0x6509B0,4)
 			CIfEnd()
 
-			CIf(FP,{CD(roka7Chk,1)})--roka7º¸½º °ø¹İ ±â¹Í ¹ßµ¿½Ã
+			CIf(FP,{CD(roka7Chk,1)})--roka7ë³´ìŠ¤ ê³µë°˜ ê¸°ë¯¹ ë°œë™ì‹œ
 			local TargetPtr = CreateVar(FP)
 			local TempSh = CreateVar(FP)
 				f_SaveCp()
 				f_Read(FP,BackupCp,nil,TargetPtr)
-				 -- °ø°İÇÏ´Â ´ë»óÀÌ ·ÎÄ«ÀÏ °æ¿ì ¸¶¸°ÀÇ °ø°İ µ¥¹ÌÁö¸¸Å­ ¸¶¸°ÀÌ ÇÇÇØ¸¦ ÀÔÀ½
-				CIf(FP,{TMemoryX(_Add(TargetPtr,25),Exactly,ParseUnit("¡£¢«+¢ªroka7¡£+.¢ª¡£¢«+¢ªroka7¡£+.¢ª     "),0xFF)})
+				 -- ê³µê²©í•˜ëŠ” ëŒ€ìƒì´ ë¡œì¹´ì¼ ê²½ìš° ë§ˆë¦°ì˜ ê³µê²© ë°ë¯¸ì§€ë§Œí¼ ë§ˆë¦°ì´ í”¼í•´ë¥¼ ì…ìŒ
+				CIf(FP,{TMemoryX(_Add(TargetPtr,25),Exactly,ParseUnit("ã€‚Ë™+Ëšroka7ã€‚+.Ëšã€‚Ë™+Ëšroka7ã€‚+.Ëš     "),0xFF)})
 					CIfX(FP,{TMemoryX(_Add(BackupCp,1), AtLeast, 1*256,0xFFFFFF)})
 
 					CIfX(FP, {TMemoryX(_Add(BackupCp,1), AtLeast, 1000*256,0xFFFFFF)})
@@ -229,7 +229,7 @@ for i = 1, 7 do
 					CIfXEnd()
 
 					CDoActions(FP, {TSetMemoryX(_Add(BackupCp,1), SetTo, 0, 0xFFFFFF),TSetMemory(_Sub(BackupCp,21),Subtract,_Sub(AtkMirrorV[i],TempSh))})
-					if Limit == 1 then -- ¼öÄ¡ ¸ğ´ÏÅÍ¸µ¿ë Å×½ºÆ® ÄÚµå
+					if Limit == 1 then -- ìˆ˜ì¹˜ ëª¨ë‹ˆí„°ë§ìš© í…ŒìŠ¤íŠ¸ ì½”ë“œ
 						CIf(FP,{CD(TestMode,1)})
 						local TempV = CreateVar(FP)
 						local TempV2 = CreateVar(FP)
@@ -240,7 +240,7 @@ for i = 1, 7 do
 					end
 
 					CElseX({TSetMemory(_Sub(BackupCp,21),Subtract,AtkMirrorV[i])})
-					if Limit == 1 then -- ¼öÄ¡ ¸ğ´ÏÅÍ¸µ¿ë Å×½ºÆ® ÄÚµå
+					if Limit == 1 then -- ìˆ˜ì¹˜ ëª¨ë‹ˆí„°ë§ìš© í…ŒìŠ¤íŠ¸ ì½”ë“œ
 						CIf(FP,{CD(TestMode,1)})
 						local TempV = CreateVar(FP)
 						f_Div(FP,TempV,AtkMirrorV[i],256)
@@ -256,7 +256,7 @@ for i = 1, 7 do
 						
 				CTrigger(FP,{
 					TMemory(_Sub(BackupCp,21),Exactly,0)},{
-						TSetMemoryX(_Sub(BackupCp,4),SetTo,0,0xFF00)},1) -- ¸¶¸°ÀÇ ÇÇ°¡ 0ÀÏ °æ¿ì ¸¶¸° Á×ÀÓ(ÀÌ Æ®¸®°Å°¡ ¾øÀ» °æ¿ì ¸¶¸°ÀÌ ÀÚµ¿À¸·Î Á×Áö ¾Ê°í Á»ºñ »óÅÂ°¡ µÊ)
+						TSetMemoryX(_Sub(BackupCp,4),SetTo,0,0xFF00)},1) -- ë§ˆë¦°ì˜ í”¼ê°€ 0ì¼ ê²½ìš° ë§ˆë¦° ì£½ì„(ì´ íŠ¸ë¦¬ê±°ê°€ ì—†ì„ ê²½ìš° ë§ˆë¦°ì´ ìë™ìœ¼ë¡œ ì£½ì§€ ì•Šê³  ì¢€ë¹„ ìƒíƒœê°€ ë¨)
 				f_LoadCp()
 				
 			CIfEnd()
@@ -297,7 +297,7 @@ ClearCalc()
 
 CunitCtrig_Part2()
 CunitCtrig_Part3X()
-for i = 0, 1699 do -- Part4X ¿ë Cunit Loop (x1700)
+for i = 0, 1699 do -- Part4X ìš© Cunit Loop (x1700)
 CunitCtrig_Part4X(i,{
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtLeast,1*256,0,0xFF00),
 	DeathsX(EPDF(0x628298-0x150*i+(19*4)),AtMost,6,0,0xFF),
@@ -351,17 +351,17 @@ CunitCtrig_End()
 	local TempType = CreateVar(FP)
 	local TempProperties = CreateVar(FP)
 	local TempAngle = CreateVar(FP)
-	local f_TempTypeErr = "\x07¡º \x08ERROR : \x04Àß¸øµÈ RepeatTypeÀÌ ÀÔ·ÂµÇ¾ú½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+	local f_TempTypeErr = "\x07ã€ \x08ERROR : \x04ì˜ëª»ëœ RepeatTypeì´ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 	if Limit == 1 then
 --		CIf(FP,{CD(TestMode,1)})
---		--DisplayPrintEr(0,{"\x07¡º \x03TESTMODE OP \x04: CreateUnitQueuePtr : ",CreateUnitQueuePtr," || CreateUnitQueuePtr2 : ",CreateUnitQueuePtr2," \x07¡»"})
+--		--DisplayPrintEr(0,{"\x07ã€ \x03TESTMODE OP \x04: CreateUnitQueuePtr : ",CreateUnitQueuePtr," || CreateUnitQueuePtr2 : ",CreateUnitQueuePtr2," \x07ã€"})
 --		local TestV = CreateVar()
 --		CMov(FP,TestV,0)
 --		CFor(FP, 19025+19, 19025+19 + (84*1700), 84)
 --			local CI = CForVariable()
 --			CTrigger(FP, {TMemoryX(CI,AtLeast,1*256,0xFF00)}, {AddV(TestV,1)},1)
 --		CForEnd()
-		--DisplayPrintEr(0,{"\x07¡º \x03TESTMODE OP \x04: CUnit Count : ",TestV," \x07¡»"})--
+		--DisplayPrintEr(0,{"\x07ã€ \x03TESTMODE OP \x04: CUnit Count : ",TestV," \x07ã€"})--
 
 --		CIfEnd()
 	end
@@ -395,7 +395,7 @@ CunitCtrig_End()
 	local isScore = CreateCcode()
 
 	
-CIfX(FP,{CV(TempType,100)})--Åº¸·À¯´Ö Àü¿ë RepeatType
+CIfX(FP,{CV(TempType,100)})--íƒ„ë§‰ìœ ë‹› ì „ìš© RepeatType
 CreateBullet(TempUID, 20, TempAngle, QPosX, QPosY, TempPID)
 CElseX()
 
@@ -443,7 +443,7 @@ CElseX()
 	CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	
 		
-		CTrigger(FP, {TMemoryX(_Add(TempUID,EPDF(0x664080)), Exactly, 4,4),CVX(TempProperties,1,1)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- °øÁßÀ¯´Ö+CBRepeat ¼ÒÈ¯ = °ãÄ¡±â ON
+		CTrigger(FP, {TMemoryX(_Add(TempUID,EPDF(0x664080)), Exactly, 4,4),CVX(TempProperties,1,1)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)} , 1) -- ê³µì¤‘ìœ ë‹›+CBRepeat ì†Œí™˜ = ê²¹ì¹˜ê¸° ON
 		local TempW = CreateWar(FP)
 		local TempHP = CreateVar(FP)
 		f_LMovX(FP, TempW, WArr(MaxHPWArr,TempUID), SetTo, nil, nil, 1)
@@ -466,11 +466,11 @@ CElseX()
 		CIfXEnd()
 
 
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 		Convert_CPosXY()
 		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
 		CDoActions(FP,{TMoveUnit(1,TempUID,FP,90,1)})
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- »ı¼ºÀ¯´Ö À§Ä¡ ºÒ·¯¿À±â
+		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos) -- ìƒì„±ìœ ë‹› ìœ„ì¹˜ ë¶ˆëŸ¬ì˜¤ê¸°
 		Convert_CPosXY()
 		Simple_SetLocX(FP,89,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(89,-4,-4,4,4)})
 
@@ -480,7 +480,7 @@ CElseX()
 			Convert_CPosXY()
 			Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
 			CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89)})
-		CElseIfX(CVar(FP,TempType[2],Exactly,4),SetCDeaths(FP,SetTo,1,isScore)) -- °ãÈ¿°ú ºÎ¿©+¾îÅÃ
+		CElseIfX(CVar(FP,TempType[2],Exactly,4),SetCDeaths(FP,SetTo,1,isScore)) -- ê²¹íš¨ê³¼ ë¶€ì—¬+ì–´íƒ
 
 			CMov(FP,CPos,TempBarPos)
 			Convert_CPosXY()
@@ -499,14 +499,14 @@ CElseX()
 			})
 			f_CGive(FP, G_CA_Nextptrs,nil, P9, FP)
 		CElseIfX(CVar(FP,TempType[2],Exactly,3),SetCDeaths(FP,SetTo,1,isScore))
-		CElseIfX(CVar(FP,TempType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- ·çÄ«½ºº¸½º·Î ¾îÅÃ¸í·É, °øÁß Ãæµ¹ÆÇÁ¤ »èÁ¦ ·çÄ«½ºº¸½º Àü¿ë TempType
+		CElseIfX(CVar(FP,TempType[2],Exactly,5),SetCDeaths(FP,SetTo,0,isScore)) -- ë£¨ì¹´ìŠ¤ë³´ìŠ¤ë¡œ ì–´íƒëª…ë ¹, ê³µì¤‘ ì¶©ëŒíŒì • ì‚­ì œ ë£¨ì¹´ìŠ¤ë³´ìŠ¤ ì „ìš© TempType
 		TriggerX(FP,CVar(FP,TempUID[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
 		GetLocCenter("Boss",CPosX,CPosY)
 		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})
 		CDoActions(FP,{TOrder(TempUID,FP,90,Attack,89),TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0,0xA00000)})
 		CTrigger(FP,{CVar(FP,TempUID[2],Exactly,27)},{TSetDeathsX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0,0x04000000)},1)
 
-		CElseIfX(CVar(FP,TempType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- ·çÄ«½ºº¸½º·Î ¾îÅÃ¸í·É, ·çÄ«½ºº¸½º Àü¿ë TempType
+		CElseIfX(CVar(FP,TempType[2],Exactly,2),SetCDeaths(FP,SetTo,0,isScore)) -- ë£¨ì¹´ìŠ¤ë³´ìŠ¤ë¡œ ì–´íƒëª…ë ¹, ë£¨ì¹´ìŠ¤ë³´ìŠ¤ ì „ìš© TempType
 		TriggerX(FP,CVar(FP,TempUID[2],Exactly,80),{KillUnitAt(All,"Edmund Duke (Siege Mode)",1,FP)},{preserved})
 		GetLocCenter("Boss",CPosX,CPosY)
 		Simple_SetLocX(FP,88,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(88,-4,-4,4,4)})

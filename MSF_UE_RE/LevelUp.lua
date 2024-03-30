@@ -8,7 +8,7 @@ function LevelUp()
 	end
 	local isBossStage = CreateCcode()
 	
-	local ClearT3 = "\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x07S T A R T\n\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+	local ClearT3 = "\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x07S T A R T\n\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 	local TextSwitch = Create_CCTable(6)
 	DoActions(FP,{SetInvincibility(Enable,147,P8,"Anywhere"),SetCp(FP)})
 	CIf(FP,{
@@ -35,7 +35,7 @@ function LevelUp()
 	BClear = CreateCcode()
 	CIf(FP,{Bring(FP,AtMost,0,147,64),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),CDeaths(FP,AtMost,0,Win)})
 		
-		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- ·¹º§ Å¬¸®¾î ÈÄ 1È¸ ½ÇÇà Æ®¸®°Åµé
+		CIf(FP,{CDeaths(FP,AtMost,0,ReplaceDelayT),Memory(0x628438,AtLeast,1)},SetCDeaths(FP,Add,1,ReplaceDelayT)) -- ë ˆë²¨ í´ë¦¬ì–´ í›„ 1íšŒ ì‹¤í–‰ íŠ¸ë¦¬ê±°ë“¤
 			--TriggerX(FP,{CVar(FP,LevelT2[2],AtLeast,2)},{ShUnitLimitT2},{preserved})--19
 			DoActions(FP,{
 			--SetDeathsX(AllPlayers,SetTo,0,12,0xFFFFFF),
@@ -45,7 +45,7 @@ function LevelUp()
 			KillUnitAt(All,125,18,Force1),
 			KillUnitAt(All,125,19,Force1),})
 			CIfX(FP, {Never()})
-			-- º¸½º¼ÒÈ¯ Å×½ºÆ®
+			-- ë³´ìŠ¤ì†Œí™˜ í…ŒìŠ¤íŠ¸
 			if Limit == 1 then
 			--	
 		        --CElseIfX({CD(TestMode,1)},{SetCD(SBossStart,1)})
@@ -135,7 +135,7 @@ function LevelUp()
 			CElseX()
 				DoActionsX(FP,SetCDeaths(FP,SetTo,1,BClear))
 			CIfXEnd()
-		CMov(FP,CunitIndex,0)-- ¸ğµç À¯´Ö ¿µÀÛÀ¯´Ö ÇÃ·¡±× ¸®¼Â
+		CMov(FP,CunitIndex,0)-- ëª¨ë“  ìœ ë‹› ì˜ì‘ìœ ë‹› í”Œë˜ê·¸ ë¦¬ì…‹
 		CWhile(FP,{CVar(FP,CunitIndex[2],AtMost,1699)})
 			CDoActions(FP,{Set_EXCC2(DUnitCalc, CunitIndex, 8, SetTo, 0)})
 			CAdd(FP,CunitIndex,1)
@@ -144,8 +144,8 @@ function LevelUp()
 	--
 		CIfEnd()
 
-	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02ÄÚ½ºÅ© ÃæµéÀÇ \x11·¹°¥(Regal) \x04¼º \x1FÁøÁøÂ¥¶ó ÁÖÀÎ \x10T\x1Earim\x04ÀÌ \x07ÁøÁøÂ¥¶ó\x04¸¦ \x08¸ğµÎ \x04ÅĞ·È½À´Ï´Ù.\r\n\r\n\x13\x05\"³×³ğµéÀÌ ¾î¶»°Ô ³» ¶ó¸éÀ»...\"\r\n "
-	Dem_T6 = "\n\n\x13\x04¡º \x06\x17D\x04emonic\x08Emperor \x04: \x06³­ µ¹¾Æ¿Ã °ÍÀÌ´Ù. \x04¡»\n\n"
+	Id_T6 = "\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n \x13\x02ì½”ìŠ¤í¬ ì¶©ë“¤ì˜ \x11ë ˆê°ˆ(Regal) \x04ì„± \x1Fì§„ì§„ì§œë¼ ì£¼ì¸ \x10T\x1Earim\x04ì´ \x07ì§„ì§„ì§œë¼\x04ë¥¼ \x08ëª¨ë‘ \x04í„¸ë ¸ìŠµë‹ˆë‹¤.\r\n\r\n\x13\x05\"ë„¤ë†ˆë“¤ì´ ì–´ë–»ê²Œ ë‚´ ë¼ë©´ì„...\"\r\n "
+	Dem_T6 = "\n\n\x13\x04ã€ \x06\x17D\x04emonic\x08Emperor \x04: \x06ë‚œ ëŒì•„ì˜¬ ê²ƒì´ë‹¤. \x04ã€\n\n"
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,rokaClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,DLClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,IdenClear)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
@@ -153,39 +153,39 @@ function LevelUp()
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{SetCDeaths(FP,SetTo,1,BClear),SetCDeaths(FP,SetTo,1,StoryT3)},{preserved})
 	TriggerX(FP,{CV(B3DeathCheck,1)},{SetCDeaths(FP,SetTo,1,BClear)},{preserved})
 	
-	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- º¸½ºÅ¬¸®¾î½Ã 1È¸½ÇÇà Æ®¸®°Å
-	CMov(FP,LVPaneltyScore,_Mul(Level, _Mov(50))) -- ·¹º§ ÆĞ³ÎÆ¼ ½ºÄÚ¾î ¼³Á¤
+	CIf(FP,{CDeaths(FP,AtLeast,1,BClear),Switch(ResetSwitch,Cleared)}) -- ë³´ìŠ¤í´ë¦¬ì–´ì‹œ 1íšŒì‹¤í–‰ íŠ¸ë¦¬ê±°
+	CMov(FP,LVPaneltyScore,_Mul(Level, _Mov(50))) -- ë ˆë²¨ íŒ¨ë„í‹° ìŠ¤ì½”ì–´ ì„¤ì •
 
 		GetP = CreateVar(FP)
 		local GetPVA = CreateVArray(FP,13)
-		CMov(FP,GetP,_Div(Level, 10),1) -- ±âº» Æ÷ÀÎÆ® °ø½Ä : P = (Level//10)+1
+		CMov(FP,GetP,_Div(Level, 10),1) -- ê¸°ë³¸ í¬ì¸íŠ¸ ê³µì‹ : P = (Level//10)+1
 
-		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)}) -- º¸½º ½ºÅ×ÀÌÁö Å¬¸®¾î½Ã Ãß°¡Æ÷ÀÎÆ®
+		CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)}) -- ë³´ìŠ¤ ìŠ¤í…Œì´ì§€ í´ë¦¬ì–´ì‹œ ì¶”ê°€í¬ì¸íŠ¸
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 
-		CIf(FP,CVar(FP,LevelT[2],Exactly,10))--10·¾ Å¬¸®¾î½Ã Ãß°¡Æ÷ÀÎÆ®
+		CIf(FP,CVar(FP,LevelT[2],Exactly,10))--10ë ™ í´ë¦¬ì–´ì‹œ ì¶”ê°€í¬ì¸íŠ¸
 			f_Mul(FP,GetP,_Mov(2))
 		CIfEnd()
 
-		CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --¾Æ¸¶ ÀÌº¥Æ®¿ë
-			f_Mul(FP,GetP,MulPoint)--Ãß°¡ Æ÷ÀÎÆ® Áö±Ş
+		CIf(FP,CVar(FP,MulPoint[2],AtLeast,2)) --ì•„ë§ˆ ì´ë²¤íŠ¸ìš©
+			f_Mul(FP,GetP,MulPoint)--ì¶”ê°€ í¬ì¸íŠ¸ ì§€ê¸‰
 		CIfEnd()
 		CIf(FP,{CD(Destr0yerClear2,1)})
-			f_Mul(FP,GetP,4)--Ãß°¡ Æ÷ÀÎÆ® Áö±Ş
+			f_Mul(FP,GetP,4)--ì¶”ê°€ í¬ì¸íŠ¸ ì§€ê¸‰
 		CIfEnd()
 
 		CIfX(FP,{CD(SoloNoPointC,1)})
-			f_Div(FP,GetP,_Mov(2))-- ½Ì±ÛÇÃ·¹ÀÌ Æ÷ÀÎÆ® Àı¹İÀ¸·Î
+			f_Div(FP,GetP,_Mov(2))-- ì‹±ê¸€í”Œë ˆì´ í¬ì¸íŠ¸ ì ˆë°˜ìœ¼ë¡œ
 		CElseX()
-			f_Mul(FP,GetP,_Mov(2))--½Ì±Û¾Æ´Ï¸é Æ÷ÀÎÆ® º¸³Ê½º
+			f_Mul(FP,GetP,_Mov(2))--ì‹±ê¸€ì•„ë‹ˆë©´ í¬ì¸íŠ¸ ë³´ë„ˆìŠ¤
 		CIfXEnd()
 
-		TriggerX(FP,{CV(GetP,0)},{SetV(GetP,1)},{preserved})--°è»êµÈ Æ÷ÀÎÆ®°¡ 0ÀÏ °æ¿ì ÃÖ¼Ò 1Àº ¾ò°ÔÇÔ
+		TriggerX(FP,{CV(GetP,0)},{SetV(GetP,1)},{preserved})--ê³„ì‚°ëœ í¬ì¸íŠ¸ê°€ 0ì¼ ê²½ìš° ìµœì†Œ 1ì€ ì–»ê²Œí•¨
 
 
 		GetP["fwc"] = true
-		DisplayPrintEr(AllPlayers, {"\x10¡¼ \x04ÀÌ¹ø \x07Level\x04¿¡¼­ ¾òÀº \x19½ºÅÈ Æ÷ÀÎÆ® \x04: \x07",GetP," \x10¡½"})
+		DisplayPrintEr(AllPlayers, {"\x10ã€ \x04ì´ë²ˆ \x07Level\x04ì—ì„œ ì–»ì€ \x19ìŠ¤íƒ¯ í¬ì¸íŠ¸ \x04: \x07",GetP," \x10ã€‘"})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},
 			{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,DemClear)},
@@ -193,14 +193,14 @@ function LevelUp()
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CV(B3DeathCheck,1)},
 			{RotatePlayer({},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3)},{RotatePlayer({
-			DisplayTextX("\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.",4),
-			DisplayTextX("\x07\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"),
+			DisplayTextX("\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.",4),
+			DisplayTextX("\x07\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg"),
 			PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 			
-		local ClearScoreT1 = "\n\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04\x07¡º \x08£Ä\x04£å£ó£ô£ò\x10£°\x04£ù£å£ò\x07 ¡» \x04¿¡°Ô¼­ »ì¾Æ³²À¸¼Ì½À´Ï´Ù.\n\x13\x1FÃàÇÏÇÕ´Ï´Ù! \x04Á¡¼ö°¡ ÃæºĞÇÏ¿© \x07Å¬¸®¾î\x04 ÇÏ¼Ì½À´Ï´Ù."
-		local ClearScoreT2 = "\x13\x04£¡£¡£¡¡¡\x07£Â£Ï£Ó£Ó¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª"
+		local ClearScoreT1 = "\n\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x07ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04\x07ã€ \x08ï¼¤\x04ï½…ï½“ï½”ï½’\x10ï¼\x04ï½™ï½…ï½’\x07 ã€ \x04ì—ê²Œì„œ ì‚´ì•„ë‚¨ìœ¼ì…¨ìŠµë‹ˆë‹¤.\n\x13\x1Fì¶•í•˜í•©ë‹ˆë‹¤! \x04ì ìˆ˜ê°€ ì¶©ë¶„í•˜ì—¬ \x07í´ë¦¬ì–´\x04 í•˜ì…¨ìŠµë‹ˆë‹¤."
+		local ClearScoreT2 = "\x13\x04ï¼ï¼ï¼ã€€\x07ï¼¢ï¼¯ï¼³ï¼³ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•"
 
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,Destr0yerClear2)},{
 		RotatePlayer({DisplayTextX(ClearScoreT1,4),DisplayTextX(ClearScoreT2,4),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg"),PlayWAVX("staredit\\wav\\Level_Clear.ogg")},HumanPlayers,FP),
@@ -209,7 +209,7 @@ function LevelUp()
 		
 
 	if Limit == 1 and TestStart == 0 then
-		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07¡º \x04Å×½ºÆ®¿¡ ÇùÁ¶ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù. ºü¸¥ ½ÃÀÏ ³»¿¡ ¿Ï¼ºµÈ ÀÛÇ°À¸·Î ºË°Ú½À´Ï´Ù. \x07¡» ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{preserved})
+		--TriggerX(FP,{CVar(FP,Level[2],AtLeast,11)},{RotatePlayer({DisplayTextX("\x07ã€ \x04í…ŒìŠ¤íŠ¸ì— í˜‘ì¡°í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤. ë¹ ë¥¸ ì‹œì¼ ë‚´ì— ì™„ì„±ëœ ì‘í’ˆìœ¼ë¡œ ëµ™ê² ìŠµë‹ˆë‹¤. \x07ã€ ",4)},HumanPlayers,FP),SetCDeaths(FP,SetTo,1,Win)},{preserved})
 	end
 
 		DoActions(FP,{RotatePlayer({RunAIScript(P8VON)},MapPlayers,FP),
@@ -233,11 +233,11 @@ function LevelUp()
 		})
 		for i = 0, 6 do
 			CTrigger(FP,{TDeaths(i,AtMost,Level,18)},{SetDeaths(i,Add,1,18),SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x13\x1F!!!£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä \x07¢¦ ·¹º§ÀÌ ¿Ã¶ú½À´Ï´Ù! ¢¦ \x1F£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä !!!",4),
+			DisplayText("\x13\x1F!!!ï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ \x07ï½ ë ˆë²¨ì´ ì˜¬ëìŠµë‹ˆë‹¤! ï½ \x1Fï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
 			CTrigger(FP,{TDeaths(i,AtMost,ExScore[i+1],36),CVar(FP,ExScore[i+1][2],AtMost,0x7FFFFFFF)},{TSetDeaths(i,SetTo,ExScore[i+1],36),SetMemory(0x6509B0,SetTo,i),
-			DisplayText("\x13\x1F!!!£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä \x07¢¦ Å³ ½ºÄÚ¾î ±â·Ï°»½Å! ¢¦ \x1F£Î£Å£× £Ò£Å£Ã£Ï£Ò£Ä !!!",4),
+			DisplayText("\x13\x1F!!!ï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ \x07ï½ í‚¬ ìŠ¤ì½”ì–´ ê¸°ë¡ê°±ì‹ ! ï½ \x1Fï¼®ï¼¥ï¼· ï¼²ï¼¥ï¼£ï¼¯ï¼²ï¼¤ !!!",4),
 			PlayWAV("staredit\\wav\\LimitBreak.ogg"),
 			SetMemory(0x6509B0,SetTo,FP)},1)
 		end
@@ -269,7 +269,7 @@ function LevelUp()
 	SetCDeaths(FP,SetTo,1,TextSwitch[6])},{preserved})
 	
 	for i = 0, 4 do
-		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x14\n\x13\x04ÃÖÈÄÀÇ °Ç¹° \x03OverMind \x1DShell \x04À» ÆÄ±«ÇÏ¼Ì½À´Ï´Ù.\n\x13\x0F´ÙÀ½ ·¹º§ ½ÃÀÛ\x04±îÁö \x07"..5-i.."\x04ÃÊ ³²¾Ò½À´Ï´Ù.\n\x14\n\x13\x04£¡£¡£¡¡¡\x1F£Ì£Å£Ö£Å£Ì¡¡£Ã£Ì£Å£Á£Ò\x04¡¡£¡£¡£¡\n\x13\x04¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª",4)},HumanPlayers,FP),
+		TriggerX(FP,{CDeaths(FP,AtLeast,10000+(i*1000),ReplaceDelayT),CDeaths(FP,AtMost,0,TextSwitch[i+1])},{RotatePlayer({DisplayTextX("\n\n\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x14\n\x13\x04ìµœí›„ì˜ ê±´ë¬¼ \x03OverMind \x1DShell \x04ì„ íŒŒê´´í•˜ì…¨ìŠµë‹ˆë‹¤.\n\x13\x0Fë‹¤ìŒ ë ˆë²¨ ì‹œì‘\x04ê¹Œì§€ \x07"..5-i.."\x04ì´ˆ ë‚¨ì•˜ìŠµë‹ˆë‹¤.\n\x14\n\x13\x04ï¼ï¼ï¼ã€€\x1Fï¼¬ï¼¥ï¼¶ï¼¥ï¼¬ã€€ï¼£ï¼¬ï¼¥ï¼¡ï¼²\x04ã€€ï¼ï¼ï¼\n\x13\x04â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•â€•",4)},HumanPlayers,FP),
 		SetCDeaths(FP,SetTo,1,TextSwitch[i+1]),SetCDeaths(FP,SetTo,1,countdownSound)},{preserved})
 	end
 
@@ -319,7 +319,7 @@ function LevelUp()
 	CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 	local TempNK = CreateVar(FP)
 	CMov(FP,TempNK,_Div(NCCalc,PCheckV))
-	DisplayPrintEr(AllPlayers, {"\x07¡º \x04Ãß°¡ \x08´ºÅ¬¸®¾î\x04°¡ \x07",TempNK," °³ \x04Áö±ŞµÇ¾ú½À´Ï´Ù. \x07¡»"})
+	DisplayPrintEr(AllPlayers, {"\x07ã€ \x04ì¶”ê°€ \x08ë‰´í´ë¦¬ì–´\x04ê°€ \x07",TempNK," ê°œ \x04ì§€ê¸‰ë˜ì—ˆìŠµë‹ˆë‹¤. \x07ã€"})
 		for i = 0, 6 do
 			CIf(FP,{HumanCheck(i, 1)},{})
 			CAdd(FP,NukesUsage[i+1],TempNK)

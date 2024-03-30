@@ -4,10 +4,10 @@ function Objects()
 
 	LvLimit = 400
 	-- Balance
-	MarDamageFactor = 1 -- Åõ»çÃ¼¼ö 2·Î ÁöÁ¤ÇØ¼­ Àı¹İÀÇ °ªÀ¸·Î ½á¾ßµÊ
-	MarDamageAmount = 30 -- Åõ»çÃ¼¼ö 2·Î ÁöÁ¤ÇØ¼­ Àı¹İÀÇ °ªÀ¸·Î ½á¾ßµÊ
-	NMarDamageFactor = 1 -- Åõ»çÃ¼¼ö 2·Î ÁöÁ¤ÇØ¼­ Àı¹İÀÇ °ªÀ¸·Î ½á¾ßµÊ
-	NMarDamageAmount = 20 -- Åõ»çÃ¼¼ö 2·Î ÁöÁ¤ÇØ¼­ Àı¹İÀÇ °ªÀ¸·Î ½á¾ßµÊ
+	MarDamageFactor = 1 -- íˆ¬ì‚¬ì²´ìˆ˜ 2ë¡œ ì§€ì •í•´ì„œ ì ˆë°˜ì˜ ê°’ìœ¼ë¡œ ì¨ì•¼ë¨
+	MarDamageAmount = 30 -- íˆ¬ì‚¬ì²´ìˆ˜ 2ë¡œ ì§€ì •í•´ì„œ ì ˆë°˜ì˜ ê°’ìœ¼ë¡œ ì¨ì•¼ë¨
+	NMarDamageFactor = 1 -- íˆ¬ì‚¬ì²´ìˆ˜ 2ë¡œ ì§€ì •í•´ì„œ ì ˆë°˜ì˜ ê°’ìœ¼ë¡œ ì¨ì•¼ë¨
+	NMarDamageAmount = 20 -- íˆ¬ì‚¬ì²´ìˆ˜ 2ë¡œ ì§€ì •í•´ì„œ ì ˆë°˜ì˜ ê°’ìœ¼ë¡œ ì¨ì•¼ë¨
 	AtkFactor = 5
 	DefFactor = 30
 	GunLimit = 1500
@@ -16,7 +16,7 @@ function Objects()
 	--Shop
 	P_MultiStopCost = 20
 	P_MultiHoldCost = 20
-	P_StimCost = 10 -- ¿ø°İ ½ºÆÀÆÑ »ç¿ë°¡´É
+	P_StimCost = 10 -- ì›ê²© ìŠ¤íŒ€íŒ© ì‚¬ìš©ê°€ëŠ¥
 	P_ExcOldP = 5000
 	P_AtkExceed = 10
 	P_HPExceed = 25
@@ -44,22 +44,22 @@ function Objects()
 	HTextStr = _0D
 	XSpeed = {"\x15#X0.5","\x05#X1.0","\x0E#X1.5","\x0F#X2.0","\x18#X2.5","\x10#X3.0","\x11#X3.5","\x08#X4.0","\x1C#X4.5","\x1F#X5.0"}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
-	PlayersN = {"\x081ÀÎ","\x0E2ÀÎ","\x0F3ÀÎ","\x104ÀÎ","\x115ÀÎ","\x156ÀÎ","\x167ÀÎ"}
+	PlayersN = {"\x081ì¸","\x0E2ì¸","\x0F3ì¸","\x104ì¸","\x115ì¸","\x156ì¸","\x167ì¸"}
 	ResetSwitch = "Switch 250"
 	WaveSwitch = "Switch 150"
 	P8VOFF = "Turn OFF Shared Vision for Player 8"
 	P8VON = "Turn ON Shared Vision for Player 8"
-	f_RepeatErr = "\x07¡º \x08ERROR : \x04f_Repeat¿¡¼­ ¹®Á¦°¡ ¹ß»ıÇß½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	f_RepeatErr2 = "\x07¡º \x08ERROR : \x04Set_Repeat¿¡¼­ Àß¸øµÈ UnitID(0)À» ÀÔ·Â¹Ş¾Ò½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	G_SendErrT = "\x07¡º \x08ERROR : \x04f_GunÀÇ ¸ñ·ÏÀÌ °¡µæ Â÷ G_Send¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	f_ReplaceErrT = "\x07¡º \x08ERROR : \x04Äµ³´À¸·Î ÀÎÇØ f_Replace¸¦ ½ÇÇàÇÒ ¼ö ¾ø½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
-	f_RepeatTypeErr = "\x07¡º \x08ERROR : \x04Àß¸øµÈ RepeatTypeÀÌ ÀÔ·ÂµÇ¾ú½À´Ï´Ù! ½ºÅ©¸°¼¦À¸·Î Á¦ÀÛÀÚ¿¡°Ô Á¦º¸ÇØÁÖ¼¼¿ä!\x07 ¡»"
+	f_RepeatErr = "\x07ã€ \x08ERROR : \x04f_Repeatì—ì„œ ë¬¸ì œê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	f_RepeatErr2 = "\x07ã€ \x08ERROR : \x04Set_Repeatì—ì„œ ì˜ëª»ëœ UnitID(0)ì„ ì…ë ¥ë°›ì•˜ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	G_SendErrT = "\x07ã€ \x08ERROR : \x04f_Gunì˜ ëª©ë¡ì´ ê°€ë“ ì°¨ G_Sendë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	f_ReplaceErrT = "\x07ã€ \x08ERROR : \x04ìº”ë‚«ìœ¼ë¡œ ì¸í•´ f_Replaceë¥¼ ì‹¤í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
+	f_RepeatTypeErr = "\x07ã€ \x08ERROR : \x04ì˜ëª»ëœ RepeatTypeì´ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤! ìŠ¤í¬ë¦°ìƒ·ìœ¼ë¡œ ì œì‘ìì—ê²Œ ì œë³´í•´ì£¼ì„¸ìš”!\x07 ã€"
 	JYD = "Set Unit Order To: Junk Yard Dog" 
 	DelayMedicT = {
-		"\x07¡º \x1D¿¹¾à¸Şµñ\x04À» \x1B2Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F300 Ore\x07 ¡»",
-		"\x07¡º \x1D¿¹¾à¸Şµñ\x04À» \x1B3Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F350 Ore\x07 ¡»",
-		"\x07¡º \x1D¿¹¾à¸Şµñ\x04À» \x1B4Tick\x04À¸·Î º¯°æÇÕ´Ï´Ù. - \x1F400 Ore\x07 ¡»",
-		"\x07¡º \x1D¿¹¾à¸Şµñ\x04À» \x1BºñÈ°¼ºÈ­(1Tick)\x04ÇÏ¿´½À´Ï´Ù. - \x1F250 Ore\x07 ¡»"}
+		"\x07ã€ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B2Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F300 Ore\x07 ã€",
+		"\x07ã€ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B3Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F350 Ore\x07 ã€",
+		"\x07ã€ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1B4Tick\x04ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤. - \x1F400 Ore\x07 ã€",
+		"\x07ã€ \x1Dì˜ˆì•½ë©”ë”•\x04ì„ \x1Bë¹„í™œì„±í™”(1Tick)\x04í•˜ì˜€ìŠµë‹ˆë‹¤. - \x1F250 Ore\x07 ã€"}
 	--[[
 	MSQC KeySensor
 	[MSQC]
@@ -185,42 +185,42 @@ function Var_init()
 	--Str1, Str1a, Str1s = SaveiStrArr(FP,MakeiStrVoid(38))
 
 
-	--Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04´ÔÀÇ \x04Normal Marine\x04ÀÌ \x1FÇÑ°è\x04¸¦ ±Øº¹ÇÏÁö ¸øÇÏ°í \x08»ç¸Á\x04Çß½À´Ï´Ù. \x06(\x07Score \x08-50\x06) \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	--Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04´ÔÀÇ \x1FExceeD \x1BM\x04arine\x04ÀÌ \x1FÇÑ°è\x04¸¦ ±Øº¹ÇÏÁö ¸øÇÏ°í \x08»ç¸Á\x04Çß½À´Ï´Ù. \x06(\x07Score \x08-500\x06) \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	--Str12 = CreateCText(FP,"\x12\x07¡º \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	--Str22 = CreateCText(FP,"\x04 ¹Ì³×¶öÀ» ¼ÒºñÇÏ¿© ÃÑ \x0d\x0d\x0d\x0d\x0d\x0d")
-	--Str23 = CreateCText(FP,"\x04 È¸ ¾÷±×·¹ÀÌµå¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù. \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d")
-	--f_GunT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_Gun Suspend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	--f_GunErrT = CreateCText(FP,"\x07¡º \x08ERROR \x04: G_CAPlot Not Found. f_Gun ½ÇÇàÀÚ : ")
-	--f_GunFuncT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun ½ÇÇàÀÚ : ")
-	--f_GunSendT = CreateCText(FP,"\x07¡º \x03TESTMODE OP \x04: f_GunSend ¼º°ø. f_Gun ½ÇÇàÀÚ : ")
-	--f_GunSendErrT = CreateCText(FP,"\x07¡º \x08ERROR \x04: G_CAPlot Send Failed. f_Gun ½ÇÇàÀÚ : ")
-	-- = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04´ÔÀÌ \x1C¼öÁ¤ º¸È£¸·\x04À» »ç¿ëÇß½À´Ï´Ù. \x07¡»\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
-	--Str24 = CreateCText(FP,"\x07¡»\x0d\x0d\x0d\x0d\x0d\x0d")
+	--Str01 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04ë‹˜ì˜ \x04Normal Marine\x04ì´ \x1Fí•œê³„\x04ë¥¼ ê·¹ë³µí•˜ì§€ ëª»í•˜ê³  \x08ì‚¬ë§\x04í–ˆìŠµë‹ˆë‹¤. \x06(\x07Score \x08-50\x06) \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	--Str02 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04ë‹˜ì˜ \x1FExceeD \x1BM\x04arine\x04ì´ \x1Fí•œê³„\x04ë¥¼ ê·¹ë³µí•˜ì§€ ëª»í•˜ê³  \x08ì‚¬ë§\x04í–ˆìŠµë‹ˆë‹¤. \x06(\x07Score \x08-500\x06) \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	--Str12 = CreateCText(FP,"\x12\x07ã€ \x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	--Str22 = CreateCText(FP,"\x04 ë¯¸ë„¤ë„ì„ ì†Œë¹„í•˜ì—¬ ì´ \x0d\x0d\x0d\x0d\x0d\x0d")
+	--Str23 = CreateCText(FP,"\x04 íšŒ ì—…ê·¸ë ˆì´ë“œë¥¼ ì™„ë£Œí•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d")
+	--f_GunT = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: f_Gun Suspend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	--f_GunErrT = CreateCText(FP,"\x07ã€ \x08ERROR \x04: G_CAPlot Not Found. f_Gun ì‹¤í–‰ì : ")
+	--f_GunFuncT = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: G_CAPlot Suspended. f_Gun ì‹¤í–‰ì : ")
+	--f_GunSendT = CreateCText(FP,"\x07ã€ \x03TESTMODE OP \x04: f_GunSend ì„±ê³µ. f_Gun ì‹¤í–‰ì : ")
+	--f_GunSendErrT = CreateCText(FP,"\x07ã€ \x08ERROR \x04: G_CAPlot Send Failed. f_Gun ì‹¤í–‰ì : ")
+	-- = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04ë‹˜ì´ \x1Cìˆ˜ì • ë³´í˜¸ë§‰\x04ì„ ì‚¬ìš©í–ˆìŠµë‹ˆë‹¤. \x07ã€\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14")
+	--Str24 = CreateCText(FP,"\x07ã€\x0d\x0d\x0d\x0d\x0d\x0d")
 	--Str18 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04 : \x1F\x0d\x0d\x0d\x0d\x0d\x0d")
-	--DBossT1 = CreateCText(FP,"\x13\x10¡¼ \x07P\x04layer \x06T\x04otal \x1FS\x04core : \x0d\x0d\x0d\x0d\x0d\x0d")
+	--DBossT1 = CreateCText(FP,"\x13\x10ã€ \x07P\x04layer \x06T\x04otal \x1FS\x04core : \x0d\x0d\x0d\x0d\x0d\x0d")
 
 	
 	--DBossT2 = CreateCText(FP," / \x0d\x0d\x0d")
-	--DBossT3 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x10¡½\x0d\x0d\x0d\x0d\x0d\x0d")
-	--StPT = CreateCText(FP,"\x13\x10¡¼ \x04ÀÌ¹ø \x07Level\x04¿¡¼­ ¾òÀº \x19½ºÅÈ Æ÷ÀÎÆ® \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-	--KillPT = CreateCText(FP,"\x13\x10¡¼ \x07Å³ ½ºÄÚ¾î°¡ \x19±¸¹öÀü ½ºÅÈ Æ÷ÀÎÆ®\x04·Î ÀüÈ¯µÇ¾ú½À´Ï´Ù. ±¸ ¹öÀü¿¡¼­ ÀÌ¿ë°¡´ÉÇÕ´Ï´Ù. \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-	--HiScoreT1 = CreateCText(FP,"\x10¡¼ \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
+	--DBossT3 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x10ã€‘\x0d\x0d\x0d\x0d\x0d\x0d")
+	--StPT = CreateCText(FP,"\x13\x10ã€ \x04ì´ë²ˆ \x07Level\x04ì—ì„œ ì–»ì€ \x19ìŠ¤íƒ¯ í¬ì¸íŠ¸ \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+	--KillPT = CreateCText(FP,"\x13\x10ã€ \x07í‚¬ ìŠ¤ì½”ì–´ê°€ \x19êµ¬ë²„ì „ ìŠ¤íƒ¯ í¬ì¸íŠ¸\x04ë¡œ ì „í™˜ë˜ì—ˆìŠµë‹ˆë‹¤. êµ¬ ë²„ì „ì—ì„œ ì´ìš©ê°€ëŠ¥í•©ë‹ˆë‹¤. \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+	--HiScoreT1 = CreateCText(FP,"\x10ã€ \x08M\x04ax \x0FL\x04evel : \x0d\x0d\x0d\x0d\x0d\x0d")
 	--HiScoreT2 = CreateCText(FP,"\x04 / \x08M\x04ax \x18S\x04core : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
-	--NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04´ÔÀÌ \x08´ºÅ¬¸®¾î\x04¸¦ \x1F»ç¿ë\x04ÇÏ¿´½À´Ï´Ù. \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
-	--GiveSendT = CreateCText(FP,"\x07¡º \x0d\x0d\x0d\x0d")
-	--GiveT2 = CreateCText(FP,"\x04¿¡°Ô \x0d\x0d\x0d\x0d")
-	--GiveSendT2 = CreateCText(FP," Ore\x04¸¦ ±âºÎÇÏ¿´½À´Ï´Ù. \x07¡»")
-	--GiveReciveT = CreateCText(FP,"\x12\x07¡º \x0d\x0d\x0d\x0d")
-	--GiveReciveT2 = CreateCText(FP," Ore\x04¸¦ ±âºÎ¹Ş¾Ò½À´Ï´Ù.\x02 \x07¡»")
+	--NukeUseT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x04\x04ë‹˜ì´ \x08ë‰´í´ë¦¬ì–´\x04ë¥¼ \x1Fì‚¬ìš©\x04í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d\x0d")
+	--GiveSendT = CreateCText(FP,"\x07ã€ \x0d\x0d\x0d\x0d")
+	--GiveT2 = CreateCText(FP,"\x04ì—ê²Œ \x0d\x0d\x0d\x0d")
+	--GiveSendT2 = CreateCText(FP," Ore\x04ë¥¼ ê¸°ë¶€í•˜ì˜€ìŠµë‹ˆë‹¤. \x07ã€")
+	--GiveReciveT = CreateCText(FP,"\x12\x07ã€ \x0d\x0d\x0d\x0d")
+	--GiveReciveT2 = CreateCText(FP," Ore\x04ë¥¼ ê¸°ë¶€ë°›ì•˜ìŠµë‹ˆë‹¤.\x02 \x07ã€")
 	--GiveTReset = CreateCText(FP,"\x0D\x0D\x0DGive".._0D)
-	--StatPT = CreateCText(FP,"\x10¡¼ \x07»ç¿ë°¡´É / \x08ÃÖ´ë \07½ºÅÈ Æ÷ÀÎÆ® \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
-	--StatPT2 = CreateCText(FP,"\x04 ¢Â \x1FE\x04xchange \x07R\x04ate : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
-	--StatPT3 = CreateCText(FP,"\x07% \x10¡½\x0d\x0d\x0d\x0d\x0d\x0d")
-	--ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07¡»\x0d\x0d\x0d\x0d\x0d\x0d")
-	--DBossTotalDMGT = CreateCText(FP,"\x13\x1F£Â\x04£ï£ó£ó \x08£Â\x04£á£ô£ô£ì£å \x07£Â\x04£ï£î£õ£ó : ")
-	--Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03¢Ó")
-	--Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03¢Ó \x04\x0d\x0d\x0d\x0d\x0d\x0d")
+	--StatPT = CreateCText(FP,"\x10ã€ \x07ì‚¬ìš©ê°€ëŠ¥ / \x08ìµœëŒ€ \07ìŠ¤íƒ¯ í¬ì¸íŠ¸ \x04: \x0d\x0d\x0d\x0d\x0d\x0d")
+	--StatPT2 = CreateCText(FP,"\x04 â—ˆ \x1FE\x04xchange \x07R\x04ate : \x07\x0d\x0d\x0d\x0d\x0d\x0d")
+	--StatPT3 = CreateCText(FP,"\x07% \x10ã€‘\x0d\x0d\x0d\x0d\x0d\x0d")
+	--ShopEndT = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x07ã€\x0d\x0d\x0d\x0d\x0d\x0d")
+	--DBossTotalDMGT = CreateCText(FP,"\x13\x1Fï¼¢\x04ï½ï½“ï½“ \x08ï¼¢\x04ï½ï½”ï½”ï½Œï½… \x07ï¼¢\x04ï½ï½ï½•ï½“ : ")
+	--Str19 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d \x03â€ ")
+	--Str10 = CreateCText(FP,"\x0d\x0d\x0d\x0d\x0d\x0d\x13\x03â€  \x04\x0d\x0d\x0d\x0d\x0d\x0d")
 	--HTextStrReset = CreateCText(FP,HTextStr)
 	HeroVArr = f_GetVArrptr(FP,#HeroArr)
 	ZergGndVArr = f_GetVArrptr(FP,#ZergGndUArr)
@@ -452,30 +452,30 @@ function HPoints()
 		HeroArr = {77,78,28,17,19,21,86,75,88,25,29,76,79,98,80,27,23,81,52,62,121}
 	end
 	ZergGndUArr = {51,53,54,48,104}
-	CreateHeroPointArr(77,55000,"\x07¡º \x1DF\x04enix \x1DZ \x07¡»",1)
-	CreateHeroPointArr(78,55000,"\x07¡º \x1DF\x04enix \x1DD \x07¡»",1)
-	CreateHeroPointArr(28,65000,"\x07¡º \x1DH\x04yperion \x07¡»",1)
-	CreateHeroPointArr(17,45000,"\x07¡º \x1DA\x04lan \x1DS\x04chezar\x07 ¡»",1)
-	CreateHeroPointArr(19,95000,"\x07¡º \x1FJ\x04im \x1FR\x04aynor \x1FV \x07¡»",1)
-	CreateHeroPointArr(21,60000,"\x07¡º \x1DT\x04om \x1DK\x04azansky \x07¡»",1)
-	CreateHeroPointArr(27,110000,"\x07¡º \x1DA\x04rcturus \x1DM\x04engsk \x07¡»",1)
-	CreateHeroPointArr(86,90000,"\x07¡º \x1DD\x04animoth \x07¡»",1)
-	CreateHeroPointArr(75,95000,"\x07¡º \x1FZ\x04eratul \x07¡»",1)
-	CreateHeroPointArr(88,77700,"\x07¡º \x1DA\x04rtanis \x07¡»",1)
-	CreateHeroPointArr(80,118000,"\x07¡º \x1DM\x04ojo \x07¡»",1)
-	CreateHeroPointArr(25,70000,"\x07¡º \x1DE\x04dmund \x1DD\x04uke \x07¡»",1)
-	CreateHeroPointArr(29,320000,"\x07¡º \x1FN\x04orad \x1FII \x07¡»",1)
-	CreateHeroPointArr(81,200000,"\x07¡º \x1FW\x04arbringer \x07¡»",1)
-	CreateHeroPointArr(23,450000,"\x07¡º \x1FE\x04dmund \x1FD\x04uke \x07¡»",1)
-	CreateHeroPointArr(76,100000,"\x07¡º \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07¡»",1)
-	CreateHeroPointArr(79,75000,"\x07¡º \x1DT\x04assadar \x07¡»",1)
-	CreateHeroPointArr(98,199000,"\x07¡º \x1FC\x04orsair \x07¡»",1)
-	CreateHeroPointArr(52,108000,"\x07¡º \x1DU\x04nclean One \x07¡»",1)
-	CreateHeroPointArr(62,118000,"\x07¡º \x1DD\x04evourer \x07¡»",1)
-	CreateHeroPointArr(121,999999,"\x07¡º \x08A\x04ntagonism \x07¡»",1)
-	CreateHeroPointArr(220,123456,"\x07¡º \x1DP\x04oint \x1DBOX(ñé) \x07¡»",2)
-	CreateHeroPointArr(150,322322,"\x07¡º \x1DP\x04oint \x1DBOX(ÓŞ) \x07¡»",2)
-	CreateHeroPointArr(221,4999999,"\x07¡º \x1DP\x04oint \x1DBOX \x08EX \x07¡»",2)
+	CreateHeroPointArr(77,55000,"\x07ã€ \x1DF\x04enix \x1DZ \x07ã€",1)
+	CreateHeroPointArr(78,55000,"\x07ã€ \x1DF\x04enix \x1DD \x07ã€",1)
+	CreateHeroPointArr(28,65000,"\x07ã€ \x1DH\x04yperion \x07ã€",1)
+	CreateHeroPointArr(17,45000,"\x07ã€ \x1DA\x04lan \x1DS\x04chezar\x07 ã€",1)
+	CreateHeroPointArr(19,95000,"\x07ã€ \x1FJ\x04im \x1FR\x04aynor \x1FV \x07ã€",1)
+	CreateHeroPointArr(21,60000,"\x07ã€ \x1DT\x04om \x1DK\x04azansky \x07ã€",1)
+	CreateHeroPointArr(27,110000,"\x07ã€ \x1DA\x04rcturus \x1DM\x04engsk \x07ã€",1)
+	CreateHeroPointArr(86,90000,"\x07ã€ \x1DD\x04animoth \x07ã€",1)
+	CreateHeroPointArr(75,95000,"\x07ã€ \x1FZ\x04eratul \x07ã€",1)
+	CreateHeroPointArr(88,77700,"\x07ã€ \x1DA\x04rtanis \x07ã€",1)
+	CreateHeroPointArr(80,118000,"\x07ã€ \x1DM\x04ojo \x07ã€",1)
+	CreateHeroPointArr(25,70000,"\x07ã€ \x1DE\x04dmund \x1DD\x04uke \x07ã€",1)
+	CreateHeroPointArr(29,320000,"\x07ã€ \x1FN\x04orad \x1FII \x07ã€",1)
+	CreateHeroPointArr(81,200000,"\x07ã€ \x1FW\x04arbringer \x07ã€",1)
+	CreateHeroPointArr(23,450000,"\x07ã€ \x1FE\x04dmund \x1FD\x04uke \x07ã€",1)
+	CreateHeroPointArr(76,100000,"\x07ã€ \x1DT\x04assadar\x07/\x1DZ\x04eratul \x07ã€",1)
+	CreateHeroPointArr(79,75000,"\x07ã€ \x1DT\x04assadar \x07ã€",1)
+	CreateHeroPointArr(98,199000,"\x07ã€ \x1FC\x04orsair \x07ã€",1)
+	CreateHeroPointArr(52,108000,"\x07ã€ \x1DU\x04nclean One \x07ã€",1)
+	CreateHeroPointArr(62,118000,"\x07ã€ \x1DD\x04evourer \x07ã€",1)
+	CreateHeroPointArr(121,999999,"\x07ã€ \x08A\x04ntagonism \x07ã€",1)
+	CreateHeroPointArr(220,123456,"\x07ã€ \x1DP\x04oint \x1DBOX(ä¸­) \x07ã€",2)
+	CreateHeroPointArr(150,322322,"\x07ã€ \x1DP\x04oint \x1DBOX(å¤§) \x07ã€",2)
+	CreateHeroPointArr(221,4999999,"\x07ã€ \x1DP\x04oint \x1DBOX \x08EX \x07ã€",2)
 	local Angle360to256={}
 	for i = 0, 359 do
 		Angle360to256[i+1] = (i/360)*256

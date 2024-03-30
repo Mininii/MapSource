@@ -7,7 +7,7 @@ function Install_DLBoss()
 	DoActions2(FP,MoveMarineArr2)
 	DoActions2(FP,OWTable)
 	CMov(FP,0x6509B0,FP)
-	Trigger { -- º¸½º ¹«ºê ·ÎÄÉ
+	Trigger { -- ë³´ìŠ¤ ë¬´ë¸Œ ë¡œì¼€
 		players = {P8},
 		conditions = {
 			
@@ -17,11 +17,11 @@ function Install_DLBoss()
 			DL_Patch;
 			MoveLocation("Boss", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			ModifyUnitShields(All,74,FP,64,100);
-			Comment("º¸½º ¹«ºê ·ÎÄÉ");
+			Comment("ë³´ìŠ¤ ë¬´ë¸Œ ë¡œì¼€");
 		},
 	}
 	
-	Trigger { -- ÃÊ¹İ ²¿ÀÌ´Â°Å ¹æÁö¿ë
+	Trigger { -- ì´ˆë°˜ ê¼¬ì´ëŠ”ê±° ë°©ì§€ìš©
 		players = {P8},
 		conditions = {
 			
@@ -30,11 +30,11 @@ function Install_DLBoss()
 		actions = {
 			PreserveTrigger();
 			SetVoid(0, SetTo, 1);
-			Comment("ÃÊ¹İ ²¿ÀÌ´Â°Å ¹æÁö¿ë");
+			Comment("ì´ˆë°˜ ê¼¬ì´ëŠ”ê±° ë°©ì§€ìš©");
 		},
 	}
 	
-	Trigger { -- ¹«ºê ¹Ú¾Æ¤¿¾Æ¤¿¤¿¤¿¤¿
+	Trigger { -- ë¬´ë¸Œ ë°•ì•„ã…ì•„ã…ã…ã…ã…
 		players = {P8},
 		conditions = {
 			
@@ -52,11 +52,11 @@ function Install_DLBoss()
 			MoveLocation("C7", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			SetVoid(1, Add, 1);
-			Comment("¹«ºê ¹Ú¾Æ¤¿¾Æ¤¿¤¿¤¿¤¿");
+			Comment("ë¬´ë¸Œ ë°•ì•„ã…ì•„ã…ã…ã…ã…");
 		},
 	}
 	
-	Trigger { -- 8°¢Çü Àç·á
+	Trigger { -- 8ê°í˜• ì¬ë£Œ
 		players = {P8},
 		conditions = {
 			
@@ -114,7 +114,7 @@ function Install_DLBoss()
 			MoveLocation("C8", "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			RemoveUnit("Danimoth (Arbiter)", CurrentPlayer);
 			RemoveUnit("Zerg Devourer", CurrentPlayer);
-			Comment("8°¢Çü Àç·á");
+			Comment("8ê°í˜• ì¬ë£Œ");
 		},
 	}
 	
@@ -155,7 +155,7 @@ function Install_DLBoss()
 		},
 	}
 	
-	Trigger { -- »õÀÛ¼º
+	Trigger { -- ìƒˆì‘ì„±
 		players = {P8},
 		conditions = {
 			
@@ -168,11 +168,11 @@ function Install_DLBoss()
 			SetVoid(0, SetTo, 0);
 			SetVoid(1, SetTo, 0);
 			SetVoid(2, Add, 1);
-			Comment("»õÀÛ¼º");
+			Comment("ìƒˆì‘ì„±");
 		},
 	}
 	
-	Trigger { -- ²¿ÀÌ´Â°Å ÇÑ¹ø ´õ ¹æÁö Æ®¸®°Å ¿ø·¡ °°À¸¸é wait ½á¾ßÇÏÁö¸¸ ±×³É µ¥½º°ªÀ¸·Î ³Ñ±è
+	Trigger { -- ê¼¬ì´ëŠ”ê±° í•œë²ˆ ë” ë°©ì§€ íŠ¸ë¦¬ê±° ì›ë˜ ê°™ìœ¼ë©´ wait ì¨ì•¼í•˜ì§€ë§Œ ê·¸ëƒ¥ ë°ìŠ¤ê°’ìœ¼ë¡œ ë„˜ê¹€
 		players = {P8},
 		conditions = {
 			
@@ -186,11 +186,11 @@ function Install_DLBoss()
 			SetVoid(0, SetTo, 1);
 			SetVoid(1, SetTo, 8);
 			SetVoid(2, Add, 1);
-			Comment("²¿ÀÌ´Â°Å ÇÑ¹ø ´õ ¹æÁö Æ®¸®°Å ¿ø·¡ °°À¸¸é wait ½á¾ßÇÏÁö¸¸ ±×³É µ¥½º°ªÀ¸·Î ³Ñ±è");
+			Comment("ê¼¬ì´ëŠ”ê±° í•œë²ˆ ë” ë°©ì§€ íŠ¸ë¦¬ê±° ì›ë˜ ê°™ìœ¼ë©´ wait ì¨ì•¼í•˜ì§€ë§Œ ê·¸ëƒ¥ ë°ìŠ¤ê°’ìœ¼ë¡œ ë„˜ê¹€");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³ 11
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬ 11
 		players = {P8},
 		conditions = {
 			
@@ -259,11 +259,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³ 11");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬ 11");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³3
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬3
 		players = {P8},
 		conditions = {
 			
@@ -331,11 +331,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³3");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬3");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³5
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬5
 		players = {P8},
 		conditions = {
 			
@@ -403,11 +403,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³5");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬5");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³6
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬6
 		players = {P8},
 		conditions = {
 			
@@ -479,11 +479,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³6");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬6");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -541,11 +541,11 @@ function Install_DLBoss()
 			CreateUnit(1, "Danimoth (Arbiter)", "C5", CurrentPlayer);
 			KillUnitAt(All, "Men", "C5", Foes);
 			SetVoid(3, SetTo, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -582,11 +582,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -645,11 +645,11 @@ function Install_DLBoss()
 			RemoveUnit("Zerg Devourer", CurrentPlayer);
 			KillUnitAt(All, "Men", "C6", Foes);
 			SetVoid(3, SetTo, 2);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -686,11 +686,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -741,11 +741,11 @@ function Install_DLBoss()
 			CreateUnit(1, "Danimoth (Arbiter)", "C7", CurrentPlayer);
 			KillUnitAt(All, "Men", "C7", Foes);
 			SetVoid(3, SetTo, 3);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -782,11 +782,11 @@ function Install_DLBoss()
 			KillUnit("Protoss Dark Archon", CurrentPlayer);
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -844,11 +844,11 @@ function Install_DLBoss()
 			CreateUnit(1, "Danimoth (Arbiter)", "C8", CurrentPlayer);
 			KillUnitAt(All, "Men", "C8", Foes);
 			SetVoid(3, SetTo, 4);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ÀÌÆåÆ® ½ºÅ³
+	Trigger { -- ì´í™íŠ¸ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -893,11 +893,11 @@ function Install_DLBoss()
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			Wait(0);
 			SetVoid(2, Add, 1);
-			Comment("ÀÌÆåÆ® ½ºÅ³");
+			Comment("ì´í™íŠ¸ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ Àç·á
+	Trigger { -- ìŠ¤í‚¬ ì¬ë£Œ
 		players = {P8},
 		conditions = {
 			
@@ -957,11 +957,11 @@ function Install_DLBoss()
 			MoveLocation("C8", "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			RemoveUnit("Danimoth (Arbiter)", CurrentPlayer);
 			RemoveUnit("Zerg Devourer", CurrentPlayer);
-			Comment("½ºÅ³ Àç·á");
+			Comment("ìŠ¤í‚¬ ì¬ë£Œ");
 		},
 	}
 	
-	Trigger { -- À¯´Ö¼ÒÈ¯
+	Trigger { -- ìœ ë‹›ì†Œí™˜
 		players = {P8},
 		conditions = {
 			
@@ -1037,11 +1037,11 @@ function Install_DLBoss()
 			KillUnit("Zerg Lurker", CurrentPlayer);
 			Order("Men", CurrentPlayer, "Anywhere", Attack, "Boss");
 			SetVoid(2, Add, 1);
-			Comment("À¯´Ö¼ÒÈ¯");
+			Comment("ìœ ë‹›ì†Œí™˜");
 		},
 	}
 	
-	Trigger { -- ·¹ÀÌ½º ½ºÅ³
+	Trigger { -- ë ˆì´ìŠ¤ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -1156,11 +1156,11 @@ function Install_DLBoss()
 				hanger = 0,
 			});
 			GiveUnits(1, "Tom Kazansky (Wraith)", CurrentPlayer, "C8", P12);
-			Comment("·¹ÀÌ½º ½ºÅ³");
+			Comment("ë ˆì´ìŠ¤ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ·¹¾Æ½º ¿øÇü ±×¸®±â
+	Trigger { -- ë ˆì•„ìŠ¤ ì›í˜• ê·¸ë¦¬ê¸°
 		players = {P8},
 		conditions = {
 			
@@ -1177,10 +1177,10 @@ function Install_DLBoss()
 			KillUnitAt(All, "Men", "C6", Foes);
 			KillUnitAt(All, "Men", "C7", Foes);
 			KillUnitAt(All, "Men", "C8", Foes);
-			Comment("·¹¾Æ½º ¿øÇü ±×¸®±â");
+			Comment("ë ˆì•„ìŠ¤ ì›í˜• ê·¸ë¦¬ê¸°");
 		},
 	}
-	Trigger { -- ·¹¾Æ½º ¿øÇü ±×¸®±â
+	Trigger { -- ë ˆì•„ìŠ¤ ì›í˜• ê·¸ë¦¬ê¸°
 		players = {P8},
 		conditions = {
 			
@@ -1205,7 +1205,7 @@ function Install_DLBoss()
 			Order("Tom Kazansky (Wraith)", P11, "Anywhere", Move, "C8");
 			Order("Tom Kazansky (Wraith)", P12, "Anywhere", Move, "C1");
 			SetVoid(4, Add, 1);
-			Comment("·¹¾Æ½º ¿øÇü ±×¸®±â");
+			Comment("ë ˆì•„ìŠ¤ ì›í˜• ê·¸ë¦¬ê¸°");
 		},
 	}
 	
@@ -1229,7 +1229,7 @@ function Install_DLBoss()
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
 	CIf(FP,Void(4, Exactly, 7),SetVoid(4, SetTo, 0))
-	Trigger { -- À¯´Ö ¼ÒÈ¯
+	Trigger { -- ìœ ë‹› ì†Œí™˜
 		players = {P8},
 		conditions = {
 			
@@ -1279,7 +1279,7 @@ function Install_DLBoss()
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C6");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C7");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C8");
-			Comment("À¯´Ö ¼ÒÈ¯");
+			Comment("ìœ ë‹› ì†Œí™˜");
 		},
 	}
 	GetLocCenter("C1",CX,CY)
@@ -1309,7 +1309,7 @@ function Install_DLBoss()
 	CIfEnd()
 	SetRecoverCp()
 	RecoverCp(FP)
-	Trigger { -- ·¹ÀÌ½º »èÁ¦
+	Trigger { -- ë ˆì´ìŠ¤ ì‚­ì œ
 		players = {P8},
 		conditions = {
 			
@@ -1322,11 +1322,11 @@ function Install_DLBoss()
 			RemoveUnitAt(All, "Edmund Duke (Siege Mode)", "Create", CurrentPlayer);
 			RemoveUnit("Terran Wraith", AllPlayers);
 			RemoveUnit("Tom Kazansky (Wraith)", AllPlayers);
-			Comment("·¹ÀÌ½º »èÁ¦");
+			Comment("ë ˆì´ìŠ¤ ì‚­ì œ");
 		},
 	}
 	
-	Trigger { -- µ¥½º°ª
+	Trigger { -- ë°ìŠ¤ê°’
 		players = {P8},
 		conditions = {
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
@@ -1342,7 +1342,7 @@ function Install_DLBoss()
 			KillUnit("Artanis (Scout)", CurrentPlayer);
 			SetVoid(5, SetTo, 350);
 			SetVoid(6, SetTo, 1);
-			Comment("µ¥½º°ª");
+			Comment("ë°ìŠ¤ê°’");
 		},
 	}
 
@@ -1419,7 +1419,7 @@ function Install_DLBoss()
 --			CreateUnit(1,27,"C1",CurrentPlayer);
 --			Order(27,CurrentPlayer,"Anywhere",Attack,"Boss");
 --			SetInvincibility(Enable,27,CurrentPlayer,"Anywhere");
---			Comment("³ë¶óµå »ı¼º Æ®¸®°Å ³ë°¡´Ù º¸´Ù °Á for¹® ¾²»ï");
+--			Comment("ë…¸ë¼ë“œ ìƒì„± íŠ¸ë¦¬ê±° ë…¸ê°€ë‹¤ ë³´ë‹¤ ê± forë¬¸ ì“°ì‚¼");
 --		}
 --	}
 --	end
@@ -1492,7 +1492,7 @@ function Install_DLBoss()
 --			CreateUnit(1,80,"C1",CurrentPlayer);
 --			Order(80,CurrentPlayer,"Anywhere",Attack,"Boss");
 --			SetInvincibility(Enable,80,CurrentPlayer,"Anywhere");
---			Comment("½ºÄ« »ı¼º Æ®¸®°Å º¸´Ù °Á for¹® ¾²»ï");
+--			Comment("ìŠ¤ì¹´ ìƒì„± íŠ¸ë¦¬ê±° ë³´ë‹¤ ê± forë¬¸ ì“°ì‚¼");
 --		}
 --	}
 --	end
@@ -1542,7 +1542,7 @@ function Install_DLBoss()
 		SetRecoverCp()
 		RecoverCp(FP)
 	
-	Trigger { -- À¯´Ö Å³
+	Trigger { -- ìœ ë‹› í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -1552,11 +1552,11 @@ function Install_DLBoss()
 		actions = {
 			PreserveTrigger();
 			KillUnit("Zerg Lurker", CurrentPlayer);
-			Comment("À¯´Ö Å³");
+			Comment("ìœ ë‹› í‚¬");
 		},
 	}
 	
-	Trigger { -- µ¥½º°ª
+	Trigger { -- ë°ìŠ¤ê°’
 		players = {P8},
 		conditions = {
 			
@@ -1564,11 +1564,11 @@ function Install_DLBoss()
 		actions = {
 			PreserveTrigger();
 			SetVoid(5, Subtract, 1);
-			Comment("µ¥½º°ª");
+			Comment("ë°ìŠ¤ê°’");
 		},
 	}
 	
-	Trigger { -- À¯´Ö ±âºÎ
+	Trigger { -- ìœ ë‹› ê¸°ë¶€
 		players = {P8},
 		conditions = {
 			Bring(AllPlayers, Exactly, 0, "Tom Kazansky (Wraith)", "Anywhere");
@@ -1578,11 +1578,11 @@ function Install_DLBoss()
 		actions = {
 			PreserveTrigger();
 			GiveUnits(All, "Edmund Duke (Siege Mode)", P9, "Anywhere", CurrentPlayer);
-			Comment("À¯´Ö ±âºÎ");
+			Comment("ìœ ë‹› ê¸°ë¶€");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ ÃÊ±âÈ­
+	Trigger { -- ìŠ¤í‚¬ ì´ˆê¸°í™”
 		players = {P8},
 		conditions = {
 			
@@ -1599,11 +1599,11 @@ function Install_DLBoss()
 			KillUnit("Zerg Lurker", CurrentPlayer);
 			Wait(0);
 			SetVoid(0, Add, 1);
-			Comment("½ºÅ³ ÃÊ±âÈ­");
+			Comment("ìŠ¤í‚¬ ì´ˆê¸°í™”");
 		},
 	}
 	
-	Trigger { -- ¿öÇÁ ½ºÅ³ Æ®¸®°Å
+	Trigger { -- ì›Œí”„ ìŠ¤í‚¬ íŠ¸ë¦¬ê±°
 		players = {P8},
 		conditions = {
 			
@@ -1621,13 +1621,13 @@ function Install_DLBoss()
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Wait(0);
 			SetVoid(0, Add, 1);
-			Comment("¿öÇÁ ½ºÅ³ Æ®¸®°Å");
+			Comment("ì›Œí”„ ìŠ¤í‚¬ íŠ¸ë¦¬ê±°");
 		},
 	}
 	
 	CSub(FP,VO(7),Dt_NT)
 	
-	Trigger { -- Ä«Ä«·ç Æ®¸®°Å
+	Trigger { -- ì¹´ì¹´ë£¨ íŠ¸ë¦¬ê±°
 		players = {P8},
 		conditions = {
 			
@@ -1654,11 +1654,11 @@ function Install_DLBoss()
 			MoveLocation("C6", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C7", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
-			Comment("Ä«Ä«·ç Æ®¸®°Å");
+			Comment("ì¹´ì¹´ë£¨ íŠ¸ë¦¬ê±°");
 		},
 	}
 	
-	Trigger { -- ÇÇ1 ÆĞÅÏ
+	Trigger { -- í”¼1 íŒ¨í„´
 		players = {P8},
 		conditions = {
 			
@@ -1672,11 +1672,11 @@ function Install_DLBoss()
 		actions = {
 			PreserveTrigger();
 			ModifyUnitHitPoints(All, "Men", Foes, "Anywhere", 0);
-			Comment("ÇÇ1 ÆĞÅÏ");
+			Comment("í”¼1 íŒ¨í„´");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ / ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)
+	Trigger { -- ìŠ¤í‚¬ / ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -1731,11 +1731,11 @@ function Install_DLBoss()
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
 			RemoveUnit("Zerg Devourer", CurrentPlayer);
-			Comment("½ºÅ³ / ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)");
+			Comment("ìŠ¤í‚¬ / ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ / ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)
+	Trigger { -- ìŠ¤í‚¬ / ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -1772,11 +1772,11 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Boss");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			Comment("½ºÅ³ / ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)");
+			Comment("ìŠ¤í‚¬ / ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )");
 		},
 	}
 	
-	Trigger { -- ¹«ºê·ÎÄÉ ½ºÅ³
+	Trigger { -- ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -1816,11 +1816,11 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Comment("¹«ºê·ÎÄÉ ½ºÅ³");
+			Comment("ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ ¤Ó ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)
+	Trigger { -- ìŠ¤í‚¬ ã…£ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -1866,11 +1866,11 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
-			Comment("½ºÅ³ ¤Ó ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)");
+			Comment("ìŠ¤í‚¬ ã…£ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ ¤Ó ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)
+	Trigger { -- ìŠ¤í‚¬ ã…£ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -1907,11 +1907,11 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			Order("Danimoth (Arbiter)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Comment("½ºÅ³ ¤Ó ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)");
+			Comment("ìŠ¤í‚¬ ã…£ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )");
 		},
 	}
 	
-	Trigger { -- ¹«ºê·ÎÄÉ ½ºÅ³
+	Trigger { -- ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -1951,11 +1951,11 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
-			Comment("¹«ºê·ÎÄÉ ½ºÅ³");
+			Comment("ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ 11½Ã ´ë°¢¼± ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)
+	Trigger { -- ìŠ¤í‚¬ 11ì‹œ ëŒ€ê°ì„  ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -2002,11 +2002,11 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
-			Comment("½ºÅ³ 11½Ã ´ë°¢¼± ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)");
+			Comment("ìŠ¤í‚¬ 11ì‹œ ëŒ€ê°ì„  ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ 11½Ã ´ë°¢¼± ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)
+	Trigger { -- ìŠ¤í‚¬ 11ì‹œ ëŒ€ê°ì„  ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -2043,11 +2043,11 @@ function Install_DLBoss()
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
 			MoveUnit(4, "Zerg Devourer", CurrentPlayer, "Create", "C2");
 			SetInvincibility(Enable, "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
-			Comment("½ºÅ³ 11½Ã ´ë°¢¼± ÀÌÂÊ ¹æÇâ ½ºÅ³ (´ë°¢¼±)");
+			Comment("ìŠ¤í‚¬ 11ì‹œ ëŒ€ê°ì„  ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ëŒ€ê°ì„ )");
 		},
 	}
 	
-	Trigger { -- ¹«ºê·ÎÄÉ ½ºÅ³
+	Trigger { -- ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -2087,11 +2087,11 @@ function Install_DLBoss()
 			GiveUnits(All, "Danimoth (Arbiter)", P12, "Anywhere", CurrentPlayer);
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
-			Comment("¹«ºê·ÎÄÉ ½ºÅ³");
+			Comment("ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ ¤Ñ ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)
+	Trigger { -- ìŠ¤í‚¬ ã…¡ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -2139,11 +2139,11 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Mutalisk)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C1");
-			Comment("½ºÅ³ ¤Ñ ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)");
+			Comment("ìŠ¤í‚¬ ã…¡ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )");
 		},
 	}
 	
-	Trigger { -- ½ºÅ³ ¤Ñ ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)
+	Trigger { -- ìŠ¤í‚¬ ã…¡ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )
 		players = {P8},
 		conditions = {
 			
@@ -2178,14 +2178,14 @@ function Install_DLBoss()
 			RemoveUnit("Kukulza (Guardian)", CurrentPlayer);
 			CreateUnit(1, "Danimoth (Arbiter)", "Create 1", CurrentPlayer);
 			MoveUnit(1, "Danimoth (Arbiter)", CurrentPlayer, "Create", "C2");
-			Comment("½ºÅ³ ¤Ñ ÀÌÂÊ ¹æÇâ ½ºÅ³ (Á÷¼±)");
+			Comment("ìŠ¤í‚¬ ã…¡ ì´ìª½ ë°©í–¥ ìŠ¤í‚¬ (ì§ì„ )");
 		},
 	}
 	
 	CAdd(FP,VO(8),Dt_NT)
 
 	
-	Trigger { -- ¹«ºê·ÎÄÉ ½ºÅ³
+	Trigger { -- ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -2227,7 +2227,7 @@ function Install_DLBoss()
 			KillUnit("Danimoth (Arbiter)", CurrentPlayer);
 			Order("Edmund Duke (Siege Mode)", CurrentPlayer, "Anywhere", Attack, "Anywhere");
 			SetVoid(10,SetTo,1);
-			Comment("¹«ºê·ÎÄÉ ½ºÅ³");
+			Comment("ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬");
 		},
 	}
 	
@@ -2238,7 +2238,7 @@ function Install_DLBoss()
 		Void(2, Exactly, 31);
 		Void(3, Exactly, 15);
 	}, {SetVoid(0,Add,1),SetVoid(8, SetTo, 0);}, {preserved})
-	Trigger { -- ¹«ºê·ÎÄÉ ½ºÅ³
+	Trigger { -- ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬
 		players = {P8},
 		conditions = {
 			
@@ -2262,13 +2262,13 @@ function Install_DLBoss()
 			MoveLocation("C8", "Dark Templar (Hero)", CurrentPlayer, "Anywhere");
 			SetVoid(0, Add, 1);
 			SetVoid(8, SetTo, 0);
-			Comment("¹«ºê·ÎÄÉ ½ºÅ³");
+			Comment("ë¬´ë¸Œë¡œì¼€ ìŠ¤í‚¬");
 		},
 	}
 
 
 
-	Trigger { -- 8°¢Çü ÀÌÆåÆ® ³»±â
+	Trigger { -- 8ê°í˜• ì´í™íŠ¸ ë‚´ê¸°
 		players = {P8},
 		conditions = {
 			
@@ -2328,7 +2328,7 @@ function Install_DLBoss()
 			MoveLocation("C8", "Danimoth (Arbiter)", CurrentPlayer, "Anywhere");
 			RemoveUnit("Danimoth (Arbiter)", CurrentPlayer);
 			RemoveUnit("Zerg Devourer", CurrentPlayer);
-			Comment("8°¢Çü ÀÌÆåÆ® ³»±â");
+			Comment("8ê°í˜• ì´í™íŠ¸ ë‚´ê¸°");
 		},
 	}
 	
@@ -2356,7 +2356,7 @@ function Install_DLBoss()
 		f_TempRepeat(17,1,nil,2)
 		CMov(FP,0x6509B0,FP)
 	CIfEnd()
-	Trigger { -- ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ
+	Trigger { -- í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€
 		players = {P8},
 		conditions = {
 			
@@ -2377,10 +2377,10 @@ function Install_DLBoss()
 			KillUnitAt(All, "Men", "C6", Foes);
 			KillUnitAt(All, "Men", "C7", Foes);
 			KillUnitAt(All, "Men", "C8", Foes);
-			Comment("ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ");
+			Comment("í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€");
 		},
 	}
-	Trigger { -- ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ
+	Trigger { -- í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€
 		players = {P8},
 		conditions = {
 			
@@ -2414,10 +2414,10 @@ function Install_DLBoss()
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C8");
 			MoveUnit(1, "Edmund Duke (Siege Mode)", CurrentPlayer, "Create", "C1");
 			SetVoid(3, Add, 1);
-			Comment("ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ");
+			Comment("í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€");
 		},
 	}
-	Trigger { -- ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ
+	Trigger { -- í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€
 		players = {P8},
 		conditions = {
 			Label();
@@ -2452,7 +2452,7 @@ function Install_DLBoss()
 			MoveUnit(1, 30, CurrentPlayer, "Create", "C1");
 			SetVoid(3, Add, 1);
 			SetCD(WaitT,0),
-			Comment("ÇìÀ¸ÀÀ ¹Ì´Ï´Ï? »ï´Ï´Ï À¯´Ö ¼ÒÈ¯ ¹Ø ¹«ºê·ÎÄÉ");
+			Comment("í—¤ìœ¼ì‘ ë¯¸ë‹ˆë‹ˆ? ì‚¼ë‹ˆë‹ˆ ìœ ë‹› ì†Œí™˜ ë°‘ ë¬´ë¸Œë¡œì¼€");
 		},
 	}
 	CIf(FP,{
@@ -2470,7 +2470,7 @@ function Install_DLBoss()
 		SetCD(WaitT,0),
 	},{preserved})
 	CIfEnd()
-	Trigger { -- ³×¹İ ½ºÅ³ ÀÛ¼º ±¸°£
+	Trigger { -- ë„¤ë°˜ ìŠ¤í‚¬ ì‘ì„± êµ¬ê°„
 		players = {P8},
 		conditions = {
 			

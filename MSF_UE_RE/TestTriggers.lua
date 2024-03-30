@@ -1,6 +1,6 @@
 function Test_LV1()
     if Limit == 1 and TestStart == 0 then
-        Trigger2(FP,{ElapsedTime(AtLeast,65)},{RotatePlayer({DisplayTextX("\x13\x04ÇöÀç \x07Å×½ºÆ® ¹öÀü\x04À» ÀÌ¿ëÁßÀÔ´Ï´Ù.\n\x13\x07Å×½ºÆ®¿¡ ÇùÁ¶ÇØÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù. \n\x13\x04Å×½ºÆ®¸Ê ÀÌ¿ë °¡´É ±â°£Àº "..T_YY.."³â "..T_MM.."¿ù "..T_DD.."ÀÏ "..T_HH.."½Ã ±îÁöÀÔ´Ï´Ù."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
+        Trigger2(FP,{ElapsedTime(AtLeast,65)},{RotatePlayer({DisplayTextX("\x13\x04í˜„ì¬ \x07í…ŒìŠ¤íŠ¸ ë²„ì „\x04ì„ ì´ìš©ì¤‘ì…ë‹ˆë‹¤.\n\x13\x07í…ŒìŠ¤íŠ¸ì— í˜‘ì¡°í•´ì£¼ì…”ì„œ ê°ì‚¬í•©ë‹ˆë‹¤. \n\x13\x04í…ŒìŠ¤íŠ¸ë§µ ì´ìš© ê°€ëŠ¥ ê¸°ê°„ì€ "..T_YY.."ë…„ "..T_MM.."ì›” "..T_DD.."ì¼ "..T_HH.."ì‹œ ê¹Œì§€ì…ë‹ˆë‹¤."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})
         Trigger2(FP,{Never(),ElapsedTime(AtLeast,65),ElapsedTime(AtMost,120)},{ModifyUnitShields(All,"Men",P8,64,0),ModifyUnitHitPoints(All,"Men",P8,64,0)},{preserved})
         CIfOnce(FP,{Never(),ElapsedTime(AtLeast,60)},{
             KillUnit("Men",P8);
@@ -78,11 +78,11 @@ function Test_LV2()
         DoActions(FP,{SetDeaths(Force1,Add,200,126),RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8")},MapPlayers,FP)})
         CIfOnce(FP)
         
-            f_GetStrXptr(FP,TextX,"\x04X ÁÂÇ¥ : ".._0D)
-            f_GetStrXptr(FP,TextY,"\x04Y ÁÂÇ¥ : ".._0D)
-            f_GetStrXptr(FP,TextX2,"\x04¸Ê»ó X ÁÂÇ¥ : ".._0D)
-            f_GetStrXptr(FP,TextY2,"\x04¸Ê»ó Y ÁÂÇ¥ : ".._0D)
-            SkipText = GetStrSize(0,"\x04X ÁÂÇ¥ : \x0d\x0d\x0d\x0d\x0d")
+            f_GetStrXptr(FP,TextX,"\x04X ì¢Œí‘œ : ".._0D)
+            f_GetStrXptr(FP,TextY,"\x04Y ì¢Œí‘œ : ".._0D)
+            f_GetStrXptr(FP,TextX2,"\x04ë§µìƒ X ì¢Œí‘œ : ".._0D)
+            f_GetStrXptr(FP,TextY2,"\x04ë§µìƒ Y ì¢Œí‘œ : ".._0D)
+            SkipText = GetStrSize(0,"\x04X ì¢Œí‘œ : \x0d\x0d\x0d\x0d\x0d")
             CMov(FP,BPtr,BarrackPtr[1])
             f_Read(FP,_Add(BPtr,10),BPos)
             CMov(FP,BPosX,BPos,0,0xFFFF)
@@ -112,10 +112,10 @@ function Test_LV2()
 
         DoActions(FP,{RotatePlayer({
             DisplayTextX("\x04==================",4),
-            DisplayTextX("\x04X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04Y ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó Y ÁÂÇ¥ : ".._0D,4),
+            DisplayTextX("\x04X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04Y ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ Y ì¢Œí‘œ : ".._0D,4),
         },{0,1,2,3,4,5,6,7},FP)})
 
         CIfEnd()
@@ -143,15 +143,15 @@ function Test_LV2()
         f_Movcpy(FP,_Add(TextY,SkipText),VArr(BRY2T,0),5*4)
 
         DoActions(FP,{RotatePlayer({
-            DisplayTextX("\x04Á¡ÀÇ Áß½É ÁÂÇ¥°¡ °»½ÅµÇ¾ú½À´Ï´Ù.",4),
+            DisplayTextX("\x04ì ì˜ ì¤‘ì‹¬ ì¢Œí‘œê°€ ê°±ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤.",4),
         },{0,1,2,3,4,5,6,7},FP)})
 
         DoActions(FP,{RotatePlayer({
             DisplayTextX("\x04==================",4),
-            DisplayTextX("\x04X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04Y ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó Y ÁÂÇ¥ : ".._0D,4),
+            DisplayTextX("\x04X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04Y ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ Y ì¢Œí‘œ : ".._0D,4),
         },{0,1,2,3,4,5,6,7},FP)})
 
         CIfEnd()
@@ -177,10 +177,10 @@ function Test_LV2()
 
         DoActions(FP,{RotatePlayer({
             DisplayTextX("\x04==================",4),
-            DisplayTextX("\x04X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04Y ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó X ÁÂÇ¥ : ".._0D,4),
-            DisplayTextX("\x04¸Ê»ó Y ÁÂÇ¥ : ".._0D,4),
+            DisplayTextX("\x04X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04Y ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ X ì¢Œí‘œ : ".._0D,4),
+            DisplayTextX("\x04ë§µìƒ Y ì¢Œí‘œ : ".._0D,4),
         },{0,1,2,3,4,5,6,7},FP)})
 
         CIfEnd()

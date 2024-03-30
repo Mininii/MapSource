@@ -30,7 +30,7 @@ function MapPreserves()
 		RunAIScript("Turn ON Shared Vision for Player 5");
 		RunAIScript("Turn ON Shared Vision for Player 6");
 		RunAIScript("Turn ON Shared Vision for Player 7");},MapPlayers,FP),},{preserved})
-    Trigger { -- µ¿¸Í»óÅÂ °íÁ¤, Áß¸³¸¶¸° Á¦°Å
+    Trigger { -- ë™ë§¹ìƒíƒœ ê³ ì •, ì¤‘ë¦½ë§ˆë¦° ì œê±°
 	players = {Force1},
 
 	actions = {
@@ -66,8 +66,8 @@ CIf(FP,Switch("Switch 240",Set))
 CIf(FP,CDeaths(FP,AtLeast,1,PExitFlag),SetCDeaths(FP,Subtract,1,PExitFlag))
 	CMov(FP,SuppMax,_Div(MarNumberLimit,PCheckV),24*2)
 	for i = 0, 6 do
-	CMov(FP,0x582234 + (4*i),SuppMax) -- ÀÎ±¸¼ö »ó½Ã ¾÷µ¥ÀÌÆ®(¸Æ½º)
-	CMov(FP,0x5821D4 + (4*i),SuppMax) -- ÀÎ±¸¼ö »ó½Ã ¾÷µ¥ÀÌÆ®(»ç¿ë°¡´É)
+	CMov(FP,0x582234 + (4*i),SuppMax) -- ì¸êµ¬ìˆ˜ ìƒì‹œ ì—…ë°ì´íŠ¸(ë§¥ìŠ¤)
+	CMov(FP,0x5821D4 + (4*i),SuppMax) -- ì¸êµ¬ìˆ˜ ìƒì‹œ ì—…ë°ì´íŠ¸(ì‚¬ìš©ê°€ëŠ¥)
 	end
 	for k = 1, 7 do
 	CIf(FP,{CV(PCheckV,k)})
@@ -78,7 +78,7 @@ CIfEnd()
 
 CIfEnd()
 	for i = 0, 6 do
-	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07±âºÎ¸ğµå\x04 : F9, \x1F¼öµ¿ÀúÀå \x04: HOMEÅ°\x07 ]")},{preserved})
+	Trigger2(FP,{Deaths(i,AtMost,0,15),Memory(0x512684,Exactly,i)},{print_utf8(12, 0, "\x07[ LV.\x0D000\x1F - 00h \x1100m \x0F00s \x04- \x07ê¸°ë¶€ëª¨ë“œ\x04 : F9, \x1Fìˆ˜ë™ì €ì¥ \x04: HOMEí‚¤\x07 ]")},{preserved})
 	end
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,countdownSound)},{
 		RotatePlayer({

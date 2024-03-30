@@ -3,7 +3,7 @@ function GameOver()
 --    if TestStart == 1 then
 --        GameOverTrig = SetCDeaths(FP,SetTo,1,ScorePrint);
 --    end
---    Trigger { -- °ÔÀÓ ¿À¹ö Æ®¸®°Å
+--    Trigger { -- ê²Œìž„ ì˜¤ë²„ íŠ¸ë¦¬ê±°
 --    players = {FP},
 --    conditions = {
 --        Label(0);
@@ -14,14 +14,14 @@ function GameOver()
 --    actions = {
 --        RotatePlayer({
 --            DisplayTextX(string.rep("\n", 20),4),
---            DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4),
---            DisplayTextX("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4),
+--            DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
+--            DisplayTextX("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4),
 --            DisplayTextX("\n",4),
---            DisplayTextX("\x13\x15¸ðµç ÇÃ·¹ÀÌ¾îÀÇ À¯´ÖÀÌ Àü¸êÇÏ¿´½À´Ï´Ù.\n",4);
---            DisplayTextX("\x13\x05°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.",4);
+--            DisplayTextX("\x13\x15ëª¨ë“  í”Œë ˆì´ì–´ì˜ ìœ ë‹›ì´ ì „ë©¸í•˜ì˜€ìŠµë‹ˆë‹¤.\n",4);
+--            DisplayTextX("\x13\x05ê²Œìž„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.",4);
 --            DisplayTextX("\n",4),
---            DisplayTextX("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4),
---            DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4),
+--            DisplayTextX("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4),
+--            DisplayTextX("\x13\x04"..string.rep("â€•", 56),4),
 --            PlayWAVX("staredit\\wav\\Game_Over.ogg")
 --        },ObPlayers,FP);
 --        SetResources(AllPlayers,SetTo,0,Ore);
@@ -30,7 +30,7 @@ function GameOver()
 
 --        },
 --    }
---    Trigger { -- °ÔÀÓ ¿À¹ö Æ®¸®°Å
+--    Trigger { -- ê²Œìž„ ì˜¤ë²„ íŠ¸ë¦¬ê±°
 --        players = {Force1},
 --        conditions = {
 --            Label(0);
@@ -40,18 +40,18 @@ function GameOver()
 --        },
 --        actions = {
 --            DisplayText(string.rep("\n", 20),4);
---            DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
---            DisplayText("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4);
+--            DisplayText("\x13\x04"..string.rep("â€•", 56),4);
+--            DisplayText("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4);
 --            DisplayText("\n",4);
---            DisplayText("\x13\x15¸ðµç ÇÃ·¹ÀÌ¾îÀÇ À¯´ÖÀÌ Àü¸êÇÏ¿´½À´Ï´Ù.\n",4);
---            DisplayText("\x13\x05°ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.",4);
+--            DisplayText("\x13\x15ëª¨ë“  í”Œë ˆì´ì–´ì˜ ìœ ë‹›ì´ ì „ë©¸í•˜ì˜€ìŠµë‹ˆë‹¤.\n",4);
+--            DisplayText("\x13\x05ê²Œìž„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.",4);
 --            DisplayText("\n",4);
---            DisplayText("\x13\x05£Ç£Á£Í£Å¡¡£Ï£Ö£Å£Ò",4);
---            DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
+--            DisplayText("\x13\x05ï¼§ï¼¡ï¼­ï¼¥ã€€ï¼¯ï¼¶ï¼¥ï¼²",4);
+--            DisplayText("\x13\x04"..string.rep("â€•", 56),4);
 --            PlayWAV("staredit\\wav\\Game_Over.ogg");
 --            },
 --        }
-    CIf({Force1,FP},CDeaths(FP,AtLeast,1,Win)) -- ½Â¸®Æ®¸®°Å
+    CIf({Force1,FP},CDeaths(FP,AtLeast,1,Win)) -- ìŠ¹ë¦¬íŠ¸ë¦¬ê±°
     CMov(FP,SpeedVar,4)
         for i=0, 56 do
         Trigger {
@@ -63,9 +63,9 @@ function GameOver()
             actions = {
                 DisplayText(string.rep("\n", 20),4);
                 DisplayText("\n",4);
-                DisplayText("\x13\x04"..string.rep("¡ª", i),4);
+                DisplayText("\x13\x04"..string.rep("â€•", i),4);
                 DisplayText("\n\n\n\n",4);
-                DisplayText("\x13\x04"..string.rep("¡ª", i),4);
+                DisplayText("\x13\x04"..string.rep("â€•", i),4);
                 DisplayText("\n\n",4);
             },
         }
@@ -81,9 +81,9 @@ function GameOver()
                 RotatePlayer({
                     DisplayTextX(string.rep("\n", 20),4),
                     DisplayTextX("\n",4),
-                    DisplayTextX("\x13\x04"..string.rep("¡ª", i),4),
+                    DisplayTextX("\x13\x04"..string.rep("â€•", i),4),
                     DisplayTextX("\n\n\n\n",4),
-                    DisplayTextX("\x13\x04"..string.rep("¡ª", i),4),
+                    DisplayTextX("\x13\x04"..string.rep("â€•", i),4),
                     DisplayTextX("\n\n",4)
                 },ObPlayers,FP);
             },
@@ -99,11 +99,11 @@ function GameOver()
             },
             actions = {
                 DisplayText(string.rep("\n", 20),4);
-                DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
-                DisplayText("\n\x13\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x04¸¦ \x10Å¬¸®¾î\x04 ÇÏ¼Ì½À´Ï´Ù. \x1F==\n",4);
-                DisplayText("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(ªÄ>¤µ<)ªÄ\n\n",4);
-                DisplayText("\x13\x04"..string.rep("¡ª", 56),4);
-                DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04£Ô£è£á£î£ë¡¡£ù£ï£õ¡¡£æ£ï£ò¡¡£Ð£ì£á£ù£é£î£ç",4);
+                DisplayText("\x13\x04"..string.rep("â€•", 56),4);
+                DisplayText("\n\x13\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x04ë¥¼ \x10í´ë¦¬ì–´\x04 í•˜ì…¨ìŠµë‹ˆë‹¤. \x1F==\n",4);
+                DisplayText("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(ã¤>ã……<)ã¤\n\n",4);
+                DisplayText("\x13\x04"..string.rep("â€•", 56),4);
+                DisplayText("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04ï¼´ï½ˆï½ï½Žï½‹ã€€ï½™ï½ï½•ã€€ï½†ï½ï½’ã€€ï¼°ï½Œï½ï½™ï½‰ï½Žï½‡",4);
                 PlayWAV("staredit\\wav\\Level_Clear.ogg");
                 PlayWAV("staredit\\wav\\Level_Clear.ogg");
             },
@@ -118,11 +118,11 @@ function GameOver()
             actions = {
                 RotatePlayer({
                 DisplayTextX(string.rep("\n", 20),4);
-                DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-                DisplayTextX("\n\x13\x1F== \x04¸¶¸°Å°¿ì±â \x08£Õ£î£Ì£é£í£é£Ô \x1C£Å£ø£ã£å£å£Ä \x04¸¦ \x10Å¬¸®¾î\x04 ÇÏ¼Ì½À´Ï´Ù. \x1F==\n",4);
-                DisplayTextX("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(ªÄ>¤µ<)ªÄ\n\n",4);
-                DisplayTextX("\x13\x04"..string.rep("¡ª", 56),4);
-                DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04£Ô£è£á£î£ë¡¡£ù£ï£õ¡¡£æ£ï£ò¡¡£Ð£ì£á£ù£é£î£ç",4);
+                DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+                DisplayTextX("\n\x13\x1F== \x04ë§ˆë¦°í‚¤ìš°ê¸° \x08ï¼µï½Žï¼¬ï½‰ï½ï½‰ï¼´ \x1Cï¼¥ï½˜ï½ƒï½…ï½…ï¼¤ \x04ë¥¼ \x10í´ë¦¬ì–´\x04 í•˜ì…¨ìŠµë‹ˆë‹¤. \x1F==\n",4);
+                DisplayTextX("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04 in Used \x19(ã¤>ã……<)ã¤\n\n",4);
+                DisplayTextX("\x13\x04"..string.rep("â€•", 56),4);
+                DisplayTextX("\x13\x03Made \x06by \x04GALAXY_BURST\n\x13\x04ï¼´ï½ˆï½ï½Žï½‹ã€€ï½™ï½ï½•ã€€ï½†ï½ï½’ã€€ï¼°ï½Œï½ï½™ï½‰ï½Žï½‡",4);
                 PlayWAVX("staredit\\wav\\Level_Clear.ogg");
                 PlayWAVX("staredit\\wav\\Level_Clear.ogg");
                 },ObPlayers,FP);
@@ -153,5 +153,5 @@ function GameOver()
         }
     DoActionsX(FP,SetCDeaths(FP,Add,1,Win))
     
-    CIfEnd() -- ½Â¸®Æ®¸®°Å ³¡
+    CIfEnd() -- ìŠ¹ë¦¬íŠ¸ë¦¬ê±° ë
 end

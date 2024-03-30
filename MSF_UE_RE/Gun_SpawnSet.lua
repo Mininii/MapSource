@@ -2,11 +2,11 @@
 function InstallGunData()
 	function Case_OverCocoon()
 		G_CB_CondStack = CVar(FP,Actived_G_CB[2],Exactly,0)
-		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,201))--¿À¹öÄÚÄï
+		CIf(FP,CVar(FP,Var_TempTable[1][2],Exactly,201))--ì˜¤ë²„ì½”ì¿¤
 			CIf(FP,{CVar(FP,Var_TempTable[5][2],AtMost,0),CVar(FP,Var_TempTable[6][2],Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,480)})
 				CMov(FP,ReserveBGM,5)
-				GunBreak("\x07£Ã£ï£Ã£ï£ï£î",77000)
+				GunBreak("\x07ï¼£ï½ï¼£ï½ï½ï½",77000)
 
 			CIfEnd()
 			CIf(FP,CVar(FP,Var_TempTable[5][2],AtLeast,480))
@@ -70,11 +70,11 @@ function InstallGunData()
 	end
 
 	function Case_Overmind()
-		CIf(FP,{Gun_Line(0,Exactly,148)})--¿À¹ö¸¶ÀÎµå
+		CIf(FP,{Gun_Line(0,Exactly,148)})--ì˜¤ë²„ë§ˆì¸ë“œ
 		CIf(FP,{Gun_Line(4,Exactly,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
 			CMov(FP,ReserveBGM,5)
-			GunBreak("\x07£Ï£ö£å£ò£Í£é£î£ä",90000)
+			GunBreak("\x07ï¼¯ï½–ï½…ï½’ï¼­ï½‰ï½ï½„",90000)
 
 		CIfEnd()
 		CIf(FP,Gun_Line(4,AtLeast,480))
@@ -128,11 +128,11 @@ function InstallGunData()
 	end
 
 	function Case_Daggoth()
-		CIf(FP,Gun_Line(0,Exactly,152))--¼¿ºê´Ù°í¾²
+		CIf(FP,Gun_Line(0,Exactly,152))--ì…€ë¸Œë‹¤ê³ ì“°
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
 			CMov(FP,ReserveBGM,5)
-			GunBreak("\x07£Ä£á£ç£ç£ï£ô£è",100000)
+			GunBreak("\x07ï¼¤ï½ï½‡ï½‡ï½ï½”ï½ˆ",100000)
 
 		CIfEnd()
 		CIf(FP,Gun_Line(4,AtLeast,480))
@@ -196,11 +196,11 @@ function InstallGunData()
 	end
 
 	function Case_Cerebrate()
-		CIf(FP,Gun_Line(0,Exactly,151))--¼¿ºê¼ø´ë
+		CIf(FP,Gun_Line(0,Exactly,151))--ì…€ë¸ŒìˆœëŒ€
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
 			CMov(FP,ReserveBGM,4)
-			GunBreak("\x07£Ã£å£ò£å£â£ò£á£ô£å",120000)
+			GunBreak("\x07ï¼£ï½…ï½’ï½…ï½‚ï½’ï½ï½”ï½…",120000)
 
 		CIfEnd()
 		CIf(FP,Gun_Line(4,AtLeast,480))
@@ -244,12 +244,12 @@ function InstallGunData()
 	function Case_InfestedCommand()
 		local RandSpeed = CreateVar()
 		local CUID = CreateVar()
-		CIf(FP,Gun_Line(0,Exactly,130))--°¨Ä¿
+		CIf(FP,Gun_Line(0,Exactly,130))--ê°ì»¤
 			CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,480)})
 				TriggerX(FP,{CVar(FP,LevelT[2],Exactly,10)},{SetCDeaths(FP,Add,1500,GCT)},{preserved})
 				CMov(FP,ReserveBGM,5)
-				GunBreak("\x07£Ç£ò£á£ö£é£ô£ù¡¡£Ã£å£î£ô£å£ò",150000)
+				GunBreak("\x07ï¼§ï½’ï½ï½–ï½‰ï½”ï½™ã€€ï¼£ï½…ï½ï½”ï½…ï½’",150000)
 			CIfEnd()
 			CIf(FP,{CVar(FP,LevelT[2],AtMost,3),Gun_Line(4,AtLeast,24)})
 				CDoActions(FP,{Gun_SetLine(4,SetTo,0)})
@@ -318,38 +318,38 @@ function InstallGunData()
 	end
 
 	function Case_Hive()
-		CIf(FP,Gun_Line(0,Exactly,133))--ÇÏÀÌºê
+		CIf(FP,Gun_Line(0,Exactly,133))--í•˜ì´ë¸Œ
 			CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,480)})
 				CMov(FP,ReserveBGM,4)
-				GunBreak("\x07£È£é£ö£å",50000)
+				GunBreak("\x07ï¼¨ï½‰ï½–ï½…",50000)
 			CIfEnd()
 			CIf(FP,{Gun_Line(4,AtLeast,480)})
 				CIf(FP,Gun_Line(3,Exactly,0))
 					CIf(FP,{LvT(AtMost,3)})
 						Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-							{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
+							{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ì¢Œìƒ
 						f_TempRepeat(62,1)
 						f_TempRepeat(56,8)
 						f_TempRepeat(104,5)
 						f_TempRepeat(48,5)
 						f_TempRepeat(51,5)
 						Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-							{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ¿ì»ó
+							{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ìš°ìƒ
 						f_TempRepeat(62,1)
 						f_TempRepeat(56,8)
 						f_TempRepeat(104,5)
 						f_TempRepeat(48,5)
 						f_TempRepeat(51,5)
 						Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-							{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ÁÂÇÏ
+							{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ì¢Œí•˜
 						f_TempRepeat(62,1)
 						f_TempRepeat(56,8)
 						f_TempRepeat(104,5)
 						f_TempRepeat(48,5)
 						f_TempRepeat(51,5)
 						Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-							{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ¿ìÇÏ
+							{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ìš°í•˜
 						f_TempRepeat(62,1)
 						f_TempRepeat(56,8)
 						f_TempRepeat(104,5)
@@ -471,10 +471,10 @@ function InstallGunData()
 
 	function Case_Lair()
 
-		CIf(FP,Gun_Line(0,Exactly,132))--·¹¾î
+		CIf(FP,Gun_Line(0,Exactly,132))--ë ˆì–´
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("\x07£Ì£á£é£ò",40000)
+			GunBreak("\x07ï¼¬ï½ï½‰ï½’",40000)
 			CMov(FP,ReserveBGM,3)
 		CIfEnd()
 		CIf(FP,{Gun_Line(4,AtLeast,480)})
@@ -523,28 +523,28 @@ function InstallGunData()
 
 			CIf(FP,{LvT(AtMost,3)})
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
+					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ì¢Œìƒ
 				f_TempRepeat(55,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(56,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(53,5)
 				f_TempRepeat(48,4)
 				f_TempRepeat(54,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ¿ì»ó
+					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ìš°ìƒ
 				f_TempRepeat(55,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(56,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(53,5)
 				f_TempRepeat(48,4)
 				f_TempRepeat(54,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ÁÂÇÏ
+					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ì¢Œí•˜
 				f_TempRepeat(55,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(56,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(53,5)
 				f_TempRepeat(48,4)
 				f_TempRepeat(54,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ¿ìÇÏ
+					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ìš°í•˜
 				f_TempRepeat(55,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(56,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(53,5)
@@ -562,38 +562,38 @@ function InstallGunData()
 
 	function Case_Hatchery()
 
-		CIf(FP,Gun_Line(0,Exactly,131))--ÇØÃ³¸®
+		CIf(FP,Gun_Line(0,Exactly,131))--í•´ì²˜ë¦¬
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
 			CMov(FP,ReserveBGM,2)
-			GunBreak("\x07£È£á£ô£ã£è£å£ò£ù",30000)
+			GunBreak("\x07ï¼¨ï½ï½”ï½ƒï½ˆï½…ï½’ï½™",30000)
 		CIfEnd()
 
 		CIf(FP,{CVar(FP,LevelT[2],AtLeast,1),CVar(FP,LevelT[2],AtMost,3)})
 			CIf(FP,{Gun_Line(4,AtLeast,480)})
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ÁÂ»ó
+					{Simple_CalcLoc(0,-32*4 + (-32*7),-32*4 + (-32*7),-32*4 + (32*7),-32*4 + (32*7))}) -- ì¢Œìƒ
 				f_TempRepeat(43,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(44,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(38,5)
 				f_TempRepeat(39,4)
 				f_TempRepeat(37,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ¿ì»ó
+					{Simple_CalcLoc(0,32*4 + (-32*7),-32*4 + (-32*7),32*4 + (32*7),-32*4 + (32*7))}) -- ìš°ìƒ
 				f_TempRepeat(43,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(44,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(38,5)
 				f_TempRepeat(39,4)
 				f_TempRepeat(37,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ÁÂÇÏ
+					{Simple_CalcLoc(0,-32*4 + (-32*7),32*4 + (-32*7),-32*4 + (32*7),32*4 + (32*7))}) -- ì¢Œí•˜
 				f_TempRepeat(43,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(44,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(38,5)
 				f_TempRepeat(39,4)
 				f_TempRepeat(37,5)
 				Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],
-					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ¿ìÇÏ
+					{Simple_CalcLoc(0,32*4 + (-32*7),32*4 + (-32*7),32*4 + (32*7),32*4 + (32*7))}) -- ìš°í•˜
 				f_TempRepeat(43,4,Gun_Line(5,Exactly,0))
 				f_TempRepeat(44,4,Gun_Line(5,Exactly,1))
 				f_TempRepeat(38,5)
@@ -650,10 +650,10 @@ function InstallGunData()
 	end
 
 	function Case_Formation()
-		CIf(FP,Gun_Line(0,Exactly,173),{SetMemoryB(0x665C48+341,SetTo,0)})--°¡¿ì½º¶óÀÌÇÃ °ø°İÀÌÆåÆ® ¾Èº¸ÀÌ°ÔÇÏ±â
+		CIf(FP,Gun_Line(0,Exactly,173),{SetMemoryB(0x665C48+341,SetTo,0)})--ê°€ìš°ìŠ¤ë¼ì´í”Œ ê³µê²©ì´í™íŠ¸ ì•ˆë³´ì´ê²Œí•˜ê¸°
 		CIf(FP,{Gun_Line(4,AtMost,0),Gun_Line(5,Exactly,0)})
 			CDoActions(FP,{Gun_SetLine(4,Add,480)})
-			GunBreak("\x07£Æ£ï£ò£í£á£ô£é£ï£î",3000000,1)
+			GunBreak("\x07ï¼¦ï½ï½’ï½ï½ï½”ï½‰ï½ï½",3000000,1)
 			G_CB_SetSpawn(CVar(FP,LevelT[2],AtMost,9),{13},"Form","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,1)},{25},"FormF1","MAX",3,nil,nil,{0,0})
 			G_CB_SetSpawn({CVar(FP,LevelT[2],Exactly,2)},{25},"FormF2","MAX",3,nil,nil,{0,0})
@@ -675,7 +675,7 @@ function InstallGunData()
 	end
 
 	function Case_Various()
-		CIf(FP,{Gun_Line(53,AtLeast,256)}) -- Àâ°ÇÀÛÀÏ °æ¿ì
+		CIf(FP,{Gun_Line(53,AtLeast,256)}) -- ì¡ê±´ì‘ì¼ ê²½ìš°
 			CIf(FP,{Gun_Line(5,Exactly,0)})
 				CDoActions(FP,{Gun_SetLine(4,Add,120)})
 			CIfEnd()
@@ -715,7 +715,7 @@ function InstallGunData()
 					NJumpXEnd(FP, RandCheck)
 					CMov(FP,TempRandV,_Mod(_Rand(),_Mov(#HeroArr)))
 					CMovX(FP,TempRandV2,VArr(HeroVArr,TempRandV),nil,nil,1)
-					NJumpX(FP, RandCheck, {CV(TempRandV2,121)})--ÇÙ¹èÆ² Àâ°ÇÀÛ ½ºÆù ¹æÁö
+					NJumpX(FP, RandCheck, {CV(TempRandV2,121)})--í•µë°°í‹€ ì¡ê±´ì‘ ìŠ¤í° ë°©ì§€
 					f_TempRepeatX(TempRandV2,1,nil,nil,nil,nil,{2,2})
 					
 					end

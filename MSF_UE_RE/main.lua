@@ -2,25 +2,14 @@
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 --dofile(Curdir.."MapSource\\MSF_UE_RE\\main.lua")
 
---º”µµ√¯¡§øÎ
+--ÏÜçÎèÑÏ∏°Ï†ïÏö©
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-LD2XOption = 1
-if LD2XOption == 1 then
-	Mapdir="C:\\euddraft0.9.2.0\\MSF_UE_RE"
-	__StringArray = {}
-	__TRIGChkptr = io.open(Mapdir.."__TRIG.chk", "wb")
-	__TRIGChkptrT = {}
-	__TTI = 1
-	Loader2XFName = "Loader.lua"
-else
-	Loader2XFName = "Loader2X.lua"
-end
 
---Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= Loader2XFName then
+     if dir:match "%.[Ll][Uu][Aa]$"  then
 		InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 		InitEXTLua()
      end
@@ -36,10 +25,6 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-NormalTurboSet(P8,214)
-DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
-DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
-DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
 TestSet(0)
 TestPMul=2
 VerText = "\x04Ver. Beta. 0.96"
@@ -56,8 +41,13 @@ EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 Enable_HumanCheck()
-Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
+DP_Start_init(FP,{15,5000},0x4000, 0x6000)
+NormalTurboSet(P8,214)
+DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
+DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
+DoActions(P8,{RemoveUnit(179,P12),RemoveUnit(71,P8),RemoveUnit(203,AllPlayers),RemoveUnit(204,AllPlayers),RemoveUnit(205,AllPlayers),RemoveUnit(206,AllPlayers),RemoveUnit(207,AllPlayers),RemoveUnit(208,AllPlayers),RemoveUnit(209,AllPlayers),RemoveUnit(211,AllPlayers),RemoveUnit(212,AllPlayers)})
+Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 GiveT = {}
 for i = 0, 6 do
 	table.insert(GiveT,GiveUnits(1, 107, P12, 64, i))
@@ -71,7 +61,6 @@ end
 	CIf(AllPlayers,ElapsedTime(AtLeast,3))
 		init_func = def_sIndex()
 		CJump(AllPlayers,init_func)
-			DP_Start_init(FP,{15,5000},0x4000, 0x6000)
 			Include_CtrigPlib(360,"Switch 100")
 			Include_64BitLibrary("Switch 100")
 			Include_CBPaint()
@@ -128,9 +117,5 @@ ErrorCheck()
 SetCallErrorCheck()
 
 
-if LD2XOption == 1 then
-__PopStringArray()
-io.close(__TRIGchkptr)
-end
---º”µµ√¯¡§øÎ 2
+--ÏÜçÎèÑÏ∏°Ï†ïÏö© 2
 --error(string.format("elapsed time: %.3f\n", os.clock() - x))

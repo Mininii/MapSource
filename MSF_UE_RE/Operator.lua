@@ -1,11 +1,11 @@
 function OPTrig()
 	Cunit2 = CreateVar(FP)
-	CIfX(FP,Never()) -- »óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ô ½ÃÀÛ
+	CIfX(FP,Never()) -- ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ ì‹œì‘
 	for i = 0, 6 do
 		CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i)})
 		f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
 		f_Read(FP,0x58A364+(48*180)+(4*i),Dt) -- MSQC val Recive. 180 
-		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07±âºÎ¸ğµå\x04 : F9, \x1F¼öµ¿ÀúÀå \x04: HOMEÅ°, \x1C¹è¼ÓÁ¶Á¤ \x04: F12\x07 ]")},1)
+		CTrigger(FP,{Deaths(i,AtMost,0,15),TMemory(0x512684,Exactly,CurrentOP)},{print_utf8(12, 0, "\x07[ LV.0000\x1F - 00h \x1100m \x0F00s \x04- \x07ê¸°ë¶€ëª¨ë“œ\x04 : F9, \x1Fìˆ˜ë™ì €ì¥ \x04: HOMEí‚¤, \x1Cë°°ì†ì¡°ì • \x04: F12\x07 ]")},1)
 	end
 	CIfXEnd()
 	for i = 0, 6 do
@@ -26,11 +26,11 @@ function OPTrig()
 	if Limit == 1 then
 		CIf(FP,{CDeaths(FP,AtLeast,1,TestMode),CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7fffffff)},{})
 		--SetFlingySpeed(158,(20*32)*6)
-		--SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210¹ø Åº¸·À¯´Ö ¹«±â Àü¹İ ¼³Á¤
+		--SetWeaponsDat({},128,{DmgBase=65535,FlingyID=158,Splash={12,12,12},RemoveAfter=48},{preserved})--210ë²ˆ íƒ„ë§‰ìœ ë‹› ë¬´ê¸° ì „ë°˜ ì„¤ì •
 
 
 		--GetLocCenter(73, CPosX, CPosY)
-		--CallTrigger(FP, Call_CreateBullet_EPD) -- Å¸°Ù Åº¸· ÀÛµ¿
+		--CallTrigger(FP, Call_CreateBullet_EPD) -- íƒ€ê²Ÿ íƒ„ë§‰ ì‘ë™
 		--SetBullet(210, 20, {CPosX,CPosY}, {96*16,192*16})
 		--CreateBulletXY(210, 20,{CPosX,CPosY},{96*16,192*16},FP)
 
@@ -134,26 +134,26 @@ function OPTrig()
 
 	
 			--[[
-			1 = ¿¬°áµÊ
-			2 = ¿¬°á ²÷Å´
-			3 = ·ÎµåÁß
-			4 = ·Îµå ¿Ï·á
-			5 = ¼¼ÀÌºêÁß
-			6 = ¼¼ÀÌºê ¿Ï·á
-			7 = ·±Ã³¿Í ¸ÕÀú ¿¬°áÇÏ¼¼¿ä
-			8 = ´Ù¸¥ ÀÛ¾÷ ÁßÀÔ´Ï´Ù.
-			9 = ÀÛ¾÷ ½ÇÆĞ
-			10 = ¸í·É ½ÇÇà
-			11 = ½Ã°£ ·Îµå
-			12 = ±Û·Î¹úµ¥ÀÌÅÍ ·Îµå
+			1 = ì—°ê²°ë¨
+			2 = ì—°ê²° ëŠí‚´
+			3 = ë¡œë“œì¤‘
+			4 = ë¡œë“œ ì™„ë£Œ
+			5 = ì„¸ì´ë¸Œì¤‘
+			6 = ì„¸ì´ë¸Œ ì™„ë£Œ
+			7 = ëŸ°ì²˜ì™€ ë¨¼ì € ì—°ê²°í•˜ì„¸ìš”
+			8 = ë‹¤ë¥¸ ì‘ì—… ì¤‘ì…ë‹ˆë‹¤.
+			9 = ì‘ì—… ì‹¤íŒ¨
+			10 = ëª…ë ¹ ì‹¤í–‰
+			11 = ì‹œê°„ ë¡œë“œ
+			12 = ê¸€ë¡œë²Œë°ì´í„° ë¡œë“œ
 			]]
 			
 	local initStr = "\x07LV.0000" 
 	local initStr2 = MakeiStrVoid(20).." \x04: " 
-	local SCAStat1 = "\x07¿¬°á µÇ¾ú½À´Ï´Ù!" 
-	local SCAStat2 = "\x07µ¥ÀÌÅÍ¸¦ ºÒ·¯¿À´Â Áß..." 
-	local NonSCAStr = "\x10SCA ·±ÃÄ\x04¿Í \x07¿¬°á\x04ÇØÁÖ¼¼¿ä." 
-	local SCAInitStr = "\x1FÇÃ\x04·¹ÀÌ¾î : \x07\x0D\x04¸í. ¼±ÅÃ°¡´É \x1FÃÖ´ë \x07Level \x04- 0000  / \x1F¼±ÅÃ \x07Level - 0000 "
+	local SCAStat1 = "\x07ì—°ê²° ë˜ì—ˆìŠµë‹ˆë‹¤!" 
+	local SCAStat2 = "\x07ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘..." 
+	local NonSCAStr = "\x10SCA ëŸ°ì³\x04ì™€ \x07ì—°ê²°\x04í•´ì£¼ì„¸ìš”." 
+	local SCAInitStr = "\x1Fí”Œ\x04ë ˆì´ì–´ : \x07\x0D\x04ëª…. ì„ íƒê°€ëŠ¥ \x1FìµœëŒ€ \x07Level \x04- 0000  / \x1Fì„ íƒ \x07Level - 0000 "
 	
 	local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))
 	
@@ -185,15 +185,15 @@ function OPTrig()
 	})
 	for i = 0, 6 do
 		if Limit == 1 then
-		TriggerX(FP, {Deaths(i,AtLeast,1,38)}, {SetCD(LimitC,1);}) -- Å×½ºÅÍÇÃ·¡±×
+		TriggerX(FP, {Deaths(i,AtLeast,1,38)}, {SetCD(LimitC,1);}) -- í…ŒìŠ¤í„°í”Œë˜ê·¸
 		end
 		TriggerX(FP, HumanCheck(i,1), SetCVar(FP,SetPlayers[2],Add,1), {preserved})
 	end
 	for k = 1, 7 do
 		CIf(FP, CVar(FP,SetPlayers[2],Exactly,k))
-		-- ¹Ì¼Ç ¿ÀºêÁ§Æ®, È¯Àü·ü ¼ÂÆÃ
+		-- ë¯¸ì…˜ ì˜¤ë¸Œì íŠ¸, í™˜ì „ë¥  ì…‹íŒ…
 		TriggerX(FP, {}, {
-			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04¸¶¸°Å°¿ì±â \x1F£Õ£í£Ì£é£í£é£ô £Å£ø£ã£å£å£Ä\n\x13"..PlayersN[k].." \x07ÇÃ·¹ÀÌÁßÀÔ´Ï´Ù.\n\x13\x04¼³¸íÀº InsertÅ° ¶Ç´Â PgUp, PgDn Å°·Î È®ÀÎ \n\x13\x1F===================================");
+			SetMissionObjectives("\x13\x1F===================================\n\x13\n\x13\x04ë§ˆë¦°í‚¤ìš°ê¸° \x1Fï¼µï½ï¼¬ï½‰ï½ï½‰ï½” ï¼¥ï½˜ï½ƒï½…ï½…ï¼¤\n\x13"..PlayersN[k].." \x07í”Œë ˆì´ì¤‘ì…ë‹ˆë‹¤.\n\x13\x04ì„¤ëª…ì€ Insertí‚¤ ë˜ëŠ” PgUp, PgDn í‚¤ë¡œ í™•ì¸ \n\x13\x1F===================================");
 		}, {preserved})
 			CAdd(FP,ExchangeRate,_Div(_Mul(LevelFactor,ExchangeRateT[k]),2),ExchangeRateT[k])
 		CIfEnd()
@@ -268,8 +268,8 @@ function OPTrig()
 		end 
 		CAPrint(OPiStr,{Force1,Force5},{1,0,0,0,1,1,0,0},"CA_OPText",FP,{}) 
 		
-		local IntroT1 = "\x13\x1E¢º \x04»óÀ§ ÇÃ·¹ÀÌ¾î´Â ½ÃÀÛ ·¹º§ ¼±ÅÃ ÈÄ Y¸¦ ´­·¯ÁÖ¼¼¿ä.(ÁÂ¿ì¹öÆ°) ÇöÀç \x07LV."..LvLimit.." \x04±îÁö ¼±ÅÃ°¡´ÉÇÕ´Ï´Ù. \x1E¢¸"
-		local IntroT2 = "\x13\x1E¢º \x08°ÔÀÓÀÌ ½ÃÀÛµÇ¸é SCA¿¡¼­ µ¥ÀÌÅÍ¸¦ ºÒ·¯¿Ã ¼ö ¾ø½À´Ï´Ù. \x1E¢¸"
+		local IntroT1 = "\x13\x1Eâ–¶ \x04ìƒìœ„ í”Œë ˆì´ì–´ëŠ” ì‹œì‘ ë ˆë²¨ ì„ íƒ í›„ Yë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”.(ì¢Œìš°ë²„íŠ¼) í˜„ì¬ \x07LV."..LvLimit.." \x04ê¹Œì§€ ì„ íƒê°€ëŠ¥í•©ë‹ˆë‹¤. \x1Eâ—€"
+		local IntroT2 = "\x13\x1Eâ–¶ \x08ê²Œì„ì´ ì‹œì‘ë˜ë©´ SCAì—ì„œ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x1Eâ—€"
 		DoActions2(FP, RotatePlayer({
 			DisplayTextX(IntroT1,4),
 			DisplayTextX(IntroT2,4),
@@ -283,9 +283,9 @@ function OPTrig()
 		end
 		CMov(FP,0x6509B0,CurrentOP)
 		StartJumpV = def_sIndex()
-		NJump(FP, StartJumpV, {Deaths(CurrentPlayer,AtLeast,1,221),CD(LoadingC,1,AtLeast)}, {TSetMemory(0x6509B0, SetTo, CurrentOP),PlayWAV("sound\\Misc\\PError.WAV");PlayWAV("sound\\Misc\\PError.WAV");DisplayText("\x13\x07¡º \x08ERROR \x04: ÇöÀç ·ÎµåÁßÀÎ ÇÃ·¹ÀÌ¾î°¡ ÀÖ¾î ½ÃÀÛÇÒ ¼ö ¾ø½À´Ï´Ù. \x07¡»", 4)})
+		NJump(FP, StartJumpV, {Deaths(CurrentPlayer,AtLeast,1,221),CD(LoadingC,1,AtLeast)}, {TSetMemory(0x6509B0, SetTo, CurrentOP),PlayWAV("sound\\Misc\\PError.WAV");PlayWAV("sound\\Misc\\PError.WAV");DisplayText("\x13\x07ã€ \x08ERROR \x04: í˜„ì¬ ë¡œë“œì¤‘ì¸ í”Œë ˆì´ì–´ê°€ ìˆì–´ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \x07ã€", 4)})
 		CIfOnce(FP, {ElapsedTime(AtLeast, 15),Deaths(CurrentPlayer,AtLeast,1,221)})
-		DoActions2X(FP, {RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1E¢º \x04¸ğµç ¼³Á¤ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù. Àá½Ã ÈÄ °ÔÀÓÀÌ ½ÃÀÛµË´Ï´Ù. \x1E¢¸", 4)}, HumanPlayers, FP),
+		DoActions2X(FP, {RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),DisplayTextX("\x13\x1Eâ–¶ \x04ëª¨ë“  ì„¤ì •ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤. ì ì‹œ í›„ ê²Œì„ì´ ì‹œì‘ë©ë‹ˆë‹¤. \x1Eâ—€", 4)}, HumanPlayers, FP),
 		SetCD(StartC,1)
 	}, 1)
 		CallTriggerX(FP, LevelReset,nil,nil,1)
@@ -312,7 +312,7 @@ function OPTrig()
 	CIfXEnd()
 	
 
-	for i = 0, 6 do -- ºÒ·¯¿Â µ¥ÀÌÅÍ ¼³Á¤
+	for i = 0, 6 do -- ë¶ˆëŸ¬ì˜¨ ë°ì´í„° ì„¤ì •
 		TriggerX(FP,{Deaths(i, AtMost, 31, 43)},{SetDeaths(i, Add, 32, 43)})
 		TriggerX(FP,{Deaths(i, AtMost, 31, 44)},{SetDeaths(i, Add, 32, 44)})
 		Act_TSetMemoryW(0x660E00+(MarID[i+1]*2), Add, _Mul(ShUp[i+1], _Mov(1000)))
@@ -345,7 +345,7 @@ function OPTrig()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayTextX("\x13\x1BÅ×½ºÆ® Àü¿ë ¸ÊÀÔ´Ï´Ù. Á¤½Ä¹öÁ¯À¸·Î ½ÃÀÛÇØÁÖ¼¼¿ä. \n\x13\x04½ÇÇà ¹æÁö ÄÚµå 0x32223223 ÀÛµ¿.",4);
+			DisplayTextX("\x13\x1Bí…ŒìŠ¤íŠ¸ ì „ìš© ë§µì…ë‹ˆë‹¤. ì •ì‹ë²„ì ¼ìœ¼ë¡œ ì‹œì‘í•´ì£¼ì„¸ìš”. \n\x13\x04ì‹¤í–‰ ë°©ì§€ ì½”ë“œ 0x32223223 ì‘ë™.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -360,12 +360,12 @@ function OPTrig()
 	CIfEnd()
 	CMov(FP,0x6509B0,CurrentOP)
 
-	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07¡º \x1F±âºÎ ON \x04»óÅÂ¿¡¼­´Â »ç¿ëÇÒ ¼ö ¾ø´Â ±â´ÉÀÔ´Ï´Ù. \x03ESC\x04¸¦ ´­·¯ ±â´ÉÀ» OFFÇØÁÖ¼¼¿ä. \x07¡»")},1)
+	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F12),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole),},{print_utf8(12,0,"\x07ã€ \x1Fê¸°ë¶€ ON \x04ìƒíƒœì—ì„œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ê¸°ëŠ¥ì…ë‹ˆë‹¤. \x03ESC\x04ë¥¼ ëˆŒëŸ¬ ê¸°ëŠ¥ì„ OFFí•´ì£¼ì„¸ìš”. \x07ã€")},1)
 	KeyInput(F12,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,CPConsole)},{
 		PlayWAV("sound\\Misc\\Buzz.wav"),
 		PlayWAV("sound\\Misc\\Buzz.wav"),
 		SetDeaths(CurrentPlayer,SetTo,5000,15);},1)
-	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F9),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole),},{print_utf8(12,0,"\x07¡º \x1C¹è¼ÓÁ¶Á¤ \x04»óÅÂ¿¡¼­´Â »ç¿ëÇÒ ¼ö ¾ø´Â ±â´ÉÀÔ´Ï´Ù. \x03ESC\x04¸¦ ´­·¯ ±â´ÉÀ» OFFÇØÁÖ¼¼¿ä. \x07¡»")},1)
+	CTrigger(FP,{TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtLeast,1,F9),CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole),},{print_utf8(12,0,"\x07ã€ \x1Cë°°ì†ì¡°ì • \x04ìƒíƒœì—ì„œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ê¸°ëŠ¥ì…ë‹ˆë‹¤. \x03ESC\x04ë¥¼ ëˆŒëŸ¬ ê¸°ëŠ¥ì„ OFFí•´ì£¼ì„¸ìš”. \x07ã€")},1)
 	KeyInput(F9,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),Deaths(CurrentPlayer,Exactly,1,OPConsole)},{
 		PlayWAV("sound\\Misc\\Buzz.wav"),
 		PlayWAV("sound\\Misc\\Buzz.wav"),
@@ -380,23 +380,23 @@ function OPTrig()
 		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,0,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,1,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{preserved})
 		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,B),Deaths(CurrentPlayer,Exactly,0,F9),Deaths(CurrentPlayer,Exactly,1,BanConsole)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,BanConsole),SetDeaths(CurrentPlayer,SetTo,0,B)},{preserved})
 		CIfX(FP,Deaths(CurrentPlayer,AtLeast,1,BanConsole))
-			CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x08°­Åğ¸ğµå ON. \x04¼ıÀÚÅ°¸¦ 5È¸ ´­·¯ °­ÅğÇÏ¼¼¿ä. ESC : ´İ±â\x07 ]")},1)
+			CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x08ê°•í‡´ëª¨ë“œ ON. \x04ìˆ«ìí‚¤ë¥¼ 5íšŒ ëˆŒëŸ¬ ê°•í‡´í•˜ì„¸ìš”. ESC : ë‹«ê¸°\x07 ]")},1)
 			-- 205 ~ 211
 			for i = 1, 6 do
 				CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,205+i),TTMemory(0x6509B0,NotSame,i),HumanCheck(i,1)},{
-					RotatePlayer({DisplayTextX("\x07¡º "..PlayerString[i+1].."\x04¿¡°Ô \x08°æ°í 1È¸ ´©Àû\x04 µÇ¾ú½À´Ï´Ù. ÃÑ 5È¸ ´©Àû½Ã \x08°­Åğ Ã³¸® \x04µË´Ï´Ù. \x07¡»",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
+					RotatePlayer({DisplayTextX("\x07ã€ "..PlayerString[i+1].."\x04ì—ê²Œ \x08ê²½ê³  1íšŒ ëˆ„ì \x04 ë˜ì—ˆìŠµë‹ˆë‹¤. ì´ 5íšŒ ëˆ„ì ì‹œ \x08ê°•í‡´ ì²˜ë¦¬ \x04ë©ë‹ˆë‹¤. \x07ã€",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP);
 					SetCDeaths(FP,SetTo,0,OPFuncT),SetCDeaths(FP,Add,1,BanToken[i+1])},{preserved})
 			end
 			CMov(FP,0x6509B0,CurrentOP)
 			CElseX()
-			CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x04¹æÇâÅ°(¡ç¡æ) : \x1F¹è¼Ó Á¶Á¤, \x04ESC : ´İ±â, B : \x08°­Åğ¸ğµå ON\x07 ]")},1)
+			CTrigger(FP,{CDeaths(FP,AtLeast,150+(48*4)+3,IntroT),TMemory(0x512684,Exactly,CurrentOP),Deaths(CurrentPlayer,AtMost,0,15)},{print_utf8(12, 0, "\x07[ \x04ë°©í–¥í‚¤(â†â†’) : \x1Fë°°ì† ì¡°ì •, \x04ESC : ë‹«ê¸°, B : \x08ê°•í‡´ëª¨ë“œ ON\x07 ]")},1)
 		CIfXEnd()
 		TriggerX(FP,{Deaths(CurrentPlayer,AtLeast,1,ESC)},{SetCDeaths(FP,SetTo,0,OPFuncT),SetDeaths(CurrentPlayer,SetTo,0,OPConsole),SetDeaths(CurrentPlayer,SetTo,0,BanConsole)},{preserved})
 	CIfEnd()
-	CMov(FP,0x6509B0,FP) -- RecoverCP »óÀ§ÇÃ·¹ÀÌ¾î ´Ü¶ô ³¡
+	CMov(FP,0x6509B0,FP) -- RecoverCP ìƒìœ„í”Œë ˆì´ì–´ ë‹¨ë½ ë
 	
     TriggerX(FP,{CD(SBossStart,1,AtLeast),CV(SpeedVar,4,AtMost)},{SetV(SpeedVar,5)},{preserved})
-	CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ¹è¼ÓÁ¶Á¤ Æ®¸®°Å
+	CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- ë°°ì†ì¡°ì • íŠ¸ë¦¬ê±°
 		CMov(FP,CurrentSpeed,SpeedVar)
 		for i = 1, 10 do
 			Trigger { -- No comment (E93EF7A9)
@@ -407,7 +407,7 @@ function OPTrig()
 				},
 				actions = {PreserveTrigger();
 					RotatePlayer({PlayWAVX("staredit\\wav\\sel_m.ogg"),
-					DisplayTextX("\x13\x07¡º \x0F¹è¼Ó º¯°æ \x10- "..XSpeed[i].." \x07¡»", 0)},HumanPlayers,FP);
+					DisplayTextX("\x13\x07ã€ \x0Fë°°ì† ë³€ê²½ \x10- "..XSpeed[i].." \x07ã€", 0)},HumanPlayers,FP);
 					SetMemory(0x5124F0,SetTo,SpeedV[i]);
 				},
 			}
