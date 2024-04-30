@@ -220,37 +220,46 @@
 		if type(TargetPlayer) == "number"  then
 			TPArr = {TargetPlayer}
 		end
-
-		for j,k in pairs(TPArr) do
-			if type(k) == "number" then
-				if  k>= 8 then PushErrorMsg("Invalid TargetPlayer. Please Select P1~P8") end
-				if OP_Hold ~= "X" then 
-					CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k),SetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
-				else
-					CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k)})
-				end
-			else --type == V
-				if OP_Hold ~= "X" then 
-					CDoActions(FP,{TSetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
-				end
-				CMov(FP,dp.Print13V,k)
-				CallTrigger(FP, dp.Call_Print13X)
-			end
-
-
-			
-		end
-
-		if #TPArr == 1 then
-			CIf(FP, {TMemory(0x512684,Exactly,TPArr[1])})
+		if TPArr[4] == "V" then
+			CMov(FP,dp.Print13V,TPArr)
+			CallTrigger(FP, dp.Call_Print13X)
 		else
-			local CondArr = {}
 			for j,k in pairs(TPArr) do
-				table.insert(CondArr, _TMemory(0x512684,Exactly,k))
-			end
-			CIf(FP,{TTOR(CondArr)})
+				if type(k) == "number" then
+					if  k>= 8 then PushErrorMsg("Invalid TargetPlayer. Please Select P1~P8") end
+					if OP_Hold ~= "X" then 
+						CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k),SetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
+					else
+						CallTrigger(FP, dp.Call_Print13X,{SetV(dp.Print13V,k)})
+					end
+				else --type == V
+					if OP_Hold ~= "X" then 
+						CDoActions(FP,{TSetDeaths(k,SetTo,OP_Hold[2],OP_Hold[1])})
+					end
+					CMov(FP,dp.Print13V,k)
+					CallTrigger(FP, dp.Call_Print13X)
+				end
+		end 
+
+
 			
 		end
+
+		if TPArr[4] == "V" then
+			CIf(FP, {TMemory(0x512684,Exactly,TPArr)})
+		else
+			if #TPArr == 1 then
+				CIf(FP, {TMemory(0x512684,Exactly,TPArr[1])})
+			else
+				local CondArr = {}
+				for j,k in pairs(TPArr) do
+					table.insert(CondArr, _TMemory(0x512684,Exactly,k))
+				end
+				CIf(FP,{TTOR(CondArr)})
+				
+			end
+		end
+		DoActions2(FP, {print_utf8_2(12, 0, string.rep("\x0D", 210))})
 		DoActions2(FP, RetAct)
 		for j,p in pairs(ItoDecKey) do
 			local k = p[1]
@@ -285,14 +294,12 @@
 
 	end
 
-	function Print_13X(PlayerID,TargetPlayer,String)
+	function Print_13X(PlayerID,TargetPlayer)
 		local Y = {}
-		if String ~= nil then
-			table.insert(Y,print_utf8(12, 0, String))
-		end
 		CIf(PlayerID,Memory(0x628438,AtLeast,1))
 			f_ReadX(PlayerID,0x628438,V(FuncAlloc),1,0xFFFFFF)
-			CDoActions(PlayerID,{SetMemory(0x628438,SetTo,0),TCreateUnit(1,0,"Anywhere",TargetPlayer),Y})
+			CDoActions(PlayerID,{SetMemory(0x628438,SetTo,0),TCreateUnit(1,0,"Anywhere",TargetPlayer)})
+			--DoActions2(PlayerID, Y)
 			CVariable2(PlayerID,FuncAlloc,0x628438,SetTo,0)
 		CIfEnd()
 		FuncAlloc = FuncAlloc + 1
