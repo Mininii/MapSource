@@ -44,13 +44,23 @@ function onInit_EUD()
 	--	SetUnitsDatX(20,{HP=9999})--테스트
 	--	SetWeaponsDatX(0, {DmgBase=1000})--테스트
 	--	SetWeaponsDatX(1, {DmgBase=2000})--테스트
-	--
 	--end
 	SetUnitsDatX(84,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1})--이펙트유닛 크기 1로 조정
 	SetUnitsDatX(72,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1})--이펙트유닛 크기 1로 조정
 	SetUnitsDatX(1,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1,})--이펙트유닛 크기 1로 조정
 
+	if EVFMode == 1 then
+		for i = 0, 227 do
+			SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
+		end
+		
+		SetUnitsDatX(0,{Shield = 2000,MinCost=8500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(20,{Shield = 7322,MinCost=50000,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DmgBase = 45,DmgFactor=3})
+		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DmgBase = 75,DmgFactor=7,Splash={5,10,15},FlingyID=150})
+		
 
+	end
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=9000*6,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -87,7 +97,6 @@ function onInit_EUD()
 		for j=i,1,-1 do
 			table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + BanToken[j],SetTo,0))
 		end
-		
 	end
 	SetUnitsDatX(115,{AdvFlag={1677721601,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 

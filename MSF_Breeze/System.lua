@@ -45,14 +45,27 @@ for i = 0, 6 do
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)},{preserved})
 		DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),NMArr[j]})
+		if EVFMode == 1 then
+		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (8000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 4000 Ore"), 4)}, {preserved})
+
+		else
 		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (4000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 2000 Ore"), 4)}, {preserved})
+
+		end
 		f_LoadCp()
 		CIfEnd()
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),Switch(RandSwitch1,SW1),Switch(RandSwitch2,SW2)},{SetScore(i, Add, 2, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX(SEArr[j]),PlayWAVX(SEArr[j])},HumanPlayers, FP)},{preserved})
 		DisplayPrint(HumanPlayers,{"\x07『 ",PName(i),HMArr[j]})
+		
+		if EVFMode == 1 then
+		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (50000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 25000 Ore"), 4)}, {preserved})
+
+		else
 		CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {SetResources(i, Add, (4500+4000)/2, Ore),SetCp(i),DisplayText(StrDesign("\x04보험금 \x1F+ 4250 Ore"), 4)}, {preserved})
+
+		end
 		f_LoadCp()
 		CIfEnd()
 		

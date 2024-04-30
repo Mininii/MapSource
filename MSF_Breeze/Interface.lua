@@ -425,10 +425,8 @@ for i = 1, 6 do -- 강퇴기능
 
 		CIf(FP,{TTMemory(_Add(BarPos[i+1],62), NotSame, BarRally[i+1])})
 			f_Read(FP, _Add(BarPos[i+1],62), BarRally[i+1])
-			if Limit == 1 then
-				Convert_CPosXY(BarRally[i+1])
-				DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"},3)
-			end
+			Convert_CPosXY(BarRally[i+1])
+			DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"},3)
 		CIfEnd()
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
@@ -606,35 +604,83 @@ for i = 1, 6 do -- 강퇴기능
 }
 
 
-Trigger { -- 조합 영웅마린
-players = {i},
-conditions = {
-	Label(0);
-	Bring(i,AtLeast,1,0,5); 
-	Accumulate(i,AtLeast,4500,Ore);
-	Accumulate(i,AtMost,0x7FFFFFFF,Ore);
-},
-actions = {
-	ModifyUnitEnergy(1,0,i,5,0);
-	RemoveUnitAt(1,0,5,i);
-	SetResources(i,Subtract,4500,Ore);
-	CreateUnitWithProperties(1,20,2,i,{energy = 100});
-	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F4500 O r e"),4);
-	--SetCDeaths(FP,Add,1,CUnitRefrash);
-	--SetCD(CUnitFlag,1);
-	PreserveTrigger();
-},
-}
-
+if EVFMode == 1 then
+	Trigger { -- 조합 영웅마린
+	players = {i},
+	conditions = {
+		Label(0);
+		Bring(i,AtLeast,1,0,5); 
+		Accumulate(i,AtLeast,41000,Ore);
+		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,0,i,5,0);
+		RemoveUnitAt(1,0,5,i);
+		SetResources(i,Subtract,41000,Ore);
+		CreateUnitWithProperties(1,20,2,i,{energy = 100});
+		DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F41,000 O r e"),4);
+		--SetCDeaths(FP,Add,1,CUnitRefrash);
+		--SetCD(CUnitFlag,1);
+		PreserveTrigger();
+	},
+	}
+	
+else
+	Trigger { -- 조합 영웅마린
+	players = {i},
+	conditions = {
+		Label(0);
+		Bring(i,AtLeast,1,0,5); 
+		Accumulate(i,AtLeast,4500,Ore);
+		Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+	},
+	actions = {
+		ModifyUnitEnergy(1,0,i,5,0);
+		RemoveUnitAt(1,0,5,i);
+		SetResources(i,Subtract,4500,Ore);
+		CreateUnitWithProperties(1,20,2,i,{energy = 100});
+		DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F4500 O r e"),4);
+		--SetCDeaths(FP,Add,1,CUnitRefrash);
+		--SetCD(CUnitFlag,1);
+		PreserveTrigger();
+	},
+	}
+	
+end
 
 
 CreateMarine1 = CreateCcode()
 
-TriggerX(FP, {Command(i, AtLeast, 1, 8)},{
+if EVFMode == 1 then
+	
+TriggerX(FP, {Accumulate(i, AtLeast, 300000-54000, Ore),Command(i, AtLeast, 1, 8)},{
 	ModifyUnitEnergy(1,8,i,64,0);
-	RemoveUnitAt(1,8,64,i);
+	GiveUnits(1, 8, i, 64, P12);
+	RemoveUnitAt(1,8,64,P12);
 	AddCD(CreateMarine1,6);
+	SetResources(i, Subtract, 300000-54000, Ore);
+	SetCp(i);
+	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Jim Raynor 6기를 소환하였습니다. - \x1F300,000 O r e"),4);
+	SetCp(FP);
 },{preserved})
+TriggerX(FP, {Accumulate(i, AtMost, 300000-54000-1, Ore),Command(i, AtLeast, 1, 8)},{
+	ModifyUnitEnergy(1,8,i,64,0);
+	GiveUnits(1, 8, i, 64, P12);
+	RemoveUnitAt(1,8,64,P12);
+	SetResources(i, Add, 54000, Ore);
+	SetCp(i);
+	DisplayText(StrDesign("\x04Jim Raynor 6기를 소환하기 위한 자원이 부족합니다. (필요 자원 : \x1F300,000 Ore\x04) 자원반환 + \x1F54,000 O r e"),4);
+	SetCp(FP);
+
+	
+},{preserved})
+else
+	TriggerX(FP, {Command(i, AtLeast, 1, 8)},{
+		ModifyUnitEnergy(1,8,i,64,0);
+		RemoveUnitAt(1,8,64,i);
+		AddCD(CreateMarine1,6);
+	},{preserved})
+end
 
 
 
