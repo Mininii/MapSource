@@ -1,7 +1,7 @@
 -- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
 -- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
---dofile(Curdir.."MapSource\\NewTestMap2\\main.lua")
-
+--__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- 맵파일 경로(\를 \\로 바꿔야함)
+--__SubDirSetting(__encode_cp949(Curdir.."MapSource\\NewTestMap2")) -- Main.lua 폴더경로 (\를 \\로 바꿔야함, 없으면 비우기)
 --속도측정용
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
@@ -40,9 +40,10 @@ end
 ------------------------------------------------------------------------------------------------------------------------------
 
 
-VerText = "\x19ver\x07. \x043\x07.\x0453"
+CurTrigCnt = 0
+VerText = "\x19ver\x07. \x043\x07.\x0456"
 
-TestSet(1)
+TestSet(0)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 1
@@ -64,7 +65,7 @@ SpeedTestMode = 0
 SlotEnable =1
 end
 FP = P8
-LimitVer = 59
+LimitVer = 62
 StatVer = 14
 StatVer2 = 5
 EUDTurbo(FP)
@@ -73,7 +74,6 @@ SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0),HumanCheck(5,0),HumanCheck(6,0)},{Defeat()})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
-TrigBench = io.open(FileDirectory .. "TrigBenchmark" .. ".txt", "wb")
 DP_Start_init()
 __SetIndexAlloc(0x4000, 0xA000)
 init_func = def_sIndex()
@@ -129,14 +129,3 @@ for j,k in pairs(ctarr) do
     
     io.write("\n")
 end
-CheckTrig("EndTrig")
-
-TrigBench:write("Total Trig Count : "..CurTrigTotal.."\n")
-io.close(CSfile)
-io.close(TrigBench)
-
-if LD2XOption == 1 then
-__PopStringArray()
-io.close(__TRIGchkptr)
-end
-

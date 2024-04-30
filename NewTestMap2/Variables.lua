@@ -81,7 +81,10 @@ end
 	io.close(CSfile)
 	SCA.DataPtrArr = {}
 
+	--STRxStart()
 	SCA.DataOffsetArr = CreateArr(500*4, FP)
+	
+	--STRxEnd()
 	SCA.CheckTime = CreateCcode()
 	SCA.GLoadCmp = CreateCcode()
 	SCA.YearV = CreateVar(FP)

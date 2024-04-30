@@ -159,9 +159,9 @@ function Install_CallTriggers()
 
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
 			for i = 1, 39 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
@@ -182,7 +182,7 @@ function Install_CallTriggers()
 	CIfX(FP,{TNVar(GetEPer, AtLeast, E3Range[1]),TNVar(GetEPer, AtMost, E3Range[2])})--+3강 성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1F결과 : +3 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1F결과 : +3 성공", 4)})
 			CIfEnd()
 		end
 		CIfX(FP, {CV(ELevel,33,AtMost)}) -- 35강부터 +2 적용안됨, 36강부터 +2 적용안됨
@@ -195,7 +195,7 @@ function Install_CallTriggers()
 	CElseIfX({TNVar(GetEPer, AtLeast, E2Range[1]),TNVar(GetEPer, AtMost, E2Range[2])})--+2강 성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x1C결과 : +2 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x1C결과 : +2 성공", 4)})
 			CIfEnd()
 		end
 		CIfX(FP, {CV(ELevel,34,AtMost)}) -- 36강부터 +2 +3 적용안됨
@@ -208,7 +208,7 @@ function Install_CallTriggers()
 	CElseIfX({TNVar(GetEPer, AtLeast, E1Range[1]),TNVar(GetEPer, AtMost, E1Range[2])})--+1강 성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F결과 : +1 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
 		end
 		CAdd(FP,ELevel,1)
@@ -216,7 +216,7 @@ function Install_CallTriggers()
 		local TempEXP = CreateVar(FP)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08결과 : 실패", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
 			CIfEnd()
 		end
 		for i = 0, 6 do
@@ -233,7 +233,7 @@ function Install_CallTriggers()
 		--	CIf(FP,{KeyPress("F12", "Down")})
 		--		ItoDec(FP,_Add(EExp,TempEXP),VArr(TestVA2,0),2,0x1F,0)
 		--		f_Movcpy(FP,_Add(ETestStrPtr3,ETestTxt3[2]),VArr(TestVA2,0),4*4)
-		--		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0D\x0D\x0DET3".._0D, 4)})
+		--		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0D\x0D\x0DET3".._0D, 4)})
 		--	CIfEnd()
 		--end
 	CMov(FP,ELevel,0)
@@ -292,9 +292,9 @@ function Install_CallTriggers()
 
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
 			for i = 40, 49 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
@@ -310,14 +310,14 @@ function Install_CallTriggers()
 		CAdd(FP,ELevel,1)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F결과 : +1 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
 		end
 	CElseX()
 	CMov(FP,ELevel,0)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08결과 : 실패", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
 			CIfEnd()
 		end
 	CIfXEnd()
@@ -356,9 +356,9 @@ function Install_CallTriggers()
 
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
 			for i = 40, 49 do
-				TriggerX(FP, CV(ELevel,i-1), {DisplayExtText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
+				TriggerX(FP, CV(ELevel,i-1), {DisplayText("\x08"..i.."강 유닛 강화 시도", 4)},{preserved})
 			end
 			ColorCodeV = CreateVar2(FP,nil,nil,0x0E)
 			ColorCodeV2 = CreateVar2(FP,nil,nil,0x0F)
@@ -374,7 +374,7 @@ function Install_CallTriggers()
 		CAdd(FP,ELevel,1)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x0F결과 : +1 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x0F결과 : +1 성공", 4)})
 			CIfEnd()
 		end
 	CElseX()
@@ -392,14 +392,14 @@ function Install_CallTriggers()
 		CIfX(FP,{TNVar(GetEPer, AtLeast, 1),TNVar(GetEPer, AtMost, BreakShield)})--성공시
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08결과 : 파괴방지 성공", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 파괴방지 성공", 4)})
 			CIfEnd()
 		end
 		CElseX()
 		CMov(FP,ELevel,0)
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText("\x08결과 : 실패", 4)})
+				CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText("\x08결과 : 실패", 4)})
 			CIfEnd()
 		end
 		CIfXEnd()
@@ -835,7 +835,7 @@ function Install_CallTriggers()
 					CIfX(FP,{TBring(GCP, AtLeast, 1, 15, 115)})	-- 조건이 만족할 경우 싱글전환
 						CIf(FP,{TMemory(0x512684,Exactly,GCP),CV(iv.PCheckV,2,AtLeast),CD(SCheck,1)})
 							f_Read(FP, 0x628438, nil, Nextptrs)
-							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
+							CTrigger(FP,{},{CreateUnit(1,94,136,FP),RemoveUnit(94,FP),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x08싱글 플레이로 전환합니다. 이 설정은 되돌릴 수 없습니다."),4),SetCp(FP),},{preserved})
 							CSub(FP,CurCunitI,Nextptrs,19025)
 							f_Div(FP,CurCunitI,_Mov(84))
 							CDoActions(FP, {Set_EXCC2(CT_Cunit,CurCunitI,0,SetTo,_Xor(CT_GNextRandV,94))})
@@ -845,7 +845,7 @@ function Install_CallTriggers()
 							--CallTrigger(FP, Call_CTInputUID)
 						CIfEnd()
 						CIf(FP, {CV(iv.PCheckV,2,AtLeast)})
-							CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
+							CTrigger(FP,{TMemory(0x512684,Exactly,GCP),CD(SCheck,0)},{SetCD(SCheck,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04정말로 \x08싱글플레이\x04로 \x07전환\x04하시겠습니까? \x08원하시면 한번 더 눌러주세요."),4),SetCp(FP),},{preserved})
 
 						CIfEnd()
 					CElseX()--조건이 만족하지 않을 경우
@@ -853,11 +853,11 @@ function Install_CallTriggers()
 						CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP),print_utf8(12,0,StrDesign("\x08ERROR \x04: 시민을 싱글 플레이 설정 위치로 이동한 후 사용가능합니다."))},{preserved})
 					CIfXEnd()
 					CIfX(FP,{CD(iv.PartyBonus,2,AtLeast)})
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07런쳐 로드 인원이 2명이상 인식되어 영구 활성화 되었습니다.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07런쳐 로드 인원이 2명이상 인식되어 영구 활성화 되었습니다.",4)})
 					CElseIfX({CV(iv.PCheckV,2,AtLeast)})
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07활성화 되었지만 런쳐 로드 인원이 1명 이하입니다. 솔로 플레이로 전환할 경우 버프가 \x08비활성화됩니다.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x07활성화 되었지만 런쳐 로드 인원이 1명 이하입니다. 솔로 플레이로 전환할 경우 버프가 \x08비활성화됩니다.",4)})
 					CElseX()
-						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x07멀티 보너스 버프 \x04활성화 상태 : \x08활성화 불가능.",4)})
+						CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x07멀티 보너스 버프 \x04활성화 상태 : \x08활성화 불가능.",4)})
 					CIfXEnd()
 				CIfEnd()--
 			
@@ -872,7 +872,7 @@ function Install_CallTriggers()
 			--8 = 다른 작업 중입니다.
 			--9 = 작업 실패
 			--10 = 명령 실행
-			CIfX(FP, {TDeathsX(GCP, Exactly, 1, 1,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
+			CIfX(FP, {TDeathsX(GCP, Exactly, 1, 1,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\n\n\n\n\n\n\n\n\n", 4),SetCp(FP)})
 				GetCreditData = CreateWar(FP)
 				GerRandData = CreateVar(FP)
 				GetAwakItemData = CreateVar(FP)
@@ -887,13 +887,13 @@ function Install_CallTriggers()
 				
 				CIf(FP,{CV(G_PushBtnm,0,AtLeast),CV(G_PushBtnm,1,AtMost)}) -- 
 					CIfX(FP,{CV(GetPUnitLevel,10,AtLeast)})--CV(SaveChkData,1,AtLeast)
-						CTrigger(FP,{},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
-						--CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 강화를 진행하기 위해선 먼저 저장해야 합니다. F9를 눌러주세요."), 4),SetCp(FP)},{preserved})
+						CTrigger(FP,{},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)},{preserved})
+						--CTrigger(FP,{CV(SaveChkData,1,AtLeast)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 강화를 진행하기 위해선 먼저 저장해야 합니다. F9를 눌러주세요."), 4),SetCp(FP)},{preserved})
 						CElseX()
 						PrevPUnitLevel = CreateVar(FP)
 						CIfX(FP,{TTNWar(GetCreditData, AtLeast, _LAdd(_LMul({GetPUnitLevel,0},"1000"),"1000")),TTNWar(GetCreditData, AtMost, "0x7FFFFFFFFFFFFFFF")})
 							VaccJump = def_sIndex()
-							CIfX(FP, {CV(G_PushBtnm,1),TTOR({CV(GetVAccData,0),CV(GetVAccData,0x80000000,AtLeast)})},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
+							CIfX(FP, {CV(G_PushBtnm,1),TTOR({CV(GetVAccData,0),CV(GetVAccData,0x80000000,AtLeast)})},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
 							CElseX()
 								CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),2,SetTo,2)
 								CTrigger(FP,{TMemory(0x512684,Exactly,GCP)},{SetMemory(0x58F500, SetTo, 1)},{preserved})--자동저장
@@ -985,11 +985,11 @@ function Install_CallTriggers()
 								CIfXEnd()
 								
 							CIfXEnd()
-						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})--크레딧이 부족합
+						CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})--크레딧이 부족합
 						CIfXEnd()
 					CIfXEnd()
 			--		DisplayPrint(GCP, {"일반강화"})
-					TriggerX(FP, {CV(GetClassData,262,AtLeast)}, {DisplayExtText(StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4)}, {preserved})
+					TriggerX(FP, {CV(GetClassData,262,AtLeast)}, {DisplayText(StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4)}, {preserved})
 				CIfEnd()
 
 					GetPETicket = CreateVar(FP)
@@ -1006,12 +1006,12 @@ function Install_CallTriggers()
 					DisplayPrint(GCP, {"\x13\x07『 \x1F확정 강화권\x04을 사용하여 강화하셨습니다. \x07",PrevPUnitLevel,"강 → ",GetPUnitLevel,"강 \x07』"})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),128,SetTo,128)
 					CElseIfX({CV(GetPUnitLevel,6,AtMost)})
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이 아이템은 \x087강 \x04이상 에서만 사용가능합니다. \x07강화\x04를 더 진행해주세요."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이 아이템은 \x087강 \x04이상 에서만 사용가능합니다. \x07강화\x04를 더 진행해주세요."), 4),SetCp(FP)})
 					CElseX()
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 최고단계까지 강화되었습니다. \x07승급\x04을 진행해주세요."), 4),SetCp(FP)})
 					CIfXEnd()
 					CElseX()
-					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확정 강화권이 부족합니다."), 4),SetCp(FP)})
+					CDoActions(FP, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 확정 강화권이 부족합니다."), 4),SetCp(FP)})
 					CIfXEnd()
 
 
@@ -1021,7 +1021,7 @@ function Install_CallTriggers()
 
 					local failflag = CreateCcode()
 					CIf(FP,{CV(G_PushBtnm,3,AtLeast),CV(G_PushBtnm,10,AtMost)},{SetCD(failflag,0)}) -- 승급
-						CIfX(FP,{CV(GetClassData,261,AtMost),CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 승급에 필요한 강화 단계가 부족합니다. 필요 단계 : 10강").."\n"..StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4),SetCp(FP)})
+						CIfX(FP,{CV(GetClassData,261,AtMost),CV(GetPUnitLevel,9,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 승급에 필요한 강화 단계가 부족합니다. 필요 단계 : 10강").."\n"..StrDesignX("\x03참고 \x04: \x07262단\x04 이후 \x1E각성\x04할 경우에는 강화하지 않아도 \x07승급 가능\x04합니다!"), 4),SetCp(FP)})
 						CElseX()
 							GetUID = CreateVar(FP)
 							CMov(FP,GetUID,_SHRead(_Add(G_Btnptr,25)),nil,0xFF,1)
@@ -1039,15 +1039,15 @@ function Install_CallTriggers()
 
 								ClassUpErrJump = def_sIndex()
 								CMov(FP,0x6509B0,GCP)
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,CS_CooldownLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 공격속도를 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,CS_AtkLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 공격력을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,CS_EXPLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 판매시 경험치 획득량을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,CS_TotalEPerLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 +1 강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,CS_TotalEper4Limit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 \x08특수 \x04강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,9),CV(GetBrShData,CS_BreakShieldLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 \x1F파괴 방지 \x04확률을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetLV3IncmData,CSX_LV3IncmLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 더 이상 \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x04을 올릴 수 없습니다."), 4),SetCp(FP)})
-								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetClassData,261,AtMost)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x07262단 이상\x04에서만 사용 가능한 옵션입니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,3),CV(GetCooldownData,CS_CooldownLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격속도를 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,4),CV(GetAtkData,CS_AtkLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 공격력을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,5),CV(GetEXPData,CS_EXPLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 판매시 경험치 획득량을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,6),CV(GetTotalEPerData,CS_TotalEPerLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 +1 강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,7),CV(GetTotalEper4Data,CS_TotalEper4Limit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x08특수 \x04강화확률을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,8),CV(GetDPSLVData,CS_DPSLVLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 옵션은 1회만 사용 가능합니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,9),CV(GetBrShData,CS_BreakShieldLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x1F파괴 방지 \x04확률을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetLV3IncmData,CSX_LV3IncmLimit,AtLeast)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 더 이상 \x11LV.MAX \x1B허수아비\x04 돈 수급량 \x04을 올릴 수 없습니다."), 4),SetCp(FP)})
+								NJumpX(FP,ClassUpErrJump,{CV(G_PushBtnm,10),CV(GetClassData,261,AtMost)},{PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x07262단 이상\x04에서만 사용 가능한 옵션입니다."), 4),SetCp(FP)})
 								NJumpX(FP,ClassUpErrJump,{TTOR({_CV(GetAwakItemData,_Sub(GetClassData,_Mov(262)),AtMost),CV(GetAwakItemData,0x80000000,AtLeast)}),CV(G_PushBtnm,10)},{SetCD(failflag,1),PlayWAV("sound\\Misc\\PError.WAV"),SetCp(FP)})
 								CIfX(FP,{TTNWar(GetCreditData,AtLeast,"1000000"),TTNWar(GetCreditData, AtMost, "0x7FFFFFFFFFFFFFFF")})
 									CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),16,SetTo,16)
@@ -1086,7 +1086,7 @@ function Install_CallTriggers()
 										CallTrigger(FP, Call_SetEPerStr)
 										DisplayPrint(GCP, {"\x13\x07『 \x08특수 \x07강화확률\x04이 증가하였습니다. \x04증가 후 \x04: \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x07』"})
 									CIfEnd()
-									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesignX("\x04이제부터 \x07고유 유닛\x04으로 \x0FLV.2 \x04사냥터에 입장할 수 있습니다."))})
+									CIf(FP,{CV(G_PushBtnm,8)},{AddV(GetDPSLVData,1),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이제부터 \x07고유 유닛\x04으로 \x0FLV.2 \x04사냥터에 입장할 수 있습니다."))})
 									CIfEnd()
 									CIf(FP,{CV(G_PushBtnm,9)},{AddV(GetBrShData,1)})
 										CMov(FP,TempV,_Mul(GetBrShData,100))
@@ -1112,7 +1112,7 @@ function Install_CallTriggers()
 									CMovX(FP,VArrX(GetVArray(iv.CSX_LV3Incm[1], 7),VArrI,VArrI4),GetLV3IncmData)
 
 
-								CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+								CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 								CIfXEnd()
 								NJumpXEnd(FP,ClassUpErrJump)
 								CIf(FP,{CD(failflag)})
@@ -1120,7 +1120,7 @@ function Install_CallTriggers()
 									CMov(FP,Tempea,_Sub(GetClassData,_Mov(261)))
 									DisplayPrint(GCP, {"\x13\x07『 \x08ERROR \x04: \x1E각성의 보석\x04이 부족합니다. \x1E필요 각성의 보석 : ",Tempea," \x04개, \x1E보유 각성의 보석 : ",GetAwakItemData," \x04개 \x07』"})
 								CIfEnd()
-							CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 기능은 승급장에서 사용가능합니다."), 4),SetCp(FP)})
+							CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 기능은 승급장에서 사용가능합니다."), 4),SetCp(FP)})
 							CIfXEnd()
 						CIfXEnd()
 
@@ -1134,7 +1134,7 @@ function Install_CallTriggers()
 
 
 				
-			CElseIfX({TTNVar(G_PushBtnm,NotSame,11)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
+			CElseIfX({TTNVar(G_PushBtnm,NotSame,11)},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 런쳐에 연결되어있지 않아 기능을 사용할 수 없습니다."), 4),SetCp(FP)})
 			CIfXEnd()
 			
 			CIf(FP,{CV(G_PushBtnm,11)},{TSetMemory(0x6509B0, SetTo, GCP)})
@@ -1165,8 +1165,8 @@ function Install_CallTriggers()
 				CallTrigger(FP, Call_SetEPerStr)
 				DisplayPrint(GCP, {"\x07『 \x08특수 \x1F파괴방지 \x04확률 증가량 : \x07+ \x08",EVarArr2,".",EVarArr3,"%p \x04(Level : \x07",GetBrShData,"\x04) \x07』"})
 				
-				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
-				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
+				CTrigger(FP,{CV(GetDPSLVData,0)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0ELV.1 사냥터 \x04입장 효과 적용중"), 4)},1)
+				CTrigger(FP,{CV(GetDPSLVData,1)},{TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesign("\x0FLV.2 사냥터 \x04입장 효과 적용중"), 4)},1)
 				CMov(FP,TempV,_Mul(GetLV3IncmData,100))
 				CMov(FP,GEVar,TempV,1000)
 				CallTrigger(FP, Call_SetEPerStr)
@@ -1179,8 +1179,8 @@ function Install_CallTriggers()
 				CMovX(FP,GetPBossLV,VArrX(GetVArray(iv.PBossLV[1], 7),VArrI,VArrI4))
 				local PUID = CreateVar(FP)
 				CMov(FP,PUID,_ReadF(_Add(G_Btnptr,25)),nil,0xFF,1)
-				CIfX(FP,{CV(GetPBossLV,4,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),TMoveUnit(1, PUID, GCP, 64, GCP+119),DisplayExtText(StrDesignX("\x04고유 유닛을 \x0ELV.1 \x07보스 존\x04으로 이동합니다."), 4),SetCp(FP)})
-				CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 \x07보스\x04를 모두 소탕하였습니다."), 4),SetCp(FP)})
+				CIfX(FP,{CV(GetPBossLV,4,AtMost)},{TSetMemory(0x6509B0, SetTo, GCP),TMoveUnit(1, PUID, GCP, 64, GCP+119),DisplayText(StrDesignX("\x04고유 유닛을 \x0ELV.1 \x07보스 존\x04으로 이동합니다."), 4),SetCp(FP)})
+				CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 \x07보스\x04를 모두 소탕하였습니다."), 4),SetCp(FP)})
 				CIfXEnd()
 
 			CIfEnd()
@@ -1718,9 +1718,9 @@ function Install_CallTriggers()
 	end
 	if Limit == 1 then -- 테스트용 결과 출력
 		CIf(FP,{KeyPress("F12", "Down")})
-			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayExtText(string.rep("\n", 10), 4)})
+			CDoActions(FP, {TSetMemory(0x6509B0, SetTo, ECP),DisplayText(string.rep("\n", 10), 4)})
 			for i = 45, 48 do
-				TriggerX(FP, CV(GaLv,i), {DisplayExtText("\x08"..i.."강 유닛 뽑기 시도", 4)},{preserved})
+				TriggerX(FP, CV(GaLv,i), {DisplayText("\x08"..i.."강 유닛 뽑기 시도", 4)},{preserved})
 			end
 			DisplayPrint(ECP,{"\x04출력된 난수 : ",GetGPer})
 		CIfEnd()
@@ -1746,7 +1746,7 @@ for i = 45, 50 do
 		
 		if Limit == 1 then
 			CIf(FP,{KeyPress("F12", "Down")})
-				CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
+				CDoActions(FP, {DisplayText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ "..k[3]-1+TotalGPer), 4)})
 			CIfEnd()
 		end
 		if j == 1 then--32억, 322억 무조건 표출
@@ -1858,17 +1858,17 @@ for i = 45, 50 do
 		
 	end
 	CDoActions(FP,{TSetMemory(0x6509B0, SetTo, ECP)})
-	--CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayExtText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
+	--CTrigger(FP, {VRange(GetGPer,TotalGPer,100000)}, {DisplayText(StrDesignX((((100000+1)-TotalGPer)/1000).." % \x04확률로 \x08꽝\x04에 걸리셨습니다...."),4)}, 1)
 	if Limit == 1 then
 		CIf(FP,{VRange(GetGPer,TotalGPer,100000),KeyPress("F12", "Down")})
-			CDoActions(FP, {DisplayExtText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ 100000"), 4)})
+			CDoActions(FP, {DisplayText(StrDesignX("\x03TESTMODE OP \x04: \x04당첨 난수 조건 범위 : "..TotalGPer.." ~ 100000"), 4)})
 		CIfEnd()
 	end
 	errt = errt..(TotalGPer).."  100000\n" -- 꽝일경우
 	if i==50 then
 		--error(errt)
 	end
-	--DoActionsX(FP,{DisplayExtText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
+	--DoActionsX(FP,{DisplayText(StrDesignX(pifrag2[i-44].." \x04유닛 판매 보상 : \x02무색 조각 \x07"..pifrag[i-44].." 개"), 4)})
 	CIf(FP,{TMemory(0x512684,Exactly,GCP)})
 	if i <= 48 then
 	CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -2023,7 +2023,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 	CMov(FP,CLocR,CPosX,32+64+64)
 	Simple_SetLocX(FP, 86, CLocL, 32, CLocR, 96)
 	CDoActions(FP, {RemoveUnitAt(All, "Any unit", 87, FP)})
-	CTrigger(FP,{},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x08구입 티켓\x04이 부족하여 유료 자판기의 작동이 중지되었습니다."), 4)},{preserved})
+	CTrigger(FP,{},{SetCD(BuyError,0),TSetMemory(0x6509B0,SetTo,GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x08구입 티켓\x04이 부족하여 유료 자판기의 작동이 중지되었습니다."), 4)},{preserved})
 	if Limit == 1 then
 		
 		DisplayPrint(GCP, {"\x13\x04GetFAcc : ",GetFAcc,"   GetFAcc2 : ",GetFAcc2})
@@ -2085,7 +2085,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CIfX(FP,{CV(XEper,1,AtLeast)})
 			CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
 			CallTrigger(FP, Call_Enchant2)
-			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
+			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
 			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
 			CIfXEnd()
 
@@ -2107,7 +2107,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			CIfX(FP,{CV(XEper,1,AtLeast)})
 				CDoActions(FP,{TKillUnitAt(_lShift(ECW, 24), UID, _Add(GCP,8), GCP)})
 				CallTrigger(FP, Call_Enchant2)
-			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
+			CElseX({TMoveUnit(All,UID,GCP,_Add(GCP,8),_Add(GCP,36)),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 확률이 부족하여 강화할 수 없습니다..."), 4),SetCp(FP)})
 			CMov(FP,ArrX(AutoEnchArr, _Add(_Mul(CI,_Mov(7)),GCP)),0,nil,nil,1)
 			CIfXEnd()
 
@@ -2133,7 +2133,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 		UnitReadX(FP,GCP,UID,_Add(GCP,73),ECW)
 		TriggerX(FP, CV(ECW,255,AtLeast), SetV(ECW,255), {preserved})
 		CIfX(FP,{CV(EXP,1,AtLeast)})
-			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
+			CIfX(FP,{CV(GetLevel,LevelLimit,AtLeast)},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 이미 만렙을 달성하여 판매할 수 없습니다..."), 4),SetCp(FP)})
 			CElseX()
 				CIfX(FP, {VRange(CI,14,24)},{TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})--판매권이필요없어요
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -2153,7 +2153,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 					CMovX(FP,VArrX(GetVArray(iv.MissionV[1], 7),VArrI,VArrI4),32,SetTo,nil,32,1)
 					CIfEnd()
 				CElseX()--판매권이필요행
-					CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
+					CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,"0"),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})}, {TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 					CElseX({TKillUnitAt(_lShift(ECW, 24), UID, GCP+73, GCP)})
 					f_LSub(FP, GetSellTicket, GetSellTicket, {ECW,0})
 					CIf(FP,{CD(iv.HotTimeBonus,1)})
@@ -2185,7 +2185,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 			f_LMov(FP,GaCostW,"1000000")
 			f_LMov(FP,GaCostW2,"999999")
 		CIfXEnd()
-			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
+			CIfX(FP, {TTOR({_TTNWar(GetSellTicket,AtMost,GaCostW2),_TTNWar(GetSellTicket,AtLeast,"0x8000000000000000")})},{TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(_TMem(Arr(AutoSellArr,CJ)), SetTo, 0),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다... \x07L 키\x04로 보유갯수를 확인해주세요."), 4),SetCp(FP)})
 			CElseX({})
 			local TempWC = CreateWar()
 			local TempWC2 = CreateWar()
@@ -2229,7 +2229,7 @@ CDoActions(FP,{TSetMemory(0x6509B0, SetTo, FP)})
 				CallTrigger(FP, Call_Gacha)
 				CWhileEnd()
 			CIfXEnd()
-		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)})
+		CElseX({TMoveUnit(All,UID,GCP,GCP+73,GCP+36),TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 해당 유닛은 판매할 수 없습니다..."), 4),SetCp(FP)})
 		CIfXEnd()
 	CIfEnd()
 	CAdd(FP,CJ,7)
@@ -2275,7 +2275,7 @@ CIfX(FP,{TTNWar(GetCreditData, AtLeast,_LMul(LMulOP, "100")),TTNWar(GetCreditDat
 	f_LMul(FP,TempW,LMulOP, "100")
 	DisplayPrint(GCP, {"\x13\x07『 \x19유닛 판매권\x04을 ",LMulOP,"개 구입하였습니다. ",TempW," \x17크레딧 \x08사용 \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetSellTicket," 개의 \x19유닛 판매권 보유중 \x07』\n"..StrDesignX("\x03참고 \x04: \x19유닛 판매권\x04은 SCA로 저장할 수 있습니다!")})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2294,7 +2294,7 @@ CIfX(FP,{TTNWar(GetSellTicket,AtLeast,LMulOP),TTNWar(GetSellTicket,AtMost,"0x7FF
 	DisplayPrint(GCP, {"\x13\x07『 \x19유닛 판매권\x04을 ",LMulOP,"개 판매하였습니다. ",TempW," \x17크레딧 \x07반환 \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetSellTicket," 개의 \x19유닛 판매권 보유중 \x07』"})
 	
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x19유닛 판매권\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2310,8 +2310,8 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),TTNWar(GetCreditData, AtLeast,_LMu
 	f_LMul(FP,TempW,LMulOP, "100000")
 	DisplayPrint(GCP, {"\x13\x07『 \x10강화기 백신\x04을 ",LMulOP,"개 구입하였습니다. ",TempW," \x17크레딧 \x08사용 \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetVAccData," 개의 \x10강화기 백신 보유중 \x07』\n"..StrDesignX("\x03참고 \x04: \x10강화기 백신\x04은 SCA로 저장할 수 있습니다!")})
-CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
+CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x17크레딧\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2330,8 +2330,8 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetVAccData,MulOP,AtLeast),CV(G
 	f_LMul(FP, TempW, LMulOP, "100000")
 	DisplayPrint(GCP, {"\x13\x07『 \x10강화기 백신\x04을 ",LMulOP,"개 판매하였습니다. ",TempW," \x17크레딧 \x07반환 \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetVAccData," 개의 \x10강화기 백신 보유중 \x07』"})
-CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
+CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x10강화기 백신\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2346,8 +2346,8 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetOldTicket,MulOP,AtLeast),CV(
 	CMov(FP,TempV,_Mul(MulOP,_Mov(25)))
 	DisplayPrint(GCP, {"\x13\x07『 \x02구 확정 강화권\x04을 ",LMulOP,"개 사용하여 ",TempV," \x02무색 조각\x04으로 \x07변환 \x04하였습니다. \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetOldTicket," 개의 \x1F확정 강화권 보유중 \x07』"})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02구 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x02구 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 CIf(FP,{TBring(GCP,AtLeast,1,15,169)},{TMoveUnit(1, 15, GCP, 169, 168)})
@@ -2359,8 +2359,8 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetOldTicket,MulOP,AtLeast),CV(
 	CMov(FP,TempV,MulOP)
 	DisplayPrint(GCP, {"\x13\x07『 \x02구 확정 강화권\x04을 ",LMulOP,"개 사용하여 ",TempV," \x1F신 확정 강화권\x04으로 \x07변환 \x04하였습니다. \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetOldTicket," 개의 \x02구 확정 강화권 \x04보유중 \x07』"})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x02구 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x02구 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 CIf(FP,{TBring(GCP,AtLeast,1,15,177)},{TMoveUnit(1, 15, GCP, 177, 168)})
@@ -2373,8 +2373,8 @@ CIfX(FP,{TTNWar(LMulOP, AtMost, "4294967295"),CV(GetPETicket,MulOP,AtLeast),CV(G
 	CMov(FP,TempV,MulOP)
 	DisplayPrint(GCP, {"\x13\x07『 \x1F신 확정 강화권\x04을 ",LMulOP,"개 사용하여 ",TempV," \x08구입 티켓\x04으로 \x07변환 \x04하였습니다. \x07』"})
 	DisplayPrint(GCP, {"\x13\x07『 \x04현재 ",GetBuyTicket," 개의 \x08구입 티켓 \x04보유중 \x07』\n"..StrDesignX("\x08주의 \x04: \x08구입 티켓\x04은 SCA로 저장할 수 없습니다!")})
-	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
-CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CElseIfX({TTNWar(LMulOP, AtLeast, "4294967295")},{TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x0850억\x04 단위 이상을 사용할 수 없는 아이템입니다."), 4),SetCp(FP)})
+CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 CIfXEnd()
 CIfEnd()
 
@@ -2386,14 +2386,14 @@ CMovX(FP,FirstRewardLimData,VArrX(GetVArray(iv.FirstRewardLim[1], 7),VArrI,VArrI
 CMovX(FP,FirstRewardLimData2,VArrX(GetVArray(iv.FirstRewardLim2[1], 7),VArrI,VArrI4),nil,nil,nil,1)
 
 CIfX(FP,{CV(GetFirstRewardOp,0)})
-	CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 25개 사용하여 \x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
-	CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
-	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CIfX(FP,{CV(FirstRewardLimData,1,AtLeast),CV(GetPETicket,25,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData,0),SubV(GetPETicket, 25),TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x1F신 확정 강화권\x04을 25개 사용하여 \x1C45강\x04~\x1B48강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
+	CElseIfX({CV(FirstRewardLimData,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 	CIfXEnd()
 CElseX()
-	CIfX(FP,{CV(FirstRewardLimData2,1,AtLeast),CV(GetPETicket,500,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData2,0),SubV(GetPETicket, 500),TSetMemory(0x6509B0, SetTo, GCP),DisplayExtText("\x1F신 확정 강화권\x04을 500개 사용하여 \x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
-	CElseIfX({CV(FirstRewardLimData2,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
-	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
+	CIfX(FP,{CV(FirstRewardLimData2,1,AtLeast),CV(GetPETicket,500,AtLeast),CV(GetPETicket,0x7FFFFFFF,AtMost)},{SetV(FirstRewardLimData2,0),SubV(GetPETicket, 500),TSetMemory(0x6509B0, SetTo, GCP),DisplayText("\x1F신 확정 강화권\x04을 500개 사용하여 \x0649강\x04~\x0750강 \x07최초 달성 보상 \x08횟수제한\x04이 초기화 되었습니다 \x07』", 4)})
+	CElseIfX({CV(FirstRewardLimData2,0)}, {TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: 이미 모든 최초달성 보상 \x08횟수제한\x04이 꽉 찼습니다."), 4),SetCp(FP)})
+	CElseX({TSetMemory(0x6509B0, SetTo, GCP),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesign("\x08ERROR \x04: \x1F신 확정 강화권\x04이 부족합니다."), 4),SetCp(FP)})
 	CIfXEnd()
 CIfXEnd()
 

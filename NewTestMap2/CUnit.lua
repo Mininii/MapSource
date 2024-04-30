@@ -106,7 +106,7 @@ DoActions2(FP, CTKillT)
 	else
 		TriggerX(FP, {DeathsX(CurrentPlayer,Exactly,0x00000004,0 ,0x00000004 )}, {RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+			DisplayTextX("a\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 		})
 	end
 
@@ -170,7 +170,7 @@ DoActions2(FP, CTKillT)
 --		else
 --			TriggerX(FP, {DeathsX(CurrentPlayer,AtMost,0,0,0xFF)}, {RotatePlayer({
 --				PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
---				DisplayExtText("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
+--				DisplayTextX("\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);
 --			})
 --		end
 --		DoActions(FP, {SetMemory(0x6509B0, Subtract, 1)})
@@ -219,7 +219,7 @@ DoActions2(FP, CTKillT)
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayTextX("i\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--
@@ -238,7 +238,7 @@ DoActions2(FP, CTKillT)
 	else
 	TriggerX(FP,{},{RotatePlayer({
 		PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+		DisplayTextX("p\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end--
 
 	CIfXEnd()--

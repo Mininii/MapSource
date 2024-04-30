@@ -179,6 +179,7 @@ iTblJump = def_sIndex()
 		InputTesterID(i,"Azusawa_Kohane")
 		--InputTesterID(i,"_Mininii")
 		InputTesterID(i,"RonaRonaChan")
+		InputTesterID(i,"Natori_sana") 
 	end
 	
 
@@ -187,7 +188,7 @@ iTblJump = def_sIndex()
 		CDeaths(FP,Exactly,1,LimitX);
 		CDeaths(FP,Exactly,0,LimitC);}, {
 			RotatePlayer({
-				DisplayExtText(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
 			Defeat();
 			},Force1,FP);
 			Defeat();
@@ -201,7 +202,7 @@ iTblJump = def_sIndex()
 --		end
 --		CTrigger(FP,{TTMemory(0x51CE84,NotSame,1000)},{
 --			RotatePlayer({
---				DisplayExtText(StrDesignX("\x1B방 제목에서 배속 옵션을 제거하거나 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x1B또한 이 맵은 배틀넷에서만 플레이 가능합니다. 배틀넷에서 진행해 주십시오."),4);
+--				DisplayTextX(StrDesignX("\x1B방 제목에서 배속 옵션을 제거하거나 게임 반응속도(턴레이트)를 최대로 올려주십시오.").."\n"..StrDesignX("\x1B또한 이 맵은 배틀넷에서만 플레이 가능합니다. 배틀넷에서 진행해 주십시오."),4);
 --			},Force1,FP);
 --			SetMemory(0xCDDDCDDC,SetTo,1);},1)
 			
@@ -216,7 +217,7 @@ iTblJump = def_sIndex()
 				},
 				actions = {
 					RotatePlayer({
-					DisplayExtText("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+						DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 					Defeat();
 					},HumanPlayers,FP);
 					Defeat();
@@ -235,7 +236,7 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -250,7 +251,7 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -265,7 +266,7 @@ iTblJump = def_sIndex()
 		},
 		actions = {
 			RotatePlayer({
-			DisplayExtText("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+				DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
 			Defeat();
 			},HumanPlayers,FP);
 			Defeat();
@@ -283,8 +284,8 @@ iTblJump = def_sIndex()
 		PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("sound\\Misc\\TRescue.wav")},HumanPlayers,FP)})
 	
 		if Limit == 1 then
-			Trigger2X(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
-			Trigger2X(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayExtText("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 종료되었으나 제작자가 게임에 참여중이므로 맵 실행 가능합니다..")},HumanPlayers,FP)})
+			Trigger2X(FP,{Memory(0x6D0F38,AtMost,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다.")},HumanPlayers,FP)})
+			Trigger2X(FP,{Memory(0x6D0F38,AtLeast,GlobalTime);},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 종료되었으나 제작자가 게임에 참여중이므로 맵 실행 가능합니다..")},HumanPlayers,FP)})
 		
 		end
 	DoActions(FP,{SetMemory(LimitVerPtr,SetTo,LimitVer)})

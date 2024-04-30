@@ -127,7 +127,7 @@ function TBL()
 		NElseIfX({CV(SelUID,k[2])},{
 			SetV(SelPer,k[3]);SetCD(SellTicketFlag,0),
 		})
-		TriggerX(FP, {CV(SelPl,7)}, {DisplayExtText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4)},{preserved})
+		TriggerX(FP, {CV(SelPl,7)}, {DisplayText(StrDesignX("\x17P8 \x08강화 유닛\x04의 세부 정보는 \x0F자기자신\x04의 \x07능력치\x04에 따라 표기됩니다."), 4)},{preserved})
 		f_LMov(FP, SelEXP, tostring(k[4])  ,nil,nil, 1)
 		if j>=26 then
 			TriggerX(FP,{CV(SelUID,k[2])},{SetCD(SellTicketFlag,1)},{preserved})
@@ -194,15 +194,15 @@ function TBL()
 	CElseX()
 	CTrigger(FP,{
 		CV(SelUID,215),
-	},{TSetMemory(0x6509B0, SetTo, LCP),DisplayExtText("\n\n\n\n\n\n\n"..
+	},{TSetMemory(0x6509B0, SetTo, LCP),DisplayText("\n\n\n\n\n\n\n"..
 	StrDesignX("\x17독도").."\n"..
 	StrDesignX("\x04독도는 동해의 남서부, 울릉도와 오키 제도 사이에 위치한 동도와 서도를 포함해").."\n"..
 	StrDesignX("\x04총 91개의 크고 작은 섬들로 이루어져 있는 대한민국의 섬이다. ").."\n"..
 	StrDesignX("\x04울릉도에서 뱃길로 200리 정도 떨어져 있다.").."\n"..
 	StrDesignX("\x07- \x1F출처 \x04: 위키백과 \x07-"), 4),SetMemory(0x6509B0, SetTo, FP),},{preserved})
 	CIfXEnd()
-	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)}, {DisplayExtText(StrDesignX("\x08주의 \x04: \x03개별확률 \x04유닛의 강화 확률은 인게임 1시간 : 0.1% 비율로 서서히 감소합니다."), 4)},{preserved})
-	TriggerX(FP, {CV(SelUID,217)}, {DisplayExtText(StrDesignX("\x08주의 \x04: 유료 자판기는 유닛 1기 소환시마다 \x08구입 티켓 1개\x04가 \x08소모\x04됩니다."), 4)})
+	TriggerX(FP, {CV(SelPl,7),CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)}, {DisplayText(StrDesignX("\x08주의 \x04: \x03개별확률 \x04유닛의 강화 확률은 인게임 1시간 : 0.1% 비율로 서서히 감소합니다."), 4)},{preserved})
+	TriggerX(FP, {CV(SelUID,217)}, {DisplayText(StrDesignX("\x08주의 \x04: 유료 자판기는 유닛 1기 소환시마다 \x08구입 티켓 1개\x04가 \x08소모\x04됩니다."), 4)})
 	
 	
 	
@@ -239,7 +239,7 @@ function TBL()
 		CS__SetValue(FP,EStr0,t10,nil,0)
 		CIfXEnd()
 		f_LMul(FP, SelEXP, SelEXP, {_Add(EXPIncomeLoc,10),0})
-		CS__lItoCustom(FP,SVA1(EStr0,14),SelEXP,nil,nil,{10,20},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10,11,12,14,15,16,18,19,20,22,23,24,26},nil,{{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0})
+		CS__lItoCustom(FP,SVA1(EStr0,14),SelEXP,nil,nil,{10,20},1,nil,"\x080",0x1B,{0,2,3,4,6,7,8,10,11,12,14,15,16,18,19,20,22,23,24,26},nil,{{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0,0,{0},0},1)
 	
 		TriggerX(FP, {
 			CSVA1(SVA1(EStr0,15+24), Exactly, 0x0D*0x1000000, 0xFF000000)
@@ -274,23 +274,23 @@ function TBL()
 	MFlag = CreateCcode()
 		CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)
 		CIfX(FP, {CD(XEperFlag,1)}) -- 특수확률일 경우
-			CS__SetValue(FP,TStr1,t01_1,nil,0)
-			CS__SetValue(FP,TStr1,"-",nil,7)
+			CS__SetValue(FP,TStr1,t01_1,nil,0,nil,1)
+			CS__SetValue(FP,TStr1,"-",nil,7,nil,1)
 		CElseIfX({CD(XEperFlag,7)},{SetCD(MFlag,0)})--고정확률
-			CS__SetValue(FP,TStr1,t01_3,nil,0)
+			CS__SetValue(FP,TStr1,t01_3,nil,0,nil,1)
 
 		CElseIfX({CD(XEperFlag,2,AtLeast),CD(XEperFlag,6,AtMost)},{SetCD(MFlag,0)})--개별확률
 			CiSub(FP,SelPer,iv.XEPerM)
-			CS__SetValue(FP,TStr1,t01_2,nil,0)
+			CS__SetValue(FP,TStr1,t01_2,nil,0,nil,1)
 			CIf(FP,CV(SelPer,0x80000000,AtLeast),{SetCD(MFlag,1)})
 				CNeg(FP, SelPer)--마이너스 수치 반전
-				CS__SetValue(FP,TStr1,"-",nil,7)--마이너스 표기 추가
+				CS__SetValue(FP,TStr1,"-",nil,7,nil,1)--마이너스 표기 추가
 			CIfEnd()
 		CElseX()
-			CS__SetValue(FP,TStr1,t01,nil,0)
+			CS__SetValue(FP,TStr1,t01,nil,0,nil,1)
 		CIfXEnd()
 
-		CS__ItoCustom(FP,SVA1(TStr1,7+1),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6})
+		CS__ItoCustom(FP,SVA1(TStr1,7+1),SelPer,nil,nil,{10,6},1,nil,"\x080",0x08,{0,1,2,4,5,6},nil,nil,1)
 	--8 9 10
 	--12 13 14
 	CS__InputTA(FP,{CSVA1(SVA1(TStr1,10+1), Exactly, 0x0D*0x1000000, 0xFF000000)},SVA1(Str1,10),string.byte("0")*0x1000000, 0xFF000000)
@@ -323,17 +323,17 @@ function TBL()
 	}, {preserved})
 	
 	CIf(FP,{CV(TempV2,0)})
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,8)
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,9)
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,10)
-	CS__SetValue(FP,TStr1,"\x080",nil,11)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,8,nil,1)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,9,nil,1)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,10,nil,1)
+	CS__SetValue(FP,TStr1,"\x080",nil,11,nil,1)
 	
 	CIfEnd()
 	CIf(FP,{CV(TempV,0)})
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,12)
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,13)
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,14)
-	CS__SetValue(FP,TStr1,"\x08\x0D",nil,15)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,12,nil,1)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,13,nil,1)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,14,nil,1)
+	CS__SetValue(FP,TStr1,"\x08\x0D",nil,15,nil,1)
 	CIfEnd()
 
 	CIf(FP,{CV(TempV2,0),CV(TempV,1,AtLeast)})
@@ -472,12 +472,12 @@ function TBL()
 		CIfEnd()
 	end
 	CIfX(FP,{CV(SelUID,102)})
-	CS__SetValue(FP,TStr4,t06_2,nil,0)
+	CS__SetValue(FP,TStr4,t06_2,nil,0,nil,1)
 	local TempW = CreateWar(FP)
 	f_LMov(FP,TempW,_LSub(TotalBossDPMLoc,TotalDPMLoc))
 	f_LMov(FP,TotalDPMLoc,TempW)
 	CElseX()
-	CS__SetValue(FP,TStr4,t09,nil,0)
+	CS__SetValue(FP,TStr4,t09,nil,0,nil,1)
 	CIfXEnd()
 
 
@@ -485,16 +485,16 @@ function TBL()
 	f_LMov(FP,TotalDPMLoc,TotalDPM)
 	f_LMov(FP,TotalBossDPMLoc,BossDPM)
 	CIfX(FP,{TTOR({CV(SelUID,77),CV(SelUID,104)})})
-	CS__SetValue(FP,TStr4,t06_1,nil,0)
+	CS__SetValue(FP,TStr4,t06_1,nil,0,nil,1)
 
 
 	CElseX()
-	CS__SetValue(FP,TStr4,t06,nil,0)
+	CS__SetValue(FP,TStr4,t06,nil,0,nil,1)
 	CIfXEnd()
 	CIfXEnd()
 	CS__InputVA(FP,iTbl1,0,TStr0,TStr0s,nil,0,TStr0s)--DPS 수치
 	
-	CS__lItoCustom(FP,SVA1(TStr4,9),TotalDPMLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+	CS__lItoCustom(FP,SVA1(TStr4,9),TotalDPMLoc,nil,nil,10,nil,nil,"\x040",{0x1B,0x1B,0x1B,0x1B,0x19,0x19,0x19,0x19,0x1D,0x1D,0x1D,0x1D,0x1C,0x1C,0x1C,0x1C,0x03,0x03,0x03,0x03},{0,1,2,3,5,6,7,8,10,11,12,13,15,16,17,18,20,21,22,23},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0},0,0,0,{0}},1)
 	CS__InputVA(FP,iTbl1,0,TStr4,TStr4s,nil,0,TStr4s)
 	
 	CS__InputVA(FP,iTbl2,0,TStr0,TStr0s,nil,0,TStr0s)--DPS 게이지
@@ -505,7 +505,7 @@ function TBL()
 	f_LDiv(FP, {TempGauge,TempGaugeT}, TotalDPMTemp, TotalBossDPMLoc)
 	
 	
-	CS__SetValue(FP,EStr2,t07,nil,0)
+	CS__SetValue(FP,EStr2,t07,nil,0,nil,1)
 	for i = 0, 24 do
 		CS__InputTA(FP,{CV(TempGauge,i+1,AtLeast)},SVA1(EStr2,0+i),0x07,0xFF)
 	end
@@ -516,7 +516,7 @@ function TBL()
 		CIf(FP,{CV(SelUID,k)})
 		CMov(FP,PUnitLevelLoc,iv.PUnitLevel[j])
 		CMov(FP,PUnitClassLoc,iv.PUnitClass[j])
-		CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,4},1,nil,"\x03초",0x07)
+		CS__lItoCustom(FP,SVA1(MarStr[j],2),PUnitClassLoc,nil,nil,{10,4},1,nil,"\x03초",0x07,nil,nil,nil,1)
 		CS__InputVA(FP,PMariTbl[j],0,MarStr[j],MarStrs[j],nil,0,MarStrs[j])
 		CIfEnd()
 	end
@@ -525,7 +525,7 @@ function TBL()
 	CMov(FP,TempPer,_Sub(_Mov(100),_Mul(PUnitLevelLoc,10)))
 	TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempPer,0)},{preserved})
 -- CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,6},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6}, nil,{0,0,{0},0,0,{0}})
-	CS__ItoCustom(FP,SVA1(TStr6,17),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F)--강화확률
+	CS__ItoCustom(FP,SVA1(TStr6,17),TempPer,nil,nil,{10,3},1,nil,"\x0F0",0x0F,nil,nil,nil,1)--강화확률
 	CS__InputVA(FP,iTbl2,0,TStr6,TStr6s,nil,0,TStr6s)
 
 
@@ -534,8 +534,8 @@ function TBL()
 	local TempCred = CreateVar(FP)
 	CMov(FP,TempCred,_Add(_Mul(PUnitLevelLoc,1000),1000))
 	TriggerX(FP,{CV(PUnitLevelLoc,10)},{SetV(TempCred,0)},{preserved})
-	CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08)--강화단계
-	CS__ItoCustom(FP,SVA1(TStr7,14),TempCred,nil,nil,{10,9},1,nil,"\x170",0x17,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+	CS__ItoCustom(FP,SVA1(TStr7,0),PUnitLevelLoc,nil,nil,{10,2},1,nil,"\x080",0x08,nil,nil,nil,1)--강화단계
+	CS__ItoCustom(FP,SVA1(TStr7,14),TempCred,nil,nil,{10,9},1,nil,"\x170",0x17,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}},1)
 	CS__InputVA(FP,iTbl1,0,TStr7,TStr7s,nil,0,TStr7s)--가격
 
 	CIfXEnd()
@@ -551,13 +551,13 @@ function TBL()
 	f_LMov(FP,MulOpLoc,0)
 	CIfXEnd()
 	CIfX(FP,{CV(iv.FROpLoc,0)})
-	CS__SetValue(FP,TStr5,t08,nil,0)
+	CS__SetValue(FP,TStr5,t08,nil,0,nil,1)
 	CElseX()
-	CS__SetValue(FP,TStr5,t08_1,nil,0)
+	CS__SetValue(FP,TStr5,t08_1,nil,0,nil,1)
 	CIfXEnd()
 
 	
-	CS__lItoCustom(FP,SVA1(TStr5,12),MulOpLoc,nil,nil,{10,12},nil,nil,"\x040",nil,{0,1,2,3,5,6,7,8,10,11,12,13},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0}})
+	CS__lItoCustom(FP,SVA1(TStr5,12),MulOpLoc,nil,nil,{10,12},nil,nil,"\x040",nil,{0,1,2,3,5,6,7,8,10,11,12,13},nil,{0,0,0,{0},0,0,0,{0},0,0,0,{0}},1)
 	CTrigger(FP, {TTNWar(MulOpLoc,AtLeast,"10000")
 	}, {
 		SetCSVA1(SVA1(TStr5,18+5), SetTo, 0x0D0D0D0D,0xFFFFFFFF),
@@ -593,17 +593,17 @@ function TBL()
 		return Txt
 	end
 	
-	CIf(FP,{CD(XEperFlag,3)},{DisplayExtText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[1].."개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
+	CIf(FP,{CD(XEperFlag,3)},{DisplayText(StrDesignX("\x1C45강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[1].."개 기본지급)").."\n"..GaTxt(Ga_45), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,4)},{DisplayExtText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[2].."개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
+	CIf(FP,{CD(XEperFlag,4)},{DisplayText(StrDesignX("\x1E46강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[2].."개 기본지급)").."\n"..GaTxt(Ga_46), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,5)},{DisplayExtText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[3].."개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
+	CIf(FP,{CD(XEperFlag,5)},{DisplayText(StrDesignX("\x0247강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[3].."개 기본지급)").."\n"..GaTxt(Ga_47), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,6)},{DisplayExtText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[4].."개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
+	CIf(FP,{CD(XEperFlag,6)},{DisplayText(StrDesignX("\x1B48강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[4].."개 기본지급)").."\n"..GaTxt(Ga_48), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,7)},{DisplayExtText(StrDesignX("\x0649강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[5].."개 기본지급)").."\n"..GaTxt(Ga_49), 4)})
+	CIf(FP,{CD(XEperFlag,7)},{DisplayText(StrDesignX("\x0649강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[5].."개 기본지급)").."\n"..GaTxt(Ga_49), 4)})
 	CIfEnd()
-	CIf(FP,{CD(XEperFlag,8)},{DisplayExtText(StrDesignX("\x0750강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[6].."개 기본지급)").."\n"..GaTxt(Ga_50), 4)})
+	CIf(FP,{CD(XEperFlag,8)},{DisplayText(StrDesignX("\x0750강 \x04유닛 \x17뽑기 \x07확률표 \x04(\x02무색 조각 \x04"..pifrag[6].."개 기본지급)").."\n"..GaTxt(Ga_50), 4)})
 	CIfEnd()
 
 	--[[
@@ -632,9 +632,9 @@ function TBL()
 			DoActions(FP, RemoveUnit(94,FP))
 		CIfEnd()
 		DoActionsX(FP,{SetCD(TBLFlag,0)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
-		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayExtText(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 90)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x04현재 자신의 \x1F미네랄\x04, \x07가스\x04가 건물에게 가하는 \x08데미지\x17(DPS) \x04입니다."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 150)},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: \x07자신\x04의 \x11지역\x04에 있는 \x1C크리스탈\x04에서 \x07유닛을 구입\x04하고 \x0F상단의 아카데미 \x04지역에 유닛을 넣으면 \x08강화\x04가 됩니다."))},Force1,FP)})
+		TriggerX(FP,{ElapsedTime(AtLeast, 180*(1.2))},{RotatePlayer({DisplayTextX(StrDesignX("\x18Notice \x04: 곧 맨 처음 주어진 스카웃이 \x08사라질 것\x04입니다. \x07유닛을 구입, \x08강화\x04하여 \x17사냥터\x04에 보냅시다!"))},Force1,FP)})
 		--	if TestStart == 1 then -- 관리자 콘솔 일단비공유데이터(방갈됨)
 	--		L = CreateVar()
 	--		CIfOnce(FP)
@@ -661,7 +661,7 @@ function TBL()
 	--if TestStart == 0 and Limit == 1 then
 	--	Trigger2X(FP, {Memory(0x6D0F38,AtLeast,GlobalTime);},  {
 	--		RotatePlayer({
-	--			DisplayExtText(StrDesignX("\x1B테스트 기간이 종료되었습니다. 이용해주셔서 대단히 감사합니다.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1B추후 정식버전 업데이트에서 뵙겠습니다."),4);
+	--			DisplayTextX(StrDesignX("\x1B테스트 기간이 종료되었습니다. 이용해주셔서 대단히 감사합니다.").."\n"..StrDesignX("\x1B").."\n"..StrDesignX("\x1B추후 정식버전 업데이트에서 뵙겠습니다."),4);
 	--		Defeat();
 	--		},Force1,FP);
 	--		Defeat();

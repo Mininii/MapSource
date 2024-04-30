@@ -548,7 +548,9 @@ end
 
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossFlag)
+	--STRxStart()
 	local DPSArrX = CreateArr(96*4, FP)
+	--STRxEnd()
 	local TotalDPS = CreateWar(FP)
 	local TotalDPS2 = CreateWar(FP)
 	local DPSCheckV = CreateVar(FP)
@@ -1046,8 +1048,8 @@ function VarCheatTest(Player,Var,TrapVar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayTextX(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayTextX("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1069,8 +1071,8 @@ function WarCheatTest(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayTextX(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayTextX("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1099,8 +1101,8 @@ function WarCheatTestX(Player,War,TrapWar,Flag)
 	TriggerX(FP,{LocalPlayerID(Player)},{{
 		SetCp(Player),
 		PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-		DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-		DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+		DisplayTextX(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+		DisplayTextX("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 		SetMemory(0xCDDDCDDC,SetTo,1);}})
 	end
 	if Flag ~=nil then Flag = tostring(Flag) else Flag = "nil" end
@@ -1191,16 +1193,16 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 				TriggerX(FP,{LocalPlayerID(p)},{{
 					SetCp(p),
 					PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-					DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-					DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+					DisplayTextX(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+					DisplayTextX("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 					SetMemory(0xCDDDCDDC,SetTo,1);}})
 			end
 		else
 			TriggerX(FP,{LocalPlayerID(Player)},{{
 				SetCp(Player),
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayExtText(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
-				DisplayExtText("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
+				DisplayTextX(Flag.."\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다. (데이터는 보존되어 있음.)\x07 』",4);
+				DisplayTextX("\x13\x07『 \x04SCA 아이디, 스타 아이디, 현재 미네랄, 가스 정보와 함께 제작자에게 문의해주시기 바랍니다.\x07 』",4);
 				SetMemory(0xCDDDCDDC,SetTo,1);}})
 				
 		end
@@ -1214,9 +1216,9 @@ function CheatTestX(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --	if TestStart == 1 then
 --		if Player == AllPlayers then Player = iv.LCP end
 --		if VW[4] =="W" then
---			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayTextX(Text,4)})
 --		else
---			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayTextX(Text,4)})
 --		end
 --		
 --	end
@@ -1277,9 +1279,9 @@ function CheatTest2X(Player,VW,TrapVW,Flag,PRandFlag,Text)
 --	if TestStart == 1 then
 --		if Player == AllPlayers then Player = iv.LCP end
 --		if VW[4] =="W" then
---			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayTextX(Text,4)})
 --		else
---			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayExtText(Text,4)})
+--			CDoActions(FP, {TSetMemory(0x6509B0,SetTo,iv.LCP),DisplayTextX(Text,4)})
 --		end
 --		
 --	end
@@ -1743,10 +1745,6 @@ function CreateCostData(Max,SFunc)
 end
 function ReciveCostDataFile(Max,CostFile)
 	return {f_GetFileptr(FP, CostFile, 1),Max,f_GetFileptr(FP, CostFile.."_dp", 1)}
-end
-function CheckTrig(Name)
-TrigBench:write(Name.." : "..CurTrigCnt.."\n")
-CurTrigCnt = 0
 end
 
 function strsum(a,b)

@@ -66,11 +66,11 @@ if TestStart == 1 then
 	CTrigger(FP,{
 		CD(MemoryCT,#condarr-1,AtMost)
 	},{RotatePlayer({
-		DisplayExtText("MemoryCT", 4);},Force1,FP)},{preserved})
+		DisplayTextX("MemoryCT", 4);},Force1,FP)},{preserved})
 	else----
 		TriggerX(FP,{CD(MemoryCT,#condarr-1,AtMost)},{RotatePlayer({
 			PlayWAVX("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-			DisplayExtText("m\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
+			DisplayTextX("m\x13\x07『 \x04당신은 SCA 시스템에서 핵유저로 의심되어 강퇴당했습니다.\x07 』",4);},Force1,FP),SetMemory(0xCDDDCDDC,SetTo,1);})
 	end
 	--
 

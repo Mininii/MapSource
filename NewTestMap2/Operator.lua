@@ -23,7 +23,7 @@ function Operator()
 
 	Trigger2X(FP, {CD(SCA.GReload,1),
 }, {SetCD(SCA.GReload,0),
-	RotatePlayer({DisplayExtText(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
+	RotatePlayer({DisplayTextX(StrDesignX("\x03SYSTEM \x04: 5분마다 글로벌 데이터를 다시 불러옵니다..."), 4)}, Force1, FP),
 	SetCD(SCA.GlobalCheck,0),
 	SetCD(SCA.GlobalLoadFlag,0),
 	SetV(SCA.GlobalVarArr[1],0),
@@ -121,13 +121,15 @@ function Operator()
 	for i = 1,20 do
 		f_Read(FP, SCA.GlobalData[i], SCA.GlobalVarArr[i])
 	end
-	--Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],1,1)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
-	--Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],2,2)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 2호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x17크레딧 50만, \x02??? 5개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x02??? 50개"),4)}, Force1, FP)}, {preserved})
-	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],4,4)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04현재 \x10시즌 3호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x02무색 조각 100개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x1E각성의 보석 1개"),4)}, Force1, FP)}, {preserved})
+	--Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],1,1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 1호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x19유닛 판매권 100개, \x17크레딧 10만").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x17크레딧 100만, \x10강화기 백신 5개"),4)}, Force1, FP)}, {preserved})
+	--Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],2,2)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 2호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x17크레딧 50만, \x02??? 5개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x02??? 50개"),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CVX(SCA.GlobalVarArr[5],4,4)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04현재 \x10시즌 3호 \x07출석 이벤트 \x04중입니다!").."\n"..StrDesignX("일일 출석 보상(최대 28회) \x04: \x02무색 조각 100개").."\n"..StrDesignX("누적 7일 출석 보상(최대 4회) \x04: \x1E각성의 보석 1개"),4)}, Force1, FP)}, {preserved})
 	
-	Trigger2X(FP, {CV(SCA.GlobalVarArr[5],0)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
-	Trigger2X(FP, {CV(SCA.GlobalVarArr[6],1)}, {RotatePlayer({DisplayExtText(StrDesignX("\x04글로벌 데이터를 통해 \x07솔로 플레이 버프\x04가 \x07영구 활성화되었습니다."),4)}, Force1, FP),SetCD(iv.PartyBonus,2)}, {preserved})
+	Trigger2X(FP, {CV(SCA.GlobalVarArr[5],0)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04출석 이벤트가 종료되었습니다ㅠㅠ").."\n"..StrDesignX("\x04다음을 기약해 주세요."),4)}, Force1, FP)}, {preserved})
+	Trigger2X(FP, {CV(SCA.GlobalVarArr[6],1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04글로벌 데이터를 통해 \x07솔로 플레이 버프\x04가 \x07영구 활성화되었습니다."),4)}, Force1, FP),SetCD(iv.PartyBonus,2)}, {preserved})
 	CIfOnce(FP)
+		Trigger2X(FP, {CVX(SCA.GlobalVarArr[7],1,1)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04글로벌 데이터를 통해 \x07핫 타임 보너스\x04가 \x07활성화되었습니다."),4)}, Force1, FP),SetCD(iv.HotTimeBonus,1),SetCD(iv.HotTimeBonus2,1)}, {preserved})
+		Trigger2X(FP, {CVX(SCA.GlobalVarArr[7],2,2)}, {RotatePlayer({DisplayTextX(StrDesignX("\x04글로벌 데이터를 통해 \x07특별 핫 타임 보너스\x04가 \x07활성화되었습니다."),4)}, Force1, FP),SetCD(iv.SpHotTimeBonus,1),}, {preserved})
 		CTrigger(FP,{TTOR({
 			TTAND(VRange(SCA.HourV, 0, 2)),
 			TTAND(VRange(SCA.HourV, 18, 24)),
@@ -135,14 +137,14 @@ function Operator()
 		})},{SetCD(iv.HotTimeBonus,1),SetCD(iv.HotTimeBonus2,1)})
 		Trigger2X(FP, {VRange(SCA.HourV, 3, 17)}, {AddCD(iv.PartyBonus,2)})
 		if Limit == 1 and HotTimeTest == 1 then
-			Trigger2X(FP, {}, {SetCD(iv.HotTimeBonus,1),SetCD(iv.HotTimeBonus2,1)})
+			--Trigger2X(FP, {}, {SetCD(iv.HotTimeBonus,1),SetCD(iv.HotTimeBonus2,1)})
 		end
 		Trigger2X(FP,{CV(SCA.YearV,2023),CV(SCA.MonthV,9),VRange(SCA.DayV, 28, 30)},{AddCD(iv.PartyBonus,2),SetCD(iv.HotTimeBonus,1),SetCD(iv.SpHotTimeBonus,1)})
 		Trigger2X(FP,{CV(SCA.YearV,2023),CV(SCA.MonthV,10),VRange(SCA.DayV, 1, 3)},{AddCD(iv.PartyBonus,2),SetCD(iv.HotTimeBonus,1),SetCD(iv.SpHotTimeBonus,1)})
 		
-		Trigger2X(FP,{CD(iv.PartyBonus,2)},{RotatePlayer({DisplayExtText(StrDesignX("\x04글로벌 데이터를 통해 \x07솔로 플레이 버프\x04가 \x07영구 활성화되었습니다."),4)}, Force1, FP)})
-		Trigger2X(FP,{CD(iv.HotTimeBonus,1)},{RotatePlayer({DisplayExtText(StrDesignX("\x07핫 타임 보너스\x04가 활성화 되었습니다. 다음 내용이 적용됩니다.").."\n\x13\x07게임 시작후 인게임 12시간까지\n\x13\x0448강 이하 판매시 재화 획득 갯수, 획득 경험치량 3배로 상승\n\x13\x07게임 종료시까지 :\n\x13\x04보스 처치 보상 2배로 상승\x08(광산 크레딧 포함, SCA 저장 가능한 항목만 적용됨)",4)}, Force1, FP)})
-		Trigger2X(FP,{CD(iv.SpHotTimeBonus,1)},{RotatePlayer({DisplayExtText(StrDesignX("\x1F추석 연휴 특별 이벤트\x04가 활성화 되었습니다. \x07기존 핫타임 보너스\x04를 포함한 다음 내용이 적용됩니다.").."\n\x13\x07게임 시작후 인게임 12시간까지\n\x13\x0649강\x04, \x1F50강\x04 유닛 판매시 재화 획득 갯수 2배, 획득 경험치량 5배로 상승",4)}, Force1, FP)})
+		Trigger2X(FP,{CD(iv.PartyBonus,2)},{RotatePlayer({DisplayTextX(StrDesignX("\x04글로벌 데이터를 통해 \x07솔로 플레이 버프\x04가 \x07영구 활성화되었습니다."),4)}, Force1, FP)})
+		Trigger2X(FP,{CD(iv.HotTimeBonus,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x07핫 타임 보너스\x04가 활성화 되었습니다. 다음 내용이 적용됩니다.").."\n\x13\x07게임 시작후 인게임 12시간까지\n\x13\x0448강 이하 판매시 재화 획득 갯수, 획득 경험치량 3배로 상승\n\x13\x07게임 종료시까지 :\n\x13\x04보스 처치 보상 2배로 상승\x08(광산 크레딧 포함, SCA 저장 가능한 항목만 적용됨)",4)}, Force1, FP)})
+		Trigger2X(FP,{CD(iv.SpHotTimeBonus,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x1F특별 핫 타임 보너스\x04가 활성화 되었습니다. \x07기존 핫타임 보너스\x04를 포함한 다음 내용이 적용됩니다.").."\n\x13\x07게임 시작후 인게임 12시간까지\n\x13\x0649강\x04, \x1F50강\x04 유닛 판매시 재화 획득 갯수 2배, 획득 경험치량 5배로 상승",4)}, Force1, FP)})
 		CIfEnd()
 
 	CIfEnd()
@@ -150,7 +152,7 @@ function Operator()
 	TriggerX(FP,{CDX(SCA.GlobalLoadFlag,3,3),CD(SCA.GlobalCheck,2)},{SetCD(SCA.GlobalCheck,3)},{preserved})
 	CIf(FP, {TTOR({Memory(SCA.Month, AtMost, 0),Memory(SCA.GlobalData[1],AtMost,0)}),CD(SCA.Timer,24*60,AtLeast)},{SetCD(SCA.Timer,0)})
 	DoActions2X(FP, {
-		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06Global Data Load Faliure. Try Again..."), 4)}, Force1, FP),SetV(iv.Time3, 0),
+		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06Global Data Load Faliure. Try Again..."), 4)}, Force1, FP),SetV(iv.Time3, 0),
 		SetCD(SCA.GlobalCheck,0),
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),
@@ -177,7 +179,7 @@ function Operator()
 	end
 	CElseX()
 	DoActions2X(FP, {
-		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06날짜 데이터가 잘못되었습니다. 다시 불러옵니다."), 4)}, Force1, FP),SetV(iv.Time3, 0),
+		RotatePlayer({PlayWAVX("sound\\Misc\\PError.WAV"),DisplayTextX(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x06날짜 데이터가 잘못되었습니다. 다시 불러옵니다."), 4)}, Force1, FP),SetV(iv.Time3, 0),
 		SetCD(SCA.GlobalCheck,0),
 		SetCD(SCA.GlobalLoadFlag,0),
 		SetV(SCA.GlobalVarArr[1],0),
@@ -237,13 +239,13 @@ function Operator()
 
 	CIf(FP,{CD(InternalFlag,1)},{SetCD(InternalFlag, 0)})
 	for i = 0, 6 do
-		TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: 게임 속도 저하가 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)})
+		TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x03SYSTEM \x08ERROR \x04: 게임 속도 저하가 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)})
 	end
 	
 	CIfEnd()
 
 	for i = 0, 6 do
-	TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),Memory(0x628438, AtMost, 0),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayExtText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x08캔낫\x04이 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)},{preserved})
+	TriggerX(FP, {CD(SCA.LoadCheckArr[i+1],2),Memory(0x628438, AtMost, 0),DeathsX(i, Exactly, 0,3,2)}, {SetDeathsX(i, SetTo, 2, 3,2),SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x03SYSTEM \x08ERROR \x04: \x08캔낫\x04이 감지되었습니다! 강화 \x1C내부계산 모드\x04를 \x07ON \x04하였습니다.").."\n"..StrDesignX("\x04다시 끄길 원하신다면 유닛 자판기에서 단축키 X를 눌러 설정해주세요."), 4),SetCp(FP)},{preserved})
 	end
 	
 end
