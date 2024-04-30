@@ -159,7 +159,6 @@ B1Mode = CreateCcode()
 			TriggerX(FP,{CD(B2C[2],500,AtLeast)},{SetMemory(0x657A9C,Add,1),SetCD(B2C[2],0)},{preserved}) -- 일정시간 지난경우 밝기 회복
 			TriggerX(FP,{Memory(0x657A9C,AtLeast,32)},{SetMemory(0x657A9C,SetTo,31)},{preserved})
 			DSkillRetX,DSkillRetY = CreateVars(2, FP)
-			DSkillX, DSkillY = CreateVars(2,FP)
 			CIf(FP,{CV(DSkillX,1,AtLeast),CV(DSkillY,1,AtLeast),CD(B2C[3],240,AtLeast)},{})
 			CMov(FP,DSkillRetX,DSkillX)
 			CMov(FP,DSkillRetY,DSkillY)
@@ -206,6 +205,20 @@ B1Mode = CreateCcode()
 
 
 	CIf(FP,CV(BPtrArr[3],1,AtLeast),{SetMemoryX(0x665E44, SetTo, 0,0xFF000000);SetBulletSpeed(250),AddCD(B3C[3],1)})--탱크보스
+	TriggerX(FP,{},{
+		SetCD(B3C[1],0),
+		SetCD(B3C[2],0),
+		SetCD(B3C[6],0),
+		SetCD(B3C[7],0),
+		SetCD(B3C[8],0),
+		SetCD(B3C[9],0),
+		SetCD(B3C[10],0),
+		SetV(B3V[1],0),
+		SetV(B3V[2],0),
+		SetV(B3V[3],0),
+		SetV(B3V[4],0),
+		SetV(B3V[5],0),
+	})
 		f_Read(FP,_Add(BPtrArr[3],10),CPos)
 		Convert_CPosXY()
 		CIf(FP,{CD(Theorist,1,AtLeast),CD(B3C[3],25,AtLeast)},{SetCD(B3C[3],0)})
@@ -214,7 +227,6 @@ B1Mode = CreateCcode()
 		CIfEnd()
 		TriggerX(FP,CD(B3C[1],0),{SetCD(B3C[1],1),SetV(B3V[1],0),SetV(B3V[2],0)},{preserved})
 		CIf(FP,CD(B3C[1],1))
-
 			CMov(FP,B3V[2],0)
 			CWhile(FP,{CVar(FP,B3V[2][2],AtMost,359)})
 			CSub(FP,B3V[3],_Mov(512),B3V[1])
@@ -223,6 +235,9 @@ B1Mode = CreateCcode()
 			CAdd(FP,N_X,CPosX)
 			CAdd(FP,N_Y,CPosY)
 			Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+			if Limit == 1 then
+				DisplayPrint(HumanPlayers, {"B3V[1] : ",B3V[1]})
+			end
 			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,17)
 			CAdd(FP,B3V[2],12)
 			CWhileEnd()
@@ -247,6 +262,9 @@ B1Mode = CreateCcode()
 			Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
 			CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,17)
 			CIf(FP,CD(B3C[2],5,AtLeast))
+			if Limit == 1 then
+				DisplayPrint(HumanPlayers, {"B3V[4] : ",B3V[4]})
+			end
 			CreateBulletLoc(205,20,f_CRandNum(256),P7)
 			CIfEnd()
 			CAdd(FP,B3V[2],60)

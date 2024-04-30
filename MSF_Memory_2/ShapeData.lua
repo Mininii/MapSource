@@ -15,7 +15,6 @@ function lengthdirT(Radius, Angle)
 	return {math.cos(Angle) * Radius,-math.sin(Angle) * Radius}
 end
 
-
 function CS_OverlapShape(Shape,...)
 	local RetShape = Shape
 

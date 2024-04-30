@@ -1131,7 +1131,6 @@ end
 
 
 
-
 		if Limit == 1 then
 			--TriggerX(FP,{CD(TestMode,1)},{Gun_SetLine(31,SetTo,1)},{preserved})--Axiom 달성시 특수패턴
 		end
@@ -1139,7 +1138,13 @@ end
 	--	CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
 	--	31이 1일경우 보스 소환 작동
 		CIfX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(12,AtMost,0),Gun_Line(31,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
-			CIf(FP,CD(Theorist,1,AtLeast))
+		ChkCD = CreateCcode()
+			CIf(FP,CD(Theorist,1,AtLeast),{SetCD(ChkCD,0)})
+				MineJump= def_sIndex()
+				NJumpEnd(FP, MineJump)
+				CIf(FP,{CD(ChkCD,1),CD(TestMode,1)})
+					DisplayPrintEr(MapPlayers, {"\x08Wrong RandMine Pos. XY : ",G_CA_CenterX,",",G_CA_CenterY})
+				CIfEnd()
 				for i = 0,3 do
 					local Opr = 0
 					if i%2 == 1 then
@@ -1156,6 +1161,9 @@ end
 					RandR = f_CRandNum(2048, Opr,GCP(i+4))
 				end
 				CMov(FP,G_CA_CenterY,RandR)
+				NJump(FP, MineJump, {
+					CV(G_CA_CenterX,1024,AtLeast),CV(G_CA_CenterY,1024,AtLeast),
+					CV(G_CA_CenterX,3072,AtMost),CV(G_CA_CenterY,3072,AtMost),},{SetCD(ChkCD,1)})
 				G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
 
 				
@@ -1230,6 +1238,11 @@ end
 		G_CA_SetSpawn({},{84},"ACAS","Warp1",nil,5,nil,"CP")
 		CElseIfX({Gun_Line(8,AtLeast,16350),Gun_Line(12,AtMost,0),Memory(0x628438,AtLeast,1)},{Gun_SetLine(12,SetTo,1),Gun_DoSuspend()})
 		CIf(FP,CD(Theorist,1,AtLeast))
+		MineJump= def_sIndex()
+		NJumpEnd(FP, MineJump)
+		CIf(FP,{CD(ChkCD,1),CD(TestMode,1)})
+			DisplayPrintEr(MapPlayers, {"\x08Wrong RandMine Pos. XY : ",G_CA_CenterX,",",G_CA_CenterY})
+		CIfEnd()
 		for i = 0,3 do
 			local Opr = 0
 			if i%2 == 1 then
@@ -1246,6 +1259,9 @@ end
 			RandR = f_CRandNum(2048, Opr,GCP(i+4))
 		end
 		CMov(FP,G_CA_CenterY,RandR)
+		NJump(FP, MineJump, {
+			CV(G_CA_CenterX,1024,AtLeast),CV(G_CA_CenterY,1024,AtLeast),
+			CV(G_CA_CenterX,3072,AtMost),CV(G_CA_CenterY,3072,AtMost),},{SetCD(ChkCD,1)})
 		G_CA_SetSpawn({},{13},"ACAS",{"Circle3"},"MAX",6,nil,"CP")
 
 		
@@ -1344,6 +1360,96 @@ end
 		{"\x0D\x0D!H\x13\x07♪\x04 \x1F네가 알 리 없는 \x04이 \x11정의\x04의 \x08저주 \x04속에서. \x07♪",194830},
 
 	}
+	
+function CS_RatioXY(FCX,FCY,mulX,idivX,mulY,idivY)
+	local LX = FCX
+	local LY = FCY
+	if mulX ~= nil then
+		LX = LX*mulX
+	end
+	if mulY ~= nil then
+		LY = LY*mulY
+	end
+	if idivX ~= nil then
+		LX = LX/idivX
+	end
+	if idivY ~= nil then
+		LY = LY/idivY
+	end
+
+	return LX,LY
+end
+
+
+function CS_Rotate3D(FCX,FCY,XYAngle,YZAngle,ZXAngle)
+	local LX = FCX
+	local LY = FCY
+	local LZ = 0
+	local LXY = XYAngle
+	local LYZ = YZAngle
+	local LZX = ZXAngle
+	if XYAngle ~= nil then 
+		local XC,XS = lengthdir(LX, LXY)-- XCos XSin
+		local YC,YS = lengthdir(LY, LXY)-- YCos YSin
+		LX = XC - YS
+		LY = XS + YC
+	end
+
+	if YZAngle ~= nil then 
+		local YC,YS = lengthdir(LY, LYZ)-- YCos YSin
+		LY = YC
+		LZ = YS
+	end
+
+	if ZXAngle ~= nil then 
+		local XC,XS = lengthdir(LX, LZX)-- XCos XSin
+		local ZC,ZS = lengthdir(LZ, LZX)-- ZCos ZSin
+		LX = XC-ZS
+	end
+	return LX,LY
+end
+testish = {
+	{0,-256},
+	{181,-182},
+	{256,0},
+	{181,181},
+	{0,256},
+	{-182,181},
+	{-256,0},
+	{-182,-182}
+	}
+
+--2048,2048
+CaTX = {
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+}
+CaTY = {
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+}
+if Limit == 1 then
+
+Ca3DT = {
+	{},
+	{},
+	{},
+	{},
+}
+end
+
 	CIf_GCase(190)
 	DoActions(FP,{KillUnit(125,Force1)},1)--건작보스 작동시 모든 벙커 폭발
 	
@@ -1352,8 +1458,10 @@ end
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{SetCD(AxiomEnable,GBossTestMode)})
 	end
-	if GBossTestMode == 2 then
-		CIfX(FP,{Always()},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
+	if GBossTestMode == 1 then
+		CIfX(FP,{CD(EEggCode,20)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
+	elseif GBossTestMode == 0 then
+		CIfX(FP,{Never()},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
 	else
 		CIfX(FP,{CD(AxiomEnable,1,AtLeast)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
 	end
@@ -1787,6 +1895,14 @@ end
 	
 	local tesLineArr = {98420,98930,99430,99770,100280,100780,101120,101620}
 	local GBLineT = {{98,66},{98,66},{98,66},{57,100},{57,100},{57,100},{29,10},{29,10}}
+	
+	
+	TriggerX(FP,{Gun_LineRange(8, 101620, 98420+5400),Memory(0x657A9C,AtLeast,16)},{SetMemory(0x657A9C,Subtract,1)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8, 98420+5400, 101620+5400),Memory(0x657A9C,AtMost,30)},{SetMemory(0x657A9C,Add,1)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8, 107520, 109210),Memory(0x657A9C,AtLeast,16)},{SetMemory(0x657A9C,Subtract,1)},{preserved})
+	TriggerX(FP,{Gun_LineRange(8, 109210, 109210+(3000)),Memory(0x657A9C,AtMost,30)},{SetMemory(0x657A9C,Add,1)},{preserved})
+	
+
 	for j,k in pairs(tesLineArr) do
 		G_CA_SetSpawn({Gun_Line(8,AtLeast,k)},GBLineT[j],"ACAS","TesLine","MAX",0,nil,nil,G_CA_Rotate((360/(#tesLineArr))*j),nil,1)
 	end
@@ -1873,6 +1989,7 @@ end
 	local TesTArr = {}
 	for i = 0, 6 do
 		table.insert(TesTArr,138870+((bit/4)*i))
+		SetBright(138870+((bit/4)*i),30-i)
 	end
 	local SWEffArr1 = {}
 	local SWEffArr2 = {}
@@ -1888,8 +2005,10 @@ end
 	--CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,2000+60),SWEffArr1},1)
 	TriggerX(FP,{Gun_LineRange(8,135500,135500+5000),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
 	TriggerX(FP,{Gun_Line(8,AtLeast,135500)},{RemoveUnit(60,Force2),SetCD(tesFlag,1),SetMemory(0x662350+(116*4),SetTo,9999*256),})
+	SetBright(135500,31)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,141570)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
+	SetBright(141570,31)
 	TriggerX(FP,{Gun_Line(8,AtLeast,120000+36400)},{AddV(CA_Eff_RatF2,60000),SetV(CA_Eff_RatFDT,5000)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,158090)},{KillUnit(116,Force2)})
 	--TriggerX(FP,{Gun_Line(8,AtLeast,(60000*2)+20220)},{AddV(CA_ACCR,0),SetV(CA_Eff_RatFMDT,15000),SetV(CA_Eff_RatFM2,1300000)})
@@ -1937,8 +2056,14 @@ end
 	end
 
 	CallTriggerX(FP,Call_CA_Effect,{Gun_LineRange(8,(60000*2)+56620,(60000*2)+57970)},{SetV(CA_Create,2000+88),SWEffArr1})
+	for i = 31,0,-1 do
+		SetBright((60000*2)+56620+(85*(31-i)), i)
+	end
 	CallTriggerX(FP,Call_CA_Effect,{Gun_LineRange(8,(60000*2)+57970,(60000*2)+59320)},{SetV(CA_Create,2000+21),SWEffArr1})
 
+	for i = 0,15,1 do
+		SetBright((60000*2)+59320+(30*(i)), i)
+	end
 	TriggerX(FP,{Gun_Line(8, AtLeast, (60000*2)+59320)},{KillUnit(88,Force2),KillUnit(21,Force2)})
 	TriggerX(FP,{Gun_LineRange(8,(60000*2)+59320,(60000*3)+2020),CV(CA_ACCR,10,AtLeast)},{SubV(CA_ACCR,3)},{preserved})
 	TriggerX(FP,{Gun_LineRange(8,(60000*3)+9430,(60000*3)+11460),CV(CA_ACCR,120,AtMost)},{AddV(CA_ACCR,3)},{preserved})
@@ -1970,11 +2095,20 @@ end
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+8930)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+9100)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15)})
 
+	SetBright((60000*3)+7410, 31)
+	SetBright((60000*3)+7580, 27)
+	SetBright((60000*3)+7920, 24)
+	SetBright((60000*3)+8090, 21)
+	SetBright((60000*3)+8420, 17)
+	SetBright((60000*3)+8590, 14)
+	SetBright((60000*3)+8930, 11)
+	SetBright((60000*3)+9100, 7)
 	
 	local SWEffArr1 = {}
 	for i = 1, 8 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],9))
 	end
+	SetBright((60000*3)+10110, 31)
 	
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+10110)},{SetV(CA_Create,2000+11),AddV(CA_Eff_RatF,30000),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+10220)},{SetV(CA_Create,2000+11),AddV(CA_Eff_RatF,30000),SWEffArr1},1)
@@ -2116,6 +2250,8 @@ end
 	CMov(FP,SHLY,G_CA_CenterY)
 	--Gun_LineRange(8, 66060, 76850)
 	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
+	
+	SetBright(120000,25)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
 	--CallTrigger(FP,EffUnitLoop)
 
@@ -2129,16 +2265,18 @@ end
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
 
 	CIf(FP,Gun_Line(7,AtLeast,400))
-
-	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D)},1)--CV(Dt,0x2A,AtMost)
+	CachePlay = CreateVar(FP)
+	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D),AddV(CachePlay,1)},1)--CV(Dt,0x2A,AtMost)
 --	CTrigger(FP,{CV(Dt,0x2A+1,AtLeast)},{TGun_SetLine(10,Add,0x2A),TGun_SetLine(8,Add,0x2A)},1)
+-- CashMemory
 
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
 	CMov(FP,CA_Eff_XY,Var_TempTable[12])
 	CMov(FP,CA_Eff_YZ,Var_TempTable[13])
 	CMov(FP,CA_Eff_ZX,Var_TempTable[14])
-	CallTrigger(FP,Call_CA_Effect,SetV(CA_Create,0))
+	DoActionsX(FP, SetV(CA_Create,0))
+
     GunBGMArr = {}
     for i = 1, 148 do
         if i <= 9 then
@@ -2151,15 +2289,10 @@ end
 		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*1263)},{RotatePlayer({PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i]),PlayWAVX(GunBGMArr[i])},HumanPlayers,FP)})
     end
 
-	DoActionsX(FP,{
-		Gun_SetLine(11,Add,1),
-		Gun_SetLine(12,Add,1),
-		--Gun_SetLine(13,Add,0),
-	})
-	CA_3DAcc(32840,1,1,1)
-	CA_3DAcc(80210,2,1,0)
-	CA_3DAcc(112420,2,1,1)
-	CA_3DAcc(142730,2,1,1)
+	
+
+
+
 
 
 	--Tier3 = {66,29,3}
@@ -2263,42 +2396,266 @@ end
 	end
 	SetBright(112420,31)
 
-
-
+	DoActionsX(FP,{
+		Gun_SetLine(11,Add,1),
+		Gun_SetLine(12,Add,1),
+		--Gun_SetLine(13,Add,0),
+	})
+	CA_3DAcc(32840,1,1,1)
+	CA_3DAcc(80210,2,1,0)
+	CA_3DAcc(112420,2,1,1)
+	CA_3DAcc(142730,2,1,1)
 	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(0*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(1*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(2*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(3*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(4*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(5*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(6*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(7*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(8*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(9*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(10*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(11*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(12*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(13*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(14*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(15*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(16*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(17*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(18*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(19*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(20*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(21*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(22*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(23*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(24*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(25*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,110210+(26*(bit)/8))},{SetV(Var_TempTable[11],110210+(26*(bit)/8))})
-	TriggerX(FP,{Gun_Line(8,AtLeast,111780)},{SetV(Var_TempTable[11],(110210+(27*(bit)/8))*2)})
-	TriggerX(FP,{Gun_Line(8,AtLeast,111780),Gun_Line(8,AtMost,112420)},{SubV(Var_TempTable[11],8500)},{preserved})
-	TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{SetV(Var_TempTable[11],112420+25000)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(1*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(2*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(3*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(4*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(5*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(6*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(7*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(8*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(9*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(10*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(11*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(12*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(13*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(14*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(15*(bit)/8))},{AddV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(16*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(17*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(18*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(19*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(20*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(21*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(22*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(23*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(24*(bit)/8))},{SubV(Var_TempTable[11],10000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(25*(bit)/8))},{AddV(Var_TempTable[11],5000*3)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,110210+(26*(bit)/8))},{SetV(Var_TempTable[11],110210+(26*(bit)/8))})
+    TriggerX(FP,{Gun_Line(8,AtLeast,111780)},{SetV(Var_TempTable[11],(110210+(27*(bit)/8))*2)})
+    TriggerX(FP,{Gun_Line(8,AtLeast,111780),Gun_Line(8,AtMost,112420)},{SubV(Var_TempTable[11],8500)},{preserved})
+    TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{SetV(Var_TempTable[11],112420+25000)})
+	CRat = 25000
+	CXY = 0-1
+	CYZ = 0-1
+	CZX = 0
+	--CSMakePolygon(8,256,0,9,1)
 	
+ikasush = 
+{
+{0,-256},
+{181,-182},
+{256,0},
+{181,181},
+{0,256},
+{-182,181},
+{-256,0},
+{-182,-182},
+}
+--2048,2048
+CaTX = {
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+}
+CaTY = {
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+	{},
+}
+if Limit == 1 then
+
+Ca3DT = {
+	{},
+	{},
+	{},
+	{},
+}
+end
+function CS_3DAcc(Time,XY,YZ,ZX)
+	if CS3DT>=Time then
+		CXY = CXY + XY
+		CYZ = CYZ + YZ
+		CZX = CZX + ZX
+	end
+end
+
+local Cj = 0
+
+	for i = 0, 195000,29 do
+		CS3DT = i
+		CXY = CXY + 1
+		CYZ = CYZ + 1
+		CS_3DAcc(32840,1,1,1)
+		CS_3DAcc(80210,2,1,0)
+		CS_3DAcc(112420,2,1,1)
+		CS_3DAcc(142730,2,1,1)
+		if math.floor(i/29) == math.floor((110210+(0*(bit)/8))/29) then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(1*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(2*(bit)/8))/29) then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(3*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(4*(bit)/8))/29) then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(5*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(6*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(7*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(8*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(9*(bit)/8))/29) then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(10*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(11*(bit)/8))/29)  then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(12*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(13*(bit)/8))/29)  then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(14*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(15*(bit)/8))/29)  then CRat = CRat + 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(16*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(17*(bit)/8))/29)  then CRat = CRat + 5000*3 end
+		if math.floor(i/29) == math.floor((110210+(18*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(19*(bit)/8))/29)  then CRat = CRat + 5000*3 end
+		if math.floor(i/29) == math.floor((110210+(20*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(21*(bit)/8))/29)  then CRat = CRat + 5000*3 end
+		if math.floor(i/29) == math.floor((110210+(22*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(23*(bit)/8))/29)  then CRat = CRat + 5000*3 end
+		if math.floor(i/29) == math.floor((110210+(24*(bit)/8))/29)  then CRat = CRat - 10000*3 end
+		if math.floor(i/29) == math.floor((110210+(25*(bit)/8))/29)  then CRat = CRat + 5000*3 end
+		if math.floor(i/29) == math.floor((110210+(26*(bit)/8))/29)  then CRat = 110210+(26*(bit)/8) end
+		if math.floor(i/29) == math.floor(111780/29) then CRat = ((110210+(27*(bit)/8))*2) end
+		if math.floor(i/29) == math.floor(112420/29) then CRat = 112420+25000 end
+
+		if i >= 111780 and i <= 112420-29 then CRat = CRat - 8500 end
+		if i >= 186000 then CRat = CRat - 4000 end
+		CRat = CRat + 29
+		for j,k in pairs(ikasush) do
+			local PX = k[1]
+			local PY = k[2]
+			local RX,RY
+			RX,RY = CS_RatioXY(PX,PY,CRat,186000,CRat,186000)
+			RX,RY = CS_Rotate3D(RX,RY,CXY,CYZ,CZX)
+			RX = RX + 2048
+			RY = RY + 2048
+			CaTX[j][Cj+1] = RX
+			CaTY[j][Cj+1] = RY
+		end
+		if Limit == 1 then
+			Ca3DT[1][Cj+1] = CXY
+			Ca3DT[2][Cj+1] = CYZ
+			Ca3DT[3][Cj+1] = CZX
+			Ca3DT[4][Cj+1] = CRat
+			
+				
+		end
+		Cj=Cj+1
+	end
+	FJump = def_sIndex()
+	FCaTX = {}
+	FCaTY = {}
+	CJump(FP,FJump)
+	for j,k in pairs(CaTX) do
+		table.insert(FCaTX,f_GetFileArrptr(FP, k, 4, 1))
+	end
+	for j,k in pairs(CaTY) do
+		table.insert(FCaTY,f_GetFileArrptr(FP, k, 4, 1))
+	end
+	if Limit == 1 then
+		Ca3DT[1] = f_GetFileArrptr(FP, Ca3DT[1], 4, 1)
+		Ca3DT[2] = f_GetFileArrptr(FP, Ca3DT[2], 4, 1)
+		Ca3DT[3] = f_GetFileArrptr(FP, Ca3DT[3], 4, 1)
+		Ca3DT[4] = f_GetFileArrptr(FP, Ca3DT[4], 4, 1)
+	end
+
+	CJumpEnd(FP,FJump)
+	
+	function CreateEffUnitA(Condition,Height,Color)
+		TriggerX(FP,{Condition},{
+			SetMemoryB(0x66321C, SetTo, Height); -- 높이
+			SetMemoryB(0x669E28+936, SetTo, Color); -- 색상
+			CreateUnitWithProperties(1,204,1,FP,{energy = 100})},{preserved})
+	end
+	
+	DoActions(FP,{
+		SetMemoryW(0x666462, SetTo, 936),
+		SetMemory(0x66EC48+(4*936), SetTo, 131),})
+	f_SHRead(FP, ArrX(FCaTX[1],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[1],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},20,17)
 
 
+	f_SHRead(FP, ArrX(FCaTX[2],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[2],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},18,13)
 
+	f_SHRead(FP, ArrX(FCaTX[3],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[3],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},18,13)
+
+	f_SHRead(FP, ArrX(FCaTX[4],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[4],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},18,13)
+
+	f_SHRead(FP, ArrX(FCaTX[5],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[5],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},17,17)
+	CreateEffUnitA({},18,13)
+
+	f_SHRead(FP, ArrX(FCaTX[6],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[6],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},18,17)
+	CreateEffUnitA({},17,13)
+	CreateEffUnitA({},19,6)
+	CreateEffUnitA({},19,6)
+
+	f_SHRead(FP, ArrX(FCaTX[7],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[7],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},17,6)
+	CreateEffUnitA({},19,17)
+	CreateEffUnitA({},18,13)
+
+	f_SHRead(FP, ArrX(FCaTX[8],CachePlay), CPosX)
+	f_SHRead(FP, ArrX(FCaTY[8],CachePlay), CPosY)
+	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	CreateEffUnitA({},19,17)
+	CreateEffUnitA({},20,17)
+	CreateEffUnitA({},18,13)
+	if Limit == 1 then
+		TempXY = CreateVar(FP)
+		TempYZ = CreateVar(FP)
+		TempZX = CreateVar(FP)
+		TempR = CreateVar(FP)
+		f_SHRead(FP, ArrX(Ca3DT[1],CachePlay), TempXY)
+		f_SHRead(FP, ArrX(Ca3DT[2],CachePlay), TempYZ)
+		f_SHRead(FP, ArrX(Ca3DT[3],CachePlay), TempZX)
+		f_Read(FP, ArrX(Ca3DT[4],CachePlay), TempR)
+
+		
+		
+		
+		DisplayPrint(HumanPlayers,{"V : ",Var_TempTable[11+1],", ",Var_TempTable[12+1],", ",Var_TempTable[13+1],", ",Var_TempTable[11],"\nCache : ",TempXY,", ",TempYZ,", ",TempZX,", ",TempR})
+	end
+
+	
 	TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{KillUnit("Men",Force2)})
 	NUGive(63150,70)
 	NUGive(80210,57)
@@ -2927,7 +3284,7 @@ Trigger2X(FP,{},{RotatePlayer({
 			
 		end
 			for i = 0, 3 do
-			CIf(FP,Bring(i,AtLeast,1,"Men",15),{Simple_SetLoc(0, 0, 0, 0, 0)})
+			CIf(FP,Bring(i,AtLeast,1,"Men",54),{Simple_SetLoc(0, 0, 0, 0, 0)})
 			
 			f_Read(FP, LocL, LocLV)
 			f_Read(FP, LocU, LocUV)
@@ -3068,6 +3425,7 @@ Trigger2X(FP,{},{RotatePlayer({
 		CIf(FP,{CV(CA[1],7)})
 			CIf(FP,{CV(PattV[1],25)},SetV(PattV[1],0))
 			CMov(FP,PattV[3],PattV[2],1)
+			TriggerX(FP,{CV(PattV[3],50,AtLeast)},{SetV(PattV[3],50)},{preserved})
 			CWhile(FP,{CV(PattV[3],1,AtLeast)},SubV(PattV[3],1))
 				f_Lengthdir(FP,f_CRandNum(256,32*6),_Mod(_Rand(),360),T_X,T_Y)
 				CiDiv(FP, T_Y, 2)

@@ -374,7 +374,20 @@ actions = {
 			PreserveTrigger();
 		},
 	}
-	if Limit == 1 then
+	Trigger {
+		players = {i},
+		conditions = {
+			Label();
+			CD(Theorist,2,AtLeast);
+			Command(i,AtLeast,1,23);
+		},
+		actions = {
+			ModifyUnitEnergy(1,23,i,64,0);
+			RemoveUnitAt(1,23,"Anywhere",i);
+			PreserveTrigger();
+		},
+	}
+	if EternalTestMode == 1 then
 		Trigger {
 			players = {i},
 			conditions = {

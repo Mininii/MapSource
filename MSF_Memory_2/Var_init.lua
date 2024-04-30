@@ -180,6 +180,7 @@ function Var_init()
 	BossAtkRand = CreateVar(FP)
 	
 	MarHPRegen = CreateVar2(FP,nil,nil,256)
+	MarHPRegen2 = CreateVar2(FP,nil,nil,256)
 	LVVA = CreateVArr(4,FP)
 	CurrentOP = CreateVar(FP)
 	MarHPRead = CreateVarArr(4,FP)

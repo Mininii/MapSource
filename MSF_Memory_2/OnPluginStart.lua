@@ -265,6 +265,7 @@ BossUIDP = {87,74,5,2,64,12,82}
 		SetUnitGrpToMarine(MarID[i]) -- 마린 그래픽 전부 마린으로 설정
 		SetUnitAdvFlag(MarID[i],0x4000,0x4000) -- 플레이어 마린에 로보틱 부여
 		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
+		SetWepTargetFlags(MarWep[i],0x020 + 1 + 2) -- 플레이어 마린 공격 비 로보틱 설정
 		--SetWepUpType(MarWep[i],i-1) -- 플레이어 마린무기에 각각 다른 공업 적용
 		
 		
@@ -378,6 +379,7 @@ end
 		InputTesterID(i,"RonaRonaChan")
 		InputTesterID(i,"Azusawa_Kohane")
 		InputTesterID(i,"RonaRonaTTang")
+		InputTesterID(i,"Natori_sana")
 		
 	end
 	

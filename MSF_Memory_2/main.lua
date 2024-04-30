@@ -40,21 +40,26 @@ end
 TestSet(1)
 	EVFFlag = 0
 	CheatEnableFlag = 0
-if Limit == 1 then
-	EVFFlag = 0
+	AxiomSet = 1
+	EternalTestMode = 0
+	GBossTestMode = 2
 	AtkSpeedMode = 0
-	CheatEnableFlag = 0
+if Limit == 1 then
+	EVFFlag = 1
+	AtkSpeedMode = 1
+	CheatEnableFlag = 1
 	TheoristTestMode = 0
-	GBossTestMode = 1
+	GBossTestMode = 2
 	EEggTestNum = 20
+	AxiomSet = 1
 else
 	EVFFlag = 0
 end
 RedMode = 0
 if RedMode == 1 then
-	VerText = "\x04Ver. Test"
+	VerText = "\x04Ver. 0.ZHR"
 else
-	VerText = "\x04Ver. Test"
+	VerText = "\x04Ver. 0.ZH"
 end
 if EVFFlag == 1 then
 	VerText = VerText.." - EVF"
@@ -84,7 +89,9 @@ CJump(AllPlayers,init_func)
 	DUnitCalc = Install_EXCC(FP,20,1)
 	UnivCunit = Install_EXCC(FP,10,{nil,{1,Subtract},{1,Subtract},{1,Subtract}})
 	Install_f_Sqrd(FP)
-	Include_G_CA_Library(0,0x600,128)
+	G_CA_MAX = 128
+	if RedMode == 1 then G_CA_MAX = 256 end
+	Include_G_CA_Library(0,0x600,G_CA_MAX)
 	M2_Install_Shape()
 	G_CAPlot2(G_CAPlot_Shape_InputTable)
 	Install_Load_CAPlot()
@@ -100,8 +107,8 @@ init()
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
 	IBGM_EPDX(FP,3,Dt,nil,{12,14})
 	init_Start()
-	BossTrig()
 	System()
+	BossTrig()
 	Opening()
 	InputStory()
 	LeaderBoardF()

@@ -4,9 +4,9 @@ function Opening()
     CIf(FP,{CD(OPJump,0,AtMost)})
     CDoActions(FP,{AddCD(OPCCode,Dt)})
     if Limit==0 then
-        DoActionsX(FP,{SetV(BGMType,1)},1)
+        
     end
-
+    DoActionsX(FP,{SetV(BGMType,1)},1)
     if Limit == 0 then
     
     end

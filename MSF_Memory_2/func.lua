@@ -601,6 +601,7 @@ local G_CA_BakY = CreateVar(FP)
 local G_CA_WSTestStrPtr = CreateVar(FP)
 local G_CA_WSTestVA = CreateVArr(5,FP)
 local TargetRotation = CreateVar(FP)
+PatchCondArr = {UnitIDV1,UnitIDV2,UnitIDV3,UnitIDV4}
 Call_Repeat = SetCallForward() -- 유닛생성부
 SetCall(FP)
 CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
@@ -636,11 +637,14 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				SetCVar(FP,G_CA_TempTable[13][2],SetTo,0);
 				SetCVar(FP,G_CA_TempTable[14][2],SetTo,0);
 			}) -- TempRepeat로 생성했을 경우
-			
-			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,221)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV1)},1)
-			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,222)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV2)},1)
-			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,223)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV3)},1)
-			CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,224)},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitIDV4)},1)
+			--DisplayPrint(HumanPlayers, {UnitIDV1,"   ",UnitIDV2,"   ",UnitIDV3,"   ",UnitIDV4})
+			--DisplayPrint(HumanPlayers, {Gun_TempSpawnSet1})
+			for i = 0, 3 do
+				for j= 0, 3 do
+					CTrigger(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,(221+i)*256^j,255*(256^j))},{TSetCVar(FP,Gun_TempSpawnSet1[2],SetTo,_Mul(PatchCondArr[i+1],256^j),255*(256^j))},1)
+				end
+			end
+
 			CIf(FP,{CVar(FP,RepeatType[2],Exactly,100)})
 			CMov(FP,G_CA_TempTable[1],Gun_TempSpawnSet1)
 			CMov(FP,G_CA_TempTable[11],Gun_TempSpawnSet2)
@@ -838,6 +842,8 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Set_EXCC2(DUnitCalc,G_CA_UnitIndex,6,SetTo,G_CA_TempTable[9]),
 				Set_EXCC2(UnivCunit,G_CA_UnitIndex,0,SetTo,LPos)
 			})
+			
+			--DisplayPrint(HumanPlayers, {G_CA_TempTable[1],"   ",G_CA_TempTable[11],"   ",G_CA_TempTable[12],"   ",G_CA_TempTable[13]})
 			CIfX(FP,Never())
 			for i = 0, 3 do
 				CElseIfX({CVar(FP,CreatePlayer[2],Exactly,i+4),HumanCheck(i,1)})
@@ -1179,7 +1185,6 @@ Write_SpawnSet = SetCallForward()
 SetCall(FP)
 
 
-local PatchCondArr = {UnitIDV1,UnitIDV2,UnitIDV3,UnitIDV4}
 for i = 221, 224 do
 	CTrigger(FP,{CVar(FP,G_CA_CUTV[1][2],Exactly,i,0xFF)},{TSetCVar(FP,G_CA_CUTV[1][2],SetTo,PatchCondArr[i-220],0xFF)},1)
 	CIf(FP,{CVar(FP,G_CA_CUTV[1][2],Exactly,i*0x100,0xFF00)})

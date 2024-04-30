@@ -101,10 +101,12 @@ function Install_CallTriggers()
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,6)})
 			TriggerX(FP,{CV(CPlayer,11)},{SetV(CPlayer,7)})
 			CDoActions(FP,{SetMemory(0x66EC48+(936*4),SetTo,165),TCreateUnitWithProperties(1,117,1,CPlayer,{energy = 100,invincible = true}),SetMemory(0x66EC48+(936*4),SetTo,409)})
-		CTrigger(FP,{TMemoryX(BackupCp,Exactly,71,0xFF),TMemoryX(_Sub(BackupCp,6),Exactly,7,0xFF)},{
+		if AxiomSet == 1 then
+			CTrigger(FP,{TMemoryX(BackupCp,Exactly,71,0xFF),TMemoryX(_Sub(BackupCp,6),Exactly,7,0xFF)},{
 			TSetMemory(_Add(Nextptrs,2),SetTo,10000*256),TSetMemoryX(_Add(Nextptrs,55),SetTo,0,0x04000000),
 			Set_EXCC2(DUnitCalc,CurCunitI,13,SetTo,2)
 		},1)
+		end
 		CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
 		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),})
 			f_Read(FP,_Sub(BackupCp,15),CPos)
@@ -443,44 +445,38 @@ function Install_CallTriggers()
 				CreateUnitWithProperties(1,204,1,FP,{energy = 100})},{preserved})
 		end
 		
-		CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},20,17)
+	CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[1],0),CVar("X",CA[6],Exactly,1);},20,17)
 
 
-		CreateEffUnitA({CD(CA_EffSWArr[2],0),CVar("X",CA[6],Exactly,2);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[2],0),CVar("X",CA[6],Exactly,2);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[2],0),CVar("X",CA[6],Exactly,2);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[2],0),CVar("X",CA[6],Exactly,2);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[2],0),CVar("X",CA[6],Exactly,2);},18,13)
 
-		CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[3],0),CVar("X",CA[6],Exactly,3);},18,13)
 
-		CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[4],0),CVar("X",CA[6],Exactly,4);},18,13)
 
-		CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},20,17)
-		CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},17,17)
+	CreateEffUnitA({CD(CA_EffSWArr[5],0),CVar("X",CA[6],Exactly,5);},18,13)
 
-		CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},20,17)
-		CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},18,17)
+	CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},17,13)
+	CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},19,6)
+	CreateEffUnitA({CD(CA_EffSWArr[6],0),CVar("X",CA[6],Exactly,6);},19,6)
 
-		CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},19,6)
-		CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},19,17)
-		CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},20,17)
-		CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},17,6)
+	CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},19,17)
+	CreateEffUnitA({CD(CA_EffSWArr[7],0),CVar("X",CA[6],Exactly,7);},18,13)
 
-		CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},19,17)
-		CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},20,17)
-		CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},18,13)
+	CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},19,17)
+	CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},20,17)
+	CreateEffUnitA({CD(CA_EffSWArr[8],0),CVar("X",CA[6],Exactly,8);},18,13)
 
 		CIfEnd({SetMemory(0x66EC48+(4*936), SetTo, 409),SetMemoryB(0x669E28+936, SetTo, 9);})
 	--커스텀 도형 건작 유닛 생성구간0~227
@@ -607,18 +603,18 @@ function Install_CallTriggers()
 		CMov(FP,V(CA[1]),CCA_ShNm)
 		CAPlot({CSMakePolygon(8,256,0,9,1),CS_OverlapX(CSMakeCircle(4,128,0,5,1),CSMakeCircle(4,128,45,5,1))},FP,nilunit,0,{SHLX,SHLY},1,16,{1,0,0,0,9999,1},"CA_Eff",FP,nil,nil,1)
 	SetCallEnd()
-	EffUnitLoop = SetCallForward()
-	SetCall(FP)
-	for i = 0, 1699 do
-		Trigger2(FP,{
-			DeathsX(19025+(84*i)+25,Exactly,204,0,0xFF),
-			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00)},
-		{
-			SetDeathsX(19025+(84*i)+55,SetTo,0x104,0,0x104);
-			SetDeathsX(19025+(84*i)+57,SetTo,0,0,0xFF);
-			},{preserved})
-	end
-	SetCallEnd()
+--	EffUnitLoop = SetCallForward()
+--	SetCall(FP)
+--	for i = 0, 1699 do
+--		Trigger2(FP,{
+--			DeathsX(19025+(84*i)+25,Exactly,204,0,0xFF),
+--			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00)},
+--		{
+--			SetDeathsX(19025+(84*i)+55,SetTo,0x104,0,0x104);
+--			SetDeathsX(19025+(84*i)+57,SetTo,0,0,0xFF);
+--			},{preserved})
+--	end
+--	SetCallEnd()
 
 	
 

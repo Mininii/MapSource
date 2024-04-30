@@ -3,7 +3,11 @@ function InputStory()
     local StartStoryTelling2 = CreateCcode()
     local StoryT = CreateCcode()
     local StoryT2 = CreateCcode()
+
+	if AxiomSet == 1 then
     TriggerX(FP,{CD(TestMode,0),CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
+    end
+
     CIf(FP,{CD(StartStoryTelling,1)})
     CAdd(FP,_Ccode(FP,StoryT),Dt)
     DoActionsX(FP,SetV(BGMType,11),1)

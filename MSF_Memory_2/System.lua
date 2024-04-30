@@ -16,8 +16,12 @@ function System()
 		CIfEnd()
 	end
 	CIfEnd()
-
-	CIf(FP,{CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,3,AtMost)})
+	
+	if AxiomSet == 1 then
+		CIf(FP,{CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,3,AtMost)})
+	else
+		CIf(FP,{Never()})
+	end
 	CIfX(FP,{Memory(0x596A44, Exactly, 0x00000100),CD(ToggleCcode,0)})
 	CTrigger(FP,{},{
 	TSetMemory(0x6509B0,SetTo,LocalPlayerV),
@@ -59,11 +63,11 @@ function System()
 	CIfEnd()
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{
-			SetCD(AxiomCcode[1],1),
-			SetCD(AxiomCcode[2],1),
-			SetCD(AxiomCcode[3],1),
-			SetCD(AxiomCcode[4],1),
-			SetCD(AxiomEnable,1),
+			--SetCD(AxiomCcode[1],1),
+			--SetCD(AxiomCcode[2],1),
+			--SetCD(AxiomCcode[3],1),
+			--SetCD(AxiomCcode[4],1),
+			--SetCD(AxiomEnable,1),
 		})
 	end
 	for i = 1, 4 do
@@ -333,6 +337,7 @@ HPRegenTable = {64}
 	CMov(FP,CPlayer,_ReadF(_Add(BackupCp,9)),nil,0xFF)
 	CMov(FP,CPos,_ReadF(BackupCp))
 	Convert_CPosXY()
+	DSkillX, DSkillY = CreateVars(2,FP)
 	CMov(FP,DSkillX,CPosX)
 	CMov(FP,DSkillY,CPosY)
 	Simple_SetLocX(FP,0,_Sub(CPosX,18),_Sub(CPosY,18),_Add(CPosX,18),_Add(CPosY,18),{CreateUnit(1,49,1,P6)}) --
@@ -433,8 +438,8 @@ HPRegenTable = {64}
 
 	CElseX({TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
 
-	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtMost,_Add(TempMarHPRead,-256))}, {Set_EXCCX(7,Add,MarHPRegen)}, {preserved})
-	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtLeast,TempMarHPRead)}, {Set_EXCCX(7,SetTo,TempMarHPRead)}, {preserved})
+	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtMost,_Add(TempMarHPRead,-256))}, {Set_EXCCX(7,Add,MarHPRegen2)}, {preserved})
+	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtLeast,_Add(TempMarHPRead,256))}, {Set_EXCCX(7,SetTo,TempMarHPRead)}, {preserved})
 
 	CIfXEnd()
 	CAdd(FP,0x6509B0,17)
@@ -732,7 +737,9 @@ HPRegenTable = {64}
 		for i = 4, 7 do
 			TriggerX(FP,{CV(CPlayer,i)},{AddCD(PyCCode[i-3],1)},{preserved})
 		end
+		if AxiomSet == 1 then
 		TriggerX(FP,{CV(CPlayer,4),CD(Theorist,1,AtLeast),Command(P5, AtLeast, 1, 189),CV(TimeV2,0,AtLeast),CV(TimeV2,10,AtMost)},{AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[1],1),})
+		end
 
 
 
@@ -764,7 +771,9 @@ HPRegenTable = {64}
 
 	CallTriggerX(FP,MakeEisEgg,{Command(FP,AtLeast,1,190),Cond_EXCC(13,Exactly,1,1)})
 
+	if AxiomSet == 1 then
 	TriggerX(FP,{Cond_EXCC(13,Exactly,2,2),Command(P8, AtLeast, 1, 189),CD(Theorist,1,AtLeast)},{AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[4],1)})
+	end
 	CIf(FP,{Cond_EXCC(1,Exactly,1),Command(FP,AtLeast,1,190)}) -- 영작유닛인식
 	f_SaveCp()
 	InstallHeroPoint()
@@ -959,7 +968,9 @@ HPRegenTable = {64}
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[3],1)},{SetCD(ResNum,1)})
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
 
+	if AxiomSet == 1 then
 	Trigger2X(FP, {CD(ResNum,1,AtLeast),Command(P6, AtLeast, 1, 189)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[2],1),})
+	end
 	DoActionsX(FP,{
 		SetCD(ResNum,0),
 		SetCD(ResNumT[1],0),
@@ -1397,7 +1408,7 @@ SetMemoryX(0x656EBC, SetTo, 999,0xFFFF);--마인딜
 SetMemoryX(0x662DC4, SetTo, 256*6,0xFF00);--마인SeekRange
 
 })
-TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x08HARD \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x10필요 경험치량\x04이 1.5배 \x08상승\x04하고 \x07적 웨이브, \x0F건작, \x11유닛 속성 \x04등의 \x08난이도\x04가 상승합니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10Eternal \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x10필요 경험치량\x04이 1.5배 \x08상승\x04하고 \x07적 웨이브, \x0F건작, \x11유닛 속성 \x04등의 \x08난이도\x04가 상승합니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！"
 DoActions2X(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 	
 
@@ -1411,8 +1422,8 @@ for i = 1, 4 do
 		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (1*2),SetTo,HMAtk*2)) -- 기본공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (1*2),SetTo,HMAtkFactor*2)) -- 추가공격력
 		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (123*2),Add,MarAtkFactor2/3)) -- 추가공격력
-		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*3)) -- 기본공격력
-		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*3)) -- 추가공격력
+		table.insert(TheoristPatchArr2,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk*2)) -- 기본공격력
+		table.insert(TheoristPatchArr2,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor*2)) -- 추가공격력
 end
 DoActions2X(FP,{RemoveUnit(203,AllPlayers),
 SetMemoryW(0x656EB0+(0*2),Add,15);
@@ -1425,7 +1436,7 @@ SetV(HPCondTmp,50),
 SetV(Level,50),
 SetMemoryW(0x663888 + (28 *2),SetTo,NMCost+HMCost+LMCost2);--루미마린 가격 재설정
 })
-TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x10理論値 \x04MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 3배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\x13\x04"
+TheoristTxt = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D!H\x13\x08理論値 \x10MODE\x04 가 \x03활성화\x04되었습니다.\n\x0D\x0D!H\x13\x07Level\x04과 \x17미사일 트랩\x04이 삭제되고 \x1B일부 기능\x04이 다수 \x10제한\x04되며, \x08공격력 2배\x04가 적용됩니다.\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04！！！　\x08ＭＯＤＥ　ＥＮＡＢＬＥ\x04　！！！"
 DoActions2X(FP,{RotatePlayer({DisplayTextX(TheoristTxt,4),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg"),PlayWAVX("staredit\\wav\\Th_EX_On.ogg")},HumanPlayers,FP)})
 
 for k = 1, 4 do

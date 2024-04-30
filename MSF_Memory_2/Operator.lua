@@ -355,6 +355,7 @@ local ExchangeUnlock = "\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\n\x0D\x0D\x13\x04
 	Trigger2X(FP,{CV(Level,50,AtLeast)},{RotatePlayer({DisplayTextX(ReviveUnlock,4),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg"),PlayWAVX("staredit\\wav\\reviveunlock.ogg")},HumanPlayers,FP)})
 	
 	f_Mul(FP,MarHPRegen,Level,256)
+	f_Mul(FP,MarHPRegen2,Level,128)
 	CMov(FP,AtkCondTmp,Level,49)
 	CMov(FP,HPCondTmp,_Sub(Level,1))
 	ItoDec(FP,_Add(Level,1),VArr(LVVA,0),2,nil,0)--렙
@@ -396,6 +397,9 @@ NJumpX(FP, Ax3Jump, {Command(P7, AtMost, 0, 189)})
 NJumpX(FP, Ax3Jump, {CD(AxiomFailCcode[3],1)})
 NJumpX(FP, Ax3Jump, {CD(Theorist,0)})
 NJumpX(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
+if AxiomSet == 0 then
+	NJumpX(FP, Ax3Jump, {Always()})
+end
 local Ax3 = CreateCcode()
 for i = 0,3 do
 	Trigger2X(FP,{Bring(P7,AtLeast,1,60,32+i)},{SetCD(Ax3, 1)})
@@ -432,8 +436,8 @@ CIfEnd()
 
 CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
-TriggerX(FP,{Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
-TriggerX(FP,{Command(FP,AtMost,0,190),CD(tesStart,1),CVar(FP,SpeedVar[2],AtLeast,5)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
+TriggerX(FP,{Command(FP,AtMost,0,190),Command(FP,AtMost,0,12),Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtMost,3)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
+TriggerX(FP,{Command(FP,AtMost,0,190),Command(FP,AtMost,0,12),Command(FP,AtMost,0,190),CVar(FP,SpeedVar[2],AtLeast,5)},{SetCVar(FP,SpeedVar[2],SetTo,4)},{preserved})
 
 TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
 CMov(FP,CurrentSpeed,SpeedVar)
@@ -663,15 +667,15 @@ TriggerX(FP,{CD(CanCTC,2)},{SetCD(CanCTC,0)},{preserved})
 
 CIfX(FP,{CDeaths(FP,AtMost,1,Theorist)})
 
- CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：\x0D００\x04．０\x04％ \x07】\x08·\x11·\x07·",nil,1) 
+ CA__SetValue(Str1,"\x07·\x11·\x08·\x07【 \x07Ｌ\x07Ｖ\x04．００\x04／\x1C５\x1C０ \x04◈ \x07Ｅ\x07Ｘ\x07Ｐ\x04：\x0D\x1F０\x1F０\x1F．\x1F０\x1F％ \x07】\x08·\x11·\x07·",nil,1) 
  CA__ItoCustom(SVA1(Str1,1),Level,nil,nil,{10,2},1,"０",nil,nil,{8,9},Data)
  CA__ItoCustom(SVA1(Str1,1),CurExpTmp,nil,nil,{10,3},1,"\x04０",nil,{0x04,0x04,0x04},{21,22,24},Data)
 
- TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,23),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
+ TriggerX(FP,{CV(Level,50)},{SetCSVA1(SVA1(Str1,24),SetTo,0x0D0D0D0D,0xFFFFFFFF),SetCSVA1(SVA1(Str1,25),SetTo,0x0D0D0D0D,0xFFFFFFFF)},{preserved})
  function LevelIStrColor(Color,ValueArr)
 	TriggerX(FP,{CVar(FP,Level[2],AtLeast,ValueArr[1]),CVar(FP,Level[2],AtMost,ValueArr[2])},{
-		SetCSVA1(SVA1(Str1,8),SetTo,Color,0xFF),
 		SetCSVA1(SVA1(Str1,9),SetTo,Color,0xFF),
+		SetCSVA1(SVA1(Str1,10),SetTo,Color,0xFF),
 	},{preserved})
  end
 
@@ -705,14 +709,14 @@ for j,k in pairs(LVUpEffArr) do
 	CA__Input(k,SVA1(Str1,LevelUpEffTmp[j]),0xFF) 
 end
 TriggerX(FP,{CD(CanCTC,1)},{
-	SetCSVA1(SVA1(Str1,8),SetTo,0x04,0xFF),
 	SetCSVA1(SVA1(Str1,9),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,20),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,21),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,22),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,23),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,24),SetTo,0x04,0xFF),
-	SetCSVA1(SVA1(Str1,25),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,10),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,20+1),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,21+1),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,22+1),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,23+1),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,24+1),SetTo,0x04,0xFF),
+	SetCSVA1(SVA1(Str1,25+1),SetTo,0x04,0xFF),
 },{preserved})
 
 LVUPEffT= CreateCcode()
