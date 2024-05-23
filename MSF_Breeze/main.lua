@@ -26,15 +26,19 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
-VerText = "\x04Ver. 1.8_EVF"
+VerText = "\x04Ver. 2.0"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(0)
+TestSet(1)
+X2_Mode = 1
+X2_Map= 0
+if X2_Mode==1 then
+	VerText = VerText.."_X2"
+end
 if Limit == 1 then
 	VerText = VerText.."T"
 	
 end
-
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
@@ -50,28 +54,38 @@ CJump(AllPlayers,init_func)
 	Install_BackupCP(FP)
 	Include_CBPaint()
 	Include_Vars()
-	Include_Conv_CPosXY(FP,{96*32,64*32})
+	if X2_Map == 1 then
+		Include_Conv_CPosXY(FP,{96*32*2,64*32*2})
+	else
+		Include_Conv_CPosXY(FP,{96*32,64*32})
+	end
 	Install_GetCLoc(FP,0,nilunit)
 	Include_CRandNum(FP)
-	Include_G_CA_Library(2,0x600,32)
+	Include_G_CA_Library(2,0x600,128)
 	Shape()
-	S_3 = G_CAPlot(S_3_ShT)
-	S_4 = G_CAPlot(S_4_ShT)
-	S_5 = G_CAPlot(S_5_ShT)
-	S_6 = G_CAPlot(S_6_ShT)
-	S_7 = G_CAPlot(S_7_ShT)
-	S_8 = G_CAPlot(S_8_ShT)
-	P_3 = G_CAPlot(P_3_ShT)
-	P_4 = G_CAPlot(P_4_ShT)
-	P_5 = G_CAPlot(P_5_ShT)
-	P_6 = G_CAPlot(P_6_ShT)
-	P_7 = G_CAPlot(P_7_ShT)
-	P_8 = G_CAPlot(P_8_ShT)
+	S_3 = G_CAPlot(S_3_ShT,1)
+	S_4 = G_CAPlot(S_4_ShT,1)
+	S_5 = G_CAPlot(S_5_ShT,1)
+	S_6 = G_CAPlot(S_6_ShT,1)
+	S_7 = G_CAPlot(S_7_ShT,1)
+	S_8 = G_CAPlot(S_8_ShT,1)
+	P_3 = G_CAPlot(P_3_ShT,1)
+	P_4 = G_CAPlot(P_4_ShT,1)
+	P_5 = G_CAPlot(P_5_ShT,1)
+	P_6 = G_CAPlot(P_6_ShT,1)
+	P_7 = G_CAPlot(P_7_ShT,1)
+	P_8 = G_CAPlot(P_8_ShT,1)
 	Cir = G_CAPlot(Cir)
 	if #G_CAPlot_Shape_InputTable >= 256 then
 		PushErrorMsg("G_CAPlot_Shape_InputTable_is_Full")
 	end
-	G_CAPlot2(G_CAPlot_Shape_InputTable)
+	if X2_Mode == 1 and X2_Map == 1 then
+		G_CAPlot2(G_CAPlot_Shape_InputTable)
+	elseif X2_Mode == 1 and X2_Map == 0 then
+		G_CAPlot2(G_CAPlot_Shape_InputTable,1)
+	else
+		G_CAPlot2(G_CAPlot_Shape_InputTable)
+	end
 Install_Load_CAPlot()
 Install_Call_G_CA()
 G_CA_Lib_ErrorCheck()
@@ -110,17 +124,6 @@ HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(7,0x58D2B0,46)
 AtkUpgradeMaskLimRetArr, AtkUpgradeLimPtrArr = CreateBPtrRetArr(7,0x58D088+7,46)
 HPUpgradeMaskLimRetArr, HPUpgradeLimPtrArr = CreateBPtrRetArr(7,0x58D088,46)
 
-
-
-function CreateBPtrRetArr(MaxPlayer,Ptr,Multiplier)
-	local X = {}
-	local Y = {}
-	for i = 0, MaxPlayer do
-		table.insert(X,(Ptr+(i*Multiplier))%4)
-		table.insert(Y,(Ptr+(i*Multiplier))-X[i+1])
-	end
-	return X,Y
-end
 OneClickUpgrade = SetCallForward()
 UpResultFlag = CreateCcode()--1 = 성공실패여부
 MinCostBase = CreateVar(FP)
@@ -161,9 +164,13 @@ SetCall(FP)
 		TAccumulate(CurrentPlayer,AtLeast,TempFactor,Ore),
 		TMemoryX(TempUpgradePtr,AtMost,TempMul_254,TempMul_255)
 	})
+	for i = 0, 6 do
+		CTrigger(FP, {CV(UpgradeCP,i)}, {SubV(CTMin[i+1],TempFactor)}, {preserved})
+	end
 		CDoActions(FP,{
 			TSetCVar(FP,UpCost[2],Add,TempFactor),
 			TSetResources(CurrentPlayer,Subtract,TempFactor,Ore),
+			
 			SetCVar(FP,UpResearched[2],Add,1),
 			SetCVar(FP,UpCompleted[2],Add,1),
 			SetCVar(FP, UpCount[2], Add, 1);
@@ -221,14 +228,25 @@ CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
 
 
+
+
+
 Interface()
 System()
+CreateUnitQueue()
 Waves()
+
+
+
 
 init_Setting()
 if Limit == 0 then
 	Enable_HideErrorMessage(FP)
 end
+
+
+
+
 
 EndCtrig()
 LabelUseCheck()

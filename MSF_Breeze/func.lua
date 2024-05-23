@@ -776,217 +776,87 @@ local CreatePlayer = CreateVar(FP)
 local CA_Repeat_Check = CreateCcode()
 local TRepeatX,TRepeatY = CreateVars(2,FP)
 
+CA_Repeat_X = CreateVar(FP)
+CA_Repeat_Y = CreateVar(FP)
 G_CA_BackupX = CreateVar(FP)
 G_CA_BackupY = CreateVar(FP)
 G_CA_X = CreateVar(FP)
 G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
-X2_Mode=0
 if X2_Mode==1 then
-	X2_XYArr = {
-		{-128,-128},{128,-128},{-128,128},{128,128},
-	}
+	G_CA_X2Option = CreateVar(FP)
+	if X2_Map == 1 then
+		X2_XYArr = {
+			{-64,-64},{64,-64},{-64,64},{64,64},
+		}
+	else
+		X2_XYArr = {
+			{-128,-128},{128,-128},{-128,128},{128,128},
+		}
+	end
 end
-local DefaultAttackLocV = CreateVar(FP)
-CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
+DefaultAttackLocV = CreateVar(FP)
+CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CMov(FP,DefaultAttackLocV,DefaultAttackLoc)
 	TriggerX(FP,{Command(FP,AtLeast,1,94)},{SetV(DefaultAttackLocV,49)},{preserved})
-		f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
-		DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
-		for i = 0, 3 do
-            if i == 0 then RS1 = Cleared RS2=Cleared end
-            if i == 1 then RS1 = Set RS2=Cleared end
-            if i == 2 then RS1 = Cleared RS2=Set end
-            if i == 3 then RS1 = Set RS2=Set end
-            TriggerX(FP,{CD(GMode,1),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,14+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,14+i)},{preserved})
-        end
-		local LocIndex = FuncAlloc
-        FuncAlloc=FuncAlloc+2
-		
+		QueueX = CreateVar(FP)
+		QueueY = CreateVar(FP)
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
 
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
+			CMov(FP,QueueX,TRepeatX)
+			CMov(FP,QueueY,TRepeatY)
 
 		CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
 		Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
+		CMov(FP,QueueX,G_CA_X)
+		CMov(FP,QueueY,G_CA_Y)
 
-		CElseX()
-		Simple_SetLocX(FP,0,3712,288,3712,288)
 		CIfXEnd()
 		CIfEnd()
 
 
-		TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
+		CIf(FP,{CD(CA_Repeat_Check,1)})
+		f_SHRead(FP, 0x58DC60, QueueX)
+		f_SHRead(FP, 0x58DC64, QueueY)
+		CMov(FP, CA_Repeat_X,QueueX)
+		CMov(FP, CA_Repeat_Y,QueueY)
+		CIfEnd()
 
-		CIfX(FP,{CD(GMode,0)})
-		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
-		CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1)
-		CElseX()
-		CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1,LocIndex)
-        CTrigger(FP,{CVar(FP,RepeatType[2],Exactly,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100, burrowed = true})},1,LocIndex+1)
-		CIfXEnd()
-
-
-
-		CIf(FP,{TMemoryX(_Add(G_CA_Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
-		f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-		Convert_CPosXY()
-		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
-
-        CTrigger(FP,{CD(GMode,1)},{TMoveUnit(1,Gun_TempSpawnSet1,Force2,72,1)},{preserved})
-			CIfX(FP,CVar(FP,RepeatType[2],Exactly,0))
-				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,1))
-			
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
-			CDoActions(FP,{
-				TSetMemory(_Add(G_CA_Nextptrs,2), SetTo, _Div(_ReadF(_Add(Gun_TempSpawnSet1,EPD(0x662350))),2)),
-			})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,187))
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,189))
-			CDoActions(FP,{
-				TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100}),TRemoveUnit(84,CreatePlayer)
-			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,190))
-				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-				Convert_CPosXY()
-				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CDoActions(FP,{TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,1920)})
-				CDoActions(FP,{
-					TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);
-					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
-					
-				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,32))
-			CDoActions(FP,{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
-				TSetMemoryX(_Add(G_CA_Nextptrs,8), SetTo, 127*65536,0xFF0000),
-				TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,20000,0),
-				TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))
-				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-				TempSpeedVar = f_CRandNum(8000)
-				CDoActions(FP,{
-					TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
-					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,_Add(TempSpeedVar,500),0),
-					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,_Add(TempSpeedVar,500),0,0xFFFF)})
-				--CElseX()
-				--CDoActions(FP,{
-				--	TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
-				--	TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-				--CIfXEnd()
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-					TSetMemory(_Add(G_CA_Nextptrs,2), SetTo, _Div(_ReadF(_Add(Gun_TempSpawnSet1,EPD(0x662350))),2)),
-				})
-
-				CElseIfX(CVar(FP,RepeatType[2],Exactly,191))
-
-				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
-				CDoActions(FP,{
-					TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,4000,0),
-					TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-				--CElseX()
-				--CDoActions(FP,{
-				--	TSetDeaths(_Add(G_CA_Nextptrs,13),SetTo,12000,0),
-				--	TSetDeathsX(_Add(G_CA_Nextptrs,18),SetTo,4000,0,0xFFFF)})
-				--CIfXEnd()
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,19),SetTo,187*256,0,0xFF00),
-				})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,18))
-			
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
-			local RandVar = CreateVar(FP)
-			CMov(FP,RandVar,0)
-			for i = 0, 6 do
-				DoActions(FP, {SetSwitch(RandSwitch1, Random)})
-				TriggerX(FP, {HumanCheck(i, 1),Switch(RandSwitch1, Set)}, {SetVX(RandVar,2^i,2^i)}, {preserved})
-			end
-			CTrigger(FP,{CD(GMode,1),},{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x100,0x100); -- 클로킹
-				TSetMemoryX(_Add(G_CA_Nextptrs,57),SetTo,RandVar,0xFF); -- 현재건작 유저 인식
-				TSetMemoryX(_Add(G_CA_Nextptrs,73),SetTo,_Mul(RandVar,256),0xFF00); -- 현재건작 유저 인식
-				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
-				TSetMemoryX(_Add(G_CA_Nextptrs,72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
-				TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,1,0xFF); -- 개별건작 표식
-				TSetMemoryX(_Add(G_CA_Nextptrs,35),SetTo,1*256,0xFF00);
-				TSetMemoryX(_Add(G_CA_Nextptrs,70),SetTo,48*16777216,0xFF000000); -- 개별건작 타이머
-
-			},{preserved})
+		--DisplayPrint(HumanPlayers, {"Queue Executed. X : ",QueueX,"  Y : ",QueueY,"  UID : ",Gun_TempSpawnSet1})
+	CDoActions(FP,{
+		TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr),SetTo,QueueX),
+		TSetMemory(_Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr),SetTo,QueueY),
+		TSetMemory(_Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr),SetTo,_Mov(Gun_TempSpawnSet1,0xFF)),
+		TSetMemory(_Add(CreateUnitQueuePIDArr,CreateUnitQueuePtr),SetTo,CreatePlayer),
+		TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr),SetTo,RepeatType),
+	})
+	DoActionsX(FP,{AddV(CreateUnitQueueNum,1),AddV(CreateUnitQueuePtr,1)})
+	TriggerX(FP, {CV(CreateUnitQueuePtr,200000,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
 
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,147))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, 23);
-				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,128),
-				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,128,0xFFFF),
-				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),
-				CreateUnit(1,84,1,FP),KillUnit(84,FP)
-			})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,3))
-				CDoActions(FP,{
-					TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00)})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,84))
-			CDoActions(FP,{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
-			})
 
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,201))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP,{
-				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x04000000,0x04000000),
-				TOrder(Gun_TempSpawnSet1, Force2, 1, Move, 36);
-			})
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,202))
-			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(Gun_TempSpawnSet1, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
-			
-			CMov(FP,CunitIndex,_Div(_Sub(G_CA_Nextptrs,19025),_Mov(84)))
-			CDoActions(FP, {Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
-
-			CElseIfX(CVar(FP,RepeatType[2],Exactly,2))
+		
+		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
+			CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
+				Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
+			CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
+				Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y)
 			CElseX()
-				DoActions(FP,RotatePlayer({DisplayTextX(f_RepeatTypeErr,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+				Simple_SetLocX(FP,0,3712,288,3712,288)
 			CIfXEnd()
-			CIf(FP,{CD(GMode,1),CD(CA_Repeat_Check,1)},{})
-			Simple_SetLocX(FP,0,G_CA_BackupX,G_CA_BackupY,G_CA_BackupX,G_CA_BackupY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CDoActions(FP,{TOrder(Gun_TempSpawnSet1,Force2,72,Attack,1)})
-			CIfEnd()
-			
+		CIfEnd()
+		
+
+--Queue
+
+
+
+		CIf(FP,{CD(CA_Repeat_Check,1),CV(Spawn_TempW,2,AtLeast)})
+		Simple_SetLocX(FP,0,CA_Repeat_X,CA_Repeat_Y,CA_Repeat_X,CA_Repeat_Y)
 		CIfEnd()
 
 	CSub(FP,Spawn_TempW,1)
@@ -1227,7 +1097,13 @@ SetCall(FP)
 TriggerX(FP,{CVar(FP,CA_TempUID[2],AtLeast,221)},{SetCVar(FP,CA_TempUID[2],SetTo,0)},{preserved})
 DoActionsX(FP,{SetCDeaths(FP,SetTo,1,CA_Repeat_Check)})
 CMov(FP,Gun_TempSpawnSet1,CA_TempUID)
+CIfX(FP,{CV(G_CA_X2Option,1)})
+CMov(FP,Repeat_TempV,4)
+CElseX()
 CMov(FP,Repeat_TempV,1)
+CIfXEnd()
+TriggerX(FP,{CVar(FP,Gun_TempSpawnSet1[2],Exactly,84),CVar(FP,Repeat_TempV[2],Exactly,4)},{SetCVar(FP,Repeat_TempV[2],SetTo,1)},{preserved}) -- 도형건작 옵저버 1개 제한
+
 CMov(FP,RepeatType,G_CA_Temp[6],nil,0xFF)
 CMov(FP,CreatePlayer,G_CA_Temp[10])
 CallTrigger(FP,Set_Repeat)
@@ -1260,7 +1136,7 @@ function CA_Func1()
 end
 local G_CA_CallStack = {}
 local G_CA_IndexAlloc = 1
-function G_CAPlot(ShapeTable)
+function G_CAPlot(ShapeTable,X2Option)
 	local G_CA_CallIndex = SetCallForward()
 	local Ret = G_CA_IndexAlloc
 	local CA = CAPlotForward()
@@ -1287,11 +1163,11 @@ function G_CAPlot(ShapeTable)
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
-	table.insert(G_CA_CallStack,G_CA_CallIndex)
+	table.insert(G_CA_CallStack,{G_CA_CallIndex,X2Option})
 	return Ret
 end
 G_CA2_ShapeTable = {}
-function G_CAPlot2(ShapeTable)
+function G_CAPlot2(ShapeTable,X2Option)
 	if type(ShapeTable) ~= "table" then
 		PushErrorMsg("ShapeData_Input_Error")
 	end
@@ -1327,7 +1203,7 @@ function G_CAPlot2(ShapeTable)
 	CDoActions(FP,{TSetCVar(FP,G_CA_Temp[3][2],SetTo,V(CA[6]))})
 	SetCallEnd()
 	G_CA_IndexAlloc = G_CA_IndexAlloc + 1
-	table.insert(G_CA_CallStack,G_CA_CallIndex)
+	table.insert(G_CA_CallStack,{G_CA_CallIndex,X2Option})
 end
 
 
@@ -1443,8 +1319,9 @@ end
 function Install_Load_CAPlot()
 	Load_CAPlot_Shape = SetCallForward()
 	SetCall(FP)
+
 	for j, k in pairs(G_CA_CallStack) do
-		CallTriggerX(FP,k,{CVar(FP,G_CA_Temp[4][2],Exactly,j,0xFF)})
+		CallTriggerX(FP,k[1],{CVar(FP,G_CA_Temp[4][2],Exactly,j,0xFF)},{SetV(G_CA_X2Option, k[2])})
 	end
 	SetCallEnd()
 end
@@ -1531,7 +1408,7 @@ function Create_G_CA_Arr()
 	if G_CA_Arr_IndexAlloc ~= StartIndex then PushErrorMsg("Already_G_CA_Arr_Created") end
 	CMov(FP,Actived_G_CA,0)
 	for i = 0, Size_of_G_CA_Arr-1 do
-		CTrigger(FP, {CVar("X","X",AtLeast,1),Memory(0x628438,AtLeast,1)}, {
+		CTrigger(FP, {CVar("X","X",AtLeast,1)}, {
 			G_CA_InputCVar,
 			SetCtrigX("X",G_CA_TempH[2],0x15C,0,SetTo,"X","X",0x15C,1,0),
 			SetCVar(FP,G_CA_Num[2],SetTo,i),

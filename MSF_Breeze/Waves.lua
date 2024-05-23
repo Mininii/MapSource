@@ -41,7 +41,7 @@ function SetTT(LocID,Unitargs,G_CA_args) -- 개별영침
 	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
 		GetLocCenter(LocID-1, G_CA_X, G_CA_Y)
 		for j,k in pairs(Unitargs) do
-			f_TempRepeatX({},k[1],k[2],nil,FP)
+			f_TempRepeat({},k[1],k[2],nil,FP)
 		end
 		if G_CA_args then
 		for j,k in pairs(G_CA_args) do
@@ -63,7 +63,7 @@ function SetTTX(SLoc,Locs,Unitargs,G_CA_args) -- 개별영침 n구간중 1개만
 	CIf(FP,{CD(TTC,1,AtLeast)},{SubCD(TTC, 1)})
 		GetLocCenter(SLoc-1, G_CA_X, G_CA_Y)
 		for j,k in pairs(Unitargs) do
-			f_TempRepeatX({},k[1],k[2],nil,FP)
+			f_TempRepeat({},k[1],k[2],nil,FP)
 		end
 		if G_CA_args then
 		for j,k in pairs(G_CA_args) do
@@ -135,7 +135,7 @@ function GunWave(GunID,LocID,NUTable,BGMTypes,G_CA_args)
 		for j, k in pairs(NUTable) do
 			local NUCcode = CreateCcode()
 			table.insert(NUCArr,SetCD(NUCcode,0))
-			f_TempRepeatX({CD(NUCcode,48,AtLeast),CD(NUCcode,48+k[2]-1,AtMost)},k[1],1,nil,FP)
+			f_TempRepeat({CD(NUCcode,48,AtLeast),CD(NUCcode,48+k[2]-1,AtMost)},k[1],1,nil,FP)
 			DoActionsX(FP,{AddCD(NUCcode)})
 		end
 		if G_CA_args then
@@ -258,22 +258,42 @@ end
 	CurGunP = CreateVar(FP)
 	DoActionsX(FP,{AddCD(NR,1)})
 	CIfX(FP,{CD(GMode,0)})
+	CAdd(FP,G_CA_X,CPosX)
+	CAdd(FP,G_CA_Y,CPosY)
 	f_TempRepeat({}, 88, 1, 201, FP)
 	f_TempRepeat({}, 21, 1, 201, FP)
 	CIf(FP,{CD(NR,10,AtLeast)},SubCD(NR,10))
-	f_TempRepeat({}, 29, 1, 201, FP,{1536,896})
-	f_TempRepeat({}, 29, 1, 201, FP,{1696,768})
-	f_TempRepeat({}, 29, 1, 201, FP,{1376,768})
-	f_TempRepeat({}, 29, 1, 201, FP,{1536,672})
+	if X2_Map ==1 then
+		f_TempRepeat({}, 29, 1, 201, FP,{1536*2,896*2})
+		f_TempRepeat({}, 29, 1, 201, FP,{1696*2,768*2})
+		f_TempRepeat({}, 29, 1, 201, FP,{1376*2,768*2})
+		f_TempRepeat({}, 29, 1, 201, FP,{1536*2,672*2})
+	else
+	
+		f_TempRepeat({}, 29, 1, 201, FP,{1536,896})
+		f_TempRepeat({}, 29, 1, 201, FP,{1696,768})
+		f_TempRepeat({}, 29, 1, 201, FP,{1376,768})
+		f_TempRepeat({}, 29, 1, 201, FP,{1536,672})
+		
+	end
 	CIfEnd()
 	CElseX()
+	CAdd(FP,G_CA_X,CPosX)
+	CAdd(FP,G_CA_Y,CPosY)
 	f_TempRepeat({}, 88, 1, 32, FP)
 	f_TempRepeat({}, 21, 1, 32, FP)
 	CIf(FP,{CD(NR,10,AtLeast)},SubCD(NR,10))
-	f_TempRepeat({}, 29, 1, 32, FP,{1536,896})
-	f_TempRepeat({}, 29, 1, 32, FP,{1696,768})
-	f_TempRepeat({}, 29, 1, 32, FP,{1376,768})
-	f_TempRepeat({}, 29, 1, 32, FP,{1536,672})
+	if X2_Map ==1 then
+		f_TempRepeat({}, 29, 1, 32, FP,{1536*2,896*2})
+		f_TempRepeat({}, 29, 1, 32, FP,{1696*2,768*2})
+		f_TempRepeat({}, 29, 1, 32, FP,{1376*2,768*2})
+		f_TempRepeat({}, 29, 1, 32, FP,{1536*2,672*2})
+	else
+		f_TempRepeat({}, 29, 1, 32, FP,{1536,896})
+		f_TempRepeat({}, 29, 1, 32, FP,{1696,768})
+		f_TempRepeat({}, 29, 1, 32, FP,{1376,768})
+		f_TempRepeat({}, 29, 1, 32, FP,{1536,672})
+	end
 	CIfEnd()
 
 	CIfXEnd()
@@ -306,20 +326,42 @@ end
 	TriggerX(FP, {CD(TCC,250),CD(GMode,1)}, {SetCD(TCC,999999),SetCp(FP),RunAIScriptAt(JYD, 46),SetInvincibility(Disable, "Men", FP, 64)})
 	CIf(FP,{CD(UTAGECcode,1,AtLeast),CD(TCC,999999,AtLeast)})
 	CIfX(FP,{CD(GMode,0)})
-	f_TempRepeat({}, 88, 50, 188, FP,{1536,896})
-	f_TempRepeat({}, 88, 50, 188, FP,{1696,768})
-	f_TempRepeat({}, 88, 50, 188, FP,{1376,768})
-	f_TempRepeat({}, 88, 50, 188, FP,{1536,672})
-	f_TempRepeat({}, 21, 50, 188, FP,{1536,896})
-	f_TempRepeat({}, 21, 50, 188, FP,{1696,768})
-	f_TempRepeat({}, 21, 50, 188, FP,{1376,768})
-	f_TempRepeat({}, 21, 50, 188, FP,{1536,672})
+	if X2_Map == 1 then
+		f_TempRepeat({}, 88, 50, 188, FP,{1536*2,896*2})
+		f_TempRepeat({}, 88, 50, 188, FP,{1696*2,768*2})
+		f_TempRepeat({}, 88, 50, 188, FP,{1376*2,768*2})
+		f_TempRepeat({}, 88, 50, 188, FP,{1536*2,672*2})
+		f_TempRepeat({}, 21, 50, 188, FP,{1536*2,896*2})
+		f_TempRepeat({}, 21, 50, 188, FP,{1696*2,768*2})
+		f_TempRepeat({}, 21, 50, 188, FP,{1376*2,768*2})
+		f_TempRepeat({}, 21, 50, 188, FP,{1536*2,672*2})
+	else
+		f_TempRepeat({}, 88, 50, 188, FP,{1536,896})
+		f_TempRepeat({}, 88, 50, 188, FP,{1696,768})
+		f_TempRepeat({}, 88, 50, 188, FP,{1376,768})
+		f_TempRepeat({}, 88, 50, 188, FP,{1536,672})
+		f_TempRepeat({}, 21, 50, 188, FP,{1536,896})
+		f_TempRepeat({}, 21, 50, 188, FP,{1696,768})
+		f_TempRepeat({}, 21, 50, 188, FP,{1376,768})
+		f_TempRepeat({}, 21, 50, 188, FP,{1536,672})
+	end
 	CElseX()
 
 	CAdd(FP,G_CA_X,CPosX)
 	CAdd(FP,G_CA_Y,CPosY)
-	f_TempRepeat({}, 88, 300, 188, FP)
-	f_TempRepeat({}, 21, 300, 188, FP)
+	
+	if X2_Map == 1 then
+		f_TempRepeat({}, 88, 1000, 188, FP)
+		f_TempRepeat({}, 21, 1000, 188, FP)
+	else
+		if X2_Mode == 1 then
+			f_TempRepeat({}, 88, 1000, 188, FP)
+			f_TempRepeat({}, 21, 1000, 188, FP)
+		else
+			f_TempRepeat({}, 88, 300, 188, FP)
+			f_TempRepeat({}, 21, 300, 188, FP)
+		end
+	end
 	CIfXEnd()
 	CIfEnd()
 	CIfEnd()
@@ -360,26 +402,47 @@ end
 	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 12)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04정신체 다고스 파괴! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04감염된 듀란과 케리건을 처치하십시오!"),4)}, HumanPlayers, FP),SetV(BGMType,5),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[6],1)})
 	Trigger2X(FP,{Bring(FP, AtMost, 0, 152, 13)},{RotatePlayer({PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),DisplayTextX(StrDesignX("\x04정신체 다고스 파괴! + 100,000 Pts"),4),DisplayTextX(StrDesignX("\x04감염된 듀란과 케리건을 처치하십시오!"),4)}, HumanPlayers, FP),SetV(BGMType,5),SetScore(Force1, Add, 100000, Kills),SetCD(WaveS[7],1)})
 	Trigger2X(FP,{},{SetInvincibility(Enable, 147, FP, 64)},{preserved})
+	
+	Trigger2X(FP,{CD(TCC,999999,AtLeast)},{SetInvincibility(Disable, "Men", FP, 64)},{preserved})
+
+	if X2_Map ==1  then
+	f_TempRepeat({CD(WaveS[6],1)},51,30,nil,FP,{1280*2,1968*2},1)
+	f_TempRepeat({CD(WaveS[6],1)},104,30,nil,FP,{1280*2,1968*2},1)
+	f_TempRepeat({CD(WaveS[7],1)},51,30,nil,FP,{1792*2,1968*2},1)
+	f_TempRepeat({CD(WaveS[7],1)},104,30,nil,FP,{1792*2,1968*2},1)
+	else
 	f_TempRepeat({CD(WaveS[6],1)},51,30,nil,FP,{1280,1968},1)
 	f_TempRepeat({CD(WaveS[6],1)},104,30,nil,FP,{1280,1968},1)
 	f_TempRepeat({CD(WaveS[7],1)},51,30,nil,FP,{1792,1968},1)
 	f_TempRepeat({CD(WaveS[7],1)},104,30,nil,FP,{1792,1968},1)
+	end
+
 	Trigger2X(FP,{CD(WaveS[6],1),CD(WaveS[7],1),Bring(FP,AtMost,0,51,64),Bring(FP,AtMost,0,104,64),CD(TCC,999999,AtLeast)},{SetCD(MB5,1)})
-	SetWave({CD(WaveS[1],0)},WaveT[1],{1536,1088},{{40,15},{37,10}})
-	SetWave({CD(WaveS[1],1),CD(WaveS[2],0)},WaveT[2],{576,1024},{{38,13},{39,9},{43,4},{44,5}})
-	SetWave({CD(WaveS[1],1),CD(WaveS[3],0)},WaveT[3],{2496,1024},{{38,13},{39,9},{43,4},{44,5}})
-	SetWave({CD(WaveS[2],1),CD(WaveS[4],0)},WaveT[4],{1152,1568},{{50,5},{54,15},{53,10},{48,5},{55,9}})
-	SetWave({CD(WaveS[3],1),CD(WaveS[5],0)},WaveT[5],{1920,1568},{{50,5},{54,15},{53,10},{48,5},{55,9}})
-	SetWave({CD(WaveS[4],1),CD(WaveS[6],0)},WaveT[6],{1280,1872},{{56,25}})
-	SetWave({CD(WaveS[5],1),CD(WaveS[7],0)},WaveT[7],{1792,1872},{{56,25}})
+	if X2_Map == 1 then
+		SetWave({CD(WaveS[1],0)},WaveT[1],{1536*2,1088*2},{{40,15},{37,10}})
+		SetWave({CD(WaveS[1],1),CD(WaveS[2],0)},WaveT[2],{576*2,1024*2},{{38,2},{39,2},{43,1},{44,1}})
+		SetWave({CD(WaveS[1],1),CD(WaveS[3],0)},WaveT[3],{2496*2,1024*2},{{38,4},{39,2},{43,1},{44,1}})
+		SetWave({CD(WaveS[2],1),CD(WaveS[4],0)},WaveT[4],{1152*2,1568*2},{{50,1},{54,2},{53,2},{48,1},{55,2}})
+		SetWave({CD(WaveS[3],1),CD(WaveS[5],0)},WaveT[5],{1920*2,1568*2},{{50,1},{54,2},{53,2},{48,1},{55,2}})
+		SetWave({CD(WaveS[4],1),CD(WaveS[6],0)},WaveT[6],{1280*2,1872*2},{{56,5}})
+		SetWave({CD(WaveS[5],1),CD(WaveS[7],0)},WaveT[7],{1792*2,1872*2},{{56,5}})
+	else
+		SetWave({CD(WaveS[1],0)},WaveT[1],{1536,1088},{{40,15},{37,10}})
+		SetWave({CD(WaveS[1],1),CD(WaveS[2],0)},WaveT[2],{576,1024},{{38,13},{39,9},{43,4},{44,5}})
+		SetWave({CD(WaveS[1],1),CD(WaveS[3],0)},WaveT[3],{2496,1024},{{38,13},{39,9},{43,4},{44,5}})
+		SetWave({CD(WaveS[2],1),CD(WaveS[4],0)},WaveT[4],{1152,1568},{{50,5},{54,15},{53,10},{48,5},{55,9}})
+		SetWave({CD(WaveS[3],1),CD(WaveS[5],0)},WaveT[5],{1920,1568},{{50,5},{54,15},{53,10},{48,5},{55,9}})
+		SetWave({CD(WaveS[4],1),CD(WaveS[6],0)},WaveT[6],{1280,1872},{{56,25}})
+		SetWave({CD(WaveS[5],1),CD(WaveS[7],0)},WaveT[7],{1792,1872},{{56,25}})
+	end
 	
 	WinCcode = CreateCcode()
 	
 	TriggerX(FP,{CD(WinCcode,1,AtLeast)},{AddCD(WinCcode,1)},{preserved})
 	Trigger2X(FP,{CD(WinCcode,150,AtLeast)},{RotatePlayer({Victory()}, MapPlayers,FP)})
 	Trigger2X(FP,{CD(WinCcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("\x04그렇게 우리는 \x08지옥같은 산들바람\x04의 원흉인 \x03카카루\x04를 제거하고 집으로 돌아갔다."), 4),DisplayTextX(StrDesignX("\x04Victory!!!"), 4)}, HumanPlayers,FP),})
-	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,0)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : 노말"), 4)}, HumanPlayers,FP),})
-	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : \x11프로페셔널"), 4)}, HumanPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,0)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : 노말 X2"), 4)}, HumanPlayers,FP),})
+	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(GMode,1)},{RotatePlayer({DisplayTextX(StrDesignX("\x04플레이한 난이도 : \x11프로페셔널 X2"), 4)}, HumanPlayers,FP),})
 	Trigger2X(FP,{CD(WinCcode,1,AtLeast),CD(UTAGECcode,1,AtLeast)},{RotatePlayer({DisplayTextX(StrDesignX("연회장 모드 적용됨"), 4)}, HumanPlayers,FP),})
 
 	
@@ -403,6 +466,9 @@ end
 
 
 	DoActions(FP, {CreateUnit(1, 95, 8, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03라그나사우르 \x08출현!!!"), 4)}, HumanPlayers, FP)})
+	if X2_Mode == 1 then
+		CTrigger(FP, {}, {TSetMemory(_Add(MBPtr[1],2),SetTo,8320000*256)})
+	end
 	CIfEnd()
 
 
@@ -470,9 +536,26 @@ end
 	},{preserved})
 
 
-
-	for i = 14,1,-1 do
-		CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(3, 74, 1, FP,{invincible = true})})
+	if X2_Mode ==1 then
+		if EVFMode == 1 then
+			for i = 9,1,-1 do
+				CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(12, 74, 1, FP,{invincible = true})})
+			end
+		else
+			for i = 14,1,-1 do
+				CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(12, 74, 1, FP,{invincible = true})})
+			end
+		end
+	else
+		if EVFMode == 1 then
+			for i = 9,1,-1 do
+				CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(3, 74, 1, FP,{invincible = true})})
+			end
+		else
+			for i = 14,1,-1 do
+				CTrigger(FP, {TMemory(_Add(MBPtr[2],2),AtMost,(100*i)*256)}, {CreateUnit(10, 84, 1, FP),KillUnit(84, FP),CreateUnitWithProperties(3, 74, 1, FP,{invincible = true})})
+			end
+		end
 	end
 	CIfEnd()
 
@@ -487,6 +570,9 @@ end
 end 
 	f_Read(FP, 0x628438, nil, MBPtr[3])
 	DoActions(FP, {CreateUnit(1, 96, 10, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03우르사돈 \x08출현!!!"), 4)}, HumanPlayers, FP)})
+	if X2_Mode == 1 then
+		CTrigger(FP, {}, {TSetMemory(_Add(MBPtr[3],2),SetTo,8320000*256)})
+	end
 	CIfEnd()
 
 
@@ -529,6 +615,9 @@ end
 end 
 	f_Read(FP, 0x628438, nil, MBPtr[4])
 	DoActions(FP, {CreateUnit(1, 90, 11, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03벤갈라스 \x08출현!!!"), 4)}, HumanPlayers, FP)})
+	if X2_Mode == 1 then
+		CTrigger(FP, {}, {TSetMemory(_Add(MBPtr[4],2),SetTo,8320000*256)})
+	end
 	CIfEnd()
 
 	
@@ -565,6 +654,9 @@ end
 	end 
 	f_Read(FP, 0x628438, nil, MBPtr[5])
 	DoActions(FP, {CreateUnit(1, 93, 48, FP),RotatePlayer({DisplayTextX(StrDesignX("\x04중간보스 \x03스캔티드 \x08출현!!!"), 4)}, HumanPlayers, FP)})
+	if X2_Mode == 1 then
+		CTrigger(FP, {}, {TSetMemory(_Add(MBPtr[5],2),SetTo,4000000*256)})
+	end
 	CIfEnd()
 	
 
@@ -593,7 +685,7 @@ end
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 89)}, {SetInvincibility(Disable, 201, FP, 11),RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03라이나돈 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills),KillUnit(74, FP)})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 96)}, {SetInvincibility(Disable, 152, FP, 12),RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03우르사돈 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 90)}, {SetInvincibility(Disable, 152, FP, 13),RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03벤갈라스 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
-	TriggerX(FP, {Deaths(FP, AtLeast, 1, 93)}, {RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03스캔티드 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),SetScore(Force1, Add, 500000, Kills)})
+	TriggerX(FP, {Deaths(FP, AtLeast, 1, 93)}, {RotatePlayer({PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),PlayWAVX("staredit\\wav\\Bosskill.ogg"),DisplayTextX(StrDesignX("\x04중간보스 \x03스캔티드 \x07처치!!! \x1F+ 500,000 Pts"), 4)}, HumanPlayers, FP),KillUnit(190, P12),SetScore(Force1, Add, 500000, Kills)})
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 90)}, {KillUnit(91, FP)},{preserved})
 	
 	TriggerX(FP, {Deaths(FP, AtLeast, 1, 93),Bring(FP,AtMost,1,"Buildings",64)}, {SetInvincibility(Disable, 147, FP, 64)},{preserved})
@@ -626,6 +718,21 @@ end
 	CIfEnd()
 	NR = CreateVar(FP)
 	CIf(FP,{Command(FP,AtLeast,1,94),CV(BossPtr,1,AtLeast)},{Simple_SetLoc(0, 0, 0, 0, 0),MoveLocation(1, 94, FP, 64),MoveLocation(49, 94, FP, 64)})
+	if X2_Map == 1 then
+		DoActions2(FP, {
+			Simple_SetLoc(13, 1088*2, 1952*2, 1088*2, 1952*2),
+			Simple_SetLoc(14, 1248*2, 1888*2, 1248*2, 1888*2),
+			Simple_SetLoc(15, 1792*2, 1888*2, 1792*2, 1888*2),
+			Simple_SetLoc(16, 1952*2, 1952*2, 1952*2, 1952*2)
+		}, 1)
+	else
+		DoActions2(FP, {
+			Simple_SetLoc(13, 1088, 1952, 1088, 1952),
+			Simple_SetLoc(14, 1248, 1888, 1248, 1888),
+			Simple_SetLoc(15, 1792, 1888, 1792, 1888),
+			Simple_SetLoc(16, 1952, 1952, 1952, 1952)
+		}, 1)
+	end
 	NoAirCollisionX(FP)
 	DoActionsX(FP, {SetV(NR,164)}, 1)
 	NSw = CreateCcode()
@@ -678,8 +785,8 @@ end
 	CIf(FP,{TMemory(_Add(BossPtr,2),AtMost,2500000*256),CD(GMode,1)},{MoveLocation(49, 94, FP, 64)})
 	GetLocCenter(48, G_CA_X, G_CA_Y)
 	CPC= CreateCcode()
-	TriggerX(FP, {CD(CT,50,AtMost),CD(CT,1,AtLeast)}, {Order("Any unit", FP, 64, Move, 48)},{preserved})
-	TriggerX(FP, {CD(CT,0,AtMost),CD(CPC,0,AtMost)}, {SetCD(CPC,1),Order("Any unit", FP, 64, Attack, 48)},{preserved})
+	TriggerX(FP, {CD(CT,50,AtMost),CD(CT,1,AtLeast)}, {Order("Any unit", FP, 64, Move, 49)},{preserved})
+	TriggerX(FP, {CD(CT,0,AtMost),CD(CPC,0,AtMost)}, {SetCD(CPC,1),Order("Any unit", FP, 64, Attack, 49)},{preserved})
 
 	CIfEnd()
 	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,7500000*256)}, {SetV(VTimerB[6],0),SetCD(CPt2[1],1),SetCD(CPC,0),AddCD(CT,50),SetInvincibility(Enable, 94, FP, 64)})
@@ -700,6 +807,11 @@ end
 		CTrigger(FP, {CD(GMode,1),TMemory(_Add(BossPtr,2),AtMost,1500000*256),Bring(FP, AtLeast, 11, "Any unit", 64)}, {SetInvincibility(Enable, 94, FP, 64)},{preserved})
 		
 	end
+	FBT = CreateCcode()
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256),CV(CreateUnitQueueNum,1,AtLeast)}, {SetInvincibility(Enable, 94, FP, 64)},{preserved})
+
+	CTrigger(FP, {TMemory(_Add(BossPtr,2),AtMost,1500000*256),Bring(FP, AtMost, 200, "Any unit", 64),CD(FBT,0)}, {MoveUnit(All, "Men", FP, 64, 49),SetCD(FBT, 400)},{preserved})
+	DoActionsX(FP, {SubCD(FBT, 1)})
 	CIf(FP,CD(GMode,1))
 	CunitCtrig_Part1(FP)
 	MoveCp("X",70*4)

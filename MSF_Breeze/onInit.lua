@@ -2,19 +2,33 @@ function onInit_EUD()
 	-- 바로 위에 StartCtrig() 있어야함 --
 -- 첫 번째 플레이어가 P1일 경우 (아닐경우 P1을 다른 플레이어로 바꿔야함)
 	UnitRepIndex2 = CreateVar(FP)
-	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast)})
+	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast),ElapsedTime(AtLeast, 3)})
 	RepPlayerID = CreateVar(FP)
 	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
 	f_Read(FP, ArrX(UnitPosArr,UnitRepIndex2), CPos)
 	f_Read(FP, ArrX(UnitIDArr,UnitRepIndex2), RepHeroIndex)
 	f_Read(FP, ArrX(PlayerIDArr,UnitRepIndex2), RepPlayerID)
+	if X2_Mode == 1 then
+		X2_Hero_Execute = CreateCcode()
+		DoActionsX(FP, {SetCD(X2_Hero_Execute,1)})
+		for j,k in pairs(UnitPointArr) do
+			CTrigger(FP, {CV(RepHeroIndex,k[1])}, {SetCD(X2_Hero_Execute, 4)},{preserved})
+		end
+	end
 	Convert_CPosXY()
 	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+	
+	if X2_Mode == 1 then
+	CWhile(FP, {CD(X2_Hero_Execute,1,AtLeast)}, {SubCD(X2_Hero_Execute, 1)})
+	end
 	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 	CDoActions(FP, {TCreateUnit(1, RepHeroIndex, 1, RepPlayerID),Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
 	CIfEnd()
+	if X2_Mode == 1 then
+	CWhileEnd()
+	end
 	CAdd(FP,UnitRepIndex2,1)
 	CSub(FP,UnitRepIndex,1)
 	CWhileEnd()
@@ -54,22 +68,34 @@ function onInit_EUD()
 			SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
 		end
 		
-		SetUnitsDatX(0,{Shield = 2000,MinCost=8500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetUnitsDatX(20,{Shield = 7322,MinCost=50000,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DmgBase = 45,DmgFactor=3})
-		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DmgBase = 75,DmgFactor=7,Splash={5,10,15},FlingyID=150})
+		if X2_Mode == 1 then
+			SetUnitsDatX(0,{HP = 2222,Shield = 777,MinCost=8500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+			SetUnitsDatX(20,{HP = 7322,Shield = 1777,MinCost=50000,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+			SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DmgBase = 45,DmgFactor=3*2})
+			SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DmgBase = 75,DmgFactor=7*2,Splash={7,14,21},FlingyID=150})
+		else
+			SetUnitsDatX(0,{Shield = 2000,MinCost=8500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+			SetUnitsDatX(20,{Shield = 7322,MinCost=50000,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+			SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DmgBase = 45,DmgFactor=3})
+			SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DmgBase = 75,DmgFactor=7,Splash={7,14,21},FlingyID=150})
+		end
 		
 
 	end
+	BSh = nil
+	if X2_Mode == 1 then BSh = 5000 end
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=9000*6,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(125,{HP=5000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(125,{HP=5000,Shield = BSh,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(111,{AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+
 	SetUnitsDatX(72,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for j,k in pairs(MedicTrig) do
 		SetUnitsDatX(k,{Playerable = 2, Reqptr=5, MinCost=150+((j-1)*50),GasCost=0,BuildTime = MedicTick[j],SuppCost = 0,RdySnd=999})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -110,7 +136,13 @@ function onInit_EUD()
 			GiveUnits(1, 122, P12, 64, i),
 			GiveUnits(1, 125, P12, 64, i),
 		},1)
+		if X2_Map== 1 then
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, (1344+32+(i*64))*2,160*2, (1344+32+(i*64))*2,160*2),CreateUnit(1, 107, 1, i)})
+
+		else
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 1344+(i*64),160, 1344+(i*64),160),CreateUnit(1, 107, 1, i)})
+
+		end
 		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i)})
 	end
 	
@@ -159,6 +191,7 @@ end
 
 		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 			InputTesterID(i,"GALAXY_BURST") 
+			InputTesterID(i,"Natori_sana") 
 		end
 		
 	T_YY = 2024
@@ -198,7 +231,14 @@ end
 	DoActions2(FP, PatchArr)
 	DoActions2(FP, PatchArr2)
 	if TestStart == 1 then
-		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1)})
+		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1),
+		AddV(CTMin[1],66666666),
+		AddV(CTMin[2],66666666),
+		AddV(CTMin[3],66666666),
+		AddV(CTMin[4],66666666),
+		AddV(CTMin[5],66666666),
+		AddV(CTMin[6],66666666),
+		AddV(CTMin[7],66666666),})
 	
 	end
 	DoActions2(FP, {	

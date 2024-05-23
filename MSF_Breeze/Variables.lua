@@ -17,7 +17,19 @@ function Include_Vars()
 	PlayerIDArr = CreateFArr(1700, FP)
 	--Vars
 	SELimit = CreateCcode()
-	ExRate = CreateVar2(FP, nil, nil, 13)
+	if X2_Mode == 1 then
+		if EVFMode == 1 then
+			ExRate = CreateVar2(FP, nil, nil, 9)
+		else
+			ExRate = CreateVar2(FP, nil, nil, 7)
+		end
+	else
+		if EVFMode == 1 then
+			ExRate = CreateVar2(FP, nil, nil, 20)
+		else
+			ExRate = CreateVar2(FP, nil, nil, 13)
+		end
+	end
 	Nextptrs = CreateVar(FP)
 	BGMType = CreateVar(FP)
 	TestMode = CreateCcode()
@@ -39,6 +51,7 @@ function Include_Vars()
 	VFlagB = CreateVarArr(6,FP)
 	VFlag256B = CreateVarArr(6,FP)
 	UTAGECcode = CreateCcode()
+	CTMin = CreateVarArr(7, FP)
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
@@ -135,5 +148,23 @@ function Include_Vars()
 	SetUnitAbility(29,21,22000,false,nil,900,1,nil,nil,95000,"노라드 II",7500)
 	SetUnitAbility(30,27,322,false,nil,3222,1,nil,nil,1611,"정체성 공성 전차",3222)
 
+
+	
+	function Create_VoidEPDHeaderV(Player,Size)
+		local Void = f_GetVoidptr(Player,Size)
+		local Header =  CreateVar(Player)
+		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
+		return Header
+	end
+	CreateUnitQueueUIDArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueuePIDArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueueXPosArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueueYPosArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueueTypeArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueuePtr = CreateVar(FP)
+	CreateUnitQueueNum = CreateVar(FP)
+	CreateUnitQueuePtr2 = CreateVar(FP)
+
+	
 
 end

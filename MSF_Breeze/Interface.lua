@@ -7,17 +7,18 @@ function Interface()
 	local CurrentOP = CreateVar(FP)
 	function Install_UnitCount(Player)
 		count,count1,count2,count3,count4,count5 = CreateVars(6,FP)
-			UnitReadX(Player,AllPlayers,229,64,count)
-			UnitReadX(Player,AllPlayers,17,nil,count1)
-			UnitReadX(Player,AllPlayers,23,nil,count2)
-			UnitReadX(Player,AllPlayers,25,nil,count3)
-			UnitReadX(Player,AllPlayers,73,nil,count4)
-			UnitReadX(Player,AllPlayers,65,nil,count5)
-			CAdd(FP,count,count1)
-			CAdd(FP,count,count2)
-			CAdd(FP,count,count3)
-			CAdd(FP,count,count4)
-			CAdd(FP,count,count5)
+		--	UnitReadX(Player,AllPlayers,229,64,count)
+		--	UnitReadX(Player,AllPlayers,17,nil,count1)
+		--	UnitReadX(Player,AllPlayers,23,nil,count2)
+		--	UnitReadX(Player,AllPlayers,25,nil,count3)
+		--	UnitReadX(Player,AllPlayers,73,nil,count4)
+		--	UnitReadX(Player,AllPlayers,65,nil,count5)
+		--	CAdd(FP,count,count1)
+		--	CAdd(FP,count,count2)
+		--	CAdd(FP,count,count3)
+		--	CAdd(FP,count,count4)
+		--	CAdd(FP,count,count5)
+		f_Read(Player, 0x6283F0, count)
 	end
 	Install_UnitCount(FP)
 	
@@ -71,6 +72,13 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 
 
 	GST2 = CreateCcode()
+	if X2_Mode == 1 then
+		DoActions(FP, {
+			SetMemory(0x657470+(0 *4),SetTo,224),
+			SetMemory(0x657470+(1 *4),SetTo,224),
+			SetMemoryB(0x662DB8+0,SetTo,224/32),
+			SetMemoryB(0x662DB8+20,SetTo,224/32),})
+	end
 	Trigger2X(FP, {CD(UTAGECcode,1)}, {
 		SetMemoryB(0x58D088+(46*0)+7,SetTo,255),
 		SetMemoryB(0x58D088+(46*1)+7,SetTo,255),
@@ -89,12 +97,12 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		SetMemory(0x662350 + (125*4),SetTo,167772*256),
 		SetMemory(0x662350 + (93*4),SetTo,400000*256),
 		SetMemoryW(0x656EB0+(25 *2),SetTo,65535),
+		SetInvincibility(Disable, 173, P12, 64);
+		SetDeaths(Force1, SetTo, 1, 49);
 		SetMemory(0x657470+(0 *4),SetTo,224),
 		SetMemory(0x657470+(1 *4),SetTo,224),
 		SetMemoryB(0x662DB8+0,SetTo,224/32),
 		SetMemoryB(0x662DB8+20,SetTo,224/32),
-		SetInvincibility(Disable, 173, P12, 64);
-		SetDeaths(Force1, SetTo, 1, 49);
 		SetMemoryB(0x65FEC8+0, SetTo, 100),SetMemoryB(0x65FEC8+20, SetTo, 100),SetMemoryB(0x65FEC8+125, SetTo, 100),SetMemoryB(0x6635D0 + 125,SetTo,0)
 	}, {preserved})
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
@@ -137,22 +145,58 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	CIfEnd()
 
 
-	CIfOnce(FP,{CD(GS,1)},{SetV(BGMType,1),SetCp(FP),KillUnit(72, P12),KillUnit(84, P12),RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),RunAIScriptAt("Value This Area Higher",2),SetResources(Force1, Add, 25000, Ore),RemoveUnit(15, AllPlayers),RemoveUnit(195, AllPlayers),RemoveUnit(196, AllPlayers)})
+	CIfOnce(FP,{CD(GS,1)},{
+		SetV(BGMType,1),
+		SetCp(FP),
+		KillUnit(72, P12),
+		KillUnit(84, P12),
+		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
+		RunAIScriptAt("Value This Area Higher",2),
+		SetResources(Force1, Add, 25000, Ore),
+		AddV(CTMin[1],25000),
+		AddV(CTMin[2],25000),
+		AddV(CTMin[3],25000),
+		AddV(CTMin[4],25000),
+		AddV(CTMin[5],25000),
+		AddV(CTMin[6],25000),
+		AddV(CTMin[7],25000),
+
+		RemoveUnit(15, AllPlayers),
+		RemoveUnit(195, AllPlayers),
+		RemoveUnit(196, AllPlayers)})
 	DoActions2(FP, {RotatePlayer({CenterView(2)}, HumanPlayers, FP)})
-	Shape1000 = {3   ,{1440, 352},{1440, 320},{1440, 288}}
-	Shape2000 = {3   ,{1472, 352},{1472, 320},{1472, 288}}
-	Shape3000 = {3   ,{1504, 352},{1504, 320},{1504, 288}}
-	Shape4000 = {3   ,{1536, 352},{1536, 320},{1536, 288}}
-	Shape5000 = {3   ,{1568, 352},{1568, 320},{1568, 288}}
-	Shape6000 = {3   ,{1600, 352},{1600, 320},{1600, 288}}
-	Shape7000 = {3   ,{1632, 352},{1632, 320},{1632, 288}}
-	Shape1020 = {1   ,{1440, 384}}
-	Shape2020 = {1   ,{1472, 384}}
-	Shape3020 = {1   ,{1504, 384}}
-	Shape4020 = {1   ,{1536, 384}}
-	Shape5020 = {1   ,{1568, 384}}
-	Shape6020 = {1   ,{1600, 384}}
-	Shape7020 = {1   ,{1632, 384}}
+	
+	if X2_Map == 1 then
+		Shape1000 = {3   ,{1440*2, 352*2},{1440*2, 320*2},{1440*2, 288*2}}
+		Shape2000 = {3   ,{1472*2, 352*2},{1472*2, 320*2},{1472*2, 288*2}}
+		Shape3000 = {3   ,{1504*2, 352*2},{1504*2, 320*2},{1504*2, 288*2}}
+		Shape4000 = {3   ,{1536*2, 352*2},{1536*2, 320*2},{1536*2, 288*2}}
+		Shape5000 = {3   ,{1568*2, 352*2},{1568*2, 320*2},{1568*2, 288*2}}
+		Shape6000 = {3   ,{1600*2, 352*2},{1600*2, 320*2},{1600*2, 288*2}}
+		Shape7000 = {3   ,{1632*2, 352*2},{1632*2, 320*2},{1632*2, 288*2}}
+		Shape1020 = {1   ,{1440*2, 384*2}}
+		Shape2020 = {1   ,{1472*2, 384*2}}
+		Shape3020 = {1   ,{1504*2, 384*2}}
+		Shape4020 = {1   ,{1536*2, 384*2}}
+		Shape5020 = {1   ,{1568*2, 384*2}}
+		Shape6020 = {1   ,{1600*2, 384*2}}
+		Shape7020 = {1   ,{1632*2, 384*2}}
+	else
+		Shape1000 = {3   ,{1440, 352},{1440, 320},{1440, 288}}
+		Shape2000 = {3   ,{1472, 352},{1472, 320},{1472, 288}}
+		Shape3000 = {3   ,{1504, 352},{1504, 320},{1504, 288}}
+		Shape4000 = {3   ,{1536, 352},{1536, 320},{1536, 288}}
+		Shape5000 = {3   ,{1568, 352},{1568, 320},{1568, 288}}
+		Shape6000 = {3   ,{1600, 352},{1600, 320},{1600, 288}}
+		Shape7000 = {3   ,{1632, 352},{1632, 320},{1632, 288}}
+		Shape1020 = {1   ,{1440, 384}}
+		Shape2020 = {1   ,{1472, 384}}
+		Shape3020 = {1   ,{1504, 384}}
+		Shape4020 = {1   ,{1536, 384}}
+		Shape5020 = {1   ,{1568, 384}}
+		Shape6020 = {1   ,{1600, 384}}
+		Shape7020 = {1   ,{1632, 384}}
+	end
 	NMT = {
 		Shape1000,
 		Shape2000,
@@ -174,9 +218,18 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 6 do
 		CSPlot(NMT[i+1], i, 0, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
 		CSPlot(HMT[i+1], i, 20, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)})
 	end
+
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
-	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
+	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),
+	AddV(CTMin[1],30000),
+	AddV(CTMin[2],30000),
+	AddV(CTMin[3],30000),
+	AddV(CTMin[4],30000),
+	AddV(CTMin[5],30000),
+	AddV(CTMin[6],30000),
+	AddV(CTMin[7],30000),CreateUnit(2, 20, 2, Force1),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore \x04+ \x03영웅마린 2기"), 4)}, HumanPlayers, FP)})
 	for i = 0, 6 do
 		Trigger2X(FP, {CV(SetPlayers,1),HumanCheck(i, 1)},{GiveUnits(All, 125, P11, 64, i),SetInvincibility(Disable, 125, i, 64)})
 	end
@@ -426,7 +479,7 @@ for i = 1, 6 do -- 강퇴기능
 		CIf(FP,{TTMemory(_Add(BarPos[i+1],62), NotSame, BarRally[i+1])})
 			f_Read(FP, _Add(BarPos[i+1],62), BarRally[i+1])
 			Convert_CPosXY(BarRally[i+1])
-			DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"},3)
+			DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"})
 		CIfEnd()
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)
@@ -617,6 +670,7 @@ if EVFMode == 1 then
 		ModifyUnitEnergy(1,0,i,5,0);
 		RemoveUnitAt(1,0,5,i);
 		SetResources(i,Subtract,41000,Ore);
+		SubV(CTMin[i+1],41000),
 		CreateUnitWithProperties(1,20,2,i,{energy = 100});
 		DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F41,000 O r e"),4);
 		--SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -638,6 +692,7 @@ else
 		ModifyUnitEnergy(1,0,i,5,0);
 		RemoveUnitAt(1,0,5,i);
 		SetResources(i,Subtract,4500,Ore);
+		SubV(CTMin[i+1],4500),
 		CreateUnitWithProperties(1,20,2,i,{energy = 100});
 		DisplayText(StrDesign("\x1F광물\x04을 소모하여 Marine 을 Jim Raynor로 \x19변환\x04하였습니다. - \x1F4500 O r e"),4);
 		--SetCDeaths(FP,Add,1,CUnitRefrash);
@@ -659,6 +714,7 @@ TriggerX(FP, {Accumulate(i, AtLeast, 300000-54000, Ore),Command(i, AtLeast, 1, 8
 	RemoveUnitAt(1,8,64,P12);
 	AddCD(CreateMarine1,6);
 	SetResources(i, Subtract, 300000-54000, Ore);
+	SubV(CTMin[i+1],300000-54000),
 	SetCp(i);
 	DisplayText(StrDesign("\x1F광물\x04을 소모하여 Jim Raynor 6기를 소환하였습니다. - \x1F300,000 O r e"),4);
 	SetCp(FP);
@@ -668,6 +724,7 @@ TriggerX(FP, {Accumulate(i, AtMost, 300000-54000-1, Ore),Command(i, AtLeast, 1, 
 	GiveUnits(1, 8, i, 64, P12);
 	RemoveUnitAt(1,8,64,P12);
 	SetResources(i, Add, 54000, Ore);
+	SubV(CTMin[i+1],54000),
 	SetCp(i);
 	DisplayText(StrDesign("\x04Jim Raynor 6기를 소환하기 위한 자원이 부족합니다. (필요 자원 : \x1F300,000 Ore\x04) 자원반환 + \x1F54,000 O r e"),4);
 	SetCp(FP);
@@ -719,10 +776,24 @@ CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 CIfEnd()
 CWhileEnd()
 
+local ShieldOnOff = CreateCcode()
 
+TriggerX(FP, {CD(ShieldOnOff,0),Command(i,AtLeast,1,19);}, {SetCD(ShieldOnOff,1),GiveUnits(All, 19, i, 64, P12),RemoveUnit(19, P12),SetCp(i),DisplayText("\x07『 \x1C수정 보호막\x04 사용이 시작되었습니다. \x03(1초당 \x1F1200미네랄 \x03소모) \x07』",4),PlayWAV("staredit\\wav\\shield_use.ogg"),SetCp(FP)}, {preserved})
+TriggerX(FP, {CD(ShieldOnOff,1),Command(i,AtLeast,1,19);}, {SetCD(ShieldOnOff,0),GiveUnits(All, 19, i, 64, P12),RemoveUnit(19, P12),SetCp(i),DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4),PlayWAV("staredit\\wav\\GMode.ogg"),PlayWAV("staredit\\wav\\GMode.ogg"),SetCp(FP)}, {preserved})
+TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtLeast, 50000, Ore)}, {
+	SetResources(i, Subtract, 50, Ore),
+	SubV(CTMin[i+1],50),
+	ModifyUnitShields(All,"Any unit",i,"Anywhere",100),
+	ModifyUnitShields(All,125,i,2,100)}, {preserved})
+TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtMost, 49999, Ore)}, {
+	SetCp(i),
+	PlayWAV("sound\\Misc\\PError.WAV");
+	PlayWAV("sound\\Misc\\PError.WAV");
+	DisplayText("\x07『 \x08잔액이 부족\x04하여 \x1C수정 보호막\x04 사용이 종료되었습니다. \x03(최소 \x1F5만 미네랄 \x03필요) \x07』",4);
+	SetCp(FP),
+	SetCD(ShieldOnOff,0),
+}, {preserved})
 
-
-	
 DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
 RunAIScript("Turn ON Shared Vision for Player 1");
 RunAIScript("Turn ON Shared Vision for Player 2");
@@ -779,6 +850,8 @@ end
 			}, {
 				SetResources(k,Subtract,GiveRate2[i+1],Ore);
 				SetResources(j,Add,GiveRate2[i+1],Ore);
+				SubV(CTMin[k+1],GiveRate2[i+1]),
+				AddV(CTMin[k+1],GiveRate2[i+1]),
 				RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
 				SetV(GivePrevP, k);
 				SetV(GiveNextP, j);
