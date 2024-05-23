@@ -140,9 +140,9 @@ function Interface()
 	TriggerX(i, {CV(PCVar[i+1],256,AtLeast)}, {SubV(PCVar[i+1],256)}, {preserved})
 	
 	local ExchangeP = CreateVar(FP)
-	for i=0, 3 do
 		ExJump = def_sIndex()
-		NJump(FP,ExJump,{HumanCheck(i,1),CD(CheatMode,0),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",17),Bring(i,AtMost,0,"Men",18),Bring(i,AtMost,0,"Men",19),Bring(i,AtMost,0,"Men",20)})
+		CIf(FP,HumanCheck(i,1))
+		NJump(FP,ExJump,{CD(CheatMode,0),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,"Men",17),Bring(i,AtMost,0,"Men",18),Bring(i,AtMost,0,"Men",19),Bring(i,AtMost,0,"Men",20)})
 		CIf(FP,Score(i,Kills,AtLeast,1000))
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 --		CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
@@ -153,8 +153,7 @@ function Interface()
 		DoActions(FP,SetDeaths(i,Subtract,1,111))
 		
 		NJumpEnd(FP,ExJump)
-	end
-		
+		CIfEnd()
 
 Trigger { -- 소환 마린
 players = {i},

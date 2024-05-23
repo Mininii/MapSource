@@ -37,23 +37,23 @@ end
 --ttt =  "ａ"
 --tttt = "a"
 --PushErrorMsg(""..string.byte(ttt, 1, 1).." "..string.byte(ttt, 2, 2).." "..string.byte(ttt, 3, 3).." "..string.byte(tttt, 1, 1))
-TestSet(1)
-	EVFFlag = 0
-	CheatEnableFlag = 0
-	AxiomSet = 1
+TestSet(0)
+	EVFFlag = 1
+	AxiomSet = 0
 	EternalTestMode = 0
-	GBossTestMode = 2
+	GBossTestMode = 1
 	AtkSpeedMode = 0
 if Limit == 1 then
 	EVFFlag = 1
-	AtkSpeedMode = 1
+	AtkSpeedMode = 0
 	CheatEnableFlag = 1
 	TheoristTestMode = 0
-	GBossTestMode = 2
-	EEggTestNum = 20
-	AxiomSet = 1
+	GBossTestMode = 1
+	EEggTestNum = 0
+	AxiomSet = 0
 else
-	EVFFlag = 0
+	CheatEnableFlag = 1
+	EVFFlag = 1
 end
 RedMode = 0
 if RedMode == 1 then

@@ -93,6 +93,9 @@ function Operator_Trig()
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 3 do
         CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 60,SetTo,1)})
+		if CheatEnableFlag == 1 then
+		TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(i,AtLeast,1,198)},{SetCD(CheatMode,1)})--에라응머즐 활성화
+		end
 		
 		TriggerX(FP,{CD(Theorist,1,AtMost),ElapsedTime(AtMost,59)},SetMemoryB(0x57F27C + (i * 228) + 23,SetTo,1),{preserved})
         f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
@@ -102,9 +105,9 @@ function Operator_Trig()
 	end
     CIfXEnd()
 	TestVar = CreateVar(FP)
+	
 	if Limit == 1 then
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
-	TriggerX(FP,{Switch("Switch 253",Cleared),ElapsedTime(AtMost, 60),Deaths(CurrentPlayer,AtLeast,1,198)},{SetCD(CheatMode,1)})--에라응머즐 활성화
 	TriggerX(FP,{Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 	CIf({FP},CD(TestMode,1)) -- 테스트 트리거
 	CMov(FP,0x57f120,CreateUnitStackPtr)
@@ -143,7 +146,7 @@ function Operator_Trig()
 	CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
     SingleGunTestMode = {}
     ExWt = {135,136,137,138,139,140,141,142,35,176,177,178,149,156,150,135,136,137,138,139,140,141,142}
-	TargetTestGun = 190
+	TargetTestGun = 189
     for j, k in pairs(f_GunTable) do
 		if k ~= TargetTestGun then
         table.insert(SingleGunTestMode,ModifyUnitEnergy(All,k,Force2,64,0))
@@ -637,12 +640,12 @@ SetStr1Data(10,
 	{
 		{
 			{"V",count,AtLeast,1200},
-			{"V",count,AtMost,1499}
+			{"V",count,AtMost,1599}
 		},08,0xFF
 	},
 	{
 		{
-			{"V",count,AtLeast,1500},
+			{"V",count,AtLeast,1600},
 			{"CD",CanCTC,Exactly,1}
 		},0x11,0xFF
 	}

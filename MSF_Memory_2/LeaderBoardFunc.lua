@@ -54,6 +54,7 @@ function LeaderBoardF()
 --        },{preserved})
     end
 	--EraUngmeojulT
+	EraUngmeojulHP = CreateCcode()
 	CIf(FP,{Command(FP,AtLeast,1,190),TTOR({CD(TestMode,1),TTAND({ElapsedTime(AtLeast,60*5),CD(TestMode,0)})})
 		,TTOR({CDeaths(FP,Exactly,0,LeaderBoardT),CD(EraUngmeojulC,1)})},{SetCD(EraUngmeojulC, 0)})-- 리더보드 타이머가 주기적으로 정확히 0일 경우 저그유닛 어택
 	CMov(FP,0x6509B0,19025+19) --CUnit 시작지점 +19 (0x4C)
@@ -152,6 +153,9 @@ function LeaderBoardF()
 				CurX,CurY = Convert_CPosXY(CurXY,1)
 				Simple_SetLocX(FP,9,TargerXY[1],TargerXY[2],TargerXY[1],TargerXY[2])
 				Simple_SetLocX(FP,0,CurX,CurY,CurX,CurY)
+				
+				--CTrigger(FP, {CD(EraUngmeojulHP,1)}, {TSetMemory(_Sub(BackupCp,23), SetTo, 256)}, {preserved})
+
 				CDoActions(FP,{TOrder(TargetUID,Force2,1,Attack,10)})
 				HeroOrder = def_sIndex()
 				CJump(FP,HeroOrder)
@@ -161,9 +165,10 @@ function LeaderBoardF()
 				local TempCPCheck = CreateVar()
 				CMov(FP,TempCPCheck,_Sub(BackupCp,(25+19025))) 
 				f_Div(FP,TempCPCheck,_Mov(84)) -- 해당유닛의 인덱스가 몇번인지 체크함
+				--DoActionsX(FP, {SetCD(EraUngmeojulHP, 0)})
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtMost,0)})
 				for j,k in pairs(EraUngmeojulT) do
-					NJumpX(FP,L_Gun_Order,{CV(TargetUID,k[1]),CD(EraUngmeojulCT[j],1)})
+					NJumpX(FP,L_Gun_Order,{CV(TargetUID,k[1]),CD(EraUngmeojulCT[j],1)},{SetCD(EraUngmeojulHP,1)})
 				end
 				NJumpX(FP,L_Gun_Order,{Cond_EXCC2(DUnitCalc,TempCPCheck,1,AtLeast,2),CD(Theorist,0)})
 				CJumpEnd(FP,HeroOrder)

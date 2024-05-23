@@ -2,53 +2,23 @@ function Var_init()
 	RandSwitch = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	if EVFFlag == 1 then
-		if Limit == 1 then
-			--GTAtk = 5*1.5
-			--GTAtkFactor = 2*1.5
-			--MarAtk = 15*1.5
-			--MarAtkFactor = 3*1.5
-			--MarAtk2 = 50*1.5
-			--MarAtkFactor2 = 15*1.5
-			GTAtk = 50*1.5
-			GTAtkFactor = 25*1.5
-			MarAtk = 50*1.5
-			MarAtkFactor = 10*1.5
-			MarAtk2 = 100*1.5
-			MarAtkFactor2 = 30*1.5
-		else
-			GTAtk = 50*1.5
-			GTAtkFactor = 25*1.5
-			MarAtk = 50*1.5
-			MarAtkFactor = 10*1.5
-			MarAtk2 = 100*1.5
-			MarAtkFactor2 = 30*1.5
-		end
+		GTAtk = 50*1.5
+		GTAtkFactor = 25*1.5
+		MarAtk = 50*1.5
+		MarAtkFactor = 10*1.5
+		MarAtk2 = 100*1.5
+		MarAtkFactor2 = 30*1.5
 		NMAtk = 15*1.5
 		NMAtkFactor = 2*1.5
 		HMAtk = 50*1.5
 		HMAtkFactor = 7*1.5
 	else
-		if Limit == 1 then
-			--GTAtk = 5
-			--GTAtkFactor = 2
-			--MarAtk = 15
-			--MarAtkFactor = 3
-			--MarAtk2 = 50
-			--MarAtkFactor2 = 15
-			GTAtk = 50
-			GTAtkFactor = 25
-			MarAtk = 50
-			MarAtkFactor = 10
-			MarAtk2 = 100
-			MarAtkFactor2 = 30
-		else
-			GTAtk = 50
-			GTAtkFactor = 25
-			MarAtk = 50
-			MarAtkFactor = 10
-			MarAtk2 = 100
-			MarAtkFactor2 = 30
-		end
+		GTAtk = 50
+		GTAtkFactor = 25
+		MarAtk = 50
+		MarAtkFactor = 10
+		MarAtk2 = 100
+		MarAtkFactor2 = 30
 		NMAtk = 15
 		NMAtkFactor = 2
 		HMAtk = 50
@@ -448,7 +418,6 @@ CreateHeroPointArr(81,nil,100000,50000,"\x1F공\x04작 "..Conv_HStr("<1F>D<4>ant
 CreateHeroPointArr(30,nil,322,0,"\x1F정\x04체성 "..Conv_HStr("<1F>I<4>dentity"),70000,nil,1)
 
 
-
 CreateHeroPointArr(60,nil,110000,60000,"\x08적\x04대자 "..Conv_HStr("<08>A<4>ntagonism"),322000,nil,nil,1)
 CreateHeroPointArr(68,nil,250000,64000,"\x1F집\x04행관 "..Conv_HStr("<1F>J<4>udgement"),110000,nil,1)
 
@@ -463,5 +432,8 @@ CreateHeroPointArr(176,nil,50000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15
 CreateHeroPointArr(177,nil,50000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15500,2,1)
 CreateHeroPointArr(178,nil,50000,0,"\x19자\x04원 "..Conv_HStr("<1D>F<4>it"),15500,2,1)
 
+
+CreateHeroPointArr(45,nil,47000,12000,"\x1B여\x04왕 "..Conv_HStr("<1B>Q<4>ueen"),30000,nil,nil,1)
+CreateHeroPointArr(46,nil,45000,15000,"\x1B악\x04충 "..Conv_HStr("<1B>D<4>efiler"),30000,nil,nil,1)
 
 end

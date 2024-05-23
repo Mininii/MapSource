@@ -285,13 +285,14 @@ end
 function Install_UnitCount(Player)
 	count,count1,count2,count3 = CreateVars(4,FP)
 	function Cast_UnitCount()
-		UnitReadX(Player,AllPlayers,229,64,count)
-		UnitReadX(Player,AllPlayers,17,nil,count1)
-		UnitReadX(Player,AllPlayers,23,nil,count2)
-		UnitReadX(Player,AllPlayers,25,nil,count3)
-		CAdd(Player,count,count1)
-		CAdd(Player,count,count2)
-		CAdd(Player,count,count3)
+		--UnitReadX(Player,AllPlayers,229,64,count)
+		--UnitReadX(Player,AllPlayers,17,nil,count1)
+		--UnitReadX(Player,AllPlayers,23,nil,count2)
+		--UnitReadX(Player,AllPlayers,25,nil,count3)
+		--CAdd(Player,count,count1)
+		--CAdd(Player,count,count2)
+		--CAdd(Player,count,count3)
+		f_Read(Player, 0x6283F0, count)
 	end
 end
 
@@ -451,8 +452,11 @@ function InstallHeroPoint() -- CreateHeroPointArr에서 전송받은 영웅 포�
 		local CT = HeroPointArr[i][1]
 		local index = HeroPointArr[i][2]
 		local Point = HeroPointArr[i][3]
+		local EXPPoint = (Point/700)
+		if EVFFlag == 1 then EXPPoint = EXPPoint*2 end
 			CIf(FP,DeathsX(CurrentPlayer,Exactly,index,0,0xFF))
-			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,(Point/700)),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
+			TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,EXPPoint),{preserved})
+			DoActions2X(FP,{SetScore(Force1,Add,Point,Kills),AddV(CurEXP,EXPPoint),RotatePlayer({DisplayTextX(CT,4);},HumanPlayers,FP)})
 			Trigger2X(FP,{CDeaths(FP,AtMost,5,SoundLimit)},{RotatePlayer({PlayWAVX("staredit\\wav\\HeroKill.ogg"),PlayWAVX("staredit\\wav\\HeroKill.ogg");},HumanPlayers,FP),SetCDeaths(FP,Add,1,SoundLimit),},{preserved})
 			f_LoadCp()
 			if index == 68 then

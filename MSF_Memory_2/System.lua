@@ -63,11 +63,11 @@ function System()
 	CIfEnd()
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{
-			--SetCD(AxiomCcode[1],1),
-			--SetCD(AxiomCcode[2],1),
-			--SetCD(AxiomCcode[3],1),
-			--SetCD(AxiomCcode[4],1),
-			--SetCD(AxiomEnable,1),
+			SetCD(AxiomCcode[1],1),
+			SetCD(AxiomCcode[2],1),
+			SetCD(AxiomCcode[3],1),
+			SetCD(AxiomCcode[4],1),
+			SetCD(AxiomEnable,1),
 		})
 	end
 	for i = 1, 4 do
@@ -756,13 +756,13 @@ HPRegenTable = {64}
 		CForEnd()
 		f_LoadCp()
 	CIfEnd()
-	CIf(FP,{CD(AxiomCcode[1],1,AtLeast),Command(P5, AtLeast, 1, 87),DeathsX(CurrentPlayer,Exactly,88,0,0xFF),Cond_EXCC(16, AtLeast, 1)}) -- Axiom 하템패턴
+	CIf(FP,{CD(AxiomCcode[1],1,AtLeast),Command(P5, AtLeast, 1, 87),DeathsX(CurrentPlayer,Exactly,88,0,0xFF),Cond_EXCC(16, AtLeast, 1*256,0xFF00)}) -- Axiom 하템패턴
 		f_SaveCp()
 		CIf(FP,{TMemoryX(_Sub(BackupCp,6),Exactly,P11,0xFF)})
 		f_Read(FP,_Sub(BackupCp,15),CPos)
 		Convert_CPosXY()
-		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],64), {CPosX,CPosY}, FP)
-		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],192), {CPosX,CPosY}, FP)
+		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],64), {CPosX,CPosY}, P5)
+		CreateBullet(206, 20, _Add(EXCC_TempVarArr[17],192), {CPosX,CPosY}, P5)
 		CIfEnd()
 		f_LoadCp()
 	CIfEnd()
@@ -834,9 +834,13 @@ HPRegenTable = {64}
 		--f_GSend(146)
 		--f_GSend(136)
 	end
-
-	TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,1),{preserved})
-	EXCC_ClearCalc(AddV(CurEXP,1))
+	if EVFFlag == 1 then
+		TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,2),{preserved})
+		EXCC_ClearCalc(AddV(CurEXP,2))
+	else
+		TriggerX(FP, {CVar(FP,SetPlayers[2],Exactly,1)}, AddV(CurEXP,1),{preserved})
+		EXCC_ClearCalc(AddV(CurEXP,1))
+	end
 	NJumpXEnd(FP,OtherG)
 	C_UID = CreateVar(FP)
 	f_SaveCp()
@@ -1154,12 +1158,12 @@ InvDisable(190,FP,{
 },"\x17중앙 \x10"..Conv_HStr("<08>C<1D>ore <1C>of <08>D<1D>epth").." \x04의 \x02무적상태\x04가 해제되었습니다.")
 if RedMode == 0 then
 	
-CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+CanText = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x04맵상의 유닛이 \x08１６００\x04기 이상 있습니다.").."\n"..StrDesignX("\x08캔낫\x04이 \x074회 이상\x04 걸릴 경우 \x10게임\x04에서 \x06패배\x04합니다.\x04").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 Trigger2X(FP, {
 	Command(FP,AtLeast,1,173);
 	CDeaths(FP,AtMost,0,CanCT);
 	CDeaths(FP,Exactly,0,CanWT);
-	CVar(FP,count[2],AtLeast,1500);}, {
+	CVar(FP,count[2],AtLeast,1600);}, {
 	RotatePlayer({
 		DisplayTextX(CanText,4),
 		PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.WAV"),
@@ -1171,7 +1175,7 @@ CIf(FP,{--캔발동
 Command(FP,AtLeast,1,173);
 	CV(CanC,2,AtMost);
 	CDeaths(FP,AtMost,0,CanCT);
-	CVar(FP,count[2],AtLeast,1500);
+	CVar(FP,count[2],AtLeast,1600);
 	Memory(0x628438,AtMost,0);
 },{
 	SetCD(ThCallT,50);
@@ -1193,7 +1197,7 @@ CIf(FP, {--캔발동
 Command(FP,AtLeast,1,173);
 	CV(CanC,3,AtLeast);
 	CDeaths(FP,AtMost,0,CanCT);
-	CVar(FP,count[2],AtLeast,1500);
+	CVar(FP,count[2],AtLeast,1600);
 	Memory(0x628438,AtMost,0);
 },{
 	AddV(CanC,1);
@@ -1454,15 +1458,10 @@ if CheatEnableFlag== 1 then
 		DoActions2(FP,{RotatePlayer({DisplayTextX(CheatTxt,4),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg"),PlayWAVX("staredit\\wav\\SkillUnlock.ogg")},HumanPlayers,FP)})
 		CIfEnd()
 		for j, k in pairs(EraUngmeojulT) do
-			CIfOnce(FP,ElapsedTime(AtLeast, (10*j)+300))
 			local CT = "\x0D\x0D!H"..StrDesignX2("\x07에라 \x1B응 \x04머 \x08즐 \x04"..k[2].." \x04을 끌어당깁니다.")
-			Trigger2X(FP,{},{SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),
-			RotatePlayer({
+			Trigger2X(FP, {ElapsedTime(AtLeast, (3*j)+300)}, {SetCD(EraUngmeojulCT[j],1),SetCD(EraUngmeojulC,1),RotatePlayer({
 				DisplayTextX(CT,4),
-				DisplayTextX(CT,4),
-				DisplayTextX(CT,4),
-				PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg"),PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
-			CIfEnd()
+				PlayWAVX("staredit\\wav\\Recall.ogg")}, HumanPlayers, FP)})
 		end
 	CIfEnd()
 end
