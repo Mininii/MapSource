@@ -38,7 +38,12 @@ function V(Index,Player,Next) -- metatable testfunc
 end
 
 function PushErrorMsg(Message)
-	return error(Message,1)
+	if Message~=nil then
+		return error(Message,1)
+	else
+		PushErrorMsg_is_nil()
+		
+	end
 end
 
 ---@param Str? string
@@ -1279,6 +1284,7 @@ function DoActionsX(PlayerID,Actions,Flags,Index)
 	elseif Flags == 1 then
 		Flags = {}
 	end
+	
 	Trigger {
 		players = {PlayerID},
 		conditions = {
@@ -1302,7 +1308,6 @@ function DoActions2X(PlayerID,Actions,Flags)
 	elseif Flags == 1 then
 		Flags = {}
 	end
-
 	local Act = {}
 	for i = 1, Size do
 		if type(Actions[i][1]) == "table" and #Actions[i][1] == 10 then
