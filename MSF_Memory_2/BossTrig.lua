@@ -22,12 +22,15 @@ function BossTrig()
 
 B1Mode = CreateCcode()
 	CIf(FP,CV(BPtrArr[1],1,AtLeast),{AddCD(B1C[2],1)})--하템보스
-		DoActionsX(FP, SetCD(B1Mode,4), 1)
+		DoActionsX(FP, {SetCD(B1Mode,4),AddCD(B1C[4],300)}, 1)
 		TriggerX(FP,{CD(Theorist,1,AtLeast)},{SetInvincibility(Enable, 87, P5, 64)})
+		local B1PV = CreateVar(FP)
+		DoActionsX(FP, {SetV(B1PV,100)})
+		TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)},{SetV(B1PV,450)} ,{preserved})
 		CIf(FP,CD(B1C[1],0))
 		
-			TriggerX(FP,{CD(B1C[2],15,AtLeast),CD(AxiomCcode[1],0)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
-			TriggerX(FP,{CD(B1C[2],5,AtLeast),CD(AxiomCcode[1],1,AtLeast)},{SetCD(TC[1],10),SetCD(B1C[2],0)},{preserved})
+			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],15,AtLeast),CD(AxiomCcode[1],0)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
+			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],5,AtLeast),CD(AxiomCcode[1],1,AtLeast)},{SetCD(TC[1],10),SetCD(B1C[2],0)},{preserved})
 			CWhile(FP,CD(TC[1],1,AtLeast),SubCD(TC[1],1))
 				CMov(FP,TV[1],f_CRandNum(128))
 				CMov(FP,TV[2],f_CRandNum(360))
@@ -44,10 +47,9 @@ B1Mode = CreateCcode()
 			DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
 			DoActions(FP,{Order(94,P5,64,Move,1),})
 		CIfEnd()
-		local B1PV = CreateVar(FP)
-		DoActionsX(FP, {SetV(B1PV,100)})
-		TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)},{SetV(B1PV,450)} ,{preserved})
-		CTrigger(FP,{TBring(P5,AtLeast,B1PV,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
+		CTrigger(FP,{CD(AxiomCcode[1],0),TBring(P5,AtLeast,B1PV,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
+		CTrigger(FP,{CD(AxiomCcode[1],1,AtLeast),TBring(P5,AtLeast,B1PV,94,64)},{AddCD(B1C[4],1)},{preserved})
+		CTrigger(FP,{CD(AxiomCcode[1],1,AtLeast),CD(B1C[4],300,AtLeast)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
 		CIf(FP,CD(B1C[1],1),AddCD(B1C[3],1))
 			CIf(FP,CD(B1C[3],1),{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64)}) --100~500
 				
@@ -82,7 +84,7 @@ B1Mode = CreateCcode()
 			CIfEnd()
 			TriggerX(FP,{CD(B1C[3],1,AtLeast)},{AddCD(B1C[3],1)},{preserved})
 			TriggerX(FP,{CD(B1C[3],100)},{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64),SetMemoryB(0x6636B8+94,SetTo,125)},{preserved})
-			TriggerX(FP,{CD(B1C[3],100,AtLeast),Bring(P5,AtMost,0,94,64)},{SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
+			TriggerX(FP,{CD(B1C[3],100,AtLeast),Bring(P5,AtMost,0,94,64)},{SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0)},{preserved})
 			local B1X = CreateVar(FP)
 			local B1A = CreateVar(FP)
 			local B1A2 = CreateVar(FP)
@@ -109,13 +111,17 @@ B1Mode = CreateCcode()
 					end
 				CIfEnd()
 			CIfEnd()
-			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0),AddCD(B1Mode,1)},{preserved})
+			B1PR = f_CRandNum(5, nil, {CD(B1C[3],500,AtLeast)})
+			CTrigger(FP, {CD(B1C[3],500,AtLeast)}, {SetCD(B1Mode,B1PR)},{preserved})
+			
+			TriggerX(FP,{CD(B1C[3],500,AtLeast)},{KillUnit(94,P5),SetCD(B1C[1],0),SetCD(B1C[2],0),SetCD(B1C[3],0),SetCD(B1C[4],0),SetCD(B1C[5],0),SetCD(B1C[6],0),SetCD(B1C[7],0),SetCD(B1C[8],0),SetCD(B1C[9],0),SetCD(B1C[10],0)},{preserved})
 			CIfEnd()
 
 
 
 			CIf(FP,{CD(AxiomCcode[1],1,AtLeast)},{SubV(B1X,1),RemoveUnitAt(All, 88, 53, P11),SetBulletSpeed(400)}) -- Axiom 전용 패턴
 			TriggerX(FP, {CV(B1X,0)}, {KillUnit(88, P11)}, {preserved})
+			TriggerX(FP, {CV(B1X,90)}, {SetInvincibility(Disable, 88, P11, 64)}, {preserved})
 			CIf(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,10*256,0xFF00),TMemory(_Add(BPtrArr[1],23),AtLeast,1),CV(B1X,0)},{SetV(B1X,100)})--공격중인 상태이며 대상이 있을경우
 			CMov(FP,B1A,_rShift(_ReadF(_Add(BPtrArr[1],8)), 8),nil,0xFF,1)
 			CMov(FP,B1A2,_ReadF(_Add(BPtrArr[1],8)),nil,0xFF00FF00,1)
@@ -128,17 +134,17 @@ B1Mode = CreateCcode()
 			CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0, CPosX, CPosY, CPosX, CPosY)
-				CDoActions(FP, {CreateUnit(1, 88, 1, FP),
+				CDoActions(FP, {CreateUnit(1, 88, 1, P5),
 				TSetMemoryX(_Add(Nextptrs,55),SetTo,0xA00000,0xA00000),
 				TSetMemoryX(_Add(Nextptrs,8), SetTo, B1A2,0xFF00FF00),
 				TSetMemoryX(_Add(Nextptrs,8), SetTo, 0,0xFF0000),
 				TSetDeaths(_Add(Nextptrs,13),SetTo,_Add(_Mul(CI,100),100),0),
 				TSetDeathsX(_Add(Nextptrs,18),SetTo,_Add(_Mul(CI,100),100),0,0xFFFF),
 				--TSetDeathsX(_Add(Nextptrs,18),SetTo,_lShift(_Add(B1A,_lShift(B1A, 8)), 16),0,0xFFFF0000),
-				Set_EXCC2(DUnitCalc,CunitIndex,16,SetTo,B1A),
+				Set_EXCC2(DUnitCalc,CunitIndex,16,SetTo,_Add(B1A,256)),
 			})
-			f_CGive(FP, Nextptrs, nil, P11, FP)
-			DoActions(FP, {Order(88, P11, 64, Move, 53)})
+			f_CGive(FP, Nextptrs, nil, P11, P5)
+			DoActions(FP, {Order(88, P11, 64, Move, 53),SetInvincibility(Enable, 88, P11, 64)})
 
 			CIfEnd()
 				
@@ -146,10 +152,10 @@ B1Mode = CreateCcode()
 
 			CIfEnd()
 			CIfEnd()
-		
+			TempV = CreateVar(FP)
+			CMov(FP, TempV,_Div(_ReadF(_Add(BPtrArr[1],2)),256))
+			DisplayPrintEr(MapPlayers, {"하템보스체력 : ",TempV})
 
-
-		TriggerX(FP, {CD(B1Mode,5,AtLeast)}, {SetCD(B1Mode,0)},{preserved})
 		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1])},1)
 	CIfEnd()
 

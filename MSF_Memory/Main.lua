@@ -23,7 +23,7 @@ dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
 Limit = 1
-RedMode = 1
+RedMode = 0
 FP = P6
 TestStartToBYD = 0
 if RedMode == 0 then
@@ -5175,19 +5175,19 @@ MoveCp(Add,25*4),
 end
 CunitCtrig_End()
 
-if Limit == 1 then
+--if Limit == 1 then--
 
-	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
-		Trigger2(FP,{
-		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtLeast,1*256,0,0xFF00),
-		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtMost,4,0,0xFF),
-		},
-		{
-			SetDeaths(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,0),
-			SetDeathsX(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,1,0xFF00),
-	},{preserved})
-		end
-end
+--	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+--		Trigger2(FP,{
+--		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtLeast,1*256,0,0xFF00),
+--		DeathsX(EPDF(0x628298-(0x150*i)+(19*4)),AtMost,4,0,0xFF),
+--		},
+--		{
+--			SetDeaths(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,0),
+--			SetDeathsX(EPDF(0x628298-(0x150*i)+(21*4)), SetTo,0,1,0xFF00),
+--	},{preserved})
+--		end
+--end
 
 
 --수정광산
@@ -9513,6 +9513,18 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 		conditions = {
 			Label(0);
 			isname(i,"_Mininii");
+			CDeaths(P6,AtLeast,1,LimitX);
+		},
+		actions = {
+			SetCDeaths(P6,SetTo,1,LimitC);
+			
+		}
+	}
+	Trigger {
+		players = {P6},
+		conditions = {
+			Label(0);
+			isname(i,"Natori_sana");
 			CDeaths(P6,AtLeast,1,LimitX);
 		},
 		actions = {
@@ -16317,7 +16329,7 @@ Trigger {
 		RotatePlayer({
 			DisplayTextX(BossT,4),
 			PlayWAVX("staredit\\wav\\BossAwak.ogg"),
-			PlayWAVX("staredit\\wav\\BossAwak.ogg")
+			PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav")
 		},HumanPlayers,FP);
 	}
 }
@@ -16331,7 +16343,7 @@ Trigger {
 		RotatePlayer({
 			DisplayTextX(BossT,4),
 			PlayWAVX("staredit\\wav\\BossAwak.ogg"),
-			PlayWAVX("staredit\\wav\\BossAwak.ogg")
+			PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav")
 		},HumanPlayers,FP);
 	}
 }
@@ -16345,7 +16357,7 @@ Trigger {
 		RotatePlayer({
 			DisplayTextX(BossT,4),
 			PlayWAVX("staredit\\wav\\BossAwak.ogg"),
-			PlayWAVX("staredit\\wav\\BossAwak.ogg")
+			PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav")
 		},HumanPlayers,FP);
 	}
 }
@@ -16359,7 +16371,7 @@ Trigger {
 		RotatePlayer({
 			DisplayTextX(BossT,4),
 			PlayWAVX("staredit\\wav\\BossAwak.ogg"),
-			PlayWAVX("staredit\\wav\\BossAwak.ogg")
+			PlayWAVX("staredit\\wav\\BossAwak.ogg"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav"),PlayWAVX("sound\\Terran\\RAYNORM\\URaPss02.wav")
 		},HumanPlayers,FP);
 	}
 }
