@@ -41,9 +41,13 @@ end
 
 
 CurTrigCnt = 0
-VerText = "\x19ver\x07. \x043\x07.\x0456"
-
-TestSet(0)
+VerText = "\x19ver\x07. \x043\x07.\x0458"
+Asm55Off = 1
+if Asm55Off == 1 then
+	function STRxStart() end
+	function STRxEnd() end
+end
+TestSet(1)
 if Limit == 1 then
 	VerText = VerText.."T"
 	TestSpeedNum = 1
@@ -65,7 +69,7 @@ SpeedTestMode = 0
 SlotEnable =1
 end
 FP = P8
-LimitVer = 62
+LimitVer = 63
 StatVer = 14
 StatVer2 = 5
 EUDTurbo(FP)
@@ -78,6 +82,7 @@ DP_Start_init()
 __SetIndexAlloc(0x4000, 0xA000)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
+STRxStart()
 	Include_CtrigPlib(360,"Switch 100")
 	Include_64BitLibrary("Switch 100")
 	Install_BackupCP(FP)
@@ -87,11 +92,14 @@ CJump(AllPlayers,init_func)
 	Include_CRandNum(FP)
 	DataArr()
 	Install_CallTriggers()
+STRxEnd()
 	
 CJumpEnd(AllPlayers,init_func)
 onInit_EUD() -- onPluginStart
-CT_Prev()
-CT_PrevCP()
+STRxStart()
+	CT_Prev()
+	CT_PrevCP()
+STRxEnd()
 LeaderBoard()
 System()
 Operator()
@@ -101,7 +109,9 @@ GameDisplay()
 GlobalBoss()
 TBL()
 CUnit()	
+STRxStart()
 CT_Next()
+STRxEnd()
 TestTrig()
 init_Setting()
 EndCtrig()

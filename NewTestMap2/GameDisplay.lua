@@ -171,7 +171,7 @@ function GameDisplay()
 		
 		CIfXEnd()
 		
-		CS__ItoCustom(FP,SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1B０",0x1B,nil, LVData)
+		CA__ItoCustom(SVA1(Str1,3),LevelLoc,nil,nil,{10,6},1,nil,"\x1B０",0x1B,nil, LVData)
 		TriggerX(FP,{CD(StatEffLoc,1),CD(StatEffT,2,AtLeast)},{SetCD(StatEffT,0),SetCSVA1(SVA1(Str1,0),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,1),SetTo,0x04,0xFF),SetCSVA1(SVA1(Str1,2),SetTo,0x04,0xFF)},{preserved})
 		CA__InputVA(56*1,Str1,Str1s,nil,56*1,56*2-2)
 		CA__SetValue(Str1,MakeiStrVoid(54),0xFFFFFFFF,0)
@@ -184,7 +184,7 @@ function GameDisplay()
 		CIfX(FP,CD(Tabkey,0))
 		CA__SetValue(Str1,"\x12포인트 \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999999,AtLeast),{SetV(StatPLoc,999999999)},{preserved})
-        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+        CA__ItoCustom(SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		f_LMov(FP, TempCrStLoc, CredLoc)
 		CElseX()
 		CA__SetValue(Str1,"\x12\x02조각\x0D \x04:  000,000,000 \x04| \x19판매권 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
@@ -197,7 +197,7 @@ function GameDisplay()
 		CMov(FP,TempFf2,-999999999)
 		CIfXEnd()
 
-        CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+        CA__ItoCustom(SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		CIfXEnd()
 		CIfX(FP,{TTNWar(TempCrStLoc, AtLeast, "999999999999999"),TTNWar(TempCrStLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
 		f_LMov(FP,TempCrStLoc,"999999999999999")
@@ -224,6 +224,38 @@ function GameDisplay()
 	CA__SetMemoryX((56*3)-1,0x0D0D0D0D,0xFFFFFFFF,1)
 		end 
 		CAPrint(iStr1,{Force1},{1,0,0,0,1,1,0,0},"TEST",FP,{}) 
+		
+		local temp,NP4 = ToggleFunc({KeyPress("NUMPAD4","Up"),KeyPress("NUMPAD4","Down")},nil,1)--누를 경우 현재 적용중인 버프 상세 표기
+		CIf(FP,CD(NP4,1))
+			CMovX(FP,VArr(GetVArray(iv.Money2[1], 7), LCP),10000000,Add,nil,nil,1)
+
+		CIfEnd()
+		if Limit == 1 then
+			CIf(FP,{KeyPress("NUMPAD5", "Down")})
+			LocGetUnitArr = CreateVarArr(11, FP)
+			for i = 0, 6 do
+				CIf(FP,{CV(LCP,i)})
+				for p = 0, 10 do
+					CMov(FP,LocGetUnitArr[p+1],VArr(GetUnitVArr[i+1], 39+p))
+					
+				end
+				CIfEnd()
+			end
+			TxtArr = {}
+		for j,k in pairs(LocGetUnitArr) do
+			table.insert(TxtArr,"\x04"..tostring(j+39).." : ")
+			table.insert(TxtArr,k)
+			table.insert(TxtArr,"     ")
+			if j ==5 then
+				table.insert(TxtArr,"\n")
+				
+			end
+		end
+
+			DisplayPrint(LCP, TxtArr)
+			DisplayPrint(LCP, {"MoneyLoc2 : ",MoneyLoc2})
+			CIfEnd()
+		end
 
 	
 	CIf(FP, {CV(InterfaceNumLoc,1,AtLeast),CV(InterfaceNumLoc,512,AtMost)})
@@ -957,7 +989,7 @@ function GameDisplay()
 			"\x13\x04맵상의 모든 보스 몬스터의 공략이 완료된 이후 \x17크레딧 \x1F광산\x04이 개인 보스존에 생성됩니다",
 			"\x13\x04이 광산에 1회 공격을 할 때마다 \x17채광력 \x04만큼의 크레딧이 주어집니다. (\x17채광력\x04은 P키로 확인 가능)",
 			"\x13\x04채광력 : 채광의 보석, 각성 횟수에 따라 1.1배씩 곱연산으로 증가",
-			"\x13\x041회 최대 채광 가능 크레딧 : 기본 1억 + 15만레벨 이후 1만 레벨 단위로 증가량 20만씩 증가",
+			"\x13\x041회 최대 채광 가능 크레딧 : 기본 1억. 15만레벨 이후부터 1레벨당 20만씩 증가.(16만LV부터 40만, 17만LV부터 60만 ...)",
 		},
 		
 	}

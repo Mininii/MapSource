@@ -285,9 +285,9 @@ function Interface()
 	else
 		CAdd(FP,GeneralPlayTime,1)
 	end
-	--if Limit == 0 then
+	if Limit == 0 then
 		TriggerX(FP,{CD(iv.HotTimeBonus,1),CV(GeneralPlayTime,24*60*60*12)},{SetCD(iv.HotTimeBonus,0),SetCD(iv.SpHotTimeBonus,0),RotatePlayer({DisplayTextX(StrDesignX("\x07핫 타임 보너스\x04가 \x06종료되었습니다.\x04(보스 처치 보상은 유지됨)"),4)}, Force1, FP)})
-	--end
+	end
 	for i = 0, 6 do
 		TriggerX(FP,{HumanCheck(i,1)},{AddV(PCheckV,1)},{preserved})
 		TriggerX(FP,{HumanCheck(i,0)},{RemoveUnit("Men", P12),RemoveUnit("Factories", P12)})
@@ -311,9 +311,12 @@ function Interface()
 		
 	end
 	DoActionsX(FP, {AddV(XEPerT,1),SetCD(iv.BossInv,0)})
+	if Limit == 0 then
+		
 	Trigger2X(FP,{CV(XEPerT,864,AtLeast)},{SubV(XEPerT,864),AddV(XEPerM,1),
 	--RotatePlayer({DisplayTextX(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 \x08강화확률이 \x0F0.1%p \x08하락\x04하였습니다.\x07"), 4),DisplayTextX(StrDesignX("\x1F44강\x04~\x1E46강 \x04유닛의 강화확률은 1시간마다 0.1%p씩 하락합니다.\x07"), 4)}, Force1, FP),
 },{preserved})
+	end
 
 	
 TipArr = {

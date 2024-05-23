@@ -154,9 +154,9 @@ Trigger2X(FP, {CDX(PBossClearFlag,2,2)}, {SetV(B_Credit,50000);RotatePlayer({Dis
 
 BossEPD = CreateVar(FP)
 BossDPM = CreateWar(FP)
---STRxStart()
+STRxStart()
 DPSArr2 = CreateArr(1441, FP)
---STRxEnd() 
+STRxEnd() 
 DPSCheckV = CreateVar(FP)
 DpsDest = CreateVar(FP)
 DPSCheck = CreateCcode()

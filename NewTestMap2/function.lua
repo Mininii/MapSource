@@ -548,9 +548,9 @@ end
 
 
 function DPSBuilding(CP,UnitPtr,Multiplier,MultiplierV,TotalDPSDest,MoneyV,BossFlag)
-	--STRxStart()
+	STRxStart()
 	local DPSArrX = CreateArr(96*4, FP)
-	--STRxEnd()
+	STRxEnd()
 	local TotalDPS = CreateWar(FP)
 	local TotalDPS2 = CreateWar(FP)
 	local DPSCheckV = CreateVar(FP)
@@ -967,6 +967,9 @@ function AutoBuyG(CP,LvUniit,Cost)--Cost==String
 			else
 				local TempCost = CreateWar(FP)
 				f_LMul(FP, TempCost, Cost, GetFAcc2W)
+				CIf(FP,{TTNWar(GetMoney, AtMost, "8006744073709551615"),CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+					f_LAdd(FP, GetMoney, GetMoney, "10000000000000000000")
+				CIfEnd()
 				CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
 				f_LSub(FP, GetMoney, GetMoney, TempCost)
 			end
@@ -1010,6 +1013,9 @@ function AutoBuyG2(CP,LvUniit,Cost)--Cost==String
 				else
 					local TempCost = CreateWar(FP)
 					f_LMul(FP, TempCost, Cost, GetFAccW)
+					CIf(FP,{TTNWar(GetMoney, AtMost, "8006744073709551615"),CV(GetMoney2,1,AtLeast)},{SubV(GetMoney2,1)})
+						f_LAdd(FP, GetMoney, GetMoney, "10000000000000000000")
+					CIfEnd()
 					CIf(FP, {TTNWar(GetMoney,AtLeast,TempCost)})
 					f_LSub(FP, GetMoney, GetMoney, TempCost)
 				end
