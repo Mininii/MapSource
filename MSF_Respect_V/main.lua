@@ -72,6 +72,7 @@ CJump(AllPlayers,init_func)
 	Install_Call_G_CA()
 	G_CA_Lib_ErrorCheck()
 	Install_CallTriggers()
+	Include_GunData(128,55)
 CJumpEnd(AllPlayers,init_func)
 
 

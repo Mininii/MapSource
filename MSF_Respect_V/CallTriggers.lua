@@ -34,6 +34,8 @@ AtkUpgradeMaskRetArr, AtkUpgradePtrArr = CreateBPtrRetArr(7,0x58D2B0+7,46)
 HPUpgradeMaskRetArr, HPUpgradePtrArr = CreateBPtrRetArr(7,0x58D2B0,46)
 AtkUpgradeMaskLimRetArr, AtkUpgradeLimPtrArr = CreateBPtrRetArr(7,0x58D088+7,46)
 HPUpgradeMaskLimRetArr, HPUpgradeLimPtrArr = CreateBPtrRetArr(7,0x58D088,46)
+ShUpgradeMaskRetArr, ShUpgradePtrArr = CreateBPtrRetArr(7,0x58D2B0+15,46)
+ShUpgradeMaskLimRetArr, ShUpgradeLimPtrArr = CreateBPtrRetArr(7,0x58D088+15,46)
 
 OneClickUpgrade = SetCallForward()
 UpResultFlag = CreateCcode()--1 = 성공실패여부
@@ -50,6 +52,9 @@ SetCall(FP)
 
 	f_WreadX(FP, 0x655740, 0, MinCostBase)
 	f_WreadX(FP, 0x6559C0, 0, MinCostFactor)
+	CElseIfX({CV(UpgradeFlag,3)})
+	f_WreadX(FP, 0x655740, 15, MinCostBase)
+	f_WreadX(FP, 0x6559C0, 15, MinCostFactor)
 	CIfXEnd()
 
 
@@ -134,4 +139,28 @@ SetCall(FP)
 		SetCVar(FP,UpCompleted[2],SetTo,0)
 	})
 SetCallEnd()
+
+
+BX = CreateVar(FP)
+BY = CreateVar(FP)
+BIDV = CreateVar(FP)
+BIndexV = CreateVar(FP)
+Call_PlaceIndexedBuild = SetCallForward()
+SetCall(FP)
+Simple_SetLocX(FP, 0, BX, BY, BX, BY)
+
+CIf(FP,{Memory(0x628438, AtLeast, 1)})
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+
+CDoActions(FP, {
+	TSetMemory(_Add(BIDV,EPDF(0x662860)) ,SetTo,1+65536),
+	TCreateUnitWithProperties(1, BIDV, 1, FP, {energy = 100}),
+	Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
+	Set_EXCC2(DUnitCalc,CunitIndex,2,SetTo,BIndexV),
+})
+CIfEnd()
+SetCallEnd()
+
+
 end

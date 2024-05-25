@@ -4,6 +4,12 @@
 
     
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
+    
+	for j, k in pairs(f_GunTable) do
+        f_GSend(k)
+    end
+
+
     EXCC_ClearCalc()
         EXCC_Part2()
         EXCC_Part3X()
@@ -15,7 +21,7 @@
             {SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
             --SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
             SetDeathsX(19025+(84*i)+35,SetTo,0,0,0xFF); -- 
-            MoveCp(Add,19*4),
+            MoveCp(Add,25*4),
             SetCVar(FP,CurCunitI2[2],SetTo,i)
             })
         end
@@ -24,6 +30,7 @@
 
 
     
+	Install_GunStack()
 	Create_G_CA_Arr()
 
     if TestStart == 1 then-- BarTextTest
@@ -75,16 +82,42 @@ end
         --스택타입 그림자 \x18 표면 \x07
         --위험타입 그림자 \x06 표면 \x08
 
-		
-		--str22 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str22 = "\x06。˙+˚Don't Die。+.˚\x12\x1B。˙+˚D\x04on't \x1BD\x04ie\x1B。+.˚"
+		--Shirley House
+        --Sui
+        --Rophe
+        --Darly
+        --Era
+        --Freyja
+        --Kamilia
+        --Sera
+        --Nina
+        --Jisoo
+        --Sen
+        --Gaya
+        --Envy
+        
+        
+        
+--Yumi - 리버
+--Yuna - 워브링어
+--Lizzet - 모조
+--Lin - 간트리써
+--Merry - 레이스
+--Rose - 배틀--
+
+--EL CLEAR - 초강하템
+--EL FAIL - 강다크
+--PLAY - 초강아콘
+--LENA - 아비터(타이탄)
+--DIEIN - 초강다크
+		--str22 = "\x1C。+.˚Shirley House\x12\x1FS\x04hirley \x1FH\x04ouse\x1F。+.˚"
+		str22 = "\x1F。˙+˚Hypernaid。+.˚\x12\x1C。˙+˚H\x04ypernaid\x1C。+.˚"
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\x1C。˙+˚Archon。+.˚\x12\x1F。˙+˚A\x04rchon\x1F。+.˚"
+		str33 = "\t\t\x06。˙+˚DIEIN。+.˚\x12\x08。˙+˚D\x04IEIN\x08。+.˚"
 		--str44 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str44 = "\t\x1C。˙+˚Raszagal。+.˚\x12\x1F。˙+˚R\x04aszagal\x1F。+.˚"					           
+		str44 = "\t\t\x15。˙+˚Merry。+.˚\x12\x1B。˙+˚M\x04erry\x1B。+.˚"
 		--str55 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str55 = "\t\x15。˙+˚Hyperion。+.˚\x12\x1B。˙+˚H\x04yperion\x1B。+.˚"
- 
+		str55 = "\t\t\x1C。˙+˚Rose。+.˚\x12\x1F。˙+˚R\x04ose\x1F。+.˚"
 
 		str = str22.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 	
@@ -240,6 +273,7 @@ end
 
         TriggerX(FP,{},{CreateUnit(1, 84, 64, FP),KillUnit(84, FP)},{preserved})
 		
+    --]]
     end
     --219
     --130

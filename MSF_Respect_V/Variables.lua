@@ -5,6 +5,7 @@
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16}
 	HumanPlayers = {0,1,2,3,4,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4}
+	MarID = {0,1,16,99,100} 
 	ObPlayers = {P9,P10,P11,P12}
 	MedicTrig = {34,9,88,80,21}
 	MedicTick = {1,2,3,4,5}
@@ -15,6 +16,8 @@
 	UnitIDArr = CreateFArr(1700, FP)
 	UnitPosArr = CreateFArr(1700, FP)
 	PlayerIDArr = CreateFArr(1700, FP)
+	UnitHPArr = CreateFArr(1700, FP)
+	
 	--Vars
 	SELimit = CreateCcode()
     ExRate = CreateVar2(FP, nil, nil, 20)
@@ -59,8 +62,8 @@
 	"\x07『 \x04기부금액 단위가 \x1F100000 Ore \x04로 변경되었습니다.\x07 』",
 	"\x07『 \x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다.\x07 』",
 	"\x07『 \x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.\x07 』"}
-	GiveUnitID = {64,65,66,67,61,63,68}
-	BanToken = {84,69,70,60,71,98}
+	GiveUnitID = {64,65,66,67,61}
+	BanToken = {84,69,70,60}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
 
 
@@ -71,7 +74,12 @@
 	for j, k in pairs(UnitPointArr2) do
 			SetUnitsDatX(k, {SizeL=4,SizeU=4,SizeR=4,SizeD=4,GroupFlag=0x29})
 	end
-	SetUnitsDatX(20, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
+		SetUnitsDatX(10, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
+		SetUnitsDatX(32, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
+		SetUnitsDatX(20, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
+	for j,k in pairs(MarID) do
+		SetUnitsDatX(k, {SizeL=7,SizeU=7,SizeR=8,SizeD=9})
+	end
 
 	--SetUnitAbility(19,5,5600,false,nil,333,1,nil,nil,38000,"짐 레이너 (V)",5000)
 
@@ -90,7 +98,10 @@
 	CreateUnitQueuePtr = CreateVar(FP)
 	CreateUnitQueueNum = CreateVar(FP)
 	CreateUnitQueuePtr2 = CreateVar(FP)
+	ShUsed = CreateCcode()
+	ShCool = CreateCcode()
 
 	
+	ShCost = 60000
 
 end

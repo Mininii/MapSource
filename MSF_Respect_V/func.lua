@@ -4,6 +4,16 @@ PatchArr = {}
 PatchArr2 = {}
 PatchArrPrsv = {}
 
+---@param Str? string
+---@return string
+function StrDesign(Str)
+	return "\x07。\x18˙\x0F+\x1C˚ "..Str.." \x1C。\x0F+\x18.\x07˚"
+end
+---@param Str? string
+---@return string
+function StrDesignX(Str)
+	return "\x13\x07。\x18˙\x0F+\x1C˚ "..Str.." \x1C。\x0F+\x18.\x07˚"
+end
 function SetWeaponsDatX(WepID,Property)
 	if type(Property)~= "table" then
 		PushErrorMsg("Property Inputdata Error")
@@ -118,7 +128,9 @@ function SetUnitsDatX(UnitID,Property)
 					PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,SType))
 					PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,SType))
 				end
-
+				
+			elseif j=="Armor"  then
+				PatchInsert(SetMemoryB(0x65FEC8 + UnitID,SetTo,k)) -- 아머
 			elseif j=="GasCost"  then
 				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- 가스
 			elseif j=="BuildTime"  then
@@ -2032,4 +2044,115 @@ function LabelUseCheck() -- Label 사용 체크
 		end
 		
 	end
+end
+
+
+function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",Length1},{2,"2.Wav",Length2},...,{N,"N.Wav",LengthN}}
+	STPopTrigArr(PlayerID)	
+	local Arr = CreateVarArr(3,PlayerID) -- Temp / ΔT / Delay 
+
+	f_Read(PlayerID,0x51CE8C,Arr[1])
+
+	CNeg(PlayerID,Arr[1])
+
+	f_Diff(PlayerID,Arr[2],Arr[1],nil,nil,nil,1)
+
+	CSub(PlayerID,Arr[3],Arr[2])
+
+	local Cond1, Act1, Cond2
+	if type(Input) == "number" then
+		Cond1 = Memory(Input,AtLeast,1)
+		Act1 = SetMemory(Input,SetTo,0)
+	elseif Input[4] == "V" then
+		Cond1 = NVar(Input,AtLeast,1)
+		Act1 = SetNVar(Input,SetTo,0)
+	else
+		Cond1 = CtrigX(Input[1],Input[2],Input[3],Input[4],AtLeast,1)
+		Act1 = SetCtrig1X(Input[1],Input[2],Input[3],Input[4],SetTo,0)
+	end
+
+	CIfX(PlayerID,{NVar(Arr[3],Exactly,0),Cond1})
+		for k, v in pairs(WAVData) do
+			if type(Input) == "number" then
+				Cond2 = Memory(Input,Exactly,v[1])
+			elseif Input[4] == "V" then
+				Cond2 = NVar(Input,Exactly,v[1])
+			else
+				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
+			end
+			if type(v[2]) == "table" then
+				local WAVs = CreateCcodeArr(12)
+					for j, k in pairs(TargetPlayer) do
+						local Pl = k
+						if Pl == P9 then Pl = 128
+						elseif Pl == P10 then Pl = 129
+						elseif Pl == P11 then Pl = 130
+						elseif Pl == P12 then Pl = 131 end
+						
+					for o,p in pairs(v[2]) do
+							Trigger {players = {PlayerID},
+								conditions = {
+									Label(0);
+									CD(WAVs[j],o-1);
+									Cond2;
+									LocalPlayerID(Pl);
+									DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+								},
+								actions = {
+									AddCD(WAVs[j], 1);
+									Act1;
+									SetCp(Pl);
+									PlayWAV(p);
+									PlayWAV(p);
+									SetCp(PlayerID);
+									SetNVar(Arr[3],Add,v[3]);
+								},
+								flag = {preserved}
+							}
+						end
+						TriggerX(PlayerID, {CD(WAVs[j],#v[2],AtLeast)}, {SetCD(WAVs[j], 0);},{preserved})
+					end
+
+			else
+				for j, k in pairs(TargetPlayer) do
+					local Pl = k
+					if Pl == P9 then Pl = 128
+					elseif Pl == P10 then Pl = 129
+					elseif Pl == P11 then Pl = 130
+					elseif Pl == P12 then Pl = 131 end
+					
+					Trigger {players = {PlayerID},
+						conditions = {
+							Label(0);
+							Cond2;
+							LocalPlayerID(Pl);
+							DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+						},
+						actions = {
+							Act1;
+							SetCp(Pl);
+							PlayWAV(v[2]);
+							PlayWAV(v[2]);
+							SetCp(PlayerID);
+							SetNVar(Arr[3],Add,v[3]);
+						},
+						flag = {preserved}
+					}
+				end
+			end
+		end
+	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
+		if AlertWav ~= nil then
+			Trigger {players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					CopyCpActionX({PlayWAVX(AlertWav)},TargetPlayer);
+				},
+				flag = {preserved}
+			}
+		end
+	CIfXEnd()
+	return Arr[2]
 end

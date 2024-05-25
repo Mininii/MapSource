@@ -1,28 +1,116 @@
 ﻿function onInit_EUD()
-    
+
+
+
+	Shape8126 = {{496, 2176},{1520, 5792}}
+	Shape8116 = {{1792, 5840},{1216, 5712},{1504, 6096}}
+	Shape8122 = {{224, 1680},{1088, 1936},{928, 2448},{320, 2416},{608, 2960},{256, 2736},{576, 6416},{192, 5296},{608, 5840}}
+	Shape8127 = {{240, 3008},{1968, 6912},{944, 6400}}
+	Shape8174 = {{400, 5488},{1744, 2384}}
+    Shape8131 = {{1024, 688},{448, 1296},{1664, 880},{1664, 1296},{448, 848},{1280, 7472},{1024, 7760},{544, 7536}}
+	Shape8132 = {{160, 752},{1888, 752},{672, 304},{1376, 304},{1088, 6992},{704, 7312},{1664, 7312},{384, 7120}}
+	Shape8133 = {{1760, 400},{1920, 7696},{1728, 7760},{1536, 7824},{1344, 7888},{128, 7696},{320, 7760},{512, 7824},{704, 7888}}
+	Shape8106 = {{1024, 5968},{1920, 6128},{1376, 5424},{224, 6896},{256, 7376},{1600, 6896},{1440, 1680}}
+	Shape8113 = {{608, 2064},{160, 2064},{640, 1712},{640, 2640},{128, 3280}}
+	Shape8114 = {{1792, 5392},{960, 6288},{768, 5584}}
+	Shape8147 = {{1936, 8016}}
+	Shape8150 = {{1824, 4800},{1504, 4960},{1184, 4800},{1504, 4640},{1184, 5120},{1184, 4480},{864, 5280},{544, 5120},{864, 4960},{224, 4960},{544, 4800},{864, 4640},{224, 4640},{544, 4480},{864, 4320},{224, 4320},{544, 4160}}
+	Shape8151 = {{64, 48},{1984, 48}}
+	Shape8152 = {{1024, 48},{1008, 8032}}
+	Shape8154 = {{1376, 3728},{1440, 2480}}
+	Shape8160 = {{1760, 3312},{1824, 2576},{1088, 2896},{1792, 1680}}
+	Shape8167 = {{1792, 4112},{1440, 2832},{1632, 2128}}
+	Shape8168 = {{288, 3792}}
+	Shape8175 = {{144, 8000}}
+	Shape8190 = {{1776, 3728}}
+	Shape8200 = {{1888, 2928},{96, 4112},{1024, 7568}}
+	Shape8201 = {{688, 3776}}
+	Shape8148 = {{1136,7280},{1024,368}}
+
+	BuildPlaceArr = {
+		{Shape8131,131},
+		{Shape8132,132},
+		{Shape8133,133},
+		{Shape8126,126},
+		{Shape8116,116},
+		{Shape8122,122},
+		{Shape8127,127},
+		{Shape8174,174},
+		{Shape8106,106},
+		{Shape8113,113},
+		{Shape8114,114},
+		{Shape8147,147},
+		{Shape8150,150},
+		{Shape8151,151},
+		{Shape8152,152},
+		{Shape8154,154},
+		{Shape8160,160},
+		{Shape8167,167},
+		{Shape8168,168},
+		{Shape8175,175},
+		{Shape8190,190},
+		{Shape8200,200},
+		{Shape8201,201},
+
+		{Shape8148,148}
+	}
+
+
+
 	UnitRepIndex2 = CreateVar(FP)
 	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast),ElapsedTime(AtLeast, 3)})
 	RepPlayerID = CreateVar(FP)
+	CunitHP = CreateVar(FP)
+	for j,k in pairs(BuildPlaceArr) do
+		local BID = k[2]
+		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})--그룹플래그
+		for o,p in pairs(k[1]) do
+			CallTrigger(FP,Call_PlaceIndexedBuild,{SetV(BX,p[1]),SetV(BY,p[2]),SetV(BIDV,BID),SetV(BIndexV, o)})
+			
+		end
+	end
 	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
 	f_Read(FP, ArrX(UnitPosArr,UnitRepIndex2), CPos)
+	f_Read(FP, ArrX(UnitHPArr,UnitRepIndex2), CunitHP)
 	f_Read(FP, ArrX(UnitIDArr,UnitRepIndex2), RepHeroIndex)
 	f_Read(FP, ArrX(PlayerIDArr,UnitRepIndex2), RepPlayerID)
 	Convert_CPosXY()
 	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 	
+	DoActions(FP, {
+		SetMemoryB(0x6644F8+4,SetTo,158),
+		SetMemoryB(0x6644F8+6,SetTo,200),
+		SetMemory(0x66EC48+(541*4), SetTo, 91),
+		SetMemory(0x66EC48+(956*4), SetTo, 91),
+	})
+
+
 	CIf(FP,{Memory(0x628438, AtLeast, 1)})
 	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
-	CDoActions(FP, {TCreateUnit(1, RepHeroIndex, 1, RepPlayerID),Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	CDoActions(FP, {
+		TSetMemory(_Add(RepHeroIndex,EPDF(0x662860)) ,SetTo,1+65536),
+		TCreateUnit(1, RepHeroIndex, 1, RepPlayerID),
+		Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
+		Set_EXCC2(DUnitCalc,CunitIndex,2,SetTo,CunitHP),
+	})
 	CIfEnd()
+	DoActions(FP, {
+		SetMemoryB(0x6644F8+4,SetTo,76),
+		SetMemoryB(0x6644F8+6,SetTo,83),
+		SetMemory(0x66EC48+(956*4), SetTo, 377),
+		SetMemory(0x66EC48+(541*4), SetTo, 247),
+	})
 	CAdd(FP,UnitRepIndex2,1)
 	CSub(FP,UnitRepIndex,1)
 	CWhileEnd()
+	
+	
 	CIfEnd()
 
 
 	for i = 0, 227 do
-	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000}})--모든 유닛을 마법사로
+	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000},Armor=0})--모든 유닛을 마법사로, 아머를 0으로
 	end
 	SetUnitsDatX(130,{GroupFlag=0x11})--그룹플래그
 	SetUnitsDatX(131,{GroupFlag=0x11})--그룹플래그
@@ -65,7 +153,7 @@
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--별의 보호막?
 	SetUnitsDatX(125,{HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -105,6 +193,7 @@
 	SetUnitsDatX(107,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 
 	CIfOnce(FP)
+
 	DoActions2(FP, PatchArr)
 	DoActions2(FP, PatchArr2)
 	LimitX = CreateCcode()
@@ -218,23 +307,18 @@ end
 		AddV(CTMin[5],66666666),
 		AddV(CTMin[6],66666666),
 		AddV(CTMin[7],66666666),})
+		for i = 0, 4 do
+			DoActions(FP, {CreateUnit(1, MarID[i+1], 5, P1)}, 1)--리마
+		end
+		DoActions(FP, {CreateUnit(1, 32, 5, P1)}, 1)--일마
+		DoActions(FP, {CreateUnit(1, 20, 5, P1)}, 1)--영마
+		DoActions(FP, {CreateUnit(1, 10, 5, P1)}, 1)--스마
+		DoActions(FP, {CreateUnit(1, 15, 5, P1)}, 1)--스마
+		DoActions(FP, {CreateUnit(1, 84, 5, P1)}, 1)--스마
+		DoActions(FP, {CreateUnit(1, 63, 5, P1)}, 1)--스마
 	
 	end
 	DoActions2(FP, {	
-		SetMemoryB(0x57F27C + (0 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (1 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (2 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (3 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (4 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (5 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (6 * 228) + 20,SetTo,0),
-		SetMemoryB(0x57F27C + (0 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (1 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (2 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (3 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (4 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (5 * 228) + 8,SetTo,0),
-		SetMemoryB(0x57F27C + (6 * 228) + 8,SetTo,0),
 	SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetCp(FP)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
 
@@ -242,17 +326,20 @@ end
 
 	CFor(FP,19025,19025+(84*1700),84)
 	CI = CForVariable()
-	
+	RepBuildData = {
+
+		5,30,3,81,83
+,	}
 	condbox = {}
 	for j,k in pairs(UnitPointArr2) do
+		table.insert(condbox,CV(RepHeroIndex,k))
+	end
+	for j,k in pairs(RepBuildData) do
 		table.insert(condbox,CV(RepHeroIndex,k))
 	end
 	
 	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
 	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
-	
-
-
 	CIf(FP,{CV(RepHeroIndex,173)})
 	CDoActions(FP, {TSetMemory(_Add(CI,2), SetTo, 8380000*256)})
 	CIfEnd()
@@ -268,16 +355,33 @@ end
 	CIfEnd()
 	CIf(FP,{TTOR(condbox)})
 	f_Read(FP,_Add(CI,10),CPos)
+	f_Read(FP,_Add(CI,2),CunitHP)
+	f_Div(FP,CunitHP,_Mov(256))
+	CIf(FP,{CV(CunitHP,99,AtMost)})
+	DisplayPrint(HumanPlayers, {"HP : ",CunitHP})
+	CIfEnd()
+	CMov(FP,ArrX(UnitHPArr,UnitRepIndex),CunitHP)
 	CMov(FP,ArrX(UnitPosArr,UnitRepIndex),CPos)
 	CMov(FP,ArrX(UnitIDArr,UnitRepIndex),RepHeroIndex,nil,0xFF,1)
 	CMov(FP,ArrX(PlayerIDArr,UnitRepIndex),PlayerV,nil,0xFF,1)
-	--CDoActions(FP,{Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+	
 	CAdd(FP,UnitRepIndex,1)
 	CIfEnd()
 	CAdd(FP,CunitIndex,1)
 	CForEnd()
+	
+	
 	removebox = {}
+	RemoveArr = {201,200,174,175,167,154,160,168,190,189,152,147,148,150,126,127,106,113,114,116,122,131,132,133,151}
 	for j,k in pairs(UnitPointArr2) do
+		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
+		table.insert(removebox,RemoveUnit(k, AllPlayers))
+	end
+	for j,k in pairs(RepBuildData) do
+		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
+		table.insert(removebox,RemoveUnit(k, AllPlayers))
+	end
+	for j,k in pairs(RemoveArr) do
 		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
 		table.insert(removebox,RemoveUnit(k, AllPlayers))
 	end
@@ -302,7 +406,6 @@ end
 		players = {FP},
 		conditions = {  
 			Command(FP,AtLeast,10,42);
-			
 		},
 		actions = {
 			KillUnit(42,FP);
@@ -310,79 +413,5 @@ end
 			
 		},
 	}
-	CanAct = {}
-
-	for i = 0, 6 do
-		table.insert(CanAct,SetMemory(0x582264 + (i*4),SetTo,3*2))
-		table.insert(CanAct,SetMemory(0x5822C4 + (i*4),SetTo,3*2))
-	end
-
-	CanAct2 = {}
-
-	for i = 0, 6 do
-		table.insert(CanAct2,SetMemory(0x582264 + (i*4),SetTo,0))
-		table.insert(CanAct2,SetMemory(0x5822C4 + (i*4),SetTo,0))
-	end
-
-	TriggerX(FP, {CD(EVFCcode,0)}, CanAct, {preserved})
-	TriggerX(FP, {CD(EVFCcode,1)}, CanAct2, {preserved})
-	CIf(FP, CD(GMode,1))
-	CMov(FP,CunitIndex,0)
-	GunSel = CreateVar(FP)
-	CMov(FP,0x6509B0,19025+25)
-	CIf(FP,{CV(GunSel,9,AtMost)})
-		CFor(FP, 19025, 19025+(84*1700), 84)
-		CI = CForVariable()
-
-		CIf(FP,{CV(GunSel,10,AtMost),TTOR({
-			DeathsX(CurrentPlayer,Exactly,134,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,135,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,136,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,137,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,138,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,139,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,140,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,141,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,142,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,149,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,176,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,177,0,0xFF),
-			DeathsX(CurrentPlayer,Exactly,178,0,0xFF),
-		})})
-		RandV = f_CRandNum(100000, 0)
-		CIf(FP, {CV(RandV,500,AtMost),TMemoryX(_Add(CI,9), Exactly, 0,0xFF0000)})
-		
-		if Limit == 1 then
-		CIf(FP,{CD(TestMode,1)})
-		f_SaveCp()
-		f_Read(FP, _Add(CI,10), CPos, nil, nil, 1)
-		Convert_CPosXY()
-		f_Read(FP, 0x628438, nil, Nextptrs)
-		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-		CDoActions(FP, {CreateUnit(1,84,1,FP),GiveUnits(All, 84, FP, 1, P9),TSetMemory(_Add(Nextptrs,2), SetTo, _Mul(GunSel,256))})
-		f_LoadCp()
-		CIfEnd()
-		end
-
-
-		CAdd(FP,GunSel,1)
-		CDoActions(FP,  {TSetMemoryX(_Add(CI,9), SetTo, 1*65536,0xFF0000),Set_EXCC2(DUnitCalc, CunitIndex, 2, SetTo, GunSel)})
-		CIfEnd()
-
-		CIfEnd()
-
-
-
-
-
-
-
-
-
-		CAdd(FP,0x6509B0,84)
-		CAdd(FP,CunitIndex,1)
-		CForEnd()
-	CIfEnd()
-	CIfEnd()
 
 end
