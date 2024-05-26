@@ -6,6 +6,9 @@ PatchArrPrsv = {}
 
 ---@param Str? string
 ---@return string
+StrD={
+	"\x07。\x18˙\x0F+\x1C˚ "," \x1C。\x0F+\x18.\x07˚"
+}
 function StrDesign(Str)
 	return "\x07。\x18˙\x0F+\x1C˚ "..Str.." \x1C。\x0F+\x18.\x07˚"
 end
@@ -40,6 +43,8 @@ function SetWeaponsDatX(WepID,Property)
 					PatchInsert(SetMemoryW(0x6570C8+(WepID*2),SetTo,k[2])) --스플 중
 					PatchInsert(SetMemoryW(0x657780+(WepID*2),SetTo,k[3])) --스플 밖
 				end
+			elseif j=="DamageType" then
+				PatchInsert(SetMemoryB(0x657258 + WepID, SetTo, k))
 			elseif j=="RangeMin" then
 				PatchInsert(SetMemory(0x656A18+(WepID *4),SetTo,k)) -- 사거리 최소
 			elseif j=="RangeMax" then
@@ -115,8 +120,8 @@ function SetUnitsDatX(UnitID,Property)
 					PatchInsert(SetMemoryB(0x57F27C + (2 * 228) + UnitID,SetTo,1))
 					PatchInsert(SetMemoryB(0x57F27C + (3 * 228) + UnitID,SetTo,1))
 					PatchInsert(SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,1))
-					PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,1))
-					PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
+					PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
 					PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
 				else
 					PatchInsert(SetMemoryB(0x57F27C + (0 * 228) + UnitID,SetTo,SType))
@@ -503,23 +508,55 @@ end
 
 
 
-
-
-function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint,QueueScript,QueueScript2)--QueueScript{FlingyID,SpriteID,ImageID,Color(Option)}
+WepDupCheck = {}
+KillPointArr = {}
+function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint,QueueScript,QueueScript2)--QueueScript{FlingyID,SpriteID,ImageID,Color(Option)}
 	local TempWID = WepID
 	local TempWID2 = 130
+	if WepID~=70 then -- 70번 제로무기 겹쳐도됨
+		if WepDupCheck[WepID] == nil then
+			WepDupCheck[WepID] = true
+		else PushErrorMsg("WepID Duplicated")
+		end
+	end
+	local ColorCode = 0
+	--DmgType 1 폭발 3 일반 4 방무 5 위험타입 = 일반형
+	if DmgType == 1 then
+		ColorCode = 0x11
+	elseif DmgType == 3 then
+		ColorCode = 0x1B
+	elseif DmgType == 4 then
+		ColorCode = 0x1F
+	elseif DmgType == 5 then
+		ColorCode = 0x08
+	else PushErrorMsg("Unit DamageType Error")
+	end
+	local StrArr = {}
+	local StrArr2 = {}
+	
+	for i in string.gmatch(Text, "%S+") do
+		table.insert(StrArr, i)
+	end
+	for j,k in pairs(StrArr) do
+		table.insert(StrArr2, S_to_EmS(string.char(ColorCode)..string.sub(Text, 1, 1)..string.char(0x04)..string.sub(Text, 2, #Text)).." ")
+	end
+	local StrRet = ""
+	for j,k in pairs(StrArr2) do
+		StrRet = StrRet..k
+	end
+
 	if UnitPointArr == nil then UnitPointArr = {} end
 	if UnitPointArr2 == nil then UnitPointArr2 = {} end
-	if QueueScriptArr == nil then QueueScriptArr = {} end
-	if QueueScriptArr2 == nil then QueueScriptArr2 = {} end
+	--if QueueScriptArr == nil then QueueScriptArr = {} end
+	--if QueueScriptArr2 == nil then QueueScriptArr2 = {} end
 	if Point~=nil then
-		table.insert(UnitPointArr, {UnitID,Point,Text})
+		table.insert(UnitPointArr, {UnitID,Point,StrRet})
 	end
-	if QueueScript ~= nil then
-		if type(QueueScript)~="table" then PushErrorMsg("QueueScript InputData Error")end
-		table.insert(QueueScriptArr, {UnitID,table.unpack(QueueScript)})
-		
-	end
+	--if QueueScript ~= nil then
+	--	if type(QueueScript)~="table" then PushErrorMsg("QueueScript InputData Error")end
+	--	table.insert(QueueScriptArr, {UnitID,table.unpack(QueueScript)})
+	--	
+	--end
 	table.insert(UnitPointArr2, UnitID)
 
 	if UnitID == 62 then TempWID2 = WepID end
@@ -532,24 +569,29 @@ function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,S
 	UnitID == 23 or 
 	UnitID == 25 or 
 	UnitID == 30 then TempWID = 130 
-	if QueueScript~=nil then
-		if QueueScript2 ~= nil then--텡크류 유닛
-				
-			if type(QueueScript2)~="table" then PushErrorMsg("QueueScript InputData Error")end
-			table.insert(QueueScriptArr2, {UnitID+1,table.unpack(QueueScript2)})
-			
-		end
-	end
+	--if QueueScript~=nil then
+	--	if QueueScript2 ~= nil then--텡크류 유닛
+	--			
+	--		if type(QueueScript2)~="table" then PushErrorMsg("QueueScript InputData Error")end
+	--		table.insert(QueueScriptArr2, {UnitID+1,table.unpack(QueueScript2)})
+	--		
+	--	end
+	--end
 	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
 	end
 	local Size = 4
 	if UnitID == 74 or UnitID == 75 then
 		Size = nil
 	end
-	SetUnitsDatX(UnitID, {AdvFlag={0x40,0x40},ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
+	if KillPoint>= 65536 then
+		table.insert(KillPointArr,{UnitID,KillPoint,StrRet})
+		KillPoint = 0
+	end
+	SetUnitsDatX(UnitID, {AdvFlag={0x40,0x40+0x8000},StarEditFlag=0x1C7,ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
 })
 if ObjNum == nil then ObjNum = 1 end
-SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})
+if DmgType == 5 then DmgType = 3 end
+SetWeaponsDatX(WepID,{DamageType = DmgType, Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=Splash,DmgFactor=Damage/10,UpgradeType=59})
 
 
 end
@@ -1619,40 +1661,6 @@ end
 	end
 end
 
-function SetUnitAbility(UnitID,WepID,HP,Shield,Cooldown,Damage,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint)
-	local TempWID = WepID
-	local TempWID2 = 130
-	if Point~=nil then
-		table.insert(UnitPointArr, {UnitID,Point,Text})
-	end
-	table.insert(UnitPointArr2, UnitID)
-
-	if UnitID == 62 then TempWID2 = WepID end
-	if UnitID == 98 then TempWID2 = WepID end
-	if UnitID == 86 then TempWID2 = WepID end
-	if 
-	UnitID == 3 or 
-	UnitID == 5 or 
-	UnitID == 17 or 
-	UnitID == 23 or 
-	UnitID == 25 or 
-	UnitID == 30 then TempWID = 130 
-	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
-	end
-	local Size = 4
-	if UnitID == 74 or UnitID == 75 then
-		Size = nil
-	end
-	SetUnitsDatX(UnitID, {AdvFlag={0x40,0x40},ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
-})
-if ObjNum == nil then ObjNum = 1 end
-SetWeaponsDatX(WepID,{Cooldown = Cooldown,DmgBase=Damage,RangeMax=RangeMax,ObjectNum=ObjNum,Splash=false,DmgFactor=0})
-
-
-end
-
-
-
 LabelUseArr = {}
 
 function CtrigX(Player,Index,Address,Next,Type,Value,Mask)
@@ -2141,6 +2149,7 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 				end
 			end
 		end
+	DoActionsX(FP, Act1)
 	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
 		if AlertWav ~= nil then
 			Trigger {players = {PlayerID},
@@ -2155,4 +2164,77 @@ function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",L
 		end
 	CIfXEnd()
 	return Arr[2]
+end
+
+function UnitButton(Player,UnitID,Condition,Actions)
+	Trigger { 
+		players = {FP},
+		conditions = {
+			Label(0);
+			Command(Player,AtLeast,1,UnitID);
+			Condition
+		},
+		actions = {
+			ModifyUnitEnergy(All,UnitID,Player,64,0);
+			GiveUnits(All,UnitID,Player,"Anywhere",11);
+			RemoveUnitAt(All,UnitID,"Anywhere",11);
+			Actions;
+			PreserveTrigger();
+			},
+	}
+end
+
+
+
+function S_to_EmS(Str)
+	local X={}
+	for i = 1, #Str do
+		local Check = string.byte(string.sub(Str,i,i),1)
+		if Check<=0x20 or Check==string.byte(" ",1) then
+			table.insert(X,string.sub(Str,i,i))
+		else	
+			if Check>=97 and Check<=97+26 then
+				table.insert(X,string.char(239,189,32+string.byte(string.sub(Str,i,i),1)))
+			else
+				table.insert(X,string.char(239,188,96+string.byte(string.sub(Str,i,i),1)))
+			end
+		end
+		--239,188,96+n
+	end
+	return table.concat(X),X
+end
+function N_to_EmN(Num)
+	if type(Num) ~= "string" then Num = tostring(Num) end
+	T,X = S_to_EmS(Num)
+	local LoopCount = 0
+	for i = #X, 1, -1 do
+		LoopCount = LoopCount+1
+		if LoopCount>=3 and i~=1 then
+			LoopCount = LoopCount - 3
+			table.insert(X,i,",")
+		end
+	end
+	return table.concat(X)
+end
+
+function Conv_HStr(Str)
+	return S_to_EmS(Convert_StrCode(Str))
+end
+
+
+function Convert_StrCode(Str)
+	for i = 1, #Str do
+		if string.sub(Str,i,i) == "<" then
+			for j= i, #Str do
+				if string.sub(Str,j,j) == ">" then
+					local Str1 = string.sub(Str,1,i-1)
+					local Str2 = string.sub(Str,j+1,#Str)
+					local Code = string.sub(Str,i+1,j-1)
+					Str = Str1..string.char(tonumber(Code,16))..Str2
+				break end
+				if j == #Str then PushErrorMsg("StrCode_EndPos_NotFound") end
+			end
+		end
+	end
+	return Str
 end

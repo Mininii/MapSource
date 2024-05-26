@@ -9,7 +9,7 @@
 	Shape8174 = {{400, 5488},{1744, 2384}}
     Shape8131 = {{1024, 688},{448, 1296},{1664, 880},{1664, 1296},{448, 848},{1280, 7472},{1024, 7760},{544, 7536}}
 	Shape8132 = {{160, 752},{1888, 752},{672, 304},{1376, 304},{1088, 6992},{704, 7312},{1664, 7312},{384, 7120}}
-	Shape8133 = {{1760, 400},{1920, 7696},{1728, 7760},{1536, 7824},{1344, 7888},{128, 7696},{320, 7760},{512, 7824},{704, 7888}}
+	Shape8133 = {{256,400},{1760, 400},{1920, 7696},{1728, 7760},{1536, 7824},{1344, 7888},{128, 7696},{320, 7760},{512, 7824},{704, 7888}}
 	Shape8106 = {{1024, 5968},{1920, 6128},{1376, 5424},{224, 6896},{256, 7376},{1600, 6896},{1440, 1680}}
 	Shape8113 = {{608, 2064},{160, 2064},{640, 1712},{640, 2640},{128, 3280}}
 	Shape8114 = {{1792, 5392},{960, 6288},{768, 5584}}
@@ -26,49 +26,51 @@
 	Shape8200 = {{1888, 2928},{96, 4112},{1024, 7568}}
 	Shape8201 = {{688, 3776}}
 	Shape8148 = {{1136,7280},{1024,368}}
-
 	BuildPlaceArr = {
-		{Shape8131,131},
-		{Shape8132,132},
-		{Shape8133,133},
-		{Shape8126,126},
-		{Shape8116,116},
-		{Shape8122,122},
-		{Shape8127,127},
-		{Shape8174,174},
-		{Shape8106,106},
-		{Shape8113,113},
-		{Shape8114,114},
-		{Shape8147,147},
-		{Shape8150,150},
-		{Shape8151,151},
-		{Shape8152,152},
-		{Shape8154,154},
-		{Shape8160,160},
-		{Shape8167,167},
-		{Shape8168,168},
-		{Shape8175,175},
-		{Shape8190,190},
-		{Shape8200,200},
-		{Shape8201,201},
-
-		{Shape8148,148}
+		{Shape8131,131,380000,65535},
+		{Shape8132,132,380000,65535},
+		{Shape8133,133,380000,65535},
+		{Shape8126,126,3500000,65535},
+		{Shape8116,116,1000000,65535},
+		{Shape8122,122,1000000,65535},
+		{Shape8127,127,3500000,65535},
+		{Shape8174,174,3500000,65535},
+		{Shape8106,106,1000000,65535},
+		{Shape8113,113,1000000,65535},
+		{Shape8114,114,1000000,65535},
+		{Shape8147,147,6500000,65535},
+		{Shape8150,150,15000,65535},
+		{Shape8151,151,650000,65535},
+		{Shape8152,152,6500000,65535},
+		{Shape8154,154,1000000,65535},
+		{Shape8160,160,1000000,65535},
+		{Shape8167,167,1000000,65535},
+		{Shape8168,168,650000,65535},
+		{Shape8175,175,6500000,65535},
+		{Shape8190,190,6500000,65535},
+		{Shape8200,200,1000000,65535},
+		{Shape8201,201,650000,65535},
+		{Shape8148,148,1000000,65535}
 	}
-
-
-
 	UnitRepIndex2 = CreateVar(FP)
 	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast),ElapsedTime(AtLeast, 3)})
-	RepPlayerID = CreateVar(FP)
-	CunitHP = CreateVar(FP)
+	local AfterPatchExec = {}
 	for j,k in pairs(BuildPlaceArr) do
 		local BID = k[2]
-		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})--그룹플래그
+		PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + BID,SetTo,0))
+		PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + BID,SetTo,0))
+		PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + BID,SetTo,0))
+		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})
+		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1+0x8000))
+		table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
 		for o,p in pairs(k[1]) do
+			
 			CallTrigger(FP,Call_PlaceIndexedBuild,{SetV(BX,p[1]),SetV(BY,p[2]),SetV(BIDV,BID),SetV(BIndexV, o)})
 			
 		end
 	end
+	RepPlayerID = CreateVar(FP)
+	CunitHP = CreateVar(FP)
 	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
 	f_Read(FP, ArrX(UnitPosArr,UnitRepIndex2), CPos)
 	f_Read(FP, ArrX(UnitHPArr,UnitRepIndex2), CunitHP)
@@ -105,9 +107,8 @@
 	CSub(FP,UnitRepIndex,1)
 	CWhileEnd()
 	
-	
+	DoActions2X(FP, AfterPatchExec,1)
 	CIfEnd()
-
 
 	for i = 0, 227 do
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000},Armor=0})--모든 유닛을 마법사로, 아머를 0으로
@@ -137,24 +138,30 @@
 	SetUnitsDatX(72,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1})--이펙트유닛 크기 1로 조정
 	SetUnitsDatX(1,{SizeL = 1, SizeU = 1, SizeR = 1, SizeD = 1,})--이펙트유닛 크기 1로 조정
 
-	if EVFMode == 1 then
-		for i = 0, 227 do
-			SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
-		end
-		
-        SetUnitsDatX(0,{HP=1500,MinCost=7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-        SetUnitsDatX(20,{HP=3000,Shield = 1500,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-        SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DmgBase = 45,DmgFactor=3})
-        SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DmgBase = 75,DmgFactor=7})
-		
-
+	for i = 0, 227 do
+		SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
 	end
-	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
-	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+	
+	SetUnitsDatX(32,{HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(10,{HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	for i =0,4 do
+	SetUnitsDatX(MarID[i+1],{HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	end
+	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
+	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
+	SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
+	SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
+
+	SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
+	SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
+	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
+	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost+SMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
+	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost+SMCost+RMCost,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=1,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--별의 보호막?
 	SetUnitsDatX(125,{HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -183,7 +190,7 @@
 		table.insert(PatchArr,SetMemory(0x5821A4 + (i*4),SetTo,1500*2))
 		table.insert(PatchArr,SetMemory(0x582144 + (i*4),SetTo,1500*2))
 	end
-	for i = 1, 6 do
+	for i = 1, 4 do
 		for j=i,1,-1 do
 			table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + BanToken[j],SetTo,0))
 		end
@@ -202,6 +209,12 @@
 	TriggerX(FP, {}, {Simple_SetLoc(0, 320,992-(64), 320,992-(64)),CreateUnit(1, 115, 1, FP)})
 	for i = 0, 4 do
 		DoActions(FP, {
+			SetMemoryB(0x58D088+(46*i)+0,SetTo,255),
+			SetMemoryB(0x58D088+(46*i)+7,SetTo,255),
+			SetMemoryB(0x58D088+(46*i)+15,SetTo,255),
+			SetMemoryB(0x58D088+(46*i)+18,SetTo,1),
+			SetMemoryB(0x58D088+(46*i)+19,SetTo,1),
+			SetMemoryB(0x58D088+(46*i)+20,SetTo,1),
 			GiveUnits(1, 111, P12, 4, i),
             GiveUnits(1, 125, P12, 2, i),
             Simple_CalcLoc(3, 0, 64, 0, 64)
@@ -215,6 +228,7 @@
 		},1)
 		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i)})
 	end
+	TriggerX(FP, {}, {CreateUnit(1, 145, 11, FP)})
 	
 	
 if TestStart == 1 then
@@ -307,20 +321,32 @@ end
 		AddV(CTMin[5],66666666),
 		AddV(CTMin[6],66666666),
 		AddV(CTMin[7],66666666),})
-		for i = 0, 4 do
-			DoActions(FP, {CreateUnit(1, MarID[i+1], 5, P1)}, 1)--리마
-		end
-		DoActions(FP, {CreateUnit(1, 32, 5, P1)}, 1)--일마
-		DoActions(FP, {CreateUnit(1, 20, 5, P1)}, 1)--영마
-		DoActions(FP, {CreateUnit(1, 10, 5, P1)}, 1)--스마
-		DoActions(FP, {CreateUnit(1, 15, 5, P1)}, 1)--스마
-		DoActions(FP, {CreateUnit(1, 84, 5, P1)}, 1)--스마
-		DoActions(FP, {CreateUnit(1, 63, 5, P1)}, 1)--스마
-	
+		--for i = 0, 4 do
+		--	DoActions(FP, {CreateUnit(1, MarID[i+1], 5, P1)}, 1)--리마
+		--end
+		--DoActions(FP, {CreateUnit(1, 32, 5, P1)}, 1)--일마
+		--DoActions(FP, {CreateUnit(1, 20, 5, P1)}, 1)--영마
+		--DoActions(FP, {CreateUnit(1, 10, 5, P1)}, 1)--스마
+		--DoActions(FP, {CreateUnit(1, 15, 5, P1)}, 1)--스마
+		--DoActions(FP, {CreateUnit(1, 84, 5, P1)}, 1)--스마
+		--DoActions(FP, {CreateUnit(1, 63, 5, P1)}, 1)--스마
+	--
 	end
 	DoActions2(FP, {	
 	SetMemory(0x5124F0,SetTo,0x1D),SetResources(FP, Add, 10000000, OreAndGas),SetCp(FP)})
 	--NPA5(FP,0x6D5A30,FArr(TBLFile,0),TBLFiles)
+
+	
+
+Trigger { -- 기타 시작시 1회실행 트리거
+players = {P8},
+actions = {
+	SetInvincibility(Disable, 176, P12, 64);
+	SetInvincibility(Disable, 177, P12, 64);
+	SetInvincibility(Disable, 178, P12, 64);
+},
+}
+
 
 
 
@@ -388,8 +414,15 @@ end
 
 	DoActions2(FP, removebox)
 
-	CIfEnd()
-	table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 64, AllPlayers))
+	HeroTestMode = 1
+	if HeroTestMode == 1 then
+		for j,k in pairs(UnitPointArr) do
+			DoActions(FP, {CreateUnit(1, k[1], 14, FP),Simple_CalcLoc(13, 0, 32, 0, 32)}, 1)
+		end
+	end
+
+	CIfEnd()--OnPluginStartEnd
+	--table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 64, AllPlayers))
 	
 	
 

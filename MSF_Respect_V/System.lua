@@ -1,13 +1,31 @@
 ﻿function System()
     count = CreateVar(FP)
     f_Read(FP, 0x6283F0, count)
-
-    
+    DoActions(FP, {ModifyUnitEnergy(All, 40, AllPlayers, 64, 100)})
+    HeroIndex = CreateVar(FP)
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
     
 	for j, k in pairs(f_GunTable) do
         f_GSend(k)
     end
+    
+	CIf(FP,{Cond_EXCC(1,Exactly,1)}) -- 영작유닛인식
+	f_SaveCp()
+	f_Read(FP, BackupCp, HeroIndex, nil, nil, 1)
+	for j,k in pairs(UnitPointArr) do
+		TriggerX(FP,{CD(SELimit,4,AtMost),CVX(HeroIndex, k[1], 0xFF)}, {AddCD(SELimit,1),RotatePlayer({
+			PlayWAVX("staredit\\wav\\Herokill.ogg"),
+			PlayWAVX("staredit\\wav\\Herokill.ogg"),},HumanPlayers, FP)},{preserved})
+		Trigger2X(FP, {
+			CVX(HeroIndex, k[1], 0xFF)}, {
+				SetScore(Force1, Add, k[2], Kills),
+				RotatePlayer({
+				DisplayTextX(StrDesignX(k[3].."\x04을(를) \x07처치하였다! \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)}, HumanPlayers, FP)},{preserved})
+	end
+	f_LoadCp()
+	CIfEnd()
+
+
 
 
     EXCC_ClearCalc()
@@ -27,6 +45,9 @@
         end
         EXCC_End()
     
+    SETimer = CreateCcode()
+    TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
+    DoActionsX(FP,{SetCDeaths(FP,Subtract,1,SETimer)})
 
 
     
@@ -35,6 +56,8 @@
 
     if TestStart == 1 then-- BarTextTest
 		
+NameTest = 1
+if NameTest == 1 then
 function ToggleFunc(CondArr,Mode,EnterFlag)
 	local KeyToggle = CreateCcode()
 	local KeyToggle2 = CreateCcode()
@@ -82,86 +105,33 @@ end
         --스택타입 그림자 \x18 표면 \x07
         --위험타입 그림자 \x06 표면 \x08
 
-		--Shirley House
-        --Sui
-        --Rophe
-        --Darly
-        --Era
-        --Freyja
-        --Kamilia
-        --Sera
-        --Nina
-        --Jisoo
-        --Sen
-        --Gaya
-        --Envy
-        
-        
-        
---Yumi - 리버
---Yuna - 워브링어
---Lizzet - 모조
---Lin - 간트리써
---Merry - 레이스
---Rose - 배틀--
+        --Dejavu
+        --Ynn
+        --Young
+        --BV13
+        --Mincho
+        --Ann
 
---EL CLEAR - 초강하템
---EL FAIL - 강다크
---PLAY - 초강아콘
---LENA - 아비터(타이탄)
---DIEIN - 초강다크
-		--str22 = "\x1C。+.˚Shirley House\x12\x1FS\x04hirley \x1FH\x04ouse\x1F。+.˚"
-		str22 = "\x1F。˙+˚Hypernaid。+.˚\x12\x1C。˙+˚H\x04ypernaid\x1C。+.˚"
+
+
+
+
+        --Aram
+        --Leon
+        --퀸 60000 1000 노멀
+
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\t\x06。˙+˚DIEIN。+.˚\x12\x08。˙+˚D\x04IEIN\x08。+.˚"
+		str33 = "\t\t\t\x15。˙+˚Aram。+.˚\x12\x1B。˙+˚A\x04ram。+.˚"--(sp:19 tab:3)
 		--str44 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str44 = "\t\t\x15。˙+˚Merry。+.˚\x12\x1B。˙+˚M\x04erry\x1B。+.˚"
+		str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str55 = "\t\t\x1C。˙+˚Rose。+.˚\x12\x1F。˙+˚R\x04ose\x1F。+.˚"
+		str55 = "\t\t\t\x1C。˙+˚Sena。+.˚\x12\x1F。˙+˚S\x04ena。+.˚"--(sp:13 tab:4)
 
-		str = str22.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
-	
-        S6 = MakeiTblString(1480,"None",'None',str,"Base",1)
-		Str2, Str2a, Str2s = SaveiStrArrX(FP,str)
-        BarTblptr = GetiTblId(FP,112,S6)
-        CJumpEnd(FP, TestJ)
-		
-        for i = 0, 19 do
-		CIf(FP,CD(testc2,i),{SetCp(0),DisplayText("bar space:"..i, 4),SetCp(FP)})
-		CS__SetValue(FP,Str2,str22.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"..string.rep(" ", i)..string.rep("\x0D",19-i),nil,0,nil,1) 
-		CIfEnd()
-		end
-        for i = 0, 19 do
-            CIf(FP,CD(testc,i),{SetCp(0),DisplayText("bar tab:"..i, 4),SetCp(FP)})
-			CS__SetValue(FP,Str2,str22..string.rep("	", i)..string.rep("\x0D",19-i),nil,0,nil,1) 
-            CIfEnd()
-        end
-		CS__InputVA(FP,BarTblptr,0,Str2,Str2s,nil,0,Str2s)
-
-
-        
-        testc = CreateCcode()
-        testc2 = CreateCcode()
-        testc3 = CreateCcode()
-		temp,QKey = ToggleFunc({KeyPress("E","Up"),KeyPress("E","Down")},nil,1)--누를 경우 설명서 출력
-		temp,WKey = ToggleFunc({KeyPress("R","Up"),KeyPress("R","Down")},nil,1)--누를 경우 설명서 출력
-		temp,AKey = ToggleFunc({KeyPress("D","Up"),KeyPress("D","Down")},nil,1)--누를 경우 설명서 출력
-		temp,SKey = ToggleFunc({KeyPress("F","Up"),KeyPress("F","Down")},nil,1)--누를 경우 설명서 출력
-		temp,ZKey = ToggleFunc({KeyPress("C","Up"),KeyPress("C","Down")},nil,1)--누를 경우 설명서 출력
-		temp,XKey = ToggleFunc({KeyPress("V","Up"),KeyPress("V","Down")},nil,1)--누를 경우 설명서 출력
-        TriggerX(FP,{CD(QKey,1)},{SubCD(testc,1)},{preserved})
-        TriggerX(FP,{CD(WKey,1)},{AddCD(testc,1)},{preserved})
-        TriggerX(FP,{CD(AKey,1)},{SubCD(testc2,1)},{preserved})
-        TriggerX(FP,{CD(SKey,1)},{AddCD(testc2,1)},{preserved})
-        TriggerX(FP,{CD(ZKey,1)},{SubCD(testc3,1)},{preserved})
-        TriggerX(FP,{CD(XKey,1)},{AddCD(testc3,1)},{preserved})
-
-
-        TestJ = def_sIndex()
-        CJump(FP, TestJ)
-	    TempiS1, TempiS1a, TempiS1s = SaveiStrArrX(FP,"\x0D\x0D\x0D\x0D\x0D\x0D")
-	    TempiS2, TempiS1a, TempiS2s = SaveiStrArrX(FP,"\x0D\x0D\x0D\x0D\x0D\x0D")
-		
+        --Yuri
+        --Sena
+        --Yona
+        --Sayu
+        --Sorang
 		str = str33.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 	
         S6 = MakeiTblString(1480,"None",'None',str,"Base",1)
@@ -273,7 +243,7 @@ end
 
         TriggerX(FP,{},{CreateUnit(1, 84, 64, FP),KillUnit(84, FP)},{preserved})
 		
-    --]]
+end
     end
     --219
     --130
