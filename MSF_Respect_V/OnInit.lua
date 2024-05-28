@@ -12,7 +12,7 @@
 	Shape8133 = {{256,400},{1760, 400},{1920, 7696},{1728, 7760},{1536, 7824},{1344, 7888},{128, 7696},{320, 7760},{512, 7824},{704, 7888}}
 	Shape8106 = {{1024, 5968},{1920, 6128},{1376, 5424},{224, 6896},{256, 7376},{1600, 6896},{1440, 1680}}
 	Shape8113 = {{608, 2064},{160, 2064},{640, 1712},{640, 2640},{128, 3280}}
-	Shape8114 = {{1792, 5392},{960, 6288},{768, 5584}}
+	Shape8114 = {{1792, 5392},{1280, 6320},{768, 5584}}
 	Shape8147 = {{1936, 8016}}
 	Shape8150 = {{1824, 4800},{1504, 4960},{1184, 4800},{1504, 4640},{1184, 5120},{1184, 4480},{864, 5280},{544, 5120},{864, 4960},{224, 4960},{544, 4800},{864, 4640},{224, 4640},{544, 4480},{864, 4320},{224, 4320},{544, 4160}}
 	Shape8151 = {{64, 48},{1984, 48}}
@@ -39,7 +39,7 @@
 		{Shape8113,113,1000000,65535},
 		{Shape8114,114,1000000,65535},
 		{Shape8147,147,6500000,65535},
-		{Shape8150,150,15000,65535},
+		{Shape8150,150,15000,15000},
 		{Shape8151,151,650000,65535},
 		{Shape8152,152,6500000,65535},
 		{Shape8154,154,1000000,65535},
@@ -60,9 +60,12 @@
 		PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + BID,SetTo,0))
-		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})
+		SetUnitsDatX(BID,{HP=k[3],Shield=k[4],Class = 96})
 		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1+0x8000))
 		table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
+		
+
+
 		for o,p in pairs(k[1]) do
 			
 			CallTrigger(FP,Call_PlaceIndexedBuild,{SetV(BX,p[1]),SetV(BY,p[2]),SetV(BIDV,BID),SetV(BIndexV, o)})
@@ -313,7 +316,7 @@ end
 
 
 	if TestStart == 1 then
-		DoActionsX(FP, {SetResources(Force1, Add, 66666666, Ore),SetCD(TestMode,1),
+		DoActionsX(FP, {SetCD(TestMode,1),--SetResources(Force1, Add, 66666666, Ore),
 		AddV(CTMin[1],66666666),
 		AddV(CTMin[2],66666666),
 		AddV(CTMin[3],66666666),
@@ -338,15 +341,14 @@ end
 
 	
 
-Trigger { -- 기타 시작시 1회실행 트리거
-players = {P8},
-actions = {
+
+DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	SetInvincibility(Disable, 176, P12, 64);
 	SetInvincibility(Disable, 177, P12, 64);
 	SetInvincibility(Disable, 178, P12, 64);
-},
-}
-
+	SetCD(HactCcode, #Shape8131[1]);
+	SetCD(LairCcode, #Shape8132[1]);
+	SetCD(HiveCcode, #Shape8133[1]);},1)
 
 
 

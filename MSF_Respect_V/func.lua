@@ -150,6 +150,7 @@ function SetUnitsDatX(UnitID,Property)
 						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
 					else
 						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,0))
+						PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, 0))
 					end
 				else
 					PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
@@ -203,6 +204,8 @@ function SetUnitsDatX(UnitID,Property)
 				PatchInsert(SetMemoryB(0x664898+UnitID,SetTo,k))--IdleOrder
 			elseif j=="RdySnd" then
 				PatchInsert(SetMemoryW(0x661FC0+(UnitID*2),SetTo,k))
+			elseif j=="Class"  then
+				PatchInsert(SetMemoryB(0x663DD0+(UnitID),SetTo,k))
 			elseif j=="WhatSndInit" then
 				PatchInsert(SetMemoryW(0x662BF0+(UnitID*2),SetTo,k))
 			elseif j=="WhatSndEnd" then
@@ -267,22 +270,38 @@ function CreateUnitQueue()
 		SetInvincibility(Disable, 131, FP, 64),
 		SetInvincibility(Disable, 132, FP, 64),
 		SetInvincibility(Disable, 133, FP, 64),
-		SetInvincibility(Disable, 150, FP, 64),
-		SetInvincibility(Disable, 148, FP, 64),
+		SetInvincibility(Disable, 122, FP, 64),
+		SetInvincibility(Disable, 113, FP, 64),
+		SetInvincibility(Disable, 114, FP, 64),
+		SetInvincibility(Disable, 160, FP, 64),
+		SetInvincibility(Disable, 167, FP, 64),
+		SetInvincibility(Disable, 154, FP, 64),
+		SetInvincibility(Disable, 116, FP, 64),
 	},{preserved})
 	TriggerX(FP, {CV(count,1501,AtLeast)}, {
 		SetInvincibility(Enable, 131, FP, 64),
 		SetInvincibility(Enable, 132, FP, 64),
 		SetInvincibility(Enable, 133, FP, 64),
-		SetInvincibility(Enable, 150, FP, 64),
-		SetInvincibility(Enable, 148, FP, 64),
+		SetInvincibility(Enable, 122, FP, 64),
+		SetInvincibility(Enable, 113, FP, 64),
+		SetInvincibility(Enable, 114, FP, 64),
+		SetInvincibility(Enable, 160, FP, 64),
+		SetInvincibility(Enable, 167, FP, 64),
+		SetInvincibility(Enable, 154, FP, 64),
+		SetInvincibility(Enable, 116, FP, 64),
 	},{preserved})
 	TriggerX(FP, {CV(CreateUnitQueueNum,1,AtLeast)}, {
 		SetInvincibility(Enable, 131, FP, 64),
 		SetInvincibility(Enable, 132, FP, 64),
 		SetInvincibility(Enable, 133, FP, 64),
-		SetInvincibility(Enable, 150, FP, 64),
-		SetInvincibility(Enable, 148, FP, 64),
+		SetInvincibility(Enable, 122, FP, 64),
+		SetInvincibility(Enable, 113, FP, 64),
+		SetInvincibility(Enable, 114, FP, 64),
+		SetInvincibility(Enable, 160, FP, 64),
+		SetInvincibility(Enable, 167, FP, 64),
+		SetInvincibility(Enable, 154, FP, 64),
+		SetInvincibility(Enable, 116, FP, 64),
+
 	},{preserved})
 	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
 	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
@@ -317,7 +336,7 @@ function CreateUnitQueue()
             if i == 1 then RS1 = Set RS2=Cleared end
             if i == 2 then RS1 = Cleared RS2=Set end
             if i == 3 then RS1 = Set RS2=Set end
-            TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,14+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,14+i)},{preserved})
+            TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,16+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,16+i)},{preserved})
         end
 		TriggerX(FP,{CVar(FP,TempPID[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,TempPID[2],SetTo,7)},{preserved})
 		CTrigger(FP,{TTCVar(FP,TempType[2],NotSame,2)},{TCreateUnitWithProperties(1,TempUID,1,TempPID,{energy = 100})},1,LocIndex)
@@ -513,22 +532,31 @@ KillPointArr = {}
 function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint,QueueScript,QueueScript2)--QueueScript{FlingyID,SpriteID,ImageID,Color(Option)}
 	local TempWID = WepID
 	local TempWID2 = 130
+	local LClass = 1350--~1355
+	if Shield == nil then Shield = false end
+
 	if WepID~=70 then -- 70번 제로무기 겹쳐도됨
 		if WepDupCheck[WepID] == nil then
 			WepDupCheck[WepID] = true
 		else PushErrorMsg("WepID Duplicated")
 		end
 	end
+	
 	local ColorCode = 0
 	--DmgType 1 폭발 3 일반 4 방무 5 위험타입 = 일반형
+	--1394,1395,1396,1397
 	if DmgType == 1 then
 		ColorCode = 0x11
+		LClass = 92
 	elseif DmgType == 3 then
 		ColorCode = 0x1B
+		LClass = 93
 	elseif DmgType == 4 then
 		ColorCode = 0x1F
+		LClass = 94
 	elseif DmgType == 5 then
 		ColorCode = 0x08
+		LClass = 95
 	else PushErrorMsg("Unit DamageType Error")
 	end
 	local StrArr = {}
@@ -538,7 +566,7 @@ function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,Ob
 		table.insert(StrArr, i)
 	end
 	for j,k in pairs(StrArr) do
-		table.insert(StrArr2, S_to_EmS(string.char(ColorCode)..string.sub(Text, 1, 1)..string.char(0x04)..string.sub(Text, 2, #Text)).." ")
+		table.insert(StrArr2, S_to_EmS(string.char(ColorCode)..string.sub(k, 1, 1)..string.char(0x04)..string.sub(k, 2, #k)).." ")
 	end
 	local StrRet = ""
 	for j,k in pairs(StrArr2) do
@@ -579,15 +607,13 @@ function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,Ob
 	--end
 	SetUnitsDatX(UnitID+1, {GroundWeapon=WepID,AirWeapon=TempWID2})
 	end
-	local Size = 4
-	if UnitID == 74 or UnitID == 75 then
-		Size = nil
-	end
+	local Size = 6
+	
 	if KillPoint>= 65536 then
 		table.insert(KillPointArr,{UnitID,KillPoint,StrRet})
 		KillPoint = 0
 	end
-	SetUnitsDatX(UnitID, {AdvFlag={0x40,0x40+0x8000},StarEditFlag=0x1C7,ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
+	SetUnitsDatX(UnitID, {Class=LClass,GroupFlag=0xA,SuppCost=0,AdvFlag={0x40,0x40+0x8000},StarEditFlag=0x1C7,ComputerAI=3,HP=HP,Shield=Shield,GroundWeapon=TempWID,AirWeapon=TempWID2,SeekRange = SeekRange,KillScore=KillPoint,SizeL=Size,SizeU=Size,SizeR=Size,SizeD=Size
 })
 if ObjNum == nil then ObjNum = 1 end
 if DmgType == 5 then DmgType = 3 end
@@ -1035,7 +1061,6 @@ SetCall(FP)
 DefaultAttackLocV = CreateVar(FP)
 CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	CMov(FP,DefaultAttackLocV,DefaultAttackLoc)
-	TriggerX(FP,{Command(FP,AtLeast,1,94)},{SetV(DefaultAttackLocV,49)},{preserved})
 		QueueX = CreateVar(FP)
 		QueueY = CreateVar(FP)
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})

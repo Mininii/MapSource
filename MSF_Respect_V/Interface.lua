@@ -81,19 +81,23 @@
 		CMov(FP,0x6509B0,FP)
 		CIfEnd()
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
-		
-	
+		KillTable = {}
+		for j,k in pairs(UnitPointArr) do
+			table.insert(KillTable, KillUnit(k[1], Force2))
+		end
+			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204)}, KillTable, {preserved})
 			Trigger {
 				players = {FP},
 				conditions = {
 					Label(0);
-					Deaths(CurrentPlayer,AtLeast,1,204);
+
+					Deaths(CurrentPlayer,AtLeast,1,204)
 				},
 				actions = {
-					KillUnit("Men",Force2);
-					KillUnit(143,Force2);
-					KillUnit(144,Force2);
-					KillUnit(146,Force2);
+					--KillUnit("Men",Force2);
+					--KillUnit(143,Force2);
+					--KillUnit(144,Force2);
+					--KillUnit(146,Force2);
 					PreserveTrigger();
 				}
 				}
@@ -578,7 +582,7 @@ for i = 1, 4 do -- 강퇴기능
 			CIf(FP,CD(TestMode,1))
 			CIfEnd()
 			--TriggerX(FP,{CD(TestMode,1)},{SetInvincibility(Enable, "Buildings", FP, 64)},{preserved})--SetV(CurEXP,0x7FFFFFFF)
-			TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+15+(i*46),SetTo,255),SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,255)})--SetV(CurEXP,0x7FFFFFFF)
+			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+15+(i*46),SetTo,255),SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,255)})--SetV(CurEXP,0x7FFFFFFF)
 		end
 
 		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
@@ -930,7 +934,6 @@ Trigger { -- 데스 스코어 리더보드
 	actions = {
 		LeaderBoardScore(Custom, StrDesign("\x08D\x04eaths".." - "..GT[i]));
 		LeaderBoardComputerPlayers(Disable);
-		ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 		PreserveTrigger();
 },
 }
@@ -944,7 +947,6 @@ Trigger { -- 킬 스코어 리더보드
 	actions = {
 		LeaderBoardKills("Any unit",StrDesign("\x11K\x04ills".." - "..GT[i]));
 		LeaderBoardComputerPlayers(Disable);
-		ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 		PreserveTrigger();
 },
 }
