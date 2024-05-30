@@ -51,19 +51,20 @@
 		{Shape8148,148,1000000,65535}
 	}
 	UnitRepIndex2 = CreateVar(FP)
-	CIfOnce(FP,{CV(UnitRepIndex,1,AtLeast),ElapsedTime(AtLeast, 3)})
+	CIfOnce(FP,{ElapsedTime(AtLeast, 3)}) --AfterOnPluginExec
 	local AfterPatchExec = {}
+	local NonClockArr = {131,132,133,113,114,116,160,167}
 	for j,k in pairs(BuildPlaceArr) do
 		local BID = k[2]
 		PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + BID,SetTo,0))
-		SetUnitsDatX(BID,{HP=k[3],Shield=k[4],Class = 96})
+		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})
 		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,0x8000))
-		table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
-		if BID~=131 and BID~=132 and BID~=133 then
-		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1))
-		end
+		--table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
+		--if BID~=131 and BID~=132 and BID~=133 then
+		--table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1))
+		--end
 		
 
 
@@ -73,6 +74,9 @@
 			
 		end
 	end
+	--for j,k in pairs(NonClockArr) do
+	--	SetUnitsDatX(k,{SightRange = 0})
+	--end
 	RepPlayerID = CreateVar(FP)
 	CunitHP = CreateVar(FP)
 	CWhile(FP, {CV(UnitRepIndex,1,AtLeast)})
@@ -110,6 +114,22 @@
 	CAdd(FP,UnitRepIndex2,1)
 	CSub(FP,UnitRepIndex,1)
 	CWhileEnd()
+	
+
+	CFor(FP,19025,19025+(84*1700),84)
+	CI = CForVariable()
+	condbox = {}
+	for j,k in pairs(BuildPlaceArr) do
+		table.insert(condbox,CV(RepHeroIndex,k[2]))
+	end
+	
+	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
+	
+	CIf(FP,{TMemoryX(_Add(CI,19),AtLeast,1*256,0xFF00),TTOR(condbox)})--블라인드 맥일놈들
+		CDoActions(FP, {TSetMemoryX(_Add(CI,72), SetTo, 0xFF000000, 0xFF000000)})
+	CIfEnd()
+	CForEnd()
+
 	
 	DoActions2X(FP, AfterPatchExec,1)
 	CIfEnd()
@@ -348,9 +368,17 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	SetInvincibility(Disable, 176, P8, 64);
 	SetInvincibility(Disable, 177, P8, 64);
 	SetInvincibility(Disable, 178, P8, 64);
-	SetCD(HactCcode, #Shape8131[1]);
-	SetCD(LairCcode, #Shape8132[1]);
-	SetCD(HiveCcode, #Shape8133[1]);},1)
+	AddCD(GunCcode,#Shape8131);
+	AddCD(GunCcode,#Shape8132);
+	AddCD(GunCcode,#Shape8133);
+	AddCD(GunCcode,#Shape8122);
+	AddCD(GunCcode,#Shape8113);
+	AddCD(GunCcode,#Shape8114);
+	AddCD(GunCcode,#Shape8160);
+	AddCD(GunCcode,#Shape8167);
+	AddCD(GunCcode,#Shape8154);
+	AddCD(GunCcode,#Shape8116);--건작들 갯수 입력(무적해제 컨디션)
+},1)
 
 
 
@@ -363,9 +391,6 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	
 	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
 	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
-	CIf(FP,{CV(RepHeroIndex,173)})
-	CDoActions(FP, {TSetMemory(_Add(CI,2), SetTo, 8380000*256)})
-	CIfEnd()
 
 	CIf(FP,{CV(RepHeroIndex,111)})
 	for i = 0,6 do

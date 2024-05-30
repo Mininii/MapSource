@@ -6,29 +6,47 @@
 	t03 = "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 	iStrSize1 = GetiStrSize(0,t01)
 	S1 = MakeiTblString(1394,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
-	S1 = MakeiTblString(1395,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
-	S1 = MakeiTblString(1396,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
-	S1 = MakeiTblString(1397,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
 	iTbl1 = GetiTblId(FP,1394,S1) --DMG
 	iTbl2 = GetiTblId(FP,1395,S1) --DMG
 	iTbl3 = GetiTblId(FP,1396,S1) --DMG
 	iTbl4 = GetiTblId(FP,1397,S1) --DMG
 	iTbl6 = GetiTblId(FP,1398,S1) --DMG
 	iTbl5 = GetiTblId(FP,764,S1) --DMG
+	iTbl9 = GetiTblId(FP,1299,S1) --실명
 	Str1, Str1a, Str1s = SaveiStrArrX(FP,t01)
 	Str3, Str3a, Str3s = SaveiStrArrX(FP,t03)
 	t04 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚"--일반
 	t05 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つXㅅ<)つ \x1C。\x0F+\x18.\x07˚"--디텍터
-	iTbl7 = GetiTblId(FP,1319,S1) --DMG
-	iTbl8 = GetiTblId(FP,831,S1) --DMG
-	Str4, Str4a, Str4s = SaveiStrArrX(FP,t04)
-	Str5, Str5a, Str5s = SaveiStrArrX(FP,t05)
+	--iTbl7 = GetiTblId(FP,1319,S1) --DMG
+	--iTbl8 = GetiTblId(FP,831,S1) --DMG
+	--Str4, Str4a, Str4s = SaveiStrArrX(FP,t04)
+	--Str5, Str5a, Str5s = SaveiStrArrX(FP,t05)
+	T290 = "\x07。\x18˙\x0F+\x1C˚\x1F 행\x04이오닉 \x1C충\x04격파 \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02 "
+	T426 = "\x07。\x18˙\x0F+\x1C˚\x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02"
+	T1365 = "\x07。\x18˙\x0F+\x1C˚\x19 흥\x04이오닉 \x08어\x04썰트 \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02 "
+	T1414 = "\x07。\x18˙\x0F+\x1C˚\x1F 행\x04이오닉 \x1C스\x04톰 \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02 "
+	TBLData = {
+		{1319,t04},
+		{831,t05},
+		{290,T290},
+		{426,T426},
+		{1365,T1365},
+		{1414,T1414},
+	}
+	
 
 	CJumpEnd(FP, iTblJump)
 
 	CIfOnce(FP)
-	CS__InputVA(FP,iTbl7,0,Str4,Str4s,nil,0,Str4s)
-	CS__InputVA(FP,iTbl8,0,Str5,Str5s,nil,0,Str5s)
+	
+	for j,k in pairs(TBLData) do
+		local TBLPtr = CreateVar(FP)
+		f_GetTblptr(FP, TBLPtr, k[1])
+		local CText = CreateCText(FP, k[2])
+		f_Memcpy(FP,TBLPtr,_TMem(Arr(CText[3],0),"X","X",1),CText[2])
+
+
+	end
 	CIfEnd()
 	
 
@@ -102,7 +120,8 @@ local SelShbool = CreateVar(FP)
 		for i = 0, 9 do
 			TriggerX(FP, {CSVA1(SVA1(Str1,6+i), AtLeast, 0x0E*0x1000000, 0xFF000000),CD(CFlag,0)}, {SetCD(CFlag, 1),SetCSVA1(SVA1(Str1,6+i), SetTo, 0x07, 0xFF)}, {preserved})
 		end
-		CS__InputVA(FP,iTbl6,0,Str1,Str1s,nil,0,Str1s)
+		CS__InputVA(FP,iTbl9,0,Str1,Str1s,nil,0,Str1s)
+		
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
 		CElseX()
 		CIfX(FP,{CV(SelClass,95)})-- SC타입
@@ -318,11 +337,11 @@ end
 		--Leon
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\x1F。˙+˚Select。+.˚\x12\x1C。˙+˚S\x04elect\x1C。+.˚"--(sp:19 tab:3)
-		--str44 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
+		str33 = "\t\x1E。˙+˚Sadol。+.˚\x12\x11。˙+˚S\x04adol\x11。+.˚"
+		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚"
+		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str55 = "\t\t\t\x1C。˙+˚Sena。+.˚\x12\x1F。˙+˚S\x04ena。+.˚"--(sp:13 tab:4)
+		str55 = "\t\x1E。˙+˚Turret。+.˚\x12\x11。˙+˚T\x04urret\x11。+.˚"--(sp:13 tab:4)
 
 		--Yuri
 		--Sena

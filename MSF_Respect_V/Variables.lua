@@ -65,9 +65,7 @@
 	PExitFlag = CreateCcode()
 	SuppMax = CreateVar(FP)
 	PCheckV = CreateVar(FP)
-	HactCcode = CreateCcode()
-	LairCcode = CreateCcode()
-	HiveCcode = CreateCcode()
+	GunCcode = CreateCcode()
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
@@ -201,7 +199,7 @@
 	SetUnitAbility(71,77,5,1450000,65535,30,3777,false,1,32*5,5,1100000,"LENA",400000)
 
 
-	SetUnitAbility(124,91,3,120000,30000,15,700,false,1,32*5,5,110000,"Turret",15000) --
+	SetUnitAbility(124,91,1,120000,30000,15,1800,false,1,32*5,5,110000,"Turret",15000) --
 
 --
 end

@@ -190,6 +190,16 @@
         RunAIScript("Turn ON Shared Vision for Player 5");
         })
     end
+	DoActions(FP,{ -- 나간플레이어 유닛 삭제
+		KillUnit(MarID[1], P12),
+		KillUnit(MarID[2], P12),
+		KillUnit(MarID[3], P12),
+		KillUnit(MarID[4], P12),
+		KillUnit(MarID[5], P12),
+		KillUnit(20, P12),
+		KillUnit(32, P12),
+		KillUnit(10, P12),
+	})
 	GST = CreateCcode()
 	GST2 = CreateCcode()
 	SelEPD = CreateVar(FP)
@@ -197,7 +207,7 @@
 	CurEPD = CreateVar(FP)
 	
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
-	tt = "\x13\x1ES\x04pecial \x1ET\x04hanks : SANDELE, CheezeNacho, ...(더 추가할 예정) And All DJMAX Respect V Users"
+	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, ...(테스터 지원시 더 추가할 예정)"
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
@@ -212,8 +222,8 @@
 		DisplayTextX("\x13\x04",4),
 		DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 		DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
-		DisplayTextX("\x13\x04",4),
 		DisplayTextX(string.sub(tt,1,i),4),
+		DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
 		DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
 			})
 	end
@@ -230,8 +240,8 @@
 		DisplayTextX("\x13\x04",4),
 		DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 		DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
-		DisplayTextX("\x13\x04",4),
 		DisplayTextX(string.sub(tt,1,i),4),
+		DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
 		DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
 			})
 	end
@@ -291,7 +301,7 @@
 		RemoveUnit(145, AllPlayers),
 		SetCp(FP);
 	})
-	if Limit == 1 then
+	if false then--TestStart == 1 then
 		GSEnable = CreateCcode()
 		TriggerX(FP, {CD(TestCode,4),CD(TestCode2,3)}, {SetCD(GSEnable,1)})
 		
@@ -769,8 +779,8 @@ Trigger { -- 보호막 가동
 	},
 	actions = {
 		SetCDeaths(i,SetTo,1,ShUsed);
-		ModifyUnitShields(All,"Men",i,"Anywhere",100);
-		ModifyUnitShields(All,"Buildings",i,"Anywhere",100);
+		--ModifyUnitShields(All,"Men",i,"Anywhere",100);
+		--ModifyUnitShields(All,"Buildings",i,"Anywhere",100);
 		ModifyUnitHitPoints(All,"Men",i,"Anywhere",100);
 		ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100);
 		PreserveTrigger();
@@ -812,16 +822,7 @@ Trigger { -- 보호막 가동
 
 
 
-DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
-RunAIScript("Turn ON Shared Vision for Player 1");
-RunAIScript("Turn ON Shared Vision for Player 2");
-RunAIScript("Turn ON Shared Vision for Player 3");
-RunAIScript("Turn ON Shared Vision for Player 4");
-RunAIScript("Turn ON Shared Vision for Player 5");
-RunAIScript("Turn ON Shared Vision for Player 6");
-RunAIScript("Turn ON Shared Vision for Player 7");
-})
-if false then
+if TestStart == 1 then
 	TriggerX(i, {Switch("Switch 254", Set)}, {
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");

@@ -163,7 +163,7 @@ function Include_GunData(Size,LineNum)
 	DoActionsX(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCD(GunCaseCheck,0)})
 	CDoActions(FP,{Gun_SetLine(7,Add,1)})
 	
-	CIf_GCase(131)
+	CIf_GCase(131)--해처리
 	G_CA_SetSpawn({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0)}, {43,37,38,39}, P_5, 2, "MAX", 0, nil, nil, P7)
 	G_CA_SetSpawn({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, P_5, 2, "MAX", 0, nil, nil, P7)
 	
@@ -178,9 +178,26 @@ function Include_GunData(Size,LineNum)
 	
 	G_CA_SetSpawn({Gun_Line(3,Exactly,5),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_4, 1, "MAX", 0, nil, nil, P7)
 	G_CA_SetSpawn({Gun_Line(3,Exactly,5),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_4, 1, "MAX", 0, nil, nil, P7)
-	
 
 	CIfEnd()
+	CIf_GCase(132)--레어
+	G_CA_SetSpawn({Gun_Line(3,Exactly,1),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_5, 1, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,1),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_5, 1, "MAX", 0, nil, nil, P7)
+	
+	G_CA_SetSpawn({Gun_Line(3,Exactly,2),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 3, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,2),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_6, 3, "MAX", 0, nil, nil, P7)
+	
+	G_CA_SetSpawn({Gun_Line(3,Exactly,3),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_3, 2, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,3),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_3, 2, "MAX", 0, nil, nil, P7)
+	
+	G_CA_SetSpawn({Gun_Line(3,Exactly,4),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_8, 2, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(3,Exactly,4),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_8, 2, "MAX", 0, nil, nil, P7)
+
+	CIfEnd()
+
+	if TestStart == 1 then
+		--DisplayPrint(HumanPlayers, {"Executer",f_GunNum," : ",Var_TempTable[1]," ",Var_TempTable[2]," ",Var_TempTable[3]," ",Var_TempTable[4]," ",Var_TempTable[5]," ",Var_TempTable[6]," ",Var_TempTable[7]," ",Var_TempTable[8]," ",Var_TempTable[9]," ",Var_TempTable[10]})
+	end
 	
 	CIf(FP,{
 		TTOR({ -- 2젠 건작 목록
@@ -196,9 +213,7 @@ function Include_GunData(Size,LineNum)
 			Gun_Line(0,Exactly,116),
 		}),
 		Gun_Line(54,AtMost,0)},{Gun_SetLine(5,SetTo,1)})
-			TriggerX(FP,{Gun_Line(0,Exactly,131),Gun_Line(6,AtLeast,1)},{SubCD(HactCcode,1)},{preserved})
-			TriggerX(FP,{Gun_Line(0,Exactly,132),Gun_Line(6,AtLeast,1)},{SubCD(LairCcode,1)},{preserved})
-			TriggerX(FP,{Gun_Line(0,Exactly,133),Gun_Line(6,AtLeast,1)},{SubCD(HiveCcode,1)},{preserved})
+			TriggerX(FP,{Gun_Line(6,AtLeast,1)},{SubCD(GunCcode,1)},{preserved})
 		CTrigger(FP,{Gun_Line(6,AtLeast,1)},{Gun_DoSuspend()},1)
 		CTrigger(FP,{TGun_Line(7,AtLeast,360)},{Gun_SetLine(6,SetTo,1)},1)
 	CIfEnd()
