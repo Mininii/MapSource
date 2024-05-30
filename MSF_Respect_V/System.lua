@@ -17,9 +17,19 @@
 	iTbl5 = GetiTblId(FP,764,S1) --DMG
 	Str1, Str1a, Str1s = SaveiStrArrX(FP,t01)
 	Str3, Str3a, Str3s = SaveiStrArrX(FP,t03)
+	t04 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚"--일반
+	t05 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つXㅅ<)つ \x1C。\x0F+\x18.\x07˚"--디텍터
+	iTbl7 = GetiTblId(FP,1319,S1) --DMG
+	iTbl8 = GetiTblId(FP,831,S1) --DMG
+	Str4, Str4a, Str4s = SaveiStrArrX(FP,t04)
+	Str5, Str5a, Str5s = SaveiStrArrX(FP,t05)
+
 	CJumpEnd(FP, iTblJump)
 
-
+	CIfOnce(FP)
+	CS__InputVA(FP,iTbl7,0,Str4,Str4s,nil,0,Str4s)
+	CS__InputVA(FP,iTbl8,0,Str5,Str5s,nil,0,Str5s)
+	CIfEnd()
 	
 
 local SelEPD,SelHP,SelSh,SelMaxHP,SelI = CreateVars(5,FP)
@@ -31,6 +41,7 @@ local NWepCcode = CreateCcode()
 local SelATK = CreateVar(FP)
 local SelClass = CreateVar(FP)
 local SelAtkType = CreateVar(FP)
+local SelShbool = CreateVar(FP)
 	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
 		f_Read(FP,0x6284B8,nil,SelEPD)
 		f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
@@ -38,6 +49,7 @@ local SelAtkType = CreateVar(FP)
 		f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
 		f_Div(FP,SelHP,_Mov(256))
 		f_Div(FP,SelSh,_Mov(256))
+		CS__SetValue(FP, Str1, t01, nil, 0,1,1)
 
 		CS__ItoCustom(FP,SVA1(Str1,0+5),SelHP,nil,nil,{10,10},1,nil,"\x040",0x04,{0,1,2,3,4,5,6,7,8,9})
 		CS__ItoCustom(FP,SVA1(Str1,13+5),SelSh,nil,nil,{10,5},1,nil,"\x1C0",0x1C,{0,1,2,3,4})
@@ -46,6 +58,7 @@ local SelAtkType = CreateVar(FP)
 
 		CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(AFlag,0),SetCD(NWepCcode, 0)})
 			CMov(FP,CurEPD,SelEPD)
+			f_BreadX(FP, 0x6647B0, SelUID, SelShbool)
 			f_BreadX(FP, 0x663DD0, SelUID, SelClass)
 			TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{preserved})
 			TriggerX(FP,CV(SelUID,23),SetV(SelUID,24),{preserved})
@@ -72,6 +85,10 @@ local SelAtkType = CreateVar(FP)
 				CAdd(FP,SelATK,SelATK)
 			CIfEnd()
 			
+		CIfEnd()
+
+		CIf(FP, {CV(SelShbool,0)})
+			CS__SetValue(FP, Str1, "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", nil, 17,1)
 		CIfEnd()
 		KillsV = CreateVar(FP)
 		f_Read(FP, _Add(SelEPD,35), KillsV)
@@ -140,7 +157,52 @@ local SelAtkType = CreateVar(FP)
 	DoActions(FP, {ModifyUnitEnergy(All, 40, AllPlayers, 64, 100)})
 	HeroIndex = CreateVar(FP)
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
+	EnemyCheck = def_sIndex()
+	NJump(FP, EnemyCheck,{DeathsX(CurrentPlayer, AtLeast, 5, 0, 0xFF)})
+
 	
+for i = 0, 4 do
+	CIf(FP,{DeathsX(CurrentPlayer, Exactly, i, 0, 0xFF)},{SetMemory(0x6509B0, Add, 6),})
+
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF)},{SetScore(i, Add, 1, Custom)})
+		f_SaveCp()
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
+		f_LoadCp()
+		CIfEnd()
+
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),},{SetScore(i, Add, 2, Custom)})
+		f_SaveCp()
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		f_LoadCp()
+		CIfEnd()
+		
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 10, 0, 0xFF),},{SetScore(i, Add, 3, Custom)})
+		f_SaveCp()
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		f_LoadCp()
+		CIfEnd()
+
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, MarID[i+1], 0, 0xFF),},{SetScore(i, Add, 4, Custom)})
+		f_SaveCp()
+		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		f_LoadCp()
+		CIfEnd()
+		
+
+	DoActions(FP, {SetMemory(0x6509B0, Subtract, 6)})
+	CIfEnd()
+end
+
+
+
+
+	
+	NJumpEnd(FP, EnemyCheck)
+	CAdd(FP, 0x6509B0, 6)
 	for j, k in pairs(f_GunTable) do
 		f_GSend(k)
 	end
@@ -175,7 +237,7 @@ local SelAtkType = CreateVar(FP)
 			{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
 			--SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
 			SetDeathsX(19025+(84*i)+35,SetTo,0,0,0xFF); -- 
-			MoveCp(Add,25*4),
+			MoveCp(Add,19*4),
 			SetCVar(FP,CurCunitI2[2],SetTo,i)
 			})
 		end
@@ -256,7 +318,7 @@ end
 		--Leon
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\t\t\x15。˙+˚Aram。+.˚\x12\x1B。˙+˚A\x04ram。+.˚"--(sp:19 tab:3)
+		str33 = "\t\x1F。˙+˚Select。+.˚\x12\x1C。˙+˚S\x04elect\x1C。+.˚"--(sp:19 tab:3)
 		--str44 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
 		str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
@@ -376,7 +438,7 @@ end
 
 
 
-		TriggerX(FP,{},{CreateUnit(1, 84, 64, FP),KillUnit(84, FP)},{preserved})
+		--TriggerX(FP,{},{CreateUnit(1, 84, 64, FP),KillUnit(84, FP)},{preserved})
 		
 end
 	end

@@ -29,6 +29,8 @@ function Include_GunData(Size,LineNum)
 		f_Read(FP,_Sub(BackupCp,15),CPos)
 		f_Read(FP,BackupCp,GunID,"X",0xFF,1)
 		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
+
+		CIf(FP, {CV(GunPlayer,7)}) -- P8건물만 건작으로 작동
 		function GunBGM(ID,Type,Text,Point,OtherTrig)
 			local GText = "\n\n\n\n\n"..StrDesignX(Text.." \x04를 파괴하였습니다\x17 + "..Point.." P t s").."\n\n"
 			if Type == nil then
@@ -81,6 +83,7 @@ function Include_GunData(Size,LineNum)
 		CElseX()
 		DoActions(FP,{RotatePlayer({DisplayTextX(G_SendErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
 		CIfXEnd()
+		CIfEnd()
 		f_LoadCp()
 	SetCallEnd()
 

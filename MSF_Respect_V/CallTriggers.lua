@@ -155,7 +155,7 @@ CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
 
 CDoActions(FP, {
 	TSetMemory(_Add(BIDV,EPDF(0x662860)) ,SetTo,1+65536),
-	TCreateUnitWithProperties(1, BIDV, 1, FP, {energy = 100}),
+	TCreateUnitWithProperties(1, BIDV, 1, P8, {energy = 100}),
 	Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
 	Set_EXCC2(DUnitCalc,CunitIndex,2,SetTo,BIndexV),
 })

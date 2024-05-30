@@ -338,9 +338,22 @@ function CreateUnitQueue()
             if i == 3 then RS1 = Set RS2=Set end
             TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{SetCtrig1X("X",FuncAlloc,CAddr("Mask",1),nil,SetTo,16+i),SetCtrig1X("X",FuncAlloc+1,CAddr("Mask",1),nil,SetTo,16+i)},{preserved})
         end
+	CDoActions(FP, {
+		SetMemoryB(0x6644F8+4,SetTo,158),
+		SetMemoryB(0x6644F8+6,SetTo,200),
+		SetMemory(0x66EC48+(541*4), SetTo, 91),
+		SetMemory(0x66EC48+(956*4), SetTo, 91),
+		TSetMemory(_Add(TempUID,EPDF(0x662860)) ,SetTo,1+65536),
+	})
 		TriggerX(FP,{CVar(FP,TempPID[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,TempPID[2],SetTo,7)},{preserved})
 		CTrigger(FP,{TTCVar(FP,TempType[2],NotSame,2)},{TCreateUnitWithProperties(1,TempUID,1,TempPID,{energy = 100})},1,LocIndex)
         CTrigger(FP,{CVar(FP,TempType[2],Exactly,2)},{TCreateUnitWithProperties(1,TempUID,1,TempPID,{energy = 100, burrowed = true})},1,LocIndex+1)
+	DoActions(FP, {
+		SetMemoryB(0x6644F8+4,SetTo,76),
+		SetMemoryB(0x6644F8+6,SetTo,83),
+		SetMemory(0x66EC48+(956*4), SetTo, 377),
+		SetMemory(0x66EC48+(541*4), SetTo, 247),
+	})
 		FuncAlloc=FuncAlloc+2
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
 
@@ -590,6 +603,7 @@ function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,Ob
 	if UnitID == 62 then TempWID2 = WepID end
 	if UnitID == 98 then TempWID2 = WepID end
 	if UnitID == 86 then TempWID2 = WepID end
+	if UnitID == 124 then TempWID2 = WepID end
 	if 
 	UnitID == 3 or 
 	UnitID == 5 or 
@@ -1143,57 +1157,15 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags)
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
-	if X2_Mode == 1 then
-		if SetX == 0xFFFFFFFF then
-			for i =0, 3 do
-				CallTriggerX(FP,Set_Repeat,Condition,{
-					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
-					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
-					SetCVar(FP,RepeatType[2],SetTo,Type),
-					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
-					SetCVar(FP,TRepeatX[2],SetTo,SetX-i),
-					SetCVar(FP,TRepeatY[2],SetTo,SetY-i),
-				},Flags)
-			end
-
-		elseif SetX == 0x80000000 then
-			for i =0, 3 do
-				CallTriggerX(FP,Set_Repeat,Condition,{
-					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
-					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
-					SetCVar(FP,RepeatType[2],SetTo,Type),
-					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
-					SetCVar(FP,TRepeatX[2],SetTo,SetX-i),
-					SetCVar(FP,TRepeatY[2],SetTo,SetY-i),
-				},Flags)
-			end
-		else
-			for i =0, 3 do
-				CallTriggerX(FP,Set_Repeat,Condition,{
-					SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-					SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
-					SetCVar(FP,Repeat_TempV[2],SetTo,Number),
-					SetCVar(FP,RepeatType[2],SetTo,Type),
-					SetCVar(FP,CreatePlayer[2],SetTo,Owner),
-					SetCVar(FP,TRepeatX[2],SetTo,SetX+X2_XYArr[i+1][1]),
-					SetCVar(FP,TRepeatY[2],SetTo,SetY+X2_XYArr[i+1][2]),
-				},Flags)
-			end
-
-		end
-	else
-		CallTriggerX(FP,Set_Repeat,Condition,{
-			SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
-			SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
-			SetCVar(FP,Repeat_TempV[2],SetTo,Number),
-			SetCVar(FP,RepeatType[2],SetTo,Type),
-			SetCVar(FP,CreatePlayer[2],SetTo,Owner),
-			SetCVar(FP,TRepeatX[2],SetTo,SetX),
-			SetCVar(FP,TRepeatY[2],SetTo,SetY),
-		},Flags)
-	end
+	CallTriggerX(FP,Set_Repeat,Condition,{
+		SetCDeaths(FP,SetTo,0,CA_Repeat_Check),
+		SetCVar(FP,Gun_TempSpawnSet1[2],SetTo,UnitID),
+		SetCVar(FP,Repeat_TempV[2],SetTo,Number),
+		SetCVar(FP,RepeatType[2],SetTo,Type),
+		SetCVar(FP,CreatePlayer[2],SetTo,Owner),
+		SetCVar(FP,TRepeatX[2],SetTo,SetX),
+		SetCVar(FP,TRepeatY[2],SetTo,SetY),
+	},Flags)
 
 end
 

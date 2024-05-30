@@ -1,7 +1,5 @@
 ﻿function onInit_EUD()
 
-
-
 	Shape8126 = {{496, 2176},{1520, 5792}}
 	Shape8116 = {{1792, 5840},{1216, 5712},{1504, 6096}}
 	Shape8122 = {{224, 1680},{1088, 1936},{928, 2448},{320, 2416},{608, 2960},{256, 2736},{576, 6416},{192, 5296},{608, 5840}}
@@ -61,8 +59,11 @@
 		PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + BID,SetTo,0))
 		SetUnitsDatX(BID,{HP=k[3],Shield=k[4],Class = 96})
-		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1+0x8000))
+		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,0x8000))
 		table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
+		if BID~=131 and BID~=132 and BID~=133 then
+		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,1))
+		end
 		
 
 
@@ -145,11 +146,11 @@
 		SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
 	end
 	
-	SetUnitsDatX(32,{HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(20,{HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(10,{HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(32,{Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(10,{Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for i =0,4 do
-	SetUnitsDatX(MarID[i+1],{HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(MarID[i+1],{Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
 	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
@@ -159,6 +160,7 @@
 	SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 	SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(12,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 	SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost+SMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
@@ -343,9 +345,9 @@ end
 
 
 DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
-	SetInvincibility(Disable, 176, P12, 64);
-	SetInvincibility(Disable, 177, P12, 64);
-	SetInvincibility(Disable, 178, P12, 64);
+	SetInvincibility(Disable, 176, P8, 64);
+	SetInvincibility(Disable, 177, P8, 64);
+	SetInvincibility(Disable, 178, P8, 64);
 	SetCD(HactCcode, #Shape8131[1]);
 	SetCD(LairCcode, #Shape8132[1]);
 	SetCD(HiveCcode, #Shape8133[1]);},1)
@@ -354,15 +356,8 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 
 	CFor(FP,19025,19025+(84*1700),84)
 	CI = CForVariable()
-	RepBuildData = {
-
-		5,30,3,81,83
-,	}
 	condbox = {}
 	for j,k in pairs(UnitPointArr2) do
-		table.insert(condbox,CV(RepHeroIndex,k))
-	end
-	for j,k in pairs(RepBuildData) do
 		table.insert(condbox,CV(RepHeroIndex,k))
 	end
 	
@@ -405,38 +400,47 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
 		table.insert(removebox,RemoveUnit(k, AllPlayers))
 	end
-	for j,k in pairs(RepBuildData) do
-		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
-		table.insert(removebox,RemoveUnit(k, AllPlayers))
-	end
 	for j,k in pairs(RemoveArr) do
 		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
 		table.insert(removebox,RemoveUnit(k, AllPlayers))
 	end
 
 	DoActions2(FP, removebox)
-
-	HeroTestMode = 1
-	if HeroTestMode == 1 then
-		for j,k in pairs(UnitPointArr) do
-			DoActions(FP, {CreateUnit(1, k[1], 14, FP),Simple_CalcLoc(13, 0, 32, 0, 32)}, 1)
-		end
-	end
-
 	CIfEnd()--OnPluginStartEnd
 	--table.insert(PatchArrPrsv, KillUnitAt(All, "Dark Swarm", 64, AllPlayers))
 	
 	
 
+	-- P6 255
+	-- P7 42
+	-- P8 128
 
 	DoActions2(AllPlayers, PatchArrPrsv)
 	DoActions2(AllPlayers, {
+		SetPlayerColor(P6, SetTo, 255);
+		SetPlayerColor(P7, SetTo, 42);
+		SetPlayerColor(P8, SetTo, 128);
+		SetMinimapColor(P6, SetTo, 255),
+		SetMinimapColor(P7, SetTo, 42),
+		SetMinimapColor(P8, SetTo, 128),
 		ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
 		ModifyUnitHitPoints(All, "Any unit", Force1, "Anywhere", 100),
 		ModifyUnitHitPoints(All, "Any unit", Force2, "Anywhere", 100),
 		ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
 	},1)
 	
+	DoActions(FP, {Simple_SetLoc(0, 1344, 7888, 1344, 7888),
+	CreateUnit(1, 133, 1, P7),
+	Simple_SetLoc(0, 704, 7888, 704, 7888),
+	CreateUnit(1, 133, 1, P7)},1)
+
+	HeroTestMode = 1
+	if HeroTestMode == 1 then
+		for j,k in pairs(UnitPointArr) do
+			f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)
+		end
+	end
+
 	Trigger {
 		players = {FP},
 		conditions = {  

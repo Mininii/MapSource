@@ -44,13 +44,16 @@
 	RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);SetCVar(FP,TestVar[2],Add,1);},{preserved})
 	TriggerX(FP,{Command(Force1,AtLeast,1,63);},{ModifyUnitEnergy(1,63,Force1,64,0);
 	RemoveUnitAt(1,63,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
-	if TestStart == 1 then
-		CDoActions(FP, {
-			TSetMemoryX(0x581DD8,SetTo,_Mul(TestVar,65536),0xFF0000);
-			TSetMemoryX(0x581D96,SetTo,_Mul(TestVar,65536),0xFF0000);
-			TSetResources(Force1, SetTo, TestVar, Gas)
-		})
-	end
+	-- P6 255
+	-- P7 42
+	-- P8 128
+	--if TestStart == 1 then
+	--	CDoActions(FP, {
+	--		TBwrite(0x581DD6+7, SetTo, TestVar);
+	--		TBwrite(0x581D76+(8*7), SetTo, TestVar);
+	--		TSetResources(Force1, SetTo, TestVar, Gas)
+	--	})
+	--end
 	CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 	TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
 	TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
@@ -65,6 +68,7 @@
 			SetMemory(0x5124F0,SetTo,SpeedV[i]);},{preserved})
 	end
 	CIfEnd()
+	GS = CreateCcode()
 
 
 	if Limit == 1 then
@@ -85,12 +89,12 @@
 		for j,k in pairs(UnitPointArr) do
 			table.insert(KillTable, KillUnit(k[1], Force2))
 		end
-			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204)}, KillTable, {preserved})
+			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,1);}, KillTable, {preserved})
 			Trigger {
 				players = {FP},
 				conditions = {
 					Label(0);
-
+					CD(GS,1);
 					Deaths(CurrentPlayer,AtLeast,1,204)
 				},
 				actions = {
@@ -102,10 +106,13 @@
 				}
 				}
 			TestUPtr = CreateVar(FP)
-			
+			TestCode = CreateCcode()
+			TestCode2 = CreateCcode()
+			TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,199),CD(GS,0)},AddCD(TestCode,1) , {preserved})
+			TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
 			if HeroTestMode==1 then
 				local TempUID = CreateVar(FP)
-				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,199)}) -- F12 누르면 선택한 유닛 12마리가 적으로 출현함
+				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,199),CD(GS,1);}) -- F12 누르면 선택한 유닛 12마리가 적으로 출현함
 				
 					CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
 					f_Read(FP, _Add(Cunit2,25), TempUID, nil, 0xFF, 1)
@@ -182,56 +189,7 @@
         RunAIScript("Turn ON Shared Vision for Player 4");
         RunAIScript("Turn ON Shared Vision for Player 5");
         })
-        if TestStart == 1 then
-            
-        DoActions(i,{SetCp(i),
-            RunAIScript("Turn ON Shared Vision for Player 1");
-            RunAIScript("Turn ON Shared Vision for Player 2");
-            RunAIScript("Turn ON Shared Vision for Player 3");
-            RunAIScript("Turn ON Shared Vision for Player 4");
-            RunAIScript("Turn ON Shared Vision for Player 5");
-            RunAIScript("Turn ON Shared Vision for Player 6");
-            RunAIScript("Turn ON Shared Vision for Player 7");
-            RunAIScript("Turn ON Shared Vision for Player 8");
-            })
-        end
-        
     end
-    if TestStart == 1 then
-        DoActions(P6,{SetCp(P6),
-            RunAIScript("Turn ON Shared Vision for Player 1");
-            RunAIScript("Turn ON Shared Vision for Player 2");
-            RunAIScript("Turn ON Shared Vision for Player 3");
-            RunAIScript("Turn ON Shared Vision for Player 4");
-            RunAIScript("Turn ON Shared Vision for Player 5");
-            RunAIScript("Turn ON Shared Vision for Player 6");
-            RunAIScript("Turn ON Shared Vision for Player 7");
-            RunAIScript("Turn ON Shared Vision for Player 8");
-            })
-    DoActions(P7,{SetCp(P7),
-        RunAIScript("Turn ON Shared Vision for Player 1");
-        RunAIScript("Turn ON Shared Vision for Player 2");
-        RunAIScript("Turn ON Shared Vision for Player 3");
-        RunAIScript("Turn ON Shared Vision for Player 4");
-        RunAIScript("Turn ON Shared Vision for Player 5");
-        RunAIScript("Turn ON Shared Vision for Player 6");
-        RunAIScript("Turn ON Shared Vision for Player 7");
-        RunAIScript("Turn ON Shared Vision for Player 8");
-        })
-    DoActions(P8,{SetCp(P8),
-        RunAIScript("Turn ON Shared Vision for Player 1");
-        RunAIScript("Turn ON Shared Vision for Player 2");
-        RunAIScript("Turn ON Shared Vision for Player 3");
-        RunAIScript("Turn ON Shared Vision for Player 4");
-        RunAIScript("Turn ON Shared Vision for Player 5");
-        RunAIScript("Turn ON Shared Vision for Player 6");
-        RunAIScript("Turn ON Shared Vision for Player 7");
-        RunAIScript("Turn ON Shared Vision for Player 8");
-        })
-    end
-
-
-	GS = CreateCcode()
 	GST = CreateCcode()
 	GST2 = CreateCcode()
 	SelEPD = CreateVar(FP)
@@ -319,7 +277,11 @@
 
 	CIfOnce(FP,{CD(GS,1)},{
 		SetV(BGMType,1),
+		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
+		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
+		RunAIScriptAt("Value This Area Higher",6),
+		SetCp(P7),
 		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
 		RunAIScriptAt("Value This Area Higher",6),
 		SetResources(Force1, Add, 25000, Ore),
@@ -327,17 +289,39 @@
 		RemoveUnit(198, AllPlayers),
 		RemoveUnit(197, AllPlayers),
 		RemoveUnit(145, AllPlayers),
+		SetCp(FP);
 	})
+	if Limit == 1 then
+		GSEnable = CreateCcode()
+		TriggerX(FP, {CD(TestCode,4),CD(TestCode2,3)}, {SetCD(GSEnable,1)})
+		
+		Trigger2X(FP, {
+			CD(GSEnable,0)
+		}, {
+				RotatePlayer({
+					DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);})
+		
+	end
 	TriggerX(FP, {CD(EVFCcode,0)}, {SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (3 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (4 * 228) + 19,SetTo,0)})
-	TriggerX(FP, {CD(GMode,3)}, {SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0),SetMemoryB(0x663CE8 + 8,SetTo,4),
+	TriggerX(FP, {CD(GMode,3)}, {SetMemoryB(0x663CE8 + 8,SetTo,4),
+	SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0),
 	SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (4 * 228) + 7,SetTo,0)})
+	SetMemoryB(0x57F27C + (4 * 228) + 7,SetTo,0),
+	SetMemoryB(0x57F27C + (0 * 228) + 12,SetTo,0),
+	SetMemoryB(0x57F27C + (1 * 228) + 12,SetTo,0),
+	SetMemoryB(0x57F27C + (2 * 228) + 12,SetTo,0),
+	SetMemoryB(0x57F27C + (3 * 228) + 12,SetTo,0),
+	SetMemoryB(0x57F27C + (4 * 228) + 12,SetTo,0),})
 	TriggerX(FP, {CD(EVFCcode,1)}, {
 		SetMemoryW(0x656EB0+(0 *2),Add,NMBaseAtk), -- 공격력
 		SetMemoryW(0x657678+(0 *2),Add,NMFactorAtk), -- 추가공격력
@@ -382,7 +366,6 @@
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)})
 	end
 
---	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("sound\\Misc\\TRescue.wav"),PlayWAVX("staredit\\wav\\Computer Beep.wav"),DisplayTextX("\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04\n\x13\x04\n\x13\x04마린키우기 \x03산들바람 \x08지옥\n\x13\x04\n\x13\x03Creator \x04: GALAXY_BURST\n\x13\x04\n\x13\x042024 "..VerText.." \n\x13\x04\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――――")}, HumanPlayers, FP)})
 	Trigger2X(FP, {CV(SetPlayers,1)},{SetResources(Force1, Add, 30000, Ore),RotatePlayer({DisplayTextX(StrDesignX("솔로 플레이 보너스 \x04: \x1F30000 ore"), 4)}, HumanPlayers, FP)})
 	CIfEnd()
 	
@@ -549,6 +532,17 @@ for i = 1, 4 do -- 강퇴기능
 			CreateUnit(1, MarID[i+1], 6, i),SetCp(FP)
 		})
 		
+		UnitButton(i,12,{MemoryX(0x664080 + (MarID[i+1]*4),Exactly,0,0x8000)},{SetCp(i),
+			SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0x8000,0x8000),
+			DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine 의 \x03디텍터 \x04기능을 \x07활성화\x04합니다"),4);
+			SetCp(FP),
+		})
+		
+		UnitButton(i,12,{MemoryX(0x664080 + (MarID[i+1]*4),Exactly,0x8000,0x8000)},{SetCp(i),
+			SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000),
+			DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine 의 \x03디텍터 \x04기능을 \x08비활성화\x04합니다"),4);
+			SetCp(FP),
+		})
 	
 
 		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
