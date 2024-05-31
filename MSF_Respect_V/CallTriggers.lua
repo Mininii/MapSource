@@ -162,5 +162,173 @@ CDoActions(FP, {
 CIfEnd()
 SetCallEnd()
 
+Call_RepeatOption = SetCallForward()
+SetCall(FP)
+RUID = CreateVar(FP)
+RPID = CreateVar(FP)
+RType = CreateVar(FP)
+RPtr = CreateVar(FP)
+RLocV = CreateVar(FP)
+CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
+		
+		--CIf(FP,{TTOR({CV(RUID,25),CV(RUID,30)})})
+		--CDoActions(FP,{
+		--	TSetDeathsX(_Add(RPtr,72),SetTo,0xFF*256,0,0xFF00),TSetMemoryX(_Add(RPtr,68), SetTo, 600,0xFFFF)})
+		--CIfEnd()
+
+		f_Read(FP,_Add(RPtr,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
+
+        CTrigger(FP,{},{TMoveUnit(1,RUID,Force2,72,1)},{preserved})
+			CIfX(FP,CVar(FP,RType[2],Exactly,0))
+				f_Read(FP,_Add(RPtr,10),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CTrigger(FP, {}, {TOrder(RUID, Force2, 1, Attack, RLocV);}, {preserved})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,1))
+			
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP, {}, {TOrder(RUID, Force2, 1, Attack, RLocV);}, {preserved})
+			CDoActions(FP,{
+				TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),2)),
+			})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,187))
+				CDoActions(FP,{
+					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,189))
+			CDoActions(FP,{
+				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				TCreateUnitWithProperties(1,84,1,RPID,{energy = 100}),TRemoveUnit(84,RPID)
+			})
+			CElseIfX(CVar(FP,RType[2],Exactly,190))
+				f_Read(FP,_Add(RPtr,10),CPos)
+				Convert_CPosXY()
+				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CDoActions(FP,{TSetMemory(_Add(RPtr,13),SetTo,1920)})
+				CDoActions(FP,{
+					TOrder(RUID, Force2, 1, Attack, RLocV);
+					TSetDeathsX(_Add(RPtr,72),SetTo,0xFF*256,0,0xFF00),
+					TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+					
+				})
+			CElseIfX(CVar(FP,RType[2],Exactly,32))
+			CDoActions(FP,{
+				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				TSetMemoryX(_Add(RPtr,55),SetTo,0x04000000,0x04000000),
+				TSetMemoryX(_Add(RPtr,8), SetTo, 127*65536,0xFF0000),
+				TSetDeaths(_Add(RPtr,13),SetTo,20000,0),
+				TSetDeathsX(_Add(RPtr,18),SetTo,4000,0,0xFFFF)})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,188))
+				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+				TempSpeedVar = f_CRandNum(8000)
+				CDoActions(FP,{
+					TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+					TSetDeaths(_Add(RPtr,13),SetTo,_Add(TempSpeedVar,500),0),
+					TSetDeathsX(_Add(RPtr,18),SetTo,_Add(TempSpeedVar,500),0,0xFFFF)})
+				--CElseX()
+				--CDoActions(FP,{
+				--	TSetDeaths(_Add(RPtr,13),SetTo,12000,0),
+				--	TSetDeathsX(_Add(RPtr,18),SetTo,4000,0,0xFFFF)})
+				--CIfXEnd()
+				CDoActions(FP,{
+					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+					TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),2)),
+				})
+
+				CElseIfX(CVar(FP,RType[2],Exactly,191))
+
+				--CIfX(FP,CVar(FP,HondonMode[2],AtMost,0))
+				CDoActions(FP,{
+					TSetDeaths(_Add(RPtr,13),SetTo,4000,0),
+					TSetDeathsX(_Add(RPtr,18),SetTo,4000,0,0xFFFF)})
+				--CElseX()
+				--CDoActions(FP,{
+				--	TSetDeaths(_Add(RPtr,13),SetTo,12000,0),
+				--	TSetDeathsX(_Add(RPtr,18),SetTo,4000,0,0xFFFF)})
+				--CIfXEnd()
+				CDoActions(FP,{
+					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				})
+			CElseIfX(CVar(FP,RType[2],Exactly,18))
+			
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+				CTrigger(FP, {}, {TOrder(RUID, Force2, 1, Attack, RLocV);}, {preserved})
+			local RandVar = CreateVar(FP)
+			CMov(FP,RandVar,0)
+			for i = 0, 6 do
+				DoActions(FP, {SetSwitch(RandSwitch1, Random)})
+				TriggerX(FP, {HumanCheck(i, 1),Switch(RandSwitch1, Set)}, {SetVX(RandVar,2^i,2^i)}, {preserved})
+			end
+			CTrigger(FP,{CD(GMode,1),},{
+				TSetMemoryX(_Add(RPtr,55),SetTo,0x100,0x100); -- 클로킹
+				TSetMemoryX(_Add(RPtr,57),SetTo,RandVar,0xFF); -- 현재건작 유저 인식
+				TSetMemoryX(_Add(RPtr,73),SetTo,_Mul(RandVar,256),0xFF00); -- 현재건작 유저 인식
+				TSetMemoryX(_Add(RPtr,72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
+				TSetMemoryX(_Add(RPtr,72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
+				TSetMemoryX(_Add(RPtr,35),SetTo,1,0xFF); -- 개별건작 표식
+				TSetMemoryX(_Add(RPtr,35),SetTo,1*256,0xFF00);
+				TSetMemoryX(_Add(RPtr,70),SetTo,48*16777216,0xFF000000); -- 개별건작 타이머
+
+			},{preserved})
+
+
+			CElseIfX(CVar(FP,RType[2],Exactly,147))
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TOrder(RUID, Force2, 1, Attack, 23);
+				TSetMemory(_Add(RPtr,13),SetTo,128),
+				TSetMemoryX(_Add(RPtr,18),SetTo,128,0xFFFF),
+				TSetDeathsX(_Add(RPtr,72),SetTo,0xFF*256,0,0xFF00),
+				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+				CreateUnit(1,84,1,FP),KillUnit(84,FP)
+			})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,3))
+				CDoActions(FP,{
+					TSetDeathsX(_Add(RPtr,72),SetTo,0xFF*256,0,0xFF00)})
+			CElseIfX(CVar(FP,RType[2],Exactly,84))
+			CDoActions(FP,{
+				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
+			})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,201))
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP,{
+				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				TSetMemoryX(_Add(RPtr,55),SetTo,0x04000000,0x04000000),
+				TOrder(RUID, Force2, 1, Move, 36);
+			})
+			CElseIfX(CVar(FP,RType[2],Exactly,202))
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP, {}, {TOrder(RUID, Force2, 1, Attack, RLocV);}, {preserved})
+			
+			CMov(FP,CunitIndex,_Div(_Sub(RPtr,19025),_Mov(84)))
+			CDoActions(FP, {Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,2))
+			CElseX()
+				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
+			CIfXEnd()
+			--Simple_SetLocX(FP,0,G_CA_BackupX,G_CA_BackupY,G_CA_BackupX,G_CA_BackupY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			--CDoActions(FP,{TOrder(RUID,Force2,72,Attack,1)})
+			
+		CIfEnd()
+SetCallEnd()
 
 end
