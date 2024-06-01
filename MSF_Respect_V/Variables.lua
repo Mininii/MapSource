@@ -66,6 +66,12 @@
 	SuppMax = CreateVar(FP)
 	PCheckV = CreateVar(FP)
 	GunCcode = CreateCcode()
+	NMCr = CreateCcodeArr(5)
+	HMCr = CreateCcodeArr(5)
+	SMCr = CreateCcodeArr(5)
+	RMCr = CreateCcodeArr(5)
+	CSPtr = CreateVar(FP)
+
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
@@ -131,16 +137,17 @@
 	ShCost = 60000
 
 	SetUnitAbility(21,18,3,17000,false,30,450,false,1,160,5,45000,"Kazansky",2000) --
-	SetUnitAbility(25,28,1,20000,false,75,1000,false,1,384,12,30000,"Duke Siege",3000) --
 	SetUnitAbility(17,9,3,15000,false,1,330,false,1,160,5,35000,"Schezar",2500) --
 	SetUnitAbility(19,5,3,30000,false,22,550,false,1,160,5,65000,"Raynor V",4000) --
 	SetUnitAbility(28,23,3,35000,false,22,680,false,1,192,6,40000,"Hyperion",5000) --
 	SetUnitAbility(88,114,3,15000,5000,22,500,false,1,32*4,4,35000,"Artanis",3200) --
-	SetUnitAbility(86,78,3,40000,10000,22,800,false,1,32*12,6,74000,"Danimoth",4500) --
-	SetUnitAbility(75,85,3,30000,10000,22,900,false,1,32*1,3,35000,"Zeratul",3800) --
-	SetUnitAbility(76,71,4,40000,10000,20,450,{5,15,30},1,32*2,3,55000,"Archon",4800) --
+	SetUnitAbility(86,78,3,25000,10000,22,800,false,1,32*12,6,54000,"Danimoth",4500) --
 	SetUnitAbility(77,65,3,20000,false,15,350,false,2,32*2,3,35000,"Fenix Z",1800) --
 	SetUnitAbility(78,67,3,25000,false,15,320,false,1,32*5,5,45000,"Fenix D",2800) --
+	
+	SetUnitAbility(25,28,1,20000,false,75,1000,false,1,384,12,30000,"Duke Siege",3000) --
+	SetUnitAbility(75,85,3,30000,10000,22,900,false,1,32*1,3,35000,"Zeratul",3800) --
+	SetUnitAbility(76,71,4,40000,10000,20,450,{5,15,30},1,32*2,3,55000,"Archon",4800) --
 
 
 
@@ -192,11 +199,11 @@
 
 
 	
-	SetUnitAbility(89,90,5,1950000,65535,15,2999,false,1,32*9,9,1500000,"EL FAIL",800000)
-	SetUnitAbility(61,111,5,1550000,65535,18,3999,false,1,32*1,1,800000,"DIEIN",500000)
-	SetUnitAbility(63,19,5,1350000,65535,55,1999,{45,45,45},1,32*4,3,1000000,"PLAY",500000)
-	SetUnitAbility(67,68,5,1880000,65535,15,1444,{60,60,60},1,32*4,3,1400000,"EL CLEAR",700000)
-	SetUnitAbility(71,77,5,1450000,65535,30,3777,false,1,32*5,5,1100000,"LENA",400000)
+	SetUnitAbility(89,90,5,3950000,65535,15,2999,false,1,32*9,9,1500000,"EL FAIL",800000)
+	SetUnitAbility(61,111,5,5550000,65535,18,3999,false,1,32*1,1,1900000,"DIEIN",1000000)
+	SetUnitAbility(63,19,5,4350000,65535,55,1999,{45,45,45},1,32*4,3,1000000,"PLAY",900000)
+	SetUnitAbility(67,68,5,3880000,65535,15,1444,{60,60,60},1,32*4,3,1400000,"EL CLEAR",900000)
+	SetUnitAbility(71,77,5,3950000,65535,30,3777,false,1,32*5,5,1100000,"LENA",800000)
 
 
 	SetUnitAbility(124,91,1,120000,30000,15,1800,false,1,32*5,5,110000,"Turret",15000) --

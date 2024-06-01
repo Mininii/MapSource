@@ -263,7 +263,7 @@ if Limit == 1 then
 	DoActionsX(FP,{SetSwitch("Switch 253", Set)}) -- Limit설정
 end
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64),}) -- Limit설정
-	function InputTesterID(Player,ID)
+	function InputTesterID(Player,ID,Num)
 		if Limit == 1 then
 			
 		Trigger {
@@ -276,6 +276,7 @@ end
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
 				SetCDeaths(FP,SetTo,1,LimitT[Player+1]);
+				SetDeaths(Player, SetTo, Num, 217);--217번 데스값을 특정숫자로
 				
 			}
 		}
@@ -299,8 +300,8 @@ end
 	end
 
 		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
-			InputTesterID(i,"GALAXY_BURST") 
-			InputTesterID(i,"Natori_sana") 
+			InputTesterID(i,"GALAXY_BURST",1) --Creator 칭호
+			InputTesterID(i,"Natori_sana",2) --名取さな 칭호 및 사망 닉네임 효과
 		end
 		
 	T_YY = 2024
@@ -368,6 +369,7 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	SetInvincibility(Disable, 176, P8, 64);
 	SetInvincibility(Disable, 177, P8, 64);
 	SetInvincibility(Disable, 178, P8, 64);
+	AddCD(GunCcode,#Shape8148);
 	AddCD(GunCcode,#Shape8131);
 	AddCD(GunCcode,#Shape8132);
 	AddCD(GunCcode,#Shape8133);
@@ -459,23 +461,12 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	Simple_SetLoc(0, 704, 7888, 704, 7888),
 	CreateUnit(1, 133, 1, P7)},1)
 
-	HeroTestMode = 1
+	HeroTestMode = 0
 	if HeroTestMode == 1 then
 		for j,k in pairs(UnitPointArr) do
 			f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)
 		end
 	end
 
-	Trigger {
-		players = {FP},
-		conditions = {  
-			Command(FP,AtLeast,10,42);
-		},
-		actions = {
-			KillUnit(42,FP);
-			PreserveTrigger();
-			
-		},
-	}
 
 end

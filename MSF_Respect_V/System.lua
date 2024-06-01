@@ -174,49 +174,112 @@ local SelShbool = CreateVar(FP)
 	count = CreateVar(FP)
 	f_Read(FP, 0x6283F0, count)
 	DoActions(FP, {ModifyUnitEnergy(All, 40, AllPlayers, 64, 100)})
+
+	
+	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
+	
+	EXCC_ClearCalc({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
+	EXCC_Part2()
+	EXCC_Part3X()
+	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
+		EXCC_Part4X(i,{
+			DeathsX(19025+(84*i)+9,AtMost,0,0,0xFF0000),--
+			DeathsX(19025+(84*i)+19,AtLeast,1*256,0,0xFF00),
+		},
+		{MoveCp(Add,25*4),
+		SetCVar(FP,CurCunitI2[2],SetTo,i),--SetResources(P1,Add,1,Gas)
+		})
+	end
+	EXCC_End()
+
+
 	HeroIndex = CreateVar(FP)
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
+
+	CDoActions(FP, {Set_EXCC2(UnivCunit, CurCunitI2, 0, SetTo, 0)})--죽인수 초기화
+
 	EnemyCheck = def_sIndex()
 	NJump(FP, EnemyCheck,{DeathsX(CurrentPlayer, AtLeast, 5, 0, 0xFF)})
 
 	
 for i = 0, 4 do
 	CIf(FP,{DeathsX(CurrentPlayer, Exactly, i, 0, 0xFF)},{SetMemory(0x6509B0, Add, 6),})
+		
 
-		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF)},{SetScore(i, Add, 1, Custom)})
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 32, 0, 0xFF)},{SetScore(i, Add, 1, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
+		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
+		CIfXEnd()
 		f_LoadCp()
 		CIfEnd()
 
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),},{SetScore(i, Add, 2, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CIfXEnd()
 		f_LoadCp()
 		CIfEnd()
 		
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 10, 0, 0xFF),},{SetScore(i, Add, 3, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CIfXEnd()
 		f_LoadCp()
 		CIfEnd()
 
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, MarID[i+1], 0, 0xFF),},{SetScore(i, Add, 4, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
+		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
+		CIfXEnd()
 		f_LoadCp()
 		CIfEnd()
 		
 
 	DoActions(FP, {SetMemory(0x6509B0, Subtract, 6)})
+	--CIf(FP, Cond_EXCC(4, AtLeast, 1,0xFF))
+	--CDoActions(FP, {TSetDeathsX(CurrentPlayer, SetTo, EXCC_TempVarArr[5], 0, 0xFF)})
+	--CIfEnd()
 	CIfEnd()
 end
 
 
+
+
+function print_utf8_A(DB, string)
+	local ret = {}
+	
+	if type(string) == "string" then
+		local str = string
+		local n = 1
+		if #str % 4 >= 1 then
+			for i = 1, #str % 4 do str = '\x0d'..str end
+		end
+		local t = StrToMem(str)
+		while n <= #t do
+			ret[#ret+1] = SetCtrig1X(FP,DB[2],(((n-1)//4)+(math.floor(((n-1)//4)/602))*2)*4,0, SetTo, _dw(t, n))
+			n = n + 4
+		end
+	elseif type(string) == "number" then
+		PushErrorMsg("print_utf8_InputError")
+	end
+	return ret
+end
 
 
 	
@@ -225,20 +288,34 @@ end
 	for j, k in pairs(f_GunTable) do
 		f_GSend(k)
 	end
-	
-	CIf(FP,{Cond_EXCC(1,Exactly,1)}) -- 영작유닛인식
+	local HTArr = CreateArr(600, FP)
+	local HPT = CreateVar(FP)
+	local HTSize = CreateVar(FP)
+	CIf(FP,{Cond_EXCC(1,Exactly,1)},SetV(HPT,0)) -- 영작유닛인식
 	f_SaveCp()
 	f_Read(FP, BackupCp, HeroIndex, nil, nil, 1)
 	for j,k in pairs(UnitPointArr) do
-		TriggerX(FP,{CD(SELimit,4,AtMost),CVX(HeroIndex, k[1], 0xFF)}, {AddCD(SELimit,1),RotatePlayer({
-			PlayWAVX("staredit\\wav\\Herokill.ogg"),
-			PlayWAVX("staredit\\wav\\Herokill.ogg"),},HumanPlayers, FP)},{preserved})
 		Trigger2X(FP, {
-			CVX(HeroIndex, k[1], 0xFF)}, {
-				SetScore(Force1, Add, k[2], Kills),
-				RotatePlayer({
-				DisplayTextX(StrDesignX(k[3].."\x04을(를) \x07처치하였다! \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)}, HumanPlayers, FP)},{preserved})
+			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]),print_utf8_A(HTArr, k[3].."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D")},{preserved})
 	end
+	
+	CIf(FP, {CV(HPT,1,AtLeast)})
+	TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({
+		PlayWAVX("staredit\\wav\\Herokill.ogg"),
+		PlayWAVX("staredit\\wav\\Herokill.ogg"),},HumanPlayers, FP)},{preserved})
+		
+	function HeroTextFunc()
+		f_Memcpy(FP,_Add(RetV,Dev),Arr(HTArr,0),0x20)
+		Dev = Dev+0x20
+		BSize=BSize+0x20
+	end
+	local ExchangeOre = CreateVar(FP)
+	
+
+	f_Div(FP, ExchangeOre, _Mul(_Mul(ExRate,HPT), 10),1000)
+	CDoActions(FP, {TSetResources(Force1, Add, ExchangeOre, Ore)})
+	DisplayPrint(HumanPlayers,{"\x13",StrD[1],HeroTextFunc,"\x04을(를) \x07처치하였다! \x1F＋ ",ExchangeOre," \x03Ｏｒｅ"..StrD[2]})
+	CIfEnd()
 	f_LoadCp()
 	CIfEnd()
 
@@ -271,31 +348,31 @@ end
 	Install_GunStack()
 	Create_G_CA_Arr()
 
+	function ToggleFunc(CondArr,Mode,EnterFlag)
+		local KeyToggle = CreateCcode()
+		local KeyToggle2 = CreateCcode()
+		local NotTypingCond = nil
+		if EnterFlag ~= nil then
+			NotTypingCond = Memory(0x68C144,Exactly,0)
+		end
+		
+		if Mode ~= nil then
+			DoActionsX(FP,{SetCD(KeyToggle,0)})
+			TriggerX(FP, {NotTypingCond,CondArr[1],CD(KeyToggle2,1)}, {SetCD(KeyToggle2,0),SetCD(KeyToggle,1)}, {preserved})
+			TriggerX(FP, {NotTypingCond,CondArr[2]}, {SetCD(KeyToggle2,1)}, {preserved})
+		else
+			DoActionsX(FP,{SetCD(KeyToggle,0)})
+			TriggerX(FP, {NotTypingCond,CondArr[2],CD(KeyToggle2,0)}, {SetCD(KeyToggle2,1),SetCD(KeyToggle,1)}, {preserved})
+			TriggerX(FP, {NotTypingCond,CondArr[1]}, {SetCD(KeyToggle2,0)}, {preserved})
+		end
+	
+		return KeyToggle2,KeyToggle
+	end
+			
 	if TestStart == 1 then-- BarTextTest
 		
 NameTest = 0
 if NameTest == 1 then
-function ToggleFunc(CondArr,Mode,EnterFlag)
-	local KeyToggle = CreateCcode()
-	local KeyToggle2 = CreateCcode()
-	local NotTypingCond = nil
-	if EnterFlag ~= nil then
-		NotTypingCond = Memory(0x68C144,Exactly,0)
-	end
-	
-	if Mode ~= nil then
-		DoActionsX(FP,{SetCD(KeyToggle,0)})
-		TriggerX(FP, {NotTypingCond,CondArr[1],CD(KeyToggle2,1)}, {SetCD(KeyToggle2,0),SetCD(KeyToggle,1)}, {preserved})
-		TriggerX(FP, {NotTypingCond,CondArr[2]}, {SetCD(KeyToggle2,1)}, {preserved})
-	else
-		DoActionsX(FP,{SetCD(KeyToggle,0)})
-		TriggerX(FP, {NotTypingCond,CondArr[2],CD(KeyToggle2,0)}, {SetCD(KeyToggle2,1),SetCD(KeyToggle,1)}, {preserved})
-		TriggerX(FP, {NotTypingCond,CondArr[1]}, {SetCD(KeyToggle2,0)}, {preserved})
-	end
-
-	return KeyToggle2,KeyToggle
-end
-		
 		testc = CreateCcode()
 		testc2 = CreateCcode()
 		testc3 = CreateCcode()
@@ -460,6 +537,54 @@ end
 		--TriggerX(FP,{},{CreateUnit(1, 84, 64, FP),KillUnit(84, FP)},{preserved})
 		
 end
+	end
+	if false then -- 언리미터 구조 파악 or 껏다켯다 테스트 but 끄자마자 튕겨 실패. 폐기코드
+		
+		temp,F9Key = ToggleFunc({KeyPress("F9","Up"),KeyPress("F9","Down")},nil,1)--누를 경우 설명서 출력
+		
+		CIfOnce(FP, {})
+		R_0x64EED8 = CreateVar(FP) R_0x64EED8["hex"] = true
+		R_0x64EEDC = CreateVar(FP) R_0x64EEDC["hex"] = true
+		R_0x63FE30 = CreateVar(FP) R_0x63FE30["hex"] = true
+		R_0x63FE34 = CreateVar(FP) R_0x63FE34["hex"] = true
+		R_0x57EB68 = CreateVar(FP) R_0x57EB68["hex"] = true
+		R_0x57EB70 = CreateVar(FP) R_0x57EB70["hex"] = true
+		R_0x64B2E0 = CreateVar(FP) R_0x64B2E0["hex"] = true
+		R_0x64B2E4 = CreateVar(FP) R_0x64B2E4["hex"] = true
+		R_0x64DEBC = CreateVar(FP) R_0x64DEBC["hex"] = true
+		f_Read(FP, 0x64EED8, R_0x64EED8)
+		f_Read(FP, 0x64EEDC, R_0x64EEDC)
+		f_Read(FP, 0x63FE30, R_0x63FE30)
+		f_Read(FP, 0x63FE34, R_0x63FE34)
+		f_Read(FP, 0x57EB68, R_0x57EB68)
+		f_Read(FP, 0x57EB70, R_0x57EB70)
+		f_Read(FP, 0x64B2E0, R_0x64B2E0)
+		f_Read(FP, 0x64B2E4, R_0x64B2E4)
+		f_Read(FP, 0x64DEBC, R_0x64DEBC)
+		CIfEnd()
+		ResetUnLimiterArr = {
+		{0x64EED8,0x64B2E8,R_0x64EED8},{0x64EEDC,0x64B358,R_0x64EEDC},
+		{0x63FE30,0x63B15C,R_0x63FE30},{0x63FE34,0x629DBC,R_0x63FE34},
+		{0x57EB68,0x56C6E8,R_0x57EB68},{0x57EB70,0x52F5A8,R_0x57EB70},
+		{0x64B2E0,0x64B1A0,R_0x64B2E0},{0x64B2E4,0x6416B4,R_0x64B2E4},
+		{0x64DEBC,0,R_0x64DEBC}}
+		UnLimiterOnOff = CreateVar(FP)
+		TriggerX(FP, {CD(F9Key,1),CD(UnLimiterOnOff,0)}, {SetCD(UnLimiterOnOff,1),RotatePlayer({DisplayTextX("UnLimiter Off")},HumanPlayers, FP)},{preserved})
+		CIf(FP, {CD(F9Key,1),CD(UnLimiterOnOff,1)},{SetCD(F9Key,0)})
+		for j,k in pairs(ResetUnLimiterArr) do
+			CMov(FP,k[1],k[2])
+		end
+		CIfEnd()
+
+		TriggerX(FP, {CD(F9Key,1),CD(UnLimiterOnOff,1)}, {SetCD(UnLimiterOnOff,0),RotatePlayer({DisplayTextX("UnLimiter On")},HumanPlayers, FP)},{preserved})
+		CIf(FP, {CD(F9Key,1),CD(UnLimiterOnOff,0)},{SetCD(F9Key,0)})
+		for j,k in pairs(ResetUnLimiterArr) do
+			CMov(FP,k[1],k[3])
+		end
+		CIfEnd()
+		TriggerX(FP, {CD(UnLimiterOnOff,0)}, {SetMemory(0x64DEBC,SetTo,40)},{preserved})
+
+
 	end
 	--219
 	--130

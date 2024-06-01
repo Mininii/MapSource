@@ -7,8 +7,15 @@
 		{2,"staredit\\wav\\BGM_BlueWhite.ogg",35*1000},
 		{3,"staredit\\wav\\BGM_OnlyForYou.ogg",39*1000},
 		{4,"staredit\\wav\\BGM_Kamui.ogg",77*1000},
+		{5,"staredit\\wav\\BGM_ALiCE.ogg",43*1000},
+		{6,"staredit\\wav\\BGM_ECiLA.ogg",40*1000},
+		{7,"staredit\\wav\\BGM_D2.ogg",37*1000},
+		{8,"staredit\\wav\\BGM_OBLIVION.ogg",48*1000},
+		{9,"staredit\\wav\\BGM_Hypernaid.ogg",98*1000},
 	})
+	
 
+	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 	for i = 0, 4 do
 		TriggerX(FP,{HumanCheck(i,1)},{SetCDeaths(FP,Add,1,PCheck),SetCVar(FP,PCheckV[2],Add,1)},{preserved})
@@ -163,12 +170,13 @@
 
 				f_SaveCp()
 				CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
-				TmpGunNum = CreateVarArr(4,FP)
+				TmpGunNum = CreateVarArr(5,FP)
 				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*0)/4))), TmpGunNum[1])
 				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*1)/4))), TmpGunNum[2])
 				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*2)/4))), TmpGunNum[3])
 				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*3)/4))), TmpGunNum[4])
-				DisplayPrintEr(CurrentOP, {"DC1 : ",TmpGunNum[1],"   DC2 : ",TmpGunNum[2],"   DC3 : ",TmpGunNum[3],"   DC4 : ",TmpGunNum[4]})
+				f_Read(FP, _Add(Cunit2,3), TmpGunNum[5])
+				DisplayPrintEr(CurrentOP, {"DC1 : ",TmpGunNum[1],"   DC2 : ",TmpGunNum[2],"   DC3 : ",TmpGunNum[3],"   DC4 : ",TmpGunNum[4],"  CSprite:",TmpGunNum[5]})
 					
 				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 				f_LoadCp()
@@ -463,6 +471,65 @@ for i = 1, 4 do -- 강퇴기능
 	local ExchangeP = CreateVar(FP)
 	MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 	for i = 0, 4 do
+		
+		
+		Trigger { -- 조합 영웅마린
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,32,13); 
+			Accumulate(i,AtLeast,HMCost,Ore);
+			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+		},
+		actions = {
+			ModifyUnitEnergy(1,32,i,13,0);
+			RemoveUnitAt(1,32,13,i);
+			SetResources(i,Subtract,HMCost,Ore);
+			AddCD(HMCr[i+1],1);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 일반 마린을 \x1B영\x04웅 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(HMCost).." O r e"),4);
+			PreserveTrigger();
+		},
+		}
+	
+		Trigger { -- 조합 스마
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,20,13); 
+			Accumulate(i,AtLeast,SMCost,Ore);
+			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+			CD(GMode,2,AtMost);
+		},
+		actions = {
+			ModifyUnitEnergy(1,20,i,13,0);
+			RemoveUnitAt(1,20,13,i);
+			SetResources(i,Subtract,SMCost,Ore);
+			AddCD(SMCr[i+1],1);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1B영\x04웅 마린을 \x1F스\x04페셜 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
+			PreserveTrigger();
+		},
+		}
+		Trigger { -- 조합 근
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,10,13); 
+			Accumulate(i,AtLeast,RMCost,Ore);
+			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+			CD(GMode,2,AtMost);
+		},
+		actions = {
+			ModifyUnitEnergy(1,10,i,13,0);
+			RemoveUnitAt(1,10,13,i);
+			SetResources(i,Subtract,RMCost,Ore);
+			AddCD(RMCr[i+1],1);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1F스\x04페셜 마린을 \x19리\x04스펙트 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
+			PreserveTrigger();
+		},
+		}
+	
+
+
 		for j,k in pairs(KillPointArr) do
 			TriggerX(i, {Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
 		end
@@ -524,22 +591,21 @@ for i = 1, 4 do -- 강퇴기능
 		CallTrigger(FP,OneClickUpgrade)
 		TriggerX(FP, {CD(UpMaster,1)}, {SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0)}, {preserved})
 		NIfEnd()
-
 		UnitButton(i,82,nil,{SetCp(i),
 			DisplayText(StrDesign("\x1DM\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
-			CreateUnit(1, 32, 6, i),SetCp(FP)
+			AddCD(NMCr[i+1],1),SetCp(FP)
 		})
 		UnitButton(i,8,{CD(GMode,2,AtMost)},{SetCp(i),
 			DisplayText(StrDesign("\x1DS\x04pecial \x1DM\x04arine 을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
-			CreateUnit(1, 10, 6, i),SetCp(FP)
+			AddCD(SMCr[i+1],1),SetCp(FP)
 		})
 		UnitButton(i,8,{CD(GMode,3,AtLeast)},{SetCp(i),
 			DisplayText(StrDesign("\x1BH\x04ero M\x04arine을 2기 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
-			CreateUnit(2, 20, 6, i),SetCp(FP)
+			AddCD(HMCr[i+1],2),SetCp(FP)
 		})
 		UnitButton(i,7,{},{SetCp(i),
 			DisplayText(StrDesign("\x19R\x04espect M\x19arine을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost+RMCost.." O r e"),4);
-			CreateUnit(1, MarID[i+1], 6, i),SetCp(FP)
+			AddCD(RMCr[i+1],1),SetCp(FP)
 		})
 		
 		UnitButton(i,12,{MemoryX(0x664080 + (MarID[i+1]*4),Exactly,0,0x8000)},{SetCp(i),
@@ -579,7 +645,29 @@ for i = 1, 4 do -- 강퇴기능
 		CTrigger(FP, {}, {SetV(PPosY[i+1],CPosY)}, {preserved})
 		CTrigger(FP, {}, {SetV(PPosX[i+1],CPosX)}, {preserved})
 		CIfEnd()
-		
+
+		--
+		--
+		--
+		--
+		local MCT = {
+		{NMCr[i+1],32},
+		{HMCr[i+1],20},
+		{SMCr[i+1],10},
+		{RMCr[i+1],MarID[i+1]}}
+		for p = 1, 4 do
+		CIf(FP, {CD(MCT[p][1],1,AtLeast),Memory(0x628438, AtLeast, 1)},SubCD(MCT[p][1],1))
+			f_Read(FP, 0x628438, nil, Nextptrs)
+			f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
+			CDoActions(FP, {
+				CreateUnit(1, MCT[p][2], 6, i),
+			})
+			f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
+			CDoActions(FP, {TSetMemoryX(_Add(CSPtr,2), SetTo,P10*0x10000, 0xFF0000)})
+
+			
+		CIfEnd()
+		end
 		
 		
 		if Limit == 1 then
@@ -900,54 +988,43 @@ end
 
 	--LeaderBoard
 	local LeaderBoardT = CreateCcode()
-	GT = {"\x08H\x04D \x08S\x04tyle","\x16M\x04X \x16S\x04tyle","\x11S\x04C \x11S\x04tyle"}
-	for i = 1, 3 do
-		
-	Trigger { -- 킬 포인트 리더보드,
-	players = {FP},
-	conditions = {
-		Label(0);
-		CD(GMode,i),
-		CDeaths(FP,AtMost,0,LeaderBoardT);
+	GT = {{"\x08H\x04D \x08S\x04tyle","\x16M\x04X \x16S\x04tyle","\x11S\x04C \x11S\x04tyle"},{"\x07EVF - \x08H\x04D \x08S\x04tyle","\x07EVF - \x16M\x04X \x16S\x04tyle","\x07EVF - \x11S\x04C \x11S\x04tyle"}}
+	for j=0,1 do
+		for i = 1, 3 do
+			
+		Trigger { -- 킬 포인트 리더보드,
+		players = {FP},
+		conditions = {
+			Label(0);
+			CD(GMode,i),
+			CD(EVFCcode,j),
+			CDeaths(FP,AtMost,0,LeaderBoardT);
+		},
+		actions = {
+			LeaderBoardKills("Any unit",StrDesign("\x11K\x04ills".." - "..GT[j+1][i]));
+			LeaderBoardComputerPlayers(Disable);
+			SetCDeaths(FP,SetTo,400,LeaderBoardT);
+			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
+			PreserveTrigger();
+		},
+	}
+	Trigger { -- 데스 스코어 리더보드
+		players = {FP},
+		conditions = {
+			Label(0);
+			CD(GMode,i),
+			CD(EVFCcode,j),
+			CDeaths(FP,Exactly,200,LeaderBoardT);
+		},
+		actions = {
+			LeaderBoardScore(Custom, StrDesign("\x08D\x04eaths".." - "..GT[j+1][i]));
+			LeaderBoardComputerPlayers(Disable);
+			PreserveTrigger();
 	},
-	actions = {
-		LeaderBoardScore(Kills, StrDesign("\x1DP\x04oints".." - "..GT[i]));
-		LeaderBoardComputerPlayers(Disable);
-		SetCDeaths(FP,SetTo,600,LeaderBoardT);
-		ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
-		PreserveTrigger();
-	},
-}
-Trigger { -- 데스 스코어 리더보드
-	players = {FP},
-	conditions = {
-		Label(0);
-		CD(GMode,i),
-		
-		CDeaths(FP,Exactly,400,LeaderBoardT);
-	},
-	actions = {
-		LeaderBoardScore(Custom, StrDesign("\x08D\x04eaths".." - "..GT[i]));
-		LeaderBoardComputerPlayers(Disable);
-		PreserveTrigger();
-},
-}
-Trigger { -- 킬 스코어 리더보드
-	players = {FP},
-	conditions = {
-		Label(0);
-		CD(GMode,i),
-		CDeaths(FP,Exactly,200,LeaderBoardT);
-	},
-	actions = {
-		LeaderBoardKills("Any unit",StrDesign("\x11K\x04ills".." - "..GT[i]));
-		LeaderBoardComputerPlayers(Disable);
-		PreserveTrigger();
-},
-}
-
+	}
 	end
-	CIf(FP,{CDeaths(FP,Exactly,400,LeaderBoardT);})
+	end
+	CIf(FP,{CDeaths(FP,Exactly,399,LeaderBoardT);})
 	CMov(FP, 0x6509B0, 19025+2)
 	CFor(FP,19025+19,19025+(1700*84)+19,84) -- 좀비유닛탐지
 	CI = CForVariable()

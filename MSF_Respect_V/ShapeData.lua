@@ -48,6 +48,15 @@
 		end
 		return X
 	end
+	
+	Hy1Line = {7   ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736}} -- 선으로 긋기
+	Hy1Fill = {10  ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736},{1536, 128},{1024, 384},{512, 128}} -- 채우기
+
+	Hy1LC_64= CS_SortR(CS_ConnectPathX(Hy1Line,64,0),0)
+	Hy1FP_64= CS_SortR(CS_MoveXY(CS_FillPathXY(Hy1Fill, 1, 64, 64, 0),-1024,-368),0)--하드 저그유닛 SC 약영웅
+	
+	
+
 	Cir = Create_SortTable({
         CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
         CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0),
@@ -72,7 +81,7 @@
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 5), 0)
     
     
-        G_CAPlot_Shape_InputTable = {"Poly"
+        G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64"
             
     
         }
