@@ -61,6 +61,12 @@
 					CallTrigger(FP,dp.Call_IToDecX)
 					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
 					Dev=Dev+(4*12)
+				elseif k["hex"] == true then
+					BSize=BSize+(4*4)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_ItoHex)
+					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoHexVArr,0),3*4)
+					Dev=Dev+(3*4)
 				else
 					BSize=BSize+(4*4)
 					CMov(FP,dp.publicItoDecV,k)
@@ -690,6 +696,10 @@
 		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,1)
 		SetCallEnd2()
 
+		SetCall2(FP, dp.Call_ItoHex)
+		ItoHex(FP, dp.publicItoDecV, VArr(dp.publicItoHexVArr,0), 0, nil, 0)
+		SetCallEnd2()
+
 		SetCall2(FP, dp.Call_VtoName)
 		for i = 0,6 do
 		CIf(FP,{CV(dp.VtoNameV,i)})
@@ -848,12 +858,13 @@
 		dp.StrXPNameArr = {}
 		dp.StrXIndex = 0
 		dp.publicItoDecVArr =CreateVArr(4,FP)
+		dp.publicItoHexVArr =CreateVArr(3,FP)
 		dp.publicItoDecVArrX =CreateVArr(12,FP)
 		dp.publicItoDecV = CreateVar(FP)
 		dp.Call_IToDec = CreateCallIndex()
 		dp.Call_IToDecX = CreateCallIndex()
 		dp.Call_VtoName = CreateCallIndex()
-		
+		dp.Call_ItoHex = CreateCallIndex()
 		dp.Call_Print13X = CreateCallIndex()
 		dp.Print13V = CreateVar(FP)
 		dp.publiclItoDecVArr =CreateVArr(5,FP)
