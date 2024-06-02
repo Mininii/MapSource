@@ -25,30 +25,31 @@
 	Shape8201 = {{688, 3776}}
 	Shape8148 = {{1136,7280},{1024,368}}
 	BuildPlaceArr = {
-		{Shape8131,131,380000,65535},
-		{Shape8132,132,380000,65535},
-		{Shape8133,133,380000,65535},
-		{Shape8126,126,3500000,65535},
-		{Shape8116,116,1000000,65535},
-		{Shape8122,122,1000000,65535},
-		{Shape8127,127,3500000,65535},
-		{Shape8174,174,3500000,65535},
-		{Shape8106,106,1000000,65535},
-		{Shape8113,113,1000000,65535},
-		{Shape8114,114,1000000,65535},
-		{Shape8147,147,6500000,65535},
-		{Shape8150,150,15000,15000},
-		{Shape8151,151,650000,65535},
-		{Shape8152,152,6500000,65535},
-		{Shape8154,154,1000000,65535},
-		{Shape8160,160,1000000,65535},
-		{Shape8167,167,1000000,65535},
-		{Shape8168,168,650000,65535},
-		{Shape8175,175,6500000,65535},
-		{Shape8190,190,6500000,65535},
-		{Shape8200,200,1000000,65535},
-		{Shape8201,201,650000,65535},
-		{Shape8148,148,1000000,65535}
+		{0,131,380000,65535},
+		{0,132,380000,65535},
+		{0,133,380000,65535},
+		{0,126,3500000,65535},
+		{0,116,1000000,65535},
+		{0,122,1000000,65535},
+		{0,130,1000000,65535},
+		{0,127,3500000,65535},
+		{0,174,3500000,65535},
+		{0,106,1000000,65535},
+		{0,113,1000000,65535},
+		{0,114,1000000,65535},
+		{0,147,6500000,65535},
+		{0,150,15000,15000},
+		{0,151,650000,65535},
+		{0,152,6500000,65535},
+		{0,154,1000000,65535},
+		{0,160,1000000,65535},
+		{0,167,1000000,65535},
+		{0,168,650000,65535},
+		{0,175,6500000,65535},
+		{0,190,6500000,65535},
+		{0,200,1000000,65535},
+		{0,201,650000,65535},
+		{0,148,1000000,65535}
 	}
 	UnitRepIndex2 = CreateVar(FP)
 	CIfOnce(FP,{ElapsedTime(AtLeast, 3)}) --AfterOnPluginExec
@@ -68,11 +69,6 @@
 		
 
 
-		for o,p in pairs(k[1]) do
-			
-			CallTrigger(FP,Call_PlaceIndexedBuild,{SetV(BX,p[1]),SetV(BY,p[2]),SetV(BIDV,BID),SetV(BIndexV, o)})
-			
-		end
 	end
 	--for j,k in pairs(NonClockArr) do
 	--	SetUnitsDatX(k,{SightRange = 0})
@@ -105,6 +101,13 @@
 		Set_EXCC2(DUnitCalc,CunitIndex,2,SetTo,CunitHP),
 	})
 	CIfEnd()
+	condbox = {}
+	for j,k in pairs(BuildPlaceArr) do
+		table.insert(condbox,CV(RepHeroIndex,k[2]))
+	end
+	CIf(FP,{TTOR(condbox)})--블라인드 맥일놈들
+		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,72), SetTo, 0xFF000000, 0xFF000000)})
+	CIfEnd()
 	DoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,76),
 		SetMemoryB(0x6644F8+6,SetTo,83),
@@ -115,20 +118,6 @@
 	CSub(FP,UnitRepIndex,1)
 	CWhileEnd()
 	
-
-	CFor(FP,19025,19025+(84*1700),84)
-	CI = CForVariable()
-	condbox = {}
-	for j,k in pairs(BuildPlaceArr) do
-		table.insert(condbox,CV(RepHeroIndex,k[2]))
-	end
-	
-	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
-	
-	CIf(FP,{TMemoryX(_Add(CI,19),AtLeast,1*256,0xFF00),TTOR(condbox)})--블라인드 맥일놈들
-		CDoActions(FP, {TSetMemoryX(_Add(CI,72), SetTo, 0xFF000000, 0xFF000000)})
-	CIfEnd()
-	CForEnd()
 
 	
 	DoActions2X(FP, AfterPatchExec,1)
@@ -215,10 +204,8 @@
 		table.insert(PatchArr,SetMemory(0x5821A4 + (i*4),SetTo,1500*2))
 		table.insert(PatchArr,SetMemory(0x582144 + (i*4),SetTo,1500*2))
 	end
-	for i = 1, 4 do
-		for j=i,1,-1 do
-			table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + BanToken[j],SetTo,0))
-		end
+	for i = 1, 5 do
+		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + BanToken[i],SetTo,0))
 	end
 	
 	SetUnitsDatX(115,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
@@ -231,7 +218,7 @@
 	LimitX = CreateCcode()
 	LimitT = CreateCcodeArr(7)
 	LimitC = CreateCcode()
-	TriggerX(FP, {}, {Simple_SetLoc(0, 320,992-(64), 320,992-(64)),CreateUnit(1, 115, 1, FP)})
+	TriggerX(FP, {}, {Simple_SetLoc(0, 320,992-(64), 320,992-(64)),CreateUnit(1, 145, 11, FP)})
 	for i = 0, 4 do
 		DoActions(FP, {
 			SetMemoryB(0x58D088+(46*i)+0,SetTo,255),
@@ -245,15 +232,16 @@
             Simple_CalcLoc(3, 0, 64, 0, 64)
 
 		},1)
-		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 320,992+(64*i), 320,992+(64*i)),CreateUnit(1, 107, 1, i)})
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 320,992+(64*i), 320,992+(64*i)),CreateUnit(1, 107, 1, i),Simple_CalcLoc(0, 64, 0, 64, 0),
+		CreateUnit(1, 115, 1, i)})
 	end
 	for i = 4, 0,-1 do
 		DoActions(FP, {
             GiveUnits(1, 125, P12, 3, i),
 		},1)
-		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i)})
+		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i),RemoveUnit(145, i)})
 	end
-	TriggerX(FP, {}, {CreateUnit(1, 145, 11, FP)})
+	TriggerX(FP, {}, {})
 	
 	
 if TestStart == 1 then
@@ -390,6 +378,9 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	for j,k in pairs(UnitPointArr2) do
 		table.insert(condbox,CV(RepHeroIndex,k))
 	end
+	for j,k in pairs(BuildPlaceArr) do
+		table.insert(condbox,CV(RepHeroIndex,k[2]))
+	end
 	
 	f_Read(FP,_Add(CI,25),RepHeroIndex,nil,0xFF,1)
 	f_Read(FP,_Add(CI,19),PlayerV,nil,0xFF,1)
@@ -407,10 +398,7 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	f_Read(FP,_Add(CI,10),CPos)
 	f_Read(FP,_Add(CI,2),CunitHP)
 	f_Div(FP,CunitHP,_Mov(256))
-	CIf(FP,{CV(CunitHP,99,AtMost)})
-	DisplayPrint(HumanPlayers, {"HP : ",CunitHP})
-	CIfEnd()
-	CMov(FP,ArrX(UnitHPArr,UnitRepIndex),CunitHP)
+	CMov(FP,ArrX(UnitHPArr,UnitRepIndex),_Sub(CunitHP,50))
 	CMov(FP,ArrX(UnitPosArr,UnitRepIndex),CPos)
 	CMov(FP,ArrX(UnitIDArr,UnitRepIndex),RepHeroIndex,nil,0xFF,1)
 	CMov(FP,ArrX(PlayerIDArr,UnitRepIndex),PlayerV,nil,0xFF,1)
@@ -422,14 +410,14 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	
 	
 	removebox = {}
-	RemoveArr = {201,200,174,175,167,154,160,168,190,189,152,147,148,150,126,127,106,113,114,116,122,131,132,133,151}
 	for j,k in pairs(UnitPointArr2) do
 		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
 		table.insert(removebox,RemoveUnit(k, AllPlayers))
 	end
-	for j,k in pairs(RemoveArr) do
-		table.insert(removebox,ModifyUnitEnergy(All, k, AllPlayers, 64, 0))
-		table.insert(removebox,RemoveUnit(k, AllPlayers))
+
+	for j,k in pairs(BuildPlaceArr) do
+		table.insert(removebox,ModifyUnitEnergy(All, k[2], AllPlayers, 64, 0))
+		table.insert(removebox,RemoveUnit(k[2], AllPlayers))
 	end
 
 	DoActions2(FP, removebox)
@@ -443,7 +431,7 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	-- P8 128
 
 	DoActions2(AllPlayers, PatchArrPrsv)
-	DoActions2(AllPlayers, {
+	DoActions2(FP, {
 		SetPlayerColor(P6, SetTo, 255);
 		SetPlayerColor(P7, SetTo, 42);
 		SetPlayerColor(P8, SetTo, 128);

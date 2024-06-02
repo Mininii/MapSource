@@ -381,7 +381,7 @@ function CreateUnitQueue()
 	NWhileEnd()
 	
 FixText(FP, 1)
-DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08200,000 \x07』"})
+DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08"..QueueMaxSize.." \x07』"})
 FixText(FP, 2)
 end
 
@@ -389,10 +389,12 @@ end
 
 WepDupCheck = {}
 KillPointArr = {}
-function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint,QueueScript,QueueScript2)--QueueScript{FlingyID,SpriteID,ImageID,Color(Option)}
+ParseUnitNameT = {}
+function SetUnitAbility(UnitID,WepID,DmgType,HP,Shield,Cooldown,Damage,Splash,ObjNum,RangeMax,SeekRange,Point,Text,KillPoint)--QueueScript{FlingyID,SpriteID,ImageID,Color(Option)}
 	local TempWID = WepID
 	local TempWID2 = 130
 	local LClass = 1350--~1355
+	ParseUnitNameT[Text] = UnitID
 	if Shield == nil then Shield = false end
 
 	if WepID~=70 then -- 70번 제로무기 겹쳐도됨
@@ -1145,6 +1147,7 @@ for i = 1, 4 do
 	CElseX()
 		CMov(FP,SL_Ret,SL_TempV[i],0,0xFF*(256^(i-1)))
 	CIfXEnd()
+	CMov(FP,SL_TempV[i],0)
 end
 SetCallEnd()
 
@@ -1360,6 +1363,9 @@ function T_to_BiteBuffer(Table)
 		for i, j in pairs(Table) do
 			if type(j) == "string" and j =="ACAS" then
 				BiteValue = BiteValue + Another_CAPlot_Shape*(256^ret)
+			elseif type(j) == "string" then
+				BiteValue = BiteValue + ParseUnitNameT[j]*(256^ret)
+				
 			else
 			BiteValue = BiteValue + j*(256^ret)
 			end
@@ -1533,6 +1539,20 @@ function Install_Call_G_CA()
 			CElseX()
 			if TestStart == 1 then
 				DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+				--DisplayPrint(HumanPlayers, {
+				--	"   G_CA_TempTable[1] : ",G_CA_TempTable[1],
+				--	"   G_CA_TempTable[2] : ",G_CA_TempTable[2],
+				--	"   G_CA_TempTable[3] : ",G_CA_TempTable[3],
+				--	"   G_CA_TempTable[4] : ",G_CA_TempTable[4],
+				--	"   G_CA_TempTable[5] : ",G_CA_TempTable[5],
+				--	"   G_CA_TempTable[6] : ",G_CA_TempTable[6],
+				--	"   G_CA_TempTable[7] : ",G_CA_TempTable[7],
+				--	"   G_CA_TempTable[8] : ",G_CA_TempTable[8],
+				--	"   G_CA_TempTable[9] : ",G_CA_TempTable[9],
+				--	"   G_CA_TempTable[10] : ",G_CA_TempTable[10],
+				--	"   G_CA_TempTable[11] : ",G_CA_TempTable[11],
+				--})
+
 			end
 			
 				CDoActions(FP,{

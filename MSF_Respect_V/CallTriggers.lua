@@ -257,30 +257,6 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
 				})
-			CElseIfX(CVar(FP,RType[2],Exactly,18))
-			
-			f_Read(FP,_Add(RPtr,10),CPos)
-			Convert_CPosXY()
-			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {}, {TOrder(RUID, Force2, 1, Attack, RLocV);}, {preserved})
-			local RandVar = CreateVar(FP)
-			CMov(FP,RandVar,0)
-			for i = 0, 6 do
-				DoActions(FP, {SetSwitch(RandSwitch1, Random)})
-				TriggerX(FP, {HumanCheck(i, 1),Switch(RandSwitch1, Set)}, {SetVX(RandVar,2^i,2^i)}, {preserved})
-			end
-			CTrigger(FP,{CD(GMode,1),},{
-				TSetMemoryX(_Add(RPtr,55),SetTo,0x100,0x100); -- 클로킹
-				TSetMemoryX(_Add(RPtr,57),SetTo,RandVar,0xFF); -- 현재건작 유저 인식
-				TSetMemoryX(_Add(RPtr,73),SetTo,_Mul(RandVar,256),0xFF00); -- 현재건작 유저 인식
-				TSetMemoryX(_Add(RPtr,72),SetTo,255*256,0xFF00); -- 어그로풀림 방지 ( 페러사이트 )
-				TSetMemoryX(_Add(RPtr,72),SetTo,255*16777216,0xFF000000); -- Blind ( 개별건작유닛 계급설정 )
-				TSetMemoryX(_Add(RPtr,35),SetTo,1,0xFF); -- 개별건작 표식
-				TSetMemoryX(_Add(RPtr,35),SetTo,1*256,0xFF00);
-				TSetMemoryX(_Add(RPtr,70),SetTo,48*16777216,0xFF000000); -- 개별건작 타이머
-
-			},{preserved})
-
 
 			CElseIfX(CVar(FP,RType[2],Exactly,147))
 			f_Read(FP,_Add(RPtr,10),CPos)
@@ -302,6 +278,34 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CDoActions(FP,{
 				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
 			})
+
+			CElseIfX(CVar(FP,RType[2],Exactly,130))
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			local SRet = CreateVar(FP)
+			CiSub(FP,CPosX,16*64)
+			CiSub(FP,CPosY,16*256)
+			f_Sqrt(FP, SRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(5)))
+			
+			CDoActions(FP, {TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
+			TSetMemory(_Add(RPtr,13),SetTo,SRet),
+			TSetMemoryX(_Add(RPtr,18),SetTo,SRet,0xFFFF),})
+			Convert_CPosXY()
+
+
+			CNeg(FP,CPosX)
+			CAdd(FP,CPosX,32*64)
+			CNeg(FP,CPosY)
+			CAdd(FP,CPosY,32*256)
+			Simple_SetLocX(FP,20,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			
+
+
+
+			CDoActions(FP, {TOrder(RUID, Force2, 1, Patrol, 21);})
+
+			
 
 			CElseIfX(CVar(FP,RType[2],Exactly,201))
 			f_Read(FP,_Add(RPtr,10),CPos)

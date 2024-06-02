@@ -1,4 +1,5 @@
 ﻿function Interface()
+	local BanCode = CreateCcodeArr(7)
     count = CreateVar(FP)
     f_Read(FP, 0x6283F0, count)
 	
@@ -12,8 +13,14 @@
 		{7,"staredit\\wav\\BGM_D2.ogg",37*1000},
 		{8,"staredit\\wav\\BGM_OBLIVION.ogg",48*1000},
 		{9,"staredit\\wav\\BGM_Hypernaid.ogg",98*1000},
+		{10,"staredit\\wav\\BGM_Mysti_Era_Mui.ogg",68*1000},
 	})
-	
+	BTDis = {}
+	for i = 0,4 do
+		for j = 0,4 do
+			table.insert(BTDis, SetMemoryB(0x57F27C + (j * 228) + BanToken[i+1],SetTo,0))
+		end
+	end
 
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
@@ -27,18 +34,44 @@
 		CMov(FP,0x582234 + (4*i),SuppMax) -- 인구수 상시 업데이트(맥스)
 		CMov(FP,0x5821D4 + (4*i),SuppMax) -- 인구수 상시 업데이트(사용가능)
 		end
+		
+
+	for i = 1,5 do
+		Trigger2X(FP, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtLeast,3),HumanCheck(i-1, 0)}, {
+			SetCD(BanCode[1],0),
+			SetCD(BanCode[2],0),
+			SetCD(BanCode[3],0),
+			SetCD(BanCode[4],0),
+			SetCD(BanCode[5],0),
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x07초기화\x04되었습니다."), 0)},HumanPlayers,FP);
+		})
+		Trigger2X(FP, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtMost,2),HumanCheck(i-1, 0)}, {BTDis,
+			RotatePlayer({
+				DisplayTextX(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x02비활성화\x04되었습니다.\x03 (사유 : 2인이하)"), 0)},HumanPlayers,FP);
+		})
+	end
+	Trigger2X(FP, {CVar(FP,PCheckV[2],AtMost,2)}, {BTDis})
 	CIfEnd()
-    
+	DoActions(FP, {
+		SetMemoryB(0x57F27C + (0 * 228) + 62,SetTo,0),
+		SetMemoryB(0x57F27C + (0 * 228) + 63,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 62,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 63,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 62,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 63,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 62,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 63,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 62,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 63,SetTo,0),}, 1)
 	local DelayMedic = CreateCcodeArr(7)
 	local GiveRate = CreateCcodeArr(7)
-	local BanCode = CreateCcodeArr(6)
 	local CurrentOP = CreateVar(FP)
 	local Cunit2 = CreateVar(FP)
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
-        for i = 0, 6 do
-            CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 115,AllPlayers, 64, i),GiveUnits(All, 96, AllPlayers, 64, i)})
+        for i = 0, 4 do
+            CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 96, AllPlayers, 64, i),SetMemoryB(0x57F27C + (i * 228) + 62,SetTo,1),SetMemoryB(0x57F27C + (i * 228) + 63,SetTo,1)})
             if Limit == 1 then
-                
                 f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
             end
     
@@ -197,7 +230,23 @@
         RunAIScript("Turn ON Shared Vision for Player 4");
         RunAIScript("Turn ON Shared Vision for Player 5");
         })
+		TriggerX(i,{HumanCheck(i, 0)},{SetCDeaths(FP,Add,10,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
     end
+	DoActions(P6,{
+	RunAIScript("Turn ON Shared Vision for Player 6");
+	RunAIScript("Turn ON Shared Vision for Player 7");
+	RunAIScript("Turn ON Shared Vision for Player 8");
+	})
+	DoActions(P7,{
+	RunAIScript("Turn ON Shared Vision for Player 6");
+	RunAIScript("Turn ON Shared Vision for Player 7");
+	RunAIScript("Turn ON Shared Vision for Player 8");
+	})
+	DoActions(P8,{SetCp(FP),
+	RunAIScript("Turn ON Shared Vision for Player 6");
+	RunAIScript("Turn ON Shared Vision for Player 7");
+	RunAIScript("Turn ON Shared Vision for Player 8");
+	})
 	DoActions(FP,{ -- 나간플레이어 유닛 삭제
 		KillUnit(MarID[1], P12),
 		KillUnit(MarID[2], P12),
@@ -294,7 +343,7 @@
 
 
 	CIfOnce(FP,{CD(GS,1)},{
-		SetV(BGMType,1),
+		--SetV(BGMType,1),
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
 		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
@@ -324,6 +373,16 @@
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 	end
+
+	
+	for k = 1, 5 do
+		Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);}, {
+			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\x13\x1F"..RMtoSMCost.." Ore\x04을 소모하여 \x19R\x04espect \x19M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x07다운그레이드\x04 할 수 있습니다.\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다.")},HumanPlayers,FP);
+			SetCVar(FP,ExRate[2],SetTo,ExRateT[k]);})
+
+	end
+
+
 	TriggerX(FP, {CD(EVFCcode,0)}, {SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
@@ -389,51 +448,47 @@
 	
 
 
-    
 
-for i = 1, 4 do -- 강퇴기능
-	Trigger { -- 강퇴토큰
-		players = {FP},
-		conditions = {
-			Label(0);
-			Command(Force1,AtLeast,1,BanToken[i]);
-		},
-		actions = {
-			RemoveUnitAt(1,BanToken[i],"Anywhere",Force1);
-			SetCDeaths(FP,Add,1,BanCode[i]);
-			PreserveTrigger();
-			},
-		}
-		for j = 1, 4 do
-			Trigger { -- 강퇴토큰
-				players = {i},
-				conditions = {
-					Label(0);
-					CDeaths(FP,Exactly,j,BanCode[i]);
-				},
-				actions = {
-					RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08경고가 총 "..j.."회 누적\x04 되었습니다. 총 5회 누적시 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-					},
-				}
-		end
-		Trigger { -- 강퇴
-		players = {i},
-		conditions = {
-			Label(0);
-			CDeaths(FP,AtLeast,5,BanCode[i]);
-		},
-		actions = {
-			RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-			},
-		}
-		Trigger { -- 강퇴 드랍
-			players = {i},
+for i = 0, 4 do -- 강퇴기능
+	for j=3,5 do
+		Trigger { -- 강퇴토큰
+			players = {FP},
 			conditions = {
 				Label(0);
-				CDeaths(FP,AtLeast,5,BanCode[i]);Memory(0x57F1B0, Exactly, i)
+				HumanCheck(i, 1);
+				Command(i,AtLeast,1,BanToken[i+1]);
+				CV(PCheckV,j),
+			},
+			actions = {
+				SetCDeaths(FP,Add,1,BanCode[i+1]);
+				RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08강퇴 투표\x04가 \x081회 누적\x04 되었습니다. 투표가 \x03만장일치\x04일 경우 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+				},
+			}
+			Trigger { -- 강퇴
+			players = {FP},
+			conditions = {
+				Label(0);
+				HumanCheck(i, 1);
+				CDeaths(FP,AtLeast,j-1,BanCode[i+1]);
+				CV(PCheckV,j),
+			},
+			actions = {
+				RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+				},
+			}
+	
+			Trigger { -- 강퇴 드랍
+			players = {FP},
+			conditions = {
+				Label(0);
+				HumanCheck(i, 1);
+				CDeaths(FP,AtLeast,j-1,BanCode[i+1]);
+				CV(PCheckV,j),
+				Memory(0x57F1B0, Exactly, i)
 				
 			},
 			actions = {
+				SetCp(i),
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
@@ -464,12 +519,23 @@ for i = 1, 4 do -- 강퇴기능
 				
 				},
 			}
+	end
 			
 		
-		end
+end
+DoActions(FP,{
+	RemoveUnitAt(1,BanToken[1],"Anywhere",Force1);
+	RemoveUnitAt(1,BanToken[2],"Anywhere",Force1);
+	RemoveUnitAt(1,BanToken[3],"Anywhere",Force1);
+	RemoveUnitAt(1,BanToken[4],"Anywhere",Force1);
+	RemoveUnitAt(1,BanToken[5],"Anywhere",Force1);
+
+})
 		BanCode2 = CreateCcodeArr(7)
+		WanCT = CreateCcodeArr(7)
 	local ExchangeP = CreateVar(FP)
-	MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+	MacroWarn1 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08경고를 무시하고 계속 사용하실 경우 드랍됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+	MacroWarn2 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 	for i = 0, 4 do
 		
 		
@@ -486,11 +552,10 @@ for i = 1, 4 do -- 강퇴기능
 			RemoveUnitAt(1,32,13,i);
 			SetResources(i,Subtract,HMCost,Ore);
 			AddCD(HMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 일반 마린을 \x1B영\x04웅 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(HMCost).." O r e"),4);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1DM\x04arine을 \x1BH\x04ero M\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(HMCost).." O r e"),4);
 			PreserveTrigger();
 		},
 		}
-	
 		Trigger { -- 조합 스마
 		players = {i},
 		conditions = {
@@ -505,7 +570,7 @@ for i = 1, 4 do -- 강퇴기능
 			RemoveUnitAt(1,20,13,i);
 			SetResources(i,Subtract,SMCost,Ore);
 			AddCD(SMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1B영\x04웅 마린을 \x1F스\x04페셜 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BH\x04ero M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
 			PreserveTrigger();
 		},
 		}
@@ -523,7 +588,26 @@ for i = 1, 4 do -- 강퇴기능
 			RemoveUnitAt(1,10,13,i);
 			SetResources(i,Subtract,RMCost,Ore);
 			AddCD(RMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1F스\x04페셜 마린을 \x19리\x04스펙트 마린으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1DS\x04pecial \x1DM\x04arine을 \x19R\x04espect \x19M\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
+			PreserveTrigger();
+		},
+		}
+		
+		Trigger { -- 다운그레이드
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(i,AtLeast,1,MarID[i+1],13); 
+			Accumulate(i,AtLeast,RMtoSMCost,Ore);
+			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+			CD(GMode,2,AtMost);
+		},
+		actions = {
+			ModifyUnitEnergy(1,MarID[i+1],i,13,0);
+			RemoveUnitAt(1,MarID[i+1],13,i);
+			SetResources(i,Subtract,RMtoSMCost,Ore);
+			AddCD(SMCr[i+1],1);
+			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x19R\x04espect \x19M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x07다운그레이드 \x04하였습니다. - \x1F"..N_to_EmN(RMtoSMCost).." O r e"),4);
 			PreserveTrigger();
 		},
 		}
@@ -604,7 +688,7 @@ for i = 1, 4 do -- 강퇴기능
 			AddCD(HMCr[i+1],2),SetCp(FP)
 		})
 		UnitButton(i,7,{},{SetCp(i),
-			DisplayText(StrDesign("\x19R\x04espect M\x19arine을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost+RMCost.." O r e"),4);
+			DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost+RMCost.." O r e"),4);
 			AddCD(RMCr[i+1],1),SetCp(FP)
 		})
 		
@@ -677,10 +761,11 @@ for i = 1, 4 do -- 강퇴기능
 			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+15+(i*46),SetTo,255),SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,255)})--SetV(CurEXP,0x7FFFFFFF)
 		end
 
-		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140)},{SetCD(BanCode2[i+1],1)})
+		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140),CD(WanCT[i+1],0)},{SetCD(WanCT[i+1],480),SetCp(i),DisplayText(MacroWarn1, 4),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav")})
+		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140),CD(WanCT[i+1],0)},{SetCD(BanCode2[i+1],1)})
 		TriggerX(FP, {CD(BanCode2[i+1],1)}, {
 			SetMemory(0x59CC78, SetTo, -1048576),
-			SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
+			SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn2, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
 	
 		Trigger {
 			players = {FP},
@@ -694,6 +779,8 @@ for i = 1, 4 do -- 강퇴기능
 			},
 			flag = {preserved}
 		}
+		Trigger2X(FP,{},{SubCD(WanCT[i+1],1)})
+
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04가 매크로를 사용하여 \x08찌리리릿 500배 \x04당하셨습니다."),4),PlayWAVX("staredit\\wav\\zzirizziri.ogg"),PlayWAVX("staredit\\wav\\zzirizziri.ogg")},HumanPlayers,FP);})
 
 			CMov(FP,0x582174+(4*i),count)

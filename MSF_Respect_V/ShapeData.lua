@@ -34,6 +34,14 @@
 		end
 		return X
 	end
+	CenLinePath = {}
+	for i =64, 1984,64 do
+		table.insert(CenLinePath, {i,i})
+	end
+	CenLinePath2 = {}
+	for i =64, 1984,64 do
+		table.insert(CenLinePath2, {2048-i,i})
+	end
 	
 
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
@@ -52,10 +60,17 @@
 	Hy1Line = {7   ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736}} -- 선으로 긋기
 	Hy1Fill = {10  ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736},{1536, 128},{1024, 384},{512, 128}} -- 채우기
 
-	Hy1LC_64= CS_SortR(CS_ConnectPathX(Hy1Line,64,0),0)
+	Hy1LC_64= CS_SortR(CS_MoveXY(CS_ConnectPathX(Hy1Line,128,nil),-1024,-368),0)
 	Hy1FP_64= CS_SortR(CS_MoveXY(CS_FillPathXY(Hy1Fill, 1, 64, 64, 0),-1024,-368),0)--하드 저그유닛 SC 약영웅
+	Fac1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96*2,96*2), 26.565)--9
+	EnBay1= CSMakePolygon(9, 32*7, 0, 10, 1)--9
+	Fac2=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96,96), 26.565)--36
+	EnBay2= CSMakePolygon(36, 32*7, 0, 37, 1)--36
+    CenU = CS_SortY(CS_OverlapX(CSMakePath(CenLinePath),CS_InvertXY(CSMakePath(CenLinePath), nil, 2048)), 0)
+	CenD = CS_SortY(CS_InvertXY(CS_OverlapX(CSMakePath(CenLinePath),CS_InvertXY(CSMakePath(CenLinePath), nil, 2048)), nil, 4096), 1)
 	
-	
+    CenU2 = CS_SortY(CS_OverlapX(CSMakePath(CenLinePath2),CS_InvertXY(CSMakePath(CenLinePath2), nil, 2048)), 0)
+	CenD2 = CS_SortY(CS_InvertXY(CS_OverlapX(CSMakePath(CenLinePath2),CS_InvertXY(CSMakePath(CenLinePath2), nil, 2048)), nil, 4096), 1)
 
 	Cir = Create_SortTable({
         CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
@@ -81,7 +96,7 @@
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 5), 0)
     
     
-        G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64"
+        G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64","Fac1","EnBay1","Fac2","EnBay2","CenU","CenD","CenU2","CenD2"
             
     
         }

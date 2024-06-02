@@ -296,7 +296,7 @@ end
 	f_Read(FP, BackupCp, HeroIndex, nil, nil, 1)
 	for j,k in pairs(UnitPointArr) do
 		Trigger2X(FP, {
-			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]),print_utf8_A(HTArr, k[3].."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D")},{preserved})
+			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]),print_utf8_A(HTArr, k[3]..string.rep("\x0D",0x40-(#k[3])))},{preserved})
 	end
 	
 	CIf(FP, {CV(HPT,1,AtLeast)})
@@ -305,9 +305,9 @@ end
 		PlayWAVX("staredit\\wav\\Herokill.ogg"),},HumanPlayers, FP)},{preserved})
 		
 	function HeroTextFunc()
-		f_Memcpy(FP,_Add(RetV,Dev),Arr(HTArr,0),0x20)
-		Dev = Dev+0x20
-		BSize=BSize+0x20
+		f_Memcpy(FP,_Add(RetV,Dev),Arr(HTArr,0),0x40)
+		Dev = Dev+0x40
+		BSize=BSize+0x40
 	end
 	local ExchangeOre = CreateVar(FP)
 	
@@ -415,10 +415,10 @@ if NameTest == 1 then
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
 		str33 = "\t\x1E。˙+˚Sadol。+.˚\x12\x11。˙+˚S\x04adol\x11。+.˚"
-		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚"
+		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚" --s16 t5
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
-		--str55 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str55 = "\t\x1E。˙+˚Turret。+.˚\x12\x11。˙+˚T\x04urret\x11。+.˚"--(sp:13 tab:4)
+		str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
+		--str55 = "\t\x1E。˙+˚Turret。+.˚\x12\x11。˙+˚T\x04urret\x11。+.˚"--(sp:13 tab:4)
 
 		--Yuri
 		--Sena

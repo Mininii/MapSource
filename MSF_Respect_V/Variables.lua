@@ -12,7 +12,14 @@
 	MedicTick = {1,2,3,4,5}
 	ObEff = 84
 	nilunit = 181
-
+	QueueMaxSize = 50000
+	MSPlayers = {
+		 "\0081인",
+		 "\0142인",
+		 "\0153인",
+		 "\0164인",
+		 "\x115인",
+	}
 
 	NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
 	NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
@@ -27,6 +34,7 @@
 	HMCost = 20000
 	SMCost = 25000
 	RMCost = 10000
+	RMtoSMCost = 2000
 
 
 	--Arr
@@ -34,7 +42,9 @@
 	UnitPosArr = CreateFArr(1700, FP)
 	PlayerIDArr = CreateFArr(1700, FP)
 	UnitHPArr = CreateFArr(1700, FP)
-	
+	ExRateT = {
+		18,20,22,24,26
+	}
 	--Vars
 	SELimit = CreateCcode()
     ExRate = CreateVar2(FP, nil, nil, 20)
@@ -60,7 +70,7 @@
 	VFlag256B = CreateVarArr(6,FP)
 	EVFCcode = CreateCcode()
 	CTMin = CreateVarArr(7, FP)
-	MarNumberLimit = CreateVar3(FP,1600)
+	MarNumberLimit = CreateVar3(FP,1800)
 	PCheck = CreateCcode()
 	PExitFlag = CreateCcode()
 	SuppMax = CreateVar(FP)
@@ -93,7 +103,7 @@
 	StrDesign("\x04기부금액 단위가 \x1F500000 Ore \x04로 변경되었습니다."),
 	StrDesign("\x04기부금액 단위가 \x1F1000 Ore \x04로 변경되었습니다.")}
 	GiveUnitID = {64,65,66,67,61}
-	BanToken = {84,69,70,60}
+	BanToken = {68,84,69,70,60}
 	PlayerString = {"\x08P1","\x0EP2","\x0FP3","\x10P4","\x11P5","\x15P6","\x16P7"} 
 
 
@@ -122,13 +132,13 @@
 		table.insert(CtrigInitArr[Player+1],SetCtrigX(Header[1],Header[2],0x15C,Header[3],SetTo,Void[1],Void[2],Void[3],1,Void[4]))
 		return Header
 	end
-	CreateUnitQueueUIDArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueuePIDArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueueXPosArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueueYPosArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueueTypeArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueueBakXPosArr = Create_VoidEPDHeaderV(FP,4*200005)
-	CreateUnitQueueBakYPosArr = Create_VoidEPDHeaderV(FP,4*200005)
+	CreateUnitQueueUIDArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueuePIDArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueueXPosArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueueYPosArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueueTypeArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueueBakXPosArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
+	CreateUnitQueueBakYPosArr = Create_VoidEPDHeaderV(FP,4*(QueueMaxSize+5))
 	CreateUnitQueuePtr = CreateVar(FP)
 	CreateUnitQueueNum = CreateVar(FP)
 	CreateUnitQueuePtr2 = CreateVar(FP)
@@ -136,6 +146,7 @@
 	ShCool = CreateCcode()
 	ShCost = 60000
 
+	--tier 1
 	SetUnitAbility(21,18,3,17000,false,30,450,false,1,160,5,45000,"Kazansky",2000) --
 	SetUnitAbility(17,9,3,15000,false,1,330,false,1,160,5,35000,"Schezar",2500) --
 	SetUnitAbility(19,5,3,30000,false,22,550,false,1,160,5,65000,"Raynor V",4000) --
@@ -144,48 +155,49 @@
 	SetUnitAbility(86,78,3,25000,10000,22,800,false,1,32*12,6,54000,"Danimoth",4500) --
 	SetUnitAbility(77,65,3,20000,false,15,350,false,2,32*2,3,35000,"Fenix Z",1800) --
 	SetUnitAbility(78,67,3,25000,false,15,320,false,1,32*5,5,45000,"Fenix D",2800) --
-	
 	SetUnitAbility(25,28,1,20000,false,75,1000,false,1,384,12,30000,"Duke Siege",3000) --
-	SetUnitAbility(75,85,3,30000,10000,22,900,false,1,32*1,3,35000,"Zeratul",3800) --
-	SetUnitAbility(76,71,4,40000,10000,20,450,{5,15,30},1,32*2,3,55000,"Archon",4800) --
+	SetUnitAbility(75,85,3,20000,10000,22,900,false,1,32*1,3,35000,"Zeratul",3800) --
+	SetUnitAbility(84,79,4,24000,9000,8,150,false,1,32*4,3,65000,"Lin",3000) --인터셉터
 
 
 
-	SetUnitAbility(79,69,3,45000,10000,22,750,false,1,32*4,4,65000,"Tassadar",3400) --
-	SetUnitAbility(84,79,4,34000,9000,8,250,false,1,32*4,3,65000,"Lin",3000) --
-	SetUnitAbility(98,89,4,15000,10000,8,250,{5,50,100},1,32*4,9,70000,"Raszagal",9000) --
-	SetUnitAbility(58,93,4,15000,25000,40,250,{3,10,20},1,32*5,6,80000,"Envy",6000) --
-	SetUnitAbility(81,29,1,1,60000,15,1350,false,1,32*4,4,70000,"Yuna",5500) --
-	SetUnitAbility(83,76,3,70000,10000,23,900,false,1,32*7,5,80000,"Yumi",7500) --
-	SetUnitAbility(95,25,3,30000,30000,15,400,{10,20,30},1,96,3,70000,"Dalry",5000) --
+	--tier 2
+	SetUnitAbility(76,71,4,30000,10000,20,200,{30,30,30},1,32*2,3,55000,"Archon",4800) --
+	SetUnitAbility(79,69,3,35000,10000,22,750,false,1,32*4,4,65000,"Tassadar",3400) --
+	SetUnitAbility(98,89,4,15000,10000,8,250,{5,50,100},1,32*4,9,70000,"Raszagal",5000) --커세어
+	SetUnitAbility(58,93,4,15000,8000,40,250,{3,10,20},1,32*5,6,80000,"Envy",6000) --발키리
+	SetUnitAbility(81,29,1,1,60000,15,1350,false,1,32*4,4,70000,"Yuna",5500) -- 리버자매(?)
+	SetUnitAbility(83,76,3,70000,10000,23,900,false,1,32*7,5,80000,"Yumi",7500) -- 리버자매(?)
+	SetUnitAbility(95,25,3,30000,30000,15,400,{10,20,30},1,96,3,70000,"Dalry",5000) --파벳
 
 	
-	SetUnitAbility(80,75,3,60000,24000,22,1150,false,1,32*5,4,80000,"Lizzet",6000) -- 
-	SetUnitAbility(93,26,4,78000,25000,15,170,{10,20,30},2,32*1,2,90000,"Yona",8000) --
-	SetUnitAbility(5,11,1,70000,30000,32,950,{10,20,70},1,224,7,120000,"Rophe",12000) --
-	SetUnitAbility(2,4,4,60000,20000,15,350,{60,60,60},1,160,6,90000,"Sui",8000) --
-	SetUnitAbility(3,8,4,50000,30000,15,700,false,1,224,7,100000,"Shirley House",10000) --
-	SetUnitAbility(8,15,3,65000,15000,22,950,false,1,160,5,80000,"Merry",7000)  --
-	SetUnitAbility(12,20,4,85000,30000,15,1100,false,1,224,7,110000,"Rose",11000) --
-	SetUnitAbility(34,94,4,80000,30000,15,850,false,1,160,5,120000,"Jisoo",10000) --
-	SetUnitAbility(29,21,4,50000,10000,22,650,false,1,192,6,90000,"Norad II",8000) --
-	SetUnitAbility(52,51,3,75000,25000,15,1500,false,1,32*7,4,110000,"Yuri",10000) --
-	SetUnitAbility(65,64,3,80000,15000,22,500,false,2,32,4,100000,"Freyja",6000) --
-	SetUnitAbility(66,66,4,90000,28000,30,888,false,1,32*5,4,100000,"Kamilia",6000) --
+	--tier 3
+	SetUnitAbility(80,75,3,60000,24000,22,1150,false,1,32*5,4,80000,"Lizzet",6000) -- 강스카1
+	SetUnitAbility(93,26,4,78000,25000,15,170,{10,20,30},2,32*1,2,90000,"Yona",8000) --스캔티드
+	SetUnitAbility(5,11,1,70000,30000,32,950,{10,20,70},1,224,7,120000,"Rophe",12000) --탱크
+	SetUnitAbility(2,4,4,60000,20000,15,350,{60,60,60},1,160,6,90000,"Sui",8000) --강벌쳐
+	SetUnitAbility(3,8,4,50000,30000,15,700,false,1,224,7,100000,"Shirley House",10000) --강골럇
+	SetUnitAbility(8,15,3,65000,15000,22,950,false,1,160,5,80000,"Merry",7000)  --강레이스
+	SetUnitAbility(12,20,4,85000,30000,15,1100,false,1,224,7,110000,"Rose",11000) --강배틀1
+	SetUnitAbility(34,94,4,80000,30000,15,850,false,1,160,5,120000,"Jisoo",10000) --메딕
+	SetUnitAbility(29,21,4,50000,10000,22,650,false,1,192,6,90000,"Norad II",8000) --노라드
+	SetUnitAbility(52,51,3,75000,25000,15,1500,false,1,32*7,4,110000,"Yuri",10000) --디파
+	SetUnitAbility(65,64,3,80000,15000,22,500,false,2,32,4,100000,"Freyja",6000) --강질럿
+	SetUnitAbility(66,66,4,90000,28000,30,888,false,1,32*5,4,100000,"Kamilia",6000) --강드라
 
 
 
 
 
-	SetUnitAbility(7,13,3,120000,50000,15,950,false,1,260,8,150000,"Era",15000) --
-	SetUnitAbility(60,100,4,100000,50000,8,550,{5,50,100},1,32*5,9,130000,"Nina",19000) --
-	SetUnitAbility(40,42,3,120000,30000,15,1200,false,1,16,3,150000,"Sayu",15000) --
-	SetUnitAbility(57,92,1,150000,35000,15,2300,false,1,32*5,4,200000,"Sorang",20000) --
-	SetUnitAbility(70,74,1,150000,60000,15,3000,false,1,32*7,7,140000,"Sera",22000) --
-	SetUnitAbility(62,104,4,150000,50000,100,1500,false,1,32*4,4,150000,"Sena",23000) --
-	SetUnitAbility(64,62,3,150000,25000,22,1111,false,1,32*5,4,100000,"Sen",10000) --
-	SetUnitAbility(87,88,4,110000,40000,15,1122,false,1,32*4,3,114000,"Gaya",9500) --
-	SetUnitAbility(74,86,4,210000,40000,22,1666,false,1,32*1,4,120000,"Leon",3800) --
+	SetUnitAbility(7,13,3,120000,50000,15,950,false,1,260,8,150000,"Era",15000) --에시비
+	SetUnitAbility(60,100,4,100000,50000,8,550,{5,50,100},1,32*5,9,130000,"Nina",19000) --강커세어
+	SetUnitAbility(70,74,1,150000,60000,15,3000,false,1,32*7,7,140000,"Sera",22000) --강스카2
+	SetUnitAbility(40,42,3,120000,30000,15,1200,false,1,16,3,150000,"Sayu",15000) --부르드링
+	SetUnitAbility(57,92,1,150000,35000,15,2300,false,1,32*5,4,200000,"Sorang",20000) --퀸
+	SetUnitAbility(62,104,4,150000,50000,100,1500,false,1,32*4,4,150000,"Sena",23000) --디바우러
+	SetUnitAbility(64,62,3,150000,25000,22,1111,false,1,32*5,4,100000,"Sen",10000) --프로브
+	SetUnitAbility(87,88,4,110000,40000,15,1122,false,1,32*4,3,114000,"Gaya",9500) --강하템
+	SetUnitAbility(74,86,4,210000,40000,22,1666,false,1,32*1,4,120000,"Leon",3800) --강다크
 
 
 
