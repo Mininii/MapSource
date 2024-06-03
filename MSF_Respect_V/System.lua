@@ -178,7 +178,39 @@ local SelShbool = CreateVar(FP)
 	
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 	
+	WhiteList = def_sIndex()
+
+	for j, i in pairs(MarID) do
+		NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
+	end
+	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
+	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
+	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
+	
 	EXCC_ClearCalc({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
+	NJumpXEnd(FP, WhiteList)
+	CIf(FP,{CV(EXCC_TempVarArr[9],0)})
+		f_SaveCp()
+		local CSPtr = CreateVar(FP)
+		f_Read(FP, _Sub(BackupCp,22), nil, CSPtr)
+		CDoActions(FP, {Set_EXCCX(8, SetTo, _Add(CSPtr,2))})
+		f_LoadCp()
+	CIfEnd()
+	CIf(FP,{Cond_EXCC(8, AtLeast, 1)})
+	CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+		CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
+			CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
+			CTrigger(FP, {NTCond2()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
+		CIfEnd()
+		for i = 0, 4 do
+			CIf(FP, {CV(EXCC_TempVarArr[10],i*65536)})
+			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
+			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)}, {preserved})
+			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)}, {preserved})
+			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)}, {preserved})
+			CIfEnd()
+		end
+	CIfEnd()
 	EXCC_Part2()
 	EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
@@ -188,6 +220,7 @@ local SelShbool = CreateVar(FP)
 		},
 		{MoveCp(Add,25*4),
 		SetCVar(FP,CurCunitI2[2],SetTo,i),--SetResources(P1,Add,1,Gas)
+		SetCVar(FP,CurCunitI[2],SetTo,i*84),--SetResources(P1,Add,1,Gas)
 		})
 	end
 	EXCC_End()

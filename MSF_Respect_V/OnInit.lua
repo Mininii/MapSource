@@ -105,7 +105,7 @@
 	for j,k in pairs(BuildPlaceArr) do
 		table.insert(condbox,CV(RepHeroIndex,k[2]))
 	end
-	CIf(FP,{TTOR(condbox)})--블라인드 맥일놈들
+	CIf(FP,{TTOR(condbox)},{AddCD(GunCcode,1)})--블라인드 맥일놈들(건작일경우)
 		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,72), SetTo, 0xFF000000, 0xFF000000)})
 	CIfEnd()
 	DoActions(FP, {
@@ -154,7 +154,11 @@
 	for i = 0, 227 do
 		SetUnitsDatX(i,{AdvFlag={0,0x4000}})--모든유닛 로보틱 제거
 	end
-	
+	SetUnitsDatX(38, {BuildTime=15})
+	SetUnitsDatX(37, {BuildTime=15})
+	SetUnitsDatX(39, {BuildTime=15})
+	SetUnitsDatX(43, {BuildTime=15})
+	SetUnitsDatX(44, {BuildTime=15})
 	SetUnitsDatX(32,{Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(10,{Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -357,17 +361,17 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	SetInvincibility(Disable, 176, P8, 64);
 	SetInvincibility(Disable, 177, P8, 64);
 	SetInvincibility(Disable, 178, P8, 64);
-	AddCD(GunCcode,#Shape8148);
-	AddCD(GunCcode,#Shape8131);
-	AddCD(GunCcode,#Shape8132);
-	AddCD(GunCcode,#Shape8133);
-	AddCD(GunCcode,#Shape8122);
-	AddCD(GunCcode,#Shape8113);
-	AddCD(GunCcode,#Shape8114);
-	AddCD(GunCcode,#Shape8160);
-	AddCD(GunCcode,#Shape8167);
-	AddCD(GunCcode,#Shape8154);
-	AddCD(GunCcode,#Shape8116);--건작들 갯수 입력(무적해제 컨디션)
+	--AddCD(GunCcode,#Shape8148);
+	--AddCD(GunCcode,#Shape8131);
+	--AddCD(GunCcode,#Shape8132);
+	--AddCD(GunCcode,#Shape8133);
+	--AddCD(GunCcode,#Shape8122);
+	--AddCD(GunCcode,#Shape8113);
+	--AddCD(GunCcode,#Shape8114);
+	--AddCD(GunCcode,#Shape8160);
+	--AddCD(GunCcode,#Shape8167);
+	--AddCD(GunCcode,#Shape8154);
+	--AddCD(GunCcode,#Shape8116);--건작들 갯수 입력(무적해제 컨디션)
 },1)
 
 
@@ -449,10 +453,10 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	Simple_SetLoc(0, 704, 7888, 704, 7888),
 	CreateUnit(1, 133, 1, P7)},1)
 
-	HeroTestMode = 0
+	HeroTestMode = 1
 	if HeroTestMode == 1 then
 		for j,k in pairs(UnitPointArr) do
-			f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)
+			--f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)
 		end
 	end
 

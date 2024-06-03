@@ -53,6 +53,7 @@
 	TestMode = CreateCcode()
 	BossStart = CreateCcode()
 	Names = CreateVArrArr(7,7,FP)
+	CurCunitI = CreateVar(FP)
 	CurCunitI2 = CreateVar(FP)
 	SetPlayers = CreateVar(FP)
 	BarPos = CreateVarArr(7,FP)

@@ -156,7 +156,8 @@
 				
 					CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
 					f_Read(FP, _Add(Cunit2,25), TempUID, nil, 0xFF, 1)
-					CDoActions(FP, {TCreateUnit(12, TempUID, 15, FP)})
+					DoActions(FP, {Simple_SetLoc(0, 576,832,576,832)})
+					f_TempRepeatX({},TempUID,1,2,FP)
 					CIfEnd()
 				CIfEnd()
 			end
@@ -346,10 +347,10 @@
 		--SetV(BGMType,1),
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
-		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
+		RunAIScript("Expansion Zerg Campaign Insane"),
 		RunAIScriptAt("Value This Area Higher",6),
 		SetCp(P7),
-		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
+		RunAIScript("Expansion Zerg Campaign Insane"),
 		RunAIScriptAt("Value This Area Higher",6),
 		SetResources(Force1, Add, 25000, Ore),
 		RemoveUnit(199, AllPlayers),
@@ -735,19 +736,24 @@ DoActions(FP,{
 		--
 		--
 		local MCT = {
-		{NMCr[i+1],32},
-		{HMCr[i+1],20},
-		{SMCr[i+1],10},
-		{RMCr[i+1],MarID[i+1]}}
+		{NMCr[i+1],32,1500},
+		{HMCr[i+1],20,3000},
+		{SMCr[i+1],10,6000},
+		{RMCr[i+1],MarID[i+1],5000}}
 		for p = 1, 4 do
 		CIf(FP, {CD(MCT[p][1],1,AtLeast),Memory(0x628438, AtLeast, 1)},SubCD(MCT[p][1],1))
 			f_Read(FP, 0x628438, nil, Nextptrs)
 			f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
 			CDoActions(FP, {
-				CreateUnit(1, MCT[p][2], 6, i),
+				CreateUnit(1, MCT[p][2], 6, i),TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)
 			})
 			f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
-			CDoActions(FP, {TSetMemoryX(_Add(CSPtr,2), SetTo,P10*0x10000, 0xFF0000)})
+			CDoActions(FP, {
+			Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
+			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
+			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, i*65536);
+			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MCT[p][3]*256);
+			})
 
 			
 		CIfEnd()

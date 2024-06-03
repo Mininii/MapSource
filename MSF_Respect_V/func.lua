@@ -1263,7 +1263,7 @@ function CA_Repeat()
 	CIfX(FP,{CVar(FP,CA[8],AtMost,32*64),CVar(FP,CA[9],AtMost,32*256)})
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CA_Launch)})
 	if Limit == 1 then
-		CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)})--
+		CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch),})--RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)
 	else
 		CElseX({SetCDeaths(FP,SetTo,1,G_CA_Launch)})--RotatePlayer({DisplayTextX(G_CA_PosErr,4)},HumanPlayers,FP)
 	end
