@@ -48,6 +48,11 @@ function Include_GunData(Size,LineNum)
 		GunBGM(113,8,"\x1CO\x04BLIVION",65000)
 		GunBGM(148,9,"\x1CH\x04ypernaid",150000)
 		GunBGM(130,10,"\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'",300000)
+		GunBGM(200,11,"\x03N\x04ew\x03G\x04ame\x03S\x04tart",500000)
+		GunBGM(150,12,"\x1FO\x04ver \x1FM\x04e",6974)
+		GunBGM(201,13,"\x08E\x04nemy \x08S\x04torm",250000)
+		GunBGM(160,14,"\x1CD\x04o \x1Ci\x04t",80000)
+		GunBGM(167,15,"\x11D\x04ream \x11i\x04t",80000)
 
 		
 		--{5,"staredit\\wav\\BGM_ALiCE.ogg",43*1000},
@@ -260,30 +265,19 @@ P_8, 7 : 289
 	
 	G_CA_SetSpawn({GNm(5),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_6, 1, "MAX", 0, nil, nil, P7)
 	G_CA_SetSpawn({GNm(5),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_6, 1, "MAX", 0, nil, nil, P7)
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	CIfEnd()
 	CIf_GCase(132)--레어
 	G_CA_SetSpawn({GNm(1),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_6, 2, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 2, "MAX", 0, nil, nil, P7)
 	
 	G_CA_SetSpawn({GNm(2),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_3, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_3, 2, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_3, 2, "MAX", 0, nil, nil, P7)
 	
 	G_CA_SetSpawn({GNm(3),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_6, 1, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_6, 1, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_6, 1, "MAX", 0, nil, nil, P7)
 	
 	G_CA_SetSpawn({GNm(4),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_4, 3, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_4, 3, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_4, 3, "MAX", 0, nil, nil, P7)
 	CIfEnd()
 
 
@@ -295,7 +289,7 @@ P_8, 7 : 289
 
 	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {19,28}, {P_6,S_3}, {0,0}, "MAX", 0, nil, nil, P7)
 	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {19,28}, {P_6,S_3}, {2,2}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_5, 1, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_5, 1, "MAX", 0, nil, nil, P7)
 	CIfEnd()
 
 	CIf(FP,GNm(2))
@@ -307,184 +301,113 @@ P_8, 7 : 289
 
 	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {78,86}, {P_7,P_8}, {0,0}, "MAX", 0, nil, nil, P7)
 	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {78,86}, {S_4,P_8}, {1,1}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_6, 3, "MAX", 0, nil, nil, P7)
+	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 3, "MAX", 0, nil, nil, P7)
 
 	
 	CIfEnd()
 
 	CIfEnd()
 
+	function Gen2Gun(CUTable1,CUTable2,GunNm,ShapeHD,ShapeSC,ZunitSh1,ZunitShLV1,ZunitSh2,ZunitShLV2)
+		CIf(FP,GNm(GunNm))
+		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, CUTable1, "ACAS", ShapeHD, "MAX", 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, CUTable1, "ACAS", ShapeSC, "MAX", 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, ZunitSh1,ZunitShLV1, "MAX", 0, nil, nil, P7)
 	
+		G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, CUTable2, "ACAS", ShapeHD, "MAX", 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, CUTable2, "ACAS", ShapeSC, "MAX", 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, ZunitSh2,ZunitShLV2, "MAX", 0, nil, nil, P7)
+		CIfEnd()
+	end
 	
 	
 	--ZUnit : S_5, 2 : 61
 	--ZUnit : P_6, 3 : 61
-	-- EnBay1 HD 9
-	-- EnBay2 MXSC 36
+	-- EnBayHD1 HD 9
+	-- EnBaySC1 MXSC 36
 	CIf_GCase(122)--엔베
-	CIf(FP,GNm(1))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {75,88}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {75,88}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_5, 2, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {75,88}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {75,88}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_6, 3, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({75,88}, {75,88},1,"EnBayHD1","EnBaySC1",S_5, 2, P_6, 3)
 	--P_5, 3 : 51
 	--S_5, 2 : 61
-	CIf(FP,GNm(2))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Kazansky","Raynor V"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Kazansky","Raynor V"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_5, 3, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Kazansky","Raynor V"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Kazansky","Raynor V"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_5, 2, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({"Kazansky","Raynor V"},{"Kazansky","Raynor V"},2,"EnBayHD1","EnBaySC1",P_5, 3, S_5, 2)
 	--P_3, 4 : 46
 	--P_8, 2 : 49
-	CIf(FP,GNm(3))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Schezar","Hyperion"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Schezar","Hyperion"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_3, 4, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Schezar","Hyperion"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Schezar","Hyperion"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_8, 2, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({"Schezar","Hyperion"},{"Schezar","Hyperion"},3,"EnBayHD1","EnBaySC1",P_3, 4, P_8, 2)
 	--S_4, 2 : 49
 	--S_8, 1 : 49
-	CIf(FP,GNm(4))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Fenix Z","Lin"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Fenix Z","Lin"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_4, 2, "MAX", 0, nil, nil, P7)
+	Gen2Gun({"Fenix Z","Lin"},{"Fenix D","Lin"},4,"EnBayHD1","EnBaySC1",S_4, 2, S_8, 1)
+	
+	--S_7, 1 : 43
+	--P_3, 4 : 46
+	Gen2Gun({"Tassadar","Envy"},{"Tassadar","Envy"},5,"EnBayHD1","EnBaySC1",S_7, 1, P_3, 4)
+	--P_8, 2 : 49
+	--S_4, 2 : 49
+	Gen2Gun({"Raszagal","Dalry"},{"Raszagal","Dalry"},6,"EnBayHD1","EnBaySC1",P_8, 2, S_4, 2)
 
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Fenix D","Lin"}, "ACAS", "EnBay1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Fenix D","Lin"}, "ACAS", "EnBay2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_8, 1, "MAX", 0, nil, nil, P7)
 	CIfEnd()
 
-	--ZUnit : P_4, 4 : 61
-	--ZUnit : S_3, 3 : 61
-	--HD
-	--P_4, 0 : 5
-	--P_5, 0 : 6
-	--S_3, 0 : 7
-	--P_7, 0 : 8
-
-	--MXSC
-	---S_3, 2 : 37
-	---S_6, 1 : 37
-	---P_8, 2 : 49
-	---S_4, 2 : 49
-	--[[
-	CIf(FP,GNm(2))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Duke Siege","Kazansky"}, {P_4,P_5}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Duke Siege","Kazansky"}, {S_3,S_6}, {2,1}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_4, 4, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Duke Siege","Kazansky"}, {S_3,P_7}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Duke Siege","Kazansky"}, {P_8,S_4}, {2,2}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_3, 3, "MAX", 0, nil, nil, P7)
-	CIfEnd()
-]]
-	CIfEnd()
-
-	-- Fac1 HD 9
-	-- Fac2 MXSC 36
+	-- FacHD1 HD 9
+	-- FacSC1 MXSC 36
 	CIf_GCase(113)--팩
 	--P_8, 3 : 81
 	--S_4, 3 : 81
-	CIf(FP,GNm(1))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {75,88}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {75,88}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_8, 3, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {75,88}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {75,88}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, S_4, 3, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({75,88},{75,88},1,"FacHD1","FacSC1",P_8, 3, S_4, 3)
 	--P_3, 5 : 64
 	--P_7, 3 : 71
-	CIf(FP,GNm(2))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Kazansky","Raynor V"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Kazansky","Raynor V"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_3, 5, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Kazansky","Raynor V"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Kazansky","Raynor V"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_7, 3, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({"Kazansky","Raynor V"},{"Kazansky","Raynor V"},2,"FacHD1","FacSC1",P_3, 5, P_7, 3)
 	--S_6, 2 : 73
 	--P_5, 4 : 76
-	CIf(FP,GNm(3))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Schezar","Hyperion"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Schezar","Hyperion"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_6, 2, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Schezar","Hyperion"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Schezar","Hyperion"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_5, 4, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({"Schezar","Hyperion"},{"Schezar","Hyperion"},3,"FacHD1","FacSC1",S_6, 2, P_5, 4)
 	--P_4, 5 : 85
 	--P_3, 6 : 85
-	CIf(FP,GNm(4))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Fenix Z","Lin"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Fenix Z","Lin"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_4, 5, "MAX", 0, nil, nil, P7)
-
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {"Fenix D","Lin"}, "ACAS", "Fac1", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {"Fenix D","Lin"}, "ACAS", "Fac2", "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,53,51,48}, P_3, 6, "MAX", 0, nil, nil, P7)
-	CIfEnd()
+	Gen2Gun({"Fenix Z","Lin"},{"Fenix Z","Lin"},4,"FacHD1","FacSC1",P_4, 5, P_3, 6)
+	--P_6, 4 : 91
+	--S_8, 2 : 97
+	Gen2Gun({"Archon","Norad II"},{"Archon","Norad II"},5,"FacHD1","FacSC1",P_6, 4, S_8, 2)
 	CIfEnd()
 	
+
 	CIf_GCase(116)--퍼실
 	CIfEnd()
 	CIf_GCase(114)--스타포트
 	CIfEnd()
-	CIf_GCase(130)--감커
-	
-	CIf(FP,GNm(1))
-	G_CA_SetSpawn({CD(GMode,1)}, {88}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {88}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {88}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {88}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
-	CIfEnd()
-	CIf(FP,GNm(2))
-	G_CA_SetSpawn({CD(GMode,1)}, {21}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {21}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {21}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {21}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
-	CIfEnd()
-	
-	CIf(FP,GNm(3))
-	G_CA_SetSpawn({CD(GMode,1)}, {86}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {86}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {86}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {86}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
-	CIfEnd()
-	CIf(FP,GNm(4))
-	G_CA_SetSpawn({CD(GMode,1)}, {84}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {84}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {84}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {84}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
+	CIf_GCase(160)--게이트
+	--P_5, 4 : 76
+	--P_8, 3 : 81
+	Gen2Gun({"Archon","Artanis"},{"Archon","Artanis"},2,"GateHD1","GateSC1",P_5, 4, P_8, 3)
+	--P_3, 5 : 64
+	--P_7, 3 : 71
+	Gen2Gun({"Tassadar","Lin"},{"Tassadar","Lin"},3,"GateHD1","GateSC1",P_3, 5, P_7, 3)
+	--P_7, 3 : 71
+	--S_6, 2 : 73
+	Gen2Gun({"Fenix D","Danimoth"},{"Fenix D","Danimoth"},4,"GateHD1","GateSC1",P_7, 3, S_6, 2)
 	CIfEnd()
 
-	CIf(FP,GNm(5))
-	G_CA_SetSpawn({CD(GMode,1)}, {98}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {98}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {98}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {98}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
-	CIfEnd()
-	CIf(FP,GNm(6))
-	G_CA_SetSpawn({CD(GMode,1)}, {58}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,1)}, {58}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {58}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-	G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {58}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
-	CIfEnd()
+	CIf_GCase(167)--스타게이트
 	
+	--P_4, 4 : 61
+	--S_3, 3 : 61
+	Gen2Gun({"Yumi","Envy"},{"Yumi","Envy"},3,"STGateHD1","STGateSC1",P_4, 4, S_3, 3)
+	--P_3, 5 : 64
+	--P_7, 3 : 71
+	Gen2Gun({"Yuna","Raszagal"},{"Yuna","Raszagal"},2,"STGateHD1","STGateSC1",P_3, 5, P_7, 3)
+
+
+	CIfEnd()
+	CIf_GCase(154)--넥서스
+	CIfEnd()
+
+	CIf_GCase(130)--감커
+	CenT2={88,21,86,84,98,58}
+	for j,k in pairs(CenT2) do
+		CIf(FP,GNm(j))
+		G_CA_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
+		G_CA_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
+		G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
+		G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
+		CIfEnd()
+		
+	end
 	CheckJump = def_sIndex()
 		CIf(FP,{Gun_Line(7,AtLeast,480)},{Gun_DoSuspend()})
 			CIf(FP, {CD(GMode,3)})
@@ -511,12 +434,10 @@ P_8, 7 : 289
 			CAdd(FP,CPosY,32*256)
 			CMov(FP,G_CA_X,CPosX)
 			CMov(FP,G_CA_Y,CPosY)
-			G_CA_SetSpawn({GNm(1)}, {7}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
-			G_CA_SetSpawn({GNm(2)}, {60}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
-			G_CA_SetSpawn({GNm(3)}, {70}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
-			G_CA_SetSpawn({GNm(4)}, {57}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
-			G_CA_SetSpawn({GNm(5)}, {62}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
-			G_CA_SetSpawn({GNm(6)}, {64}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
+			CenT = {7,60,70,57,62,64}
+			for j,k in pairs(CenT) do
+				G_CA_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
+			end
 			CIfEnd()
 		CIfEnd()
 
@@ -536,15 +457,15 @@ P_8, 7 : 289
 		CIf(FP,{Gun_Line(7,Exactly,0)})
 		G_CA_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,1)}, {19,28}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
 		G_CA_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,2,AtLeast)}, {19,28}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,1)}, {56,53,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(6,Exactly,1)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		
 		G_CA_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,1)}, {88,77}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
 		G_CA_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,2,AtLeast)}, {88,77}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,2)}, {56,53,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(6,Exactly,2)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		
 		G_CA_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,1)}, {78,86}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
 		G_CA_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,2,AtLeast)}, {78,86}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,3)}, {56,53,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CA_SetSpawn({Gun_Line(6,Exactly,3)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		CIfEnd()
 
 		--21,17
@@ -560,8 +481,95 @@ P_8, 7 : 289
 		CTrigger(FP,{Gun_Line(6,AtLeast,3)},{Gun_DoSuspend()},1)
 		CIfEnd()
 	CIfEnd()
+	GeneCUT1 = {21,86,58,12,60,62}
+	GeneCUT2 = {88,98,80,29,70,64}
+	GeneCUT3 = {28,84,8,7,57,102}
+	CIf_GCase(200)
+		for j,k in pairs(GeneCUT1) do
+			G_CA_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
+			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
+		end
+		for j,k in pairs(GeneCUT2) do
+			G_CA_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
+			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
+		end
+		for j,k in pairs(GeneCUT3) do
+			G_CA_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
+			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
+		end
+		CTrigger(FP,{Gun_Line(7,AtLeast,480*(6))},{Gun_DoSuspend(),Order("Men", P6, 64, Patrol, 6)},1)
+		
+	CIfEnd()
+	--HD
+	--S_7, 0 : 15
+	--S_7, 0 : 15
+	--S_7, 0 : 15
+	--P_4, 1 : 13
+	--P_4, 1 : 13
+	--P_4, 1 : 13
+	--S_6, 0 : 13
+	--S_6, 0 : 13
+	--S_6, 0 : 13
+	--S_5, 0 : 11
+	--S_5, 0 : 11
+	--S_5, 0 : 11
+	--P_3, 1 : 10
+	--P_3, 1 : 10
+	--P_3, 1 : 10
+	--S_4, 0 : 9
+	--S_4, 0 : 9
+	--S_4, 0 : 9
+	--SC
+	--P_3, 5 : 64
+	--P_3, 5 : 64
+	--P_3, 5 : 64
+	--S_3, 3 : 61
+	--S_3, 3 : 61
+	--S_3, 3 : 61
+	--P_4, 4 : 61
+	--P_4, 4 : 61
+	--P_4, 4 : 61
+	--P_6, 3 : 61
+	--P_6, 3 : 61
+	--P_6, 3 : 61
+	--S_5, 2 : 61
+	--S_5, 2 : 61
+	--S_5, 2 : 61
+	--P_5, 3 : 51
+	--P_5, 3 : 51
+	--P_5, 3 : 51
 	
+	KimrhegbArr = {55,56,"Kazansky","Artanis","Danimoth","Lin","Raszagal","Envy","Lizzet","Merry","Rose","Norad II","Era","Nina","Sera","Sorang","Sena","Sen"}
+	
+	KimrhegbArr2 = {{P_3, 5},{P_3, 5},{P_3, 5},{S_3, 3},{S_3, 3},{S_3, 3},{P_4, 4},{P_4, 4},{P_4, 4},{P_6, 3},{P_6, 3},{P_6, 3},{S_5, 2},{S_5, 2},{S_5, 2},{P_5, 3},{P_5, 3},{P_5, 3}}
+	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0},}
+	CIf_GCase(150)
+		for j,k in pairs(KimrhegbArr) do
+			G_CA_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
+			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 187, nil, nil, P6,1)
+		end
+		CTrigger(FP,{},{Gun_DoSuspend(),SubCD(ChryCcode, 1)},1)
 
+	CIfEnd()
+	CIf_GCase(201)
+			for j,k in pairs(KimrhegbArr) do
+			CIfOnce(FP, {Gun_Line(7,AtLeast,(j-1)*12)})
+			f_SHRead(FP, ArrX(OverMePosX,j-1), G_CA_X)
+			f_SHRead(FP, ArrX(OverMePosY,j-1), G_CA_Y)
+			G_CA_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+			G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
+			DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(10, 94, 1, P6)})
+			CIfEnd()
+			end
+			CIf(FP,{Gun_Line(7,AtLeast,640)},{Gun_DoSuspend(),SetCD(CocoonCcode,1),SetCp(P6),RunAIScriptAt(JYD, 64),SetCp(FP)})
+			for j,k in pairs(KimrhegbArr) do
+				f_SHRead(FP, ArrX(OverMePosX,j-1), G_CA_X)
+				f_SHRead(FP, ArrX(OverMePosY,j-1), G_CA_Y)
+				G_CA_SetSpawn({CD(GMode,1)}, {94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", nil, nil, nil, P6,1)
+				G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", nil, nil, nil, P6,1)
+			end
+			CIfEnd()
+	CIfEnd()
 	
 	
 	if TestStart == 1 then

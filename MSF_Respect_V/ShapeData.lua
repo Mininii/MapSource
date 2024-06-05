@@ -165,15 +165,52 @@ CenCross = CSMakeLine(4, 128, 0, 256, 0)
 		return X
 	end
 	
+
+
 	Hy1Line = {7   ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736}} -- 선으로 긋기
 	Hy1Fill = {10  ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736},{1536, 128},{1024, 384},{512, 128}} -- 채우기
 
+	CircleA = CSMakeCircle(6,60,0,PlotSizeCalc(6, 2),PlotSizeCalc(6, 1)) ---- 작은 원
+	EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- 작은 타원
+	EllipseRA = CS_Rotate(EllipseA,15) ---- 작은 타원 회전
+	CircleB = CSMakeCircle(6,40,0,PlotSizeCalc(6, 2),PlotSizeCalc(6, 1)) ---- 큰 원
+	EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- 큰 타원
+	EllipseRB = CS_Rotate(EllipseB,40) ---- 큰 타원 회전
+	EllipseRAD = CS_MoveXY(EllipseRA,0,350) ---- 큰 타원 평행이동
+	EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- 작은타원 큰타원 합
+	EllipseMirror = CS_MirrorX(EllipseShape,300,1,1) --나비
+	EllipseMirror1 = CS_MoveXY(EllipseMirror,-300,-250)
+	CircleA = CSMakeCircle(4,60,0,PlotSizeCalc(4, 1),PlotSizeCalc(4, 0)) ---- 작은 원
+	EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- 작은 타원
+	EllipseRA = CS_Rotate(EllipseA,15) ---- 작은 타원 회전
+	CircleB = CSMakeCircle(4,40,0,PlotSizeCalc(4, 1),PlotSizeCalc(4, 0)) ---- 큰 원
+	EllipseB = CS_Distortion(CircleB,{3,1.5},{3,1.5},{3,1.5},{3,1.5}) ---- 큰 타원
+	EllipseRB = CS_Rotate(EllipseB,40) ---- 큰 타원 회전
+	EllipseRAD = CS_MoveXY(EllipseRA,0,350) ---- 큰 타원 평행이동
+	EllipseShape = CS_Merge(EllipseRB,EllipseRAD,64,1) ---- 작은타원 큰타원 합
+	EllipseMirror = CS_MirrorX(EllipseShape,300,1,1) --나비
+	EllipseMirror2 = CS_MoveXY(EllipseMirror,-300,-250)
+
 	Hy1LC_64= CS_SortR(CS_MoveXY(CS_ConnectPathX(Hy1Line,128,nil),-1024,-368),0)
 	Hy1FP_64= CS_SortR(CS_MoveXY(CS_FillPathXY(Hy1Fill, 1, 64, 64, 0),-1024,-368),0)--하드 저그유닛 SC 약영웅
-	Fac1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96*2,96*2), 26.565)--9
-	EnBay1= CSMakePolygon(9, 32*7, 0, 10, 1)--9
-	Fac2=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96,96), 26.565)--36
-	EnBay2= CSMakePolygon(36, 32*7, 0, 37, 1)--36
+	FacHD1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96*2,96*2), 26.565)--9
+	FacSC1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96,96), 26.565)--36
+	EnBayHD1= CSMakePolygon(9, 32*7, 0, 10, 1)--9
+	EnBaySC1= CSMakePolygon(36, 32*7, 0, 37, 1)--36
+	GateHD1 = CSMakeStar(4, 180, 45*4, 0, PlotSizeCalc(8, 1), PlotSizeCalc(8, 0))
+	GateSC1 = CSMakeStar(4, 180, 45, 0, PlotSizeCalc(8, 5), PlotSizeCalc(8, 4))
+	
+	STGateHD1 = CS_RatioXY(EllipseMirror2, 0.5, 0.5)
+	STGateSC1 = CS_RatioXY(EllipseMirror1, 0.5, 0.5)
+	
+
+	GeneN1 = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 25)
+	GeneN2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 25)
+	GeneN3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 25)
+	Gene1 = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 100)
+	Gene2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 100)
+	Gene3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 100)
+	
 	Cir = Create_SortTable({
 		CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
 		CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0),
@@ -196,8 +233,8 @@ CenCross = CSMakeLine(4, 128, 0, 256, 0)
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 5), 0)
 	
 	
-		G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64","Fac1","EnBay1","Fac2","EnBay2","Cen1","Cen2","CenNM1","CenNM2","CenCross"
-			
+		G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64","FacHD1","EnBayHD1","FacSC1","EnBaySC1","Cen1","Cen2","CenNM1","CenNM2","CenCross",
+		"Gene1","Gene2","Gene3","GeneN1","GeneN2","GeneN3",	"GateHD1","GateSC1","STGateHD1","STGateSC1"
 	
 		}
 end

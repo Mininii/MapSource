@@ -169,6 +169,8 @@ RPID = CreateVar(FP)
 RType = CreateVar(FP)
 RPtr = CreateVar(FP)
 RLocV = CreateVar(FP)
+QueueOX = CreateVar(FP)
+QueueOY = CreateVar(FP)
 CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 		
 		--CIf(FP,{TTOR({CV(RUID,25),CV(RUID,30)})})
@@ -179,8 +181,15 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 		f_Read(FP,_Add(RPtr,10),CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
+		CIfX(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,203)})
+        CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{Simple_SetLoc(200, 1888, 2928, 1888, 2928),TMoveUnit(1,RUID,Force2,72,201)},{preserved})
+        CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{Simple_SetLoc(200, 96, 4112, 96, 4112),TMoveUnit(1,RUID,Force2,72,201)},{preserved})
+        CTrigger(FP,{CVar(FP,RType[2],Exactly,202)},{Simple_SetLoc(200, 1024, 7568, 1024, 7568),TMoveUnit(1,RUID,Force2,72,201)},{preserved})
+        CTrigger(FP,{CVar(FP,RType[2],Exactly,203)},{Simple_SetLoc(200, 288,3792,288,3792),TMoveUnit(1,RUID,Force2,72,201)},{preserved})
 
+		CElseX()
         CTrigger(FP,{},{TMoveUnit(1,RUID,Force2,72,1)},{preserved})
+		CIfXEnd()
 			CIfX(FP,CVar(FP,RType[2],Exactly,0))
 				f_Read(FP,_Add(RPtr,10),CPos)
 				Convert_CPosXY()
@@ -218,6 +227,31 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 					TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
 					
 				})
+			CElseIfX({CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,203)})
+			local NPosX, NPosY = CreateVars(2, FP)
+			local SRet = CreateVar(FP)
+
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			
+			CiSub(FP,CPosX,QueueOX)
+			CiSub(FP,CPosY,QueueOY)
+			f_Sqrt(FP, SRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(2)))
+			CDoActions(FP,{
+				TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
+				TSetMemory(_Add(RPtr,13),SetTo,SRet),
+				TSetMemoryX(_Add(RPtr,18),SetTo,SRet,0xFFFF),
+				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+				SetDeaths(_Add(RPtr,23),SetTo,0,0),
+				SetDeathsX(_Add(RPtr,19),SetTo,14*256,0,0xFF00),
+				TSetDeaths(_Add(RPtr,4),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
+				TSetDeaths(_Add(RPtr,6),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
+				TSetDeaths(_Add(RPtr,22),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
+			})
+			CTrigger(FP, {CV(RType,203)}, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000)},{preserved})
+			
+				
 			CElseIfX(CVar(FP,RType[2],Exactly,32))
 			CDoActions(FP,{
 				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
@@ -280,13 +314,11 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			})
 
 			CElseIfX(CVar(FP,RType[2],Exactly,129))
-			local NPosX, NPosY = CreateVars(2, FP)
 			GetLocCenter(201, NPosX, NPosY)
 			
 			f_Read(FP,_Add(RPtr,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			local SRet = CreateVar(FP)
 			CiSub(FP,CPosX,NPosX)
 			CiSub(FP,CPosY,NPosY)
 			f_Sqrt(FP, SRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(5)))

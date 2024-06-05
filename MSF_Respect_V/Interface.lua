@@ -2,7 +2,11 @@
 	local BanCode = CreateCcodeArr(7)
     count = CreateVar(FP)
     f_Read(FP, 0x6283F0, count)
+	CMov(FP,0x582144+(4*5),3000)
+	CMov(FP,0x582174+(4*5),count)
+	CAdd(FP,0x582174+(4*5),count)
 	
+
 	Dt = IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
 		{1,"staredit\\wav\\BGM_OP.ogg",96*1000},
 		{2,"staredit\\wav\\BGM_BlueWhite.ogg",35*1000},
@@ -14,6 +18,13 @@
 		{8,"staredit\\wav\\BGM_OBLIVION.ogg",48*1000},
 		{9,"staredit\\wav\\BGM_Hypernaid.ogg",98*1000},
 		{10,"staredit\\wav\\BGM_Mysti_Era_Mui.ogg",68*1000},
+		{11,"staredit\\wav\\BGM_NewGameStart.ogg",115*1000},
+		{12,"staredit\\wav\\BGM_OverMe.ogg",62*1000},
+		{13,"staredit\\wav\\BGM_EnemyStorm.ogg",107*1000},
+		{14,"staredit\\wav\\BGM_Do_it.ogg",60*1000},
+		{15,"staredit\\wav\\BGM_Dream_it.ogg",44*1000},
+
+		
 	})
 	BTDis = {}
 	for i = 0,4 do
@@ -138,7 +149,7 @@
 					Deaths(CurrentPlayer,AtLeast,1,204)
 				},
 				actions = {
-					--KillUnit("Men",Force2);
+					KillUnit("Men",Force2);
 					--KillUnit(143,Force2);
 					--KillUnit(144,Force2);
 					--KillUnit(146,Force2);
@@ -230,6 +241,7 @@
         RunAIScript("Turn ON Shared Vision for Player 3");
         RunAIScript("Turn ON Shared Vision for Player 4");
         RunAIScript("Turn ON Shared Vision for Player 5");
+        RunAIScript("Turn ON Shared Vision for Player 6");
         })
 		TriggerX(i,{HumanCheck(i, 0)},{SetCDeaths(FP,Add,10,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
     end
@@ -347,16 +359,20 @@
 		--SetV(BGMType,1),
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
-		RunAIScript("Expansion Zerg Campaign Insane"),
+		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
 		RunAIScriptAt("Value This Area Higher",6),
 		SetCp(P7),
-		RunAIScript("Expansion Zerg Campaign Insane"),
+		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
 		RunAIScriptAt("Value This Area Higher",6),
 		SetResources(Force1, Add, 25000, Ore),
 		RemoveUnit(199, AllPlayers),
 		RemoveUnit(198, AllPlayers),
 		RemoveUnit(197, AllPlayers),
 		RemoveUnit(145, AllPlayers),
+		SetMemory(0x582144 + (4 * 6),SetTo,1600);
+		SetMemory(0x5821A4 + (4 * 6),SetTo,1600);
+		SetMemory(0x582144 + (4 * 7),SetTo,1600);
+		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
 		SetCp(FP);
 	})
 	if false then--TestStart == 1 then

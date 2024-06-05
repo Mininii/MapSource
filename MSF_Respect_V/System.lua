@@ -171,8 +171,6 @@ local SelShbool = CreateVar(FP)
 
 
 
-	count = CreateVar(FP)
-	f_Read(FP, 0x6283F0, count)
 	DoActions(FP, {ModifyUnitEnergy(All, 40, AllPlayers, 64, 100)})
 
 	
@@ -622,4 +620,9 @@ end
 	--219
 	--130
 	--129
+Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved})
+Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
+Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
+
+DoActions(FP, {KillUnit(94, AllPlayers)})
 end

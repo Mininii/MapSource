@@ -60,7 +60,7 @@
 		PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + BID,SetTo,0))
 		PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + BID,SetTo,0))
-		SetUnitsDatX(BID,{HP=k[3],Shield=k[4]})
+		SetUnitsDatX(BID,{HP=k[3],Shield=k[4],AdvFlag={0,0x80000}})
 		table.insert(AfterPatchExec,SetMemoryX(0x664080 + (BID*4),SetTo,0,0x8000))
 		--table.insert(AfterPatchExec,SetMemoryB(0x6637A0+(BID),SetTo,0xA))
 		--if BID~=131 and BID~=132 and BID~=133 then
@@ -105,6 +105,14 @@
 	for j,k in pairs(BuildPlaceArr) do
 		table.insert(condbox,CV(RepHeroIndex,k[2]))
 	end
+	CIf(FP,CV(RepHeroIndex,150),{AddCD(ChryCcode,1)})
+	
+		CMov(FP, ArrX(OverMePosX,CunitHP), CPosX)
+		CMov(FP, ArrX(OverMePosY,CunitHP), CPosY)
+
+	CIfEnd()
+
+
 	CIf(FP,{TTOR(condbox)},{AddCD(GunCcode,1)})--블라인드 맥일놈들(건작일경우)
 		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,72), SetTo, 0xFF000000, 0xFF000000)})
 	CIfEnd()
@@ -126,10 +134,10 @@
 	for i = 0, 227 do
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000},Armor=0})--모든 유닛을 마법사로, 아머를 0으로
 	end
-	SetUnitsDatX(130,{GroupFlag=0x11})--그룹플래그
-	SetUnitsDatX(131,{GroupFlag=0x11})--그룹플래그
-	SetUnitsDatX(132,{GroupFlag=0x11})--그룹플래그
-	SetUnitsDatX(133,{GroupFlag=0x11})--그룹플래그
+	--SetUnitsDatX(130,{GroupFlag=0x11})--그룹플래그
+	--SetUnitsDatX(131,{GroupFlag=0x11})--그룹플래그
+	--SetUnitsDatX(132,{GroupFlag=0x11})--그룹플래그
+	--SetUnitsDatX(133,{GroupFlag=0x11})--그룹플래그
 	SetUnitsDatX(162,{AdvFlag={0x400200,0x480200},BdDimX=1,BdDimY=1})--포토 파일런 불필요
 	for j,k in pairs({89,90,93,94,95,96}) do
 		SetUnitsDatX(k, {HumanInitAct = 2,
@@ -449,9 +457,10 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	},1)
 	
 	DoActions(FP, {Simple_SetLoc(0, 1344, 7888, 1344, 7888),
-	CreateUnit(1, 133, 1, P7),
+	CreateUnit(1, 133, 1, P7),	CreateUnit(1, 132, 1, P7),	CreateUnit(1, 131, 1, P7),
 	Simple_SetLoc(0, 704, 7888, 704, 7888),
-	CreateUnit(1, 133, 1, P7)},1)
+	CreateUnit(1, 133, 1, P7),	CreateUnit(1, 132, 1, P7),	CreateUnit(1, 131, 1, P7),
+},1)
 
 	HeroTestMode = 1
 	if HeroTestMode == 1 then

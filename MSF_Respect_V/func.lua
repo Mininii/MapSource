@@ -357,7 +357,8 @@ function CreateUnitQueue()
 	})
 		FuncAlloc=FuncAlloc+2
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
-
+		CMov(FP,QueueOX,CPosX)
+		CMov(FP,QueueOY,CPosY)
 		CMov(FP,RUID,QueueUID)
 		CMov(FP,RPID,QueuePID)
 		CMov(FP,RType,QueueType)
@@ -997,6 +998,8 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		})
 		FuncAlloc=FuncAlloc+2
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+		CMov(FP,QueueOX,CPosX)
+		CMov(FP,QueueOY,CPosY)
 		CMov(FP,RUID,Gun_TempSpawnSet1)
 		CMov(FP,RPID,CreatePlayer)
 		CMov(FP,RType,RepeatType)
