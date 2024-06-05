@@ -33,6 +33,7 @@
 		{1365,T1365},
 		{1414,T1414},
 	}
+
 	
 
 	CJumpEnd(FP, iTblJump)
@@ -44,8 +45,6 @@
 		f_GetTblptr(FP, TBLPtr, k[1])
 		local CText = CreateCText(FP, k[2])
 		f_Memcpy(FP,TBLPtr,_TMem(Arr(CText[3],0),"X","X",1),CText[2])
-
-
 	end
 	CIfEnd()
 	
@@ -377,7 +376,7 @@ end
 
 	
 	Install_GunStack()
-	Create_G_CA_Arr()
+	Create_G_CB_Arr()
 
 	function ToggleFunc(CondArr,Mode,EnterFlag)
 		local KeyToggle = CreateCcode()

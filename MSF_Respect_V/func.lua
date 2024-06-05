@@ -305,7 +305,7 @@ function CreateUnitQueue()
 
 	},{preserved})
 	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
-	f_Read(FP,0x628438,"X",G_CA_Nextptrs,0xFFFFFF)
+	f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
 	f_SHRead(FP, _Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), CPosX)
 	f_SHRead(FP, _Add(CreateUnitQueueYPosArr,CreateUnitQueuePtr2), CPosY)
 	f_SHRead(FP, _Add(CreateUnitQueueUIDArr,CreateUnitQueuePtr2), QueueUID)
@@ -362,7 +362,7 @@ function CreateUnitQueue()
 		CMov(FP,RUID,QueueUID)
 		CMov(FP,RPID,QueuePID)
 		CMov(FP,RType,QueueType)
-		CMov(FP,RPtr,G_CA_Nextptrs)
+		CMov(FP,RPtr,Nextptrs)
 		CMov(FP,RLocV,DefaultAttackLocV)
 		CallTrigger(FP, Call_RepeatOption)
 
@@ -2200,4 +2200,10 @@ function Convert_StrCode(Str)
 		end
 	end
 	return Str
+end
+
+function Getdebugmsg(infonum)
+	local file1 = debug.getinfo(infonum).source
+	local DebugMsg = string.sub(file1, #file1-13, #file1)..":"..debug.getinfo(infonum).currentline.." in global "..debug.getinfo(infonum).name
+	return DebugMsg
 end

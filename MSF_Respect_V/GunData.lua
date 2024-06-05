@@ -168,8 +168,8 @@ function Include_GunData(Size,LineNum)
 		return Gun_Line(3,Type,Value)
 	end
 	SetCall(FP)
-	CMov(FP,G_CA_X,Var_TempTable[2])
-	CMov(FP,G_CA_Y,Var_TempTable[3])
+	CMov(FP,G_CB_X,Var_TempTable[2])
+	CMov(FP,G_CB_Y,Var_TempTable[3])
 	Simple_SetLocX(FP,0,Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
 	DoActionsX(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random),SetCD(GunCaseCheck,0)})
 	CDoActions(FP,{Gun_SetLine(7,Add,1)})
@@ -251,57 +251,57 @@ P_8, 7 : 289
 
 	
 	CIf_GCase(131)--해처리
-	G_CA_SetSpawn({GNm(1),Gun_Line(5,Exactly,0)}, {43,37,38,39}, P_5, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, P_5, 2, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(1),Gun_Line(5,Exactly,0)}, {43,37,38,39}, P_5, 2, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, P_5, 2, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(2),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_5, 1, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_5, 1, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(2),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_5, 1, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_5, 1, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(3),Gun_Line(5,Exactly,0)}, {43,37,38,39}, P_6, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, P_6, 2, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(3),Gun_Line(5,Exactly,0)}, {43,37,38,39}, P_6, 2, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, P_6, 2, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(4),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_3, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_3, 2, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(4),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_3, 2, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_3, 2, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(5),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_6, 1, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(5),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_6, 1, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(5),Gun_Line(5,Exactly,0)}, {43,37,38,39}, S_6, 1, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(5),Gun_Line(6,AtLeast,1)}, {44,46,38,39}, S_6, 1, 0, 0, nil, nil, P7)
 	CIfEnd()
 	CIf_GCase(132)--레어
-	G_CA_SetSpawn({GNm(1),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 2, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(1),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 2, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(1),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 2, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(2),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_3, 2, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_3, 2, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(2),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_3, 2, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(2),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_3, 2, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(3),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_6, 1, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_6, 1, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(3),Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_6, 1, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(3),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_6, 1, 0, 0, nil, nil, P7)
 	
-	G_CA_SetSpawn({GNm(4),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_4, 3, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_4, 3, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(4),Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_4, 3, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_4, 3, 0, 0, nil, nil, P7)
 	CIfEnd()
 
 
 	CIf_GCase(133)--하이브
 	CIf(FP,GNm(1))
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {21,17}, {P_8,S_4}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {21,17}, {S_5,P_5}, {1,2}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_5, 1, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {21,17}, {P_8,S_4}, {0,0}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {21,17}, {S_5,P_5}, {1,2}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, S_5, 1, 0, 0, nil, nil, P7)
 
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {19,28}, {P_6,S_3}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {19,28}, {P_6,S_3}, {2,2}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_5, 1, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {19,28}, {P_6,S_3}, {0,0}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {19,28}, {P_6,S_3}, {2,2}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, S_5, 1, 0, 0, nil, nil, P7)
 	CIfEnd()
 
 	CIf(FP,GNm(2))
 
 	
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {88,77}, {P_3,P_4}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {88,77}, {P_3,P_5}, {3,2}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 3, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {88,77}, {P_3,P_4}, {0,0}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {88,77}, {P_3,P_5}, {3,2}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, P_6, 3, 0, 0, nil, nil, P7)
 
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {78,86}, {P_7,P_8}, {0,0}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {78,86}, {S_4,P_8}, {1,1}, "MAX", 0, nil, nil, P7)
-	G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 3, "MAX", 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, {78,86}, {P_7,P_8}, {0,0}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, {78,86}, {S_4,P_8}, {1,1}, 0, 0, nil, nil, P7)
+	G_CB_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_6, 3, 0, 0, nil, nil, P7)
 
 	
 	CIfEnd()
@@ -310,13 +310,13 @@ P_8, 7 : 289
 
 	function Gen2Gun(CUTable1,CUTable2,GunNm,ShapeHD,ShapeSC,ZunitSh1,ZunitShLV1,ZunitSh2,ZunitShLV2)
 		CIf(FP,GNm(GunNm))
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, CUTable1, "ACAS", ShapeHD, "MAX", 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, CUTable1, "ACAS", ShapeSC, "MAX", 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, ZunitSh1,ZunitShLV1, "MAX", 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, CUTable1, "ACAS", ShapeHD, 0, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, CUTable1, "ACAS", ShapeSC, 0, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, ZunitSh1,ZunitShLV1, 0, 0, nil, nil, P7)
 	
-		G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, CUTable2, "ACAS", ShapeHD, "MAX", 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, CUTable2, "ACAS", ShapeSC, "MAX", 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, ZunitSh2,ZunitShLV2, "MAX", 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, CUTable2, "ACAS", ShapeHD, 0, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, CUTable2, "ACAS", ShapeSC, 0, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, ZunitSh2,ZunitShLV2, 0, 0, nil, nil, P7)
 		CIfEnd()
 	end
 	
@@ -401,10 +401,10 @@ P_8, 7 : 289
 	CenT2={88,21,86,84,98,58}
 	for j,k in pairs(CenT2) do
 		CIf(FP,GNm(j))
-		G_CA_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-		G_CA_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-		G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-		G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
+		G_CB_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
+		G_CB_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
+		G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
+		G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
 		CIfEnd()
 		
 	end
@@ -432,11 +432,11 @@ P_8, 7 : 289
 			CAdd(FP,CPosX,32*64)
 			CNeg(FP,CPosY)
 			CAdd(FP,CPosY,32*256)
-			CMov(FP,G_CA_X,CPosX)
-			CMov(FP,G_CA_Y,CPosY)
+			CMov(FP,G_CB_X,CPosX)
+			CMov(FP,G_CB_Y,CPosY)
 			CenT = {7,60,70,57,62,64}
 			for j,k in pairs(CenT) do
-				G_CA_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
+				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
 			end
 			CIfEnd()
 		CIfEnd()
@@ -450,22 +450,22 @@ P_8, 7 : 289
 		
 		CTrigger(FP,{Gun_Line(7,AtLeast,480)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),},1)
 
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {21,17}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {21,17}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, {21,17}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {21,17}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 
 		CIf(FP,{Gun_Line(7,Exactly,0)})
-		G_CA_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,1)}, {19,28}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,2,AtLeast)}, {19,28}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,1)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,1)}, {19,28}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,1),CD(GMode,2,AtLeast)}, {19,28}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,1)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		
-		G_CA_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,1)}, {88,77}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,2,AtLeast)}, {88,77}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,2)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,1)}, {88,77}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,2),CD(GMode,2,AtLeast)}, {88,77}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,2)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		
-		G_CA_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,1)}, {78,86}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,2,AtLeast)}, {78,86}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
-		G_CA_SetSpawn({Gun_Line(6,Exactly,3)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,1)}, {78,86}, "ACAS", "Hy1LC_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,3),CD(GMode,2,AtLeast)}, {78,86}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
+		G_CB_SetSpawn({Gun_Line(6,Exactly,3)}, {56,104,51,48}, "ACAS", "Hy1FP_64", nil, 0, nil, nil, P7)
 		CIfEnd()
 
 		--21,17
@@ -486,16 +486,16 @@ P_8, 7 : 289
 	GeneCUT3 = {28,84,8,7,57,102}
 	CIf_GCase(200)
 		for j,k in pairs(GeneCUT1) do
-			G_CA_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
-			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
 		end
 		for j,k in pairs(GeneCUT2) do
-			G_CA_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
-			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
 		end
 		for j,k in pairs(GeneCUT3) do
-			G_CA_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
-			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
+			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
 		end
 		CTrigger(FP,{Gun_Line(7,AtLeast,480*(6))},{Gun_DoSuspend(),Order("Men", P6, 64, Patrol, 6)},1)
 		
@@ -545,8 +545,8 @@ P_8, 7 : 289
 	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0},}
 	CIf_GCase(150)
 		for j,k in pairs(KimrhegbArr) do
-			G_CA_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
-			G_CA_SetSpawn({CD(GMode,2,AtLeast),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 187, nil, nil, P6,1)
+			G_CB_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
+			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 187, nil, nil, P6,1)
 		end
 		CTrigger(FP,{},{Gun_DoSuspend(),SubCD(ChryCcode, 1)},1)
 
@@ -554,19 +554,19 @@ P_8, 7 : 289
 	CIf_GCase(201)
 			for j,k in pairs(KimrhegbArr) do
 			CIfOnce(FP, {Gun_Line(7,AtLeast,(j-1)*12)})
-			f_SHRead(FP, ArrX(OverMePosX,j-1), G_CA_X)
-			f_SHRead(FP, ArrX(OverMePosY,j-1), G_CA_Y)
-			G_CA_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
-			G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
+			f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
+			f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
+			G_CB_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+			G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
 			DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(10, 94, 1, P6)})
 			CIfEnd()
 			end
 			CIf(FP,{Gun_Line(7,AtLeast,640)},{Gun_DoSuspend(),SetCD(CocoonCcode,1),SetCp(P6),RunAIScriptAt(JYD, 64),SetCp(FP)})
 			for j,k in pairs(KimrhegbArr) do
-				f_SHRead(FP, ArrX(OverMePosX,j-1), G_CA_X)
-				f_SHRead(FP, ArrX(OverMePosY,j-1), G_CA_Y)
-				G_CA_SetSpawn({CD(GMode,1)}, {94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", nil, nil, nil, P6,1)
-				G_CA_SetSpawn({CD(GMode,2,AtLeast)}, {94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", nil, nil, nil, P6,1)
+				f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
+				f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
+				G_CB_SetSpawn({CD(GMode,1)}, {94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", nil, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", nil, nil, nil, P6,1)
 			end
 			CIfEnd()
 	CIfEnd()
@@ -615,6 +615,16 @@ P_8, 7 : 289
 		end
 	CIfEnd()
 
-	
+	--Kazansky
+	--Hyperion
+	--Artanis
+	--Danimoth
+	--Lin
+	--Raszagal
+	--Envy
+	--Lizzet
+	--Merry
+	--Rose
+	--Norad II
 	SetCallEnd()
 end

@@ -151,7 +151,7 @@ CenL4= CSMakePath(CenLinePath4)
 CenOverlap = CS_OverlapX(CenL1,CenL2,CenL3,CenL4)
 CenNM1 = CS_SortY(CS_CropXY(CenOverlap, {0,2048}, {0,4096}, {0,0}, {0,1}), 1)
 CenNM2 = CS_SortY(CS_CropXY(CenOverlap, {0,2048}, {4096,8192}, {0,0}, {0,0}),0)
-CenCross = CSMakeLine(4, 128, 0, 256, 0)
+CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
 		local X = {}
 		for i = LvMin, LvMax do
@@ -211,30 +211,26 @@ CenCross = CSMakeLine(4, 128, 0, 256, 0)
 	Gene2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 100)
 	Gene3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 100)
 	
-	Cir = Create_SortTable({
+	Cir = {
 		CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
 		CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0),
 		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 3), 0),
 		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 4), 0),
-		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 5), 0)	})
-		S_3_ShT = Create_SortTable(MakeLevelShape("Star",3,1,4))
-		S_4_ShT = Create_SortTable(MakeLevelShape("Star",4,1,4))
-		S_5_ShT = Create_SortTable(MakeLevelShape("Star",5,1,4))
-		S_6_ShT = Create_SortTable(MakeLevelShape("Star",6,1,4))
-		S_7_ShT = Create_SortTable(MakeLevelShape("Star",7,1,4))
-		S_8_ShT = Create_SortTable(MakeLevelShape("Star",8,1,4))
-		P_3_ShT = Create_SortTable(MakeLevelShape("Polygon",3,1,8))
-		P_4_ShT = Create_SortTable(MakeLevelShape("Polygon",4,1,8))
-		P_5_ShT = Create_SortTable(MakeLevelShape("Polygon",5,1,8))
-		P_6_ShT = Create_SortTable(MakeLevelShape("Polygon",6,1,8))
-		P_7_ShT = Create_SortTable(MakeLevelShape("Polygon",7,1,8))
-		P_8_ShT = Create_SortTable(MakeLevelShape("Polygon",8,1,8))
+		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 5), 0)	}
+		S_3 = MakeLevelShape("Star",3,1,4)
+		S_4 = MakeLevelShape("Star",4,1,4)
+		S_5 = MakeLevelShape("Star",5,1,4)
+		S_6 = MakeLevelShape("Star",6,1,4)
+		S_7 = MakeLevelShape("Star",7,1,4)
+		S_8 = MakeLevelShape("Star",8,1,4)
+		P_3 = MakeLevelShape("Polygon",3,1,8)
+		P_4 = MakeLevelShape("Polygon",4,1,8)
+		P_5 = MakeLevelShape("Polygon",5,1,8)
+		P_6 = MakeLevelShape("Polygon",6,1,8)
+		P_7 = MakeLevelShape("Polygon",7,1,8)
+		P_8 = MakeLevelShape("Polygon",8,1,8)
 	
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 5), 0)
 	
 	
-		G_CAPlot_Shape_InputTable = {"Poly","Hy1LC_64","Hy1FP_64","FacHD1","EnBayHD1","FacSC1","EnBaySC1","Cen1","Cen2","CenNM1","CenNM2","CenCross",
-		"Gene1","Gene2","Gene3","GeneN1","GeneN2","GeneN3",	"GateHD1","GateSC1","STGateHD1","STGateSC1"
-	
-		}
 end
