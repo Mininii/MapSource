@@ -505,6 +505,7 @@ CJumpEnd(FP,Write_SpawnSet_Jump)
 
 CAdd(FP,G_CB_LineTemp,G_CB_LineV,G_CB_InputH)
 NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
+DisplayPrint(HumanPlayers, {G_CB_LMTV})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,0*(0x20/4)),SetTo,G_CB_CUTV),
 	TSetMemory(_Add(G_CB_LineTemp,1*(0x20/4)),SetTo,G_CB_FNTV),
@@ -655,7 +656,6 @@ function CB_initTCopy()
 	CBPlotNumHeader = CreateVar(PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotNumHeader[2],0x15C,0, SetTo, PlayerID, CA[7], 0x15C, 1, 0))
 end
-
 function CB_TCopy(Shape,RetShape)
 	FCBCOPYCheck = 1
 	local CV
@@ -685,6 +685,7 @@ function CB_TCopy(Shape,RetShape)
 	CMul(PlayerID,LRShNextV2,RetShape,(0x970/4))
 	end
 	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CV[2])
+	
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -706,6 +707,7 @@ function CB_TCopy(Shape,RetShape)
 	else
 		CDoActions(PlayerID,{SetV(CV[4],_SHRead(FArr(CBPlotFNum,_Sub(RetShape,1))))})
 	end
+	--DisplayPrint(HumanPlayers, {CV[1]," ",CV[2]," ",CV[3]," ",CV[4]," ",CV[5]," ",CV[6]," ",CV[7]," ",CV[8]})
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -723,6 +725,7 @@ function CB_TCopy(Shape,RetShape)
 			flag = {preserved}
 		}
 	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
+	--DisplayPrint(HumanPlayers, {CV[1]," ",CV[2]," ",CV[3]," ",CV[4]," ",CV[5]," ",CV[6]," ",CV[7]," ",CV[8]})
 end
 
 
@@ -742,8 +745,8 @@ CJumpEnd(FP,CB_PrfcInit)
 
 function CB_RandSort()
 		
-	GetXCntr,GetXmax,GetXmin = CreateVars(3, FP) CB_GetXCntr(STSize+1,GetXCntr,GetXmax,GetXmin)
-	GetYCntr,GetYmax,GetYmin = CreateVars(3, FP) CB_GetYCntr(STSize+1,GetYCntr,GetYmax,GetYmin)
+	GetXCntr,GetXmax,GetXmin = CreateVars(3, FP) CB_GetXCntr(STSize+2,GetXCntr,GetXmax,GetXmin)
+	GetYCntr,GetYmax,GetYmin = CreateVars(3, FP) CB_GetYCntr(STSize+2,GetYCntr,GetYmax,GetYmin)
 	RandXmax = CreateVar(FP) f_iMod(FP, RandXmax,_Rand(), GetXmax)
 	RandXmin = CreateVar(FP) f_iMod(FP, RandXmin,_Rand(), GetXmin)
 	RandYmax = CreateVar(FP) f_iMod(FP, RandYmax,_Rand(), GetYmax)
@@ -757,10 +760,10 @@ function CB_RandSort()
 	
 	RandRet = f_CRandNum(6)
 	CMov(FP,FncRand,RandRet)
-	CB_Sort(CFunc1, DirRand, STSize+1, EndRetShape)
+	CB_Sort(CFunc1, DirRand, STSize+2, EndRetShape)
 	CurShNum = CreateVar(FP)
 	CB_GetNumber(EndRetShape, CurShNum)
-	DisplayPrint(HumanPlayers, {"Calc "..(STSize+1).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
+	--DisplayPrint(HumanPlayers, {"Calc "..(STSize+2).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
 	
 
 end
@@ -774,8 +777,8 @@ end
 	
 	
 	CIfX(FP,{CVX(G_CB_TempTable[2],1,0xFF,AtLeast)})
-	CB_TCopy(V(CA[1]),STSize+1)
-	DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+1).." TempFunc : ",G_CB_TempTable[2]})
+	CB_TCopy(V(CA[1]),STSize+2)
+	--DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+2).." TempFunc : ",G_CB_TempTable[2]})
 	for j, k in pairs(G_CB_PrefuncArr) do
 		CIf(FP,CVX(G_CB_TempTable[2],k[1],0xFF))
 			_G[k[2]]()
@@ -787,10 +790,12 @@ end
 	CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
 	CMov(FP,G_CB_TempTable[13],G_CB_Num,EndRetShape)
 	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
-
+	CB_GetNumber(EndRetShape, G_CB_TempTable[21])
+	
 
 
 	CIfXEnd()
+	
 	CMov(FP,G_CB_TempTable[2],0,nil,0xFF)
 
 
@@ -847,7 +852,7 @@ function G_CBPlot()
 	table.insert(Z,CS_InputVoid(1699))
 	table.insert(Z,CS_InputVoid(1699))
 	table.insert(Z,CS_InputVoid(1699))
-	for i = 1, Size_of_G_CB_Arr do
+	for i = 1, Size_of_G_CB_Arr+3 do
 		table.insert(Z,CS_InputVoid(1699))
 	end
 
@@ -865,19 +870,7 @@ function G_CBPlot()
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
 	CMov(FP,V(CA[6]),G_CB_TempTable[3]) -- CBPlot Index
     CMov(FP,NQOption,G_CB_TempTable[12],nil,0xFF,1) -- QueueOption
-	CIfX(FP,CVar(FP,G_CB_TempTable[5][2],AtMost,0)) -- LoopLimit
-		if type(Z[1]) == "number" then
-			DoActionsX(FP,{SetCVar(FP,CA[1],SetTo,1,0xFF),SetCVar(FP,CA[5],SetTo,(Z[1]/50)+1)})
-		elseif type(Z) == "table" then
-			for j, k in pairs(Z) do
-				CTrigger(FP,{CVar(FP,G_CB_TempTable[13][2],Exactly,j,0xFF)},{SetCVar(FP,CA[5],SetTo,(k[1]/50)+1)},1)
-			end
-		else
-			PushErrorMsg("G_CBPlot_InputData_Error")
-		end
-	CElseX()
-		CMov(FP,V(CA[5]),G_CB_TempTable[5])
-	CIfXEnd()
+	CMov(FP,V(CA[5]),G_CB_TempTable[5])
 	CMov(FP,G_CB_BackupX,G_CB_TempTable[8])
 	CMov(FP,G_CB_BackupY,G_CB_TempTable[9])
     CBPlot(Z, L, FP,nilunit, 0, {G_CB_TempTable[8],G_CB_TempTable[9]}, 1,32,{0,0,0,0,0,1}, "CA_Func1", "G_CB_Prefunc", FP, nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)})
@@ -987,33 +980,59 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 	
     
 	local X = {}
+	local ShNm = {}
 	if type(G_CB_ShapeTable[1]) == "table" then
 		if #G_CB_ShapeTable >= 5 then
 			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CB_ShapeTable[i] ~= nil then
-				
+				ShNm[i] = #G_CB_ShapeTable[i]-1
                 if G_CB_Shapes[G_CB_ShapeTable[i]] == nil then
                     G_CB_Shapes[G_CB_ShapeTable[i]] = {G_CB_ShapeTable[i],G_CB_ShapeIndexAlloc}
                     G_CB_ShapeIndexAlloc = G_CB_ShapeIndexAlloc + 1
                 end
-                G_CB_ShapeTable[i] = G_CB_Shapes[G_CB_ShapeTable[i]][2]
+                X = SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_Shapes[G_CB_ShapeTable[i]][2])
             else
-                G_CB_ShapeTable[i] = 0
+				ShNm[i] = 0
+                X = nil
             end
 		end
 	else
 		PushErrorMsg("G_CB_SLTable_InputData_Error")
 	end
-	local LMRet = 0
+	
+
+	local LMRet = {}
 	if G_CB_LMTable == "MAX" then
 		LMRet = T_to_BiteBuffer({255,255,255,255})
 	elseif type(G_CB_LMTable) == "table" then
+		for j,k in pairs(G_CB_LMTable) do
+			if k == 0 then
+				LMRet[j] = ShNm[j]/50+1
+			else
+				LMRet[j] = k
+			end
+		end
 		LMRet = T_to_BiteBuffer(G_CB_LMTable)
 	elseif type(G_CB_LMTable) == "number" then
-		local NumRet = G_CB_LMTable
-		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
+
+		local NumRet = {}
+		
+		if G_CB_LMTable == 0 then
+			for i = 1, 4 do
+				if G_CB_ShapeTable[i]~= nil then
+					NumRet[i] = ShNm[i]/50+1
+					
+				else
+					NumRet[i] = 255
+				end
+			end
+		else
+			NumRet = {G_CB_LMTable,G_CB_LMTable,G_CB_LMTable,G_CB_LMTable}
+		end
+		
+		LMRet = T_to_BiteBuffer(NumRet)
 	end
 	local Y = {}
 	if CenterXY == nil then 
@@ -1086,6 +1105,7 @@ SetCall(FP)
                 TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,G_CB_TempTable[11],0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,G_CB_TempTable[12],0xFF),
                 TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[13]),
+				TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,G_CB_TempTable[21]),
                 
             })
             
