@@ -505,7 +505,6 @@ CJumpEnd(FP,Write_SpawnSet_Jump)
 
 CAdd(FP,G_CB_LineTemp,G_CB_LineV,G_CB_InputH)
 NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
-DisplayPrint(HumanPlayers, {G_CB_LMTV})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,0*(0x20/4)),SetTo,G_CB_CUTV),
 	TSetMemory(_Add(G_CB_LineTemp,1*(0x20/4)),SetTo,G_CB_FNTV),
@@ -603,7 +602,6 @@ function CA_Func1()
 
 end
 
-
 local Ret = CreateVar(FP)
 local CalcX, CalcY = CreateVars(2, FP)
 local FncRand = CreateVar(FP)
@@ -616,15 +614,23 @@ CiSub(FP,Ret,_iMul(Para[2],CalcY),100)
 CElseIfX({CV(FncRand,2)})
 CiSub(FP,Ret,_Add(_iMul(Para[1],CalcX),_iMul(Para[2],CalcY)),100)
 CElseIfX({CV(FncRand,3)})
-	local Cos,Sin = CreateVars(2,FP)
-	f_Lengthdir(FP, CalcX, CalcY, Cos, Sin)
-	CiSub(FP,Ret,_iMul(Para[1],Cos),100)
+CMov(FP,Ret,_Sqrt(_Add(_Square(Para[1]),_Square(Para[2]))))
 CElseIfX({CV(FncRand,4)})
-f_Lengthdir(FP, CalcX, CalcY, Cos, Sin)
-CiSub(FP,Ret,_iMul(Para[2],Sin),100)
-CElseIfX({CV(FncRand,5)})
-f_Lengthdir(FP, CalcX, CalcY, Cos, Sin)
-CiSub(FP,Ret,_Add(_iMul(Para[1],Cos),_iMul(Para[2],Sin)),100)
+local RetAbs= CreateVar(FP)
+CMov(FP,RetAbs,_Abs(_Atan2(_iDiv(_iMul(Para[2],100),_iMul(Para[1],100)),_Mov(0))))
+CIfX(FP,{TTCVar(FP, Para[1][2], iAtLeast, 0),TTCVar(FP, Para[2][2], iAtLeast, 0)})
+CMov(FP,Ret,RetAbs)
+CElseIfX({TTCVar(FP, Para[1][2], iAtMost, -1),TTCVar(FP, Para[2][2], iAtLeast, 0)})
+CMov(FP,Ret,_iSub(_Mov(math.pi*100),RetAbs))
+CElseIfX({TTCVar(FP, Para[1][2], iAtMost, -1),TTCVar(FP, Para[2][2], iAtMost, -1)})
+CMov(FP,Ret,_Add(_Mov(math.pi*100),RetAbs))
+CElseIfX({TTCVar(FP, Para[1][2], iAtLeast, 0),TTCVar(FP, Para[2][2], iAtMost, -1)})
+CMov(FP,Ret,_iSub(_Mov(math.pi*200),RetAbs))
+
+
+
+
+CIfXEnd()
 CIfXEnd()
 CFuncReturn({Ret})
 CFuncEnd()
@@ -656,6 +662,7 @@ function CB_initTCopy()
 	CBPlotNumHeader = CreateVar(PlayerID)
 	table.insert(CtrigInitArr[PlayerID+1],SetCtrigX(PlayerID,CBPlotNumHeader[2],0x15C,0, SetTo, PlayerID, CA[7], 0x15C, 1, 0))
 end
+
 function CB_TCopy(Shape,RetShape)
 	FCBCOPYCheck = 1
 	local CV
@@ -685,7 +692,6 @@ function CB_TCopy(Shape,RetShape)
 	CMul(PlayerID,LRShNextV2,RetShape,(0x970/4))
 	end
 	f_SHRead(PlayerID,_Add(CBPlotNumHeader,LShNextV),CV[2])
-	
 	Trigger {
 			players = {PlayerID},
 			conditions = {
@@ -707,7 +713,6 @@ function CB_TCopy(Shape,RetShape)
 	else
 		CDoActions(PlayerID,{SetV(CV[4],_SHRead(FArr(CBPlotFNum,_Sub(RetShape,1))))})
 	end
-	--DisplayPrint(HumanPlayers, {CV[1]," ",CV[2]," ",CV[3]," ",CV[4]," ",CV[5]," ",CV[6]," ",CV[7]," ",CV[8]})
 	-- Call f_CBMove
 	Trigger {
 			players = {PlayerID},
@@ -725,7 +730,6 @@ function CB_TCopy(Shape,RetShape)
 			flag = {preserved}
 		}
 	CDoActions(PlayerID,{TSetMemory(_Add(CBPlotNumHeader,LRShNextV2),SetTo,CV[1])})
-	--DisplayPrint(HumanPlayers, {CV[1]," ",CV[2]," ",CV[3]," ",CV[4]," ",CV[5]," ",CV[6]," ",CV[7]," ",CV[8]})
 end
 
 
@@ -758,8 +762,9 @@ function CB_RandSort()
 	DirRand = CreateVar(FP)
 	CMov(FP,DirRand,RandRet)
 	
-	RandRet = f_CRandNum(6)
-	CMov(FP,FncRand,RandRet)
+	RandRet = f_CRandNum(5)
+	CMov(FP,FncRand,4)
+	DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
 	CB_Sort(CFunc1, DirRand, STSize+2, EndRetShape)
 	CurShNum = CreateVar(FP)
 	CB_GetNumber(EndRetShape, CurShNum)
@@ -789,13 +794,27 @@ end
 	CB_TCopy(EndRetShape,TempRetShape)
 	CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
 	CMov(FP,G_CB_TempTable[13],G_CB_Num,EndRetShape)
-	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
-	CB_GetNumber(EndRetShape, G_CB_TempTable[21])
-	
+--	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
 
+	CIf(FP,CVX(G_CB_TempTable[5],0,0xFF))
+	local RetNum = CreateVar(FP)
+	CB_GetNumber(EndRetShape, RetNum)
+	CMov(FP,G_CB_TempTable[5],_Div(RetNum,50),1,0xFF,1)
+	CMov(FP,V(CA[5]),G_CB_TempTable[5],nil,0xFF,1)
+
+	CIfEnd()
 
 	CIfXEnd()
+
 	
+	CIfX(FP,CVar(FP,G_CB_TempTable[5][2],AtMost,0,0xFF)) -- LoopLimit
+	for j, k in pairs(Z) do
+		CTrigger(FP,{CVar(FP,G_CB_TempTable[13][2],Exactly,j,0xFF)},{SetCVar(FP,G_CB_TempTable[5][2],SetTo,(k[1]/50)+1)},1)
+	end
+		CMov(FP,V(CA[5]),G_CB_TempTable[5],nil,0xFF,1)
+	CElseX()
+		CMov(FP,V(CA[5]),G_CB_TempTable[5],nil,0xFF,1)
+	CIfXEnd()
 	CMov(FP,G_CB_TempTable[2],0,nil,0xFF)
 
 
@@ -852,7 +871,7 @@ function G_CBPlot()
 	table.insert(Z,CS_InputVoid(1699))
 	table.insert(Z,CS_InputVoid(1699))
 	table.insert(Z,CS_InputVoid(1699))
-	for i = 1, Size_of_G_CB_Arr+3 do
+	for i = 1, Size_of_G_CB_Arr do
 		table.insert(Z,CS_InputVoid(1699))
 	end
 
@@ -870,10 +889,10 @@ function G_CBPlot()
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
 	CMov(FP,V(CA[6]),G_CB_TempTable[3]) -- CBPlot Index
     CMov(FP,NQOption,G_CB_TempTable[12],nil,0xFF,1) -- QueueOption
-	CMov(FP,V(CA[5]),G_CB_TempTable[5])
+	CMov(FP,V(CA[5]),G_CB_TempTable[5],nil,0xFF,1)
 	CMov(FP,G_CB_BackupX,G_CB_TempTable[8])
 	CMov(FP,G_CB_BackupY,G_CB_TempTable[9])
-    CBPlot(Z, L, FP,nilunit, 0, {G_CB_TempTable[8],G_CB_TempTable[9]}, 1,32,{0,0,0,0,0,1}, "CA_Func1", "G_CB_Prefunc", FP, nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)})
+    CBPlot(Z, nil, FP,nilunit, 0, {G_CB_TempTable[8],G_CB_TempTable[9]}, 1,32,{0,0,0,0,0,1}, "CA_Func1", "G_CB_Prefunc", FP, nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)})
     CTrigger(FP, {TTNVar(V(CA[2]), NotSame, G_CB_TempTable[4])}, {SetCDeaths(FP,SetTo,1,G_CB_Launch)},{preserved})
 	CDoActions(FP,{TSetCVar(FP,G_CB_TempTable[3][2],SetTo,V(CA[6])),TSetCVar(FP,G_CB_TempTable[4][2],SetTo,V(CA[2]))})
 
@@ -980,59 +999,33 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 	
     
 	local X = {}
-	local ShNm = {}
 	if type(G_CB_ShapeTable[1]) == "table" then
 		if #G_CB_ShapeTable >= 5 then
 			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i = 1, 4 do
 			if G_CB_ShapeTable[i] ~= nil then
-				ShNm[i] = #G_CB_ShapeTable[i]-1
+				
                 if G_CB_Shapes[G_CB_ShapeTable[i]] == nil then
                     G_CB_Shapes[G_CB_ShapeTable[i]] = {G_CB_ShapeTable[i],G_CB_ShapeIndexAlloc}
                     G_CB_ShapeIndexAlloc = G_CB_ShapeIndexAlloc + 1
                 end
-                X = SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_Shapes[G_CB_ShapeTable[i]][2])
+                G_CB_ShapeTable[i] = G_CB_Shapes[G_CB_ShapeTable[i]][2]
             else
-				ShNm[i] = 0
-                X = nil
+                G_CB_ShapeTable[i] = 0
             end
 		end
 	else
 		PushErrorMsg("G_CB_SLTable_InputData_Error")
 	end
-	
-
-	local LMRet = {}
+	local LMRet = 0
 	if G_CB_LMTable == "MAX" then
 		LMRet = T_to_BiteBuffer({255,255,255,255})
 	elseif type(G_CB_LMTable) == "table" then
-		for j,k in pairs(G_CB_LMTable) do
-			if k == 0 then
-				LMRet[j] = ShNm[j]/50+1
-			else
-				LMRet[j] = k
-			end
-		end
 		LMRet = T_to_BiteBuffer(G_CB_LMTable)
 	elseif type(G_CB_LMTable) == "number" then
-
-		local NumRet = {}
-		
-		if G_CB_LMTable == 0 then
-			for i = 1, 4 do
-				if G_CB_ShapeTable[i]~= nil then
-					NumRet[i] = ShNm[i]/50+1
-					
-				else
-					NumRet[i] = 255
-				end
-			end
-		else
-			NumRet = {G_CB_LMTable,G_CB_LMTable,G_CB_LMTable,G_CB_LMTable}
-		end
-		
-		LMRet = T_to_BiteBuffer(NumRet)
+		local NumRet = G_CB_LMTable
+		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
 	end
 	local Y = {}
 	if CenterXY == nil then 
@@ -1090,7 +1083,7 @@ end
 Call_G_CB = SetCallForward()
 SetCall(FP)
     CIfX(FP,CVar(FP,G_CB_TempTable[1][2],AtLeast,1,0xFF))
-		--DisplayPrint(HumanPlayers, {G_CB_TempTable[4]})
+		--DisplayPrint(HumanPlayers, {G_CB_TempTable[5]})
         CallTrigger(FP,Call_G_CBPlot)
         CIfX(FP,{CDeaths(FP,AtLeast,1,G_CB_Launch),CDeaths(FP,AtMost,0,CA_Suspend)})
             CDoActions(FP,{
@@ -1105,7 +1098,6 @@ SetCall(FP)
                 TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,G_CB_TempTable[11],0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,G_CB_TempTable[12],0xFF),
                 TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[13]),
-				TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,G_CB_TempTable[21]),
                 
             })
             

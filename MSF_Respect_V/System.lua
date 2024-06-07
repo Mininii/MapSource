@@ -623,5 +623,5 @@ Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved}
 Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
-DoActions(FP, {KillUnit(94, AllPlayers)})
+DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1)})
 end

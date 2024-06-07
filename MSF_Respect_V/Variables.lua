@@ -86,7 +86,7 @@
 	CSPtr = CreateVar(FP)
 	OverMePosX = CreateArr(20, FP)
 	OverMePosY = CreateArr(20, FP)
-
+	GTime = CreateVar(FP)
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
