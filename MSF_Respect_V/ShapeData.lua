@@ -169,6 +169,7 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 
 	Hy1Line = {7   ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736}} -- 선으로 긋기
 	Hy1Fill = {10  ,{512, 736},{640, 672},{640, 288},{1024, 480},{1408, 288},{1408, 672},{1536, 736},{1536, 128},{1024, 384},{512, 128}} -- 채우기
+	Shape1008 = {14  ,{2016, 2816},{1024, 3296},{672, 3136},{672, 2752},{1120, 2528},{1184, 2336},{1312, 2176},{1408, 1984},{1504, 1728},{1632, 1632},{1696, 1536},{1760, 1440},{1920, 1344},{2016, 1344}}
 
 	CircleA = CSMakeCircle(6,60,0,PlotSizeCalc(6, 2),PlotSizeCalc(6, 1)) ---- 작은 원
 	EllipseA = CS_Distortion(CircleA,{2,1},{2,1},{2,1},{2,1}) ---- 작은 타원
@@ -217,20 +218,48 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 3), 0),
 		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 4), 0),
 		CSMakeCircle(8, 54, 0, PlotSizeCalc(8, 5), 0)	}
-		S_3 = MakeLevelShape("Star",3,1,4)
-		S_4 = MakeLevelShape("Star",4,1,4)
-		S_5 = MakeLevelShape("Star",5,1,4)
-		S_6 = MakeLevelShape("Star",6,1,4)
-		S_7 = MakeLevelShape("Star",7,1,4)
-		S_8 = MakeLevelShape("Star",8,1,4)
-		P_3 = MakeLevelShape("Polygon",3,1,8)
-		P_4 = MakeLevelShape("Polygon",4,1,8)
-		P_5 = MakeLevelShape("Polygon",5,1,8)
-		P_6 = MakeLevelShape("Polygon",6,1,8)
-		P_7 = MakeLevelShape("Polygon",7,1,8)
-		P_8 = MakeLevelShape("Polygon",8,1,8)
+	S_3 = MakeLevelShape("Star",3,1,4)
+	S_4 = MakeLevelShape("Star",4,1,4)
+	S_5 = MakeLevelShape("Star",5,1,4)
+	S_6 = MakeLevelShape("Star",6,1,4)
+	S_7 = MakeLevelShape("Star",7,1,4)
+	S_8 = MakeLevelShape("Star",8,1,4)
+	P_3 = MakeLevelShape("Polygon",3,1,8)
+	P_4 = MakeLevelShape("Polygon",4,1,8)
+	P_5 = MakeLevelShape("Polygon",5,1,8)
+	P_6 = MakeLevelShape("Polygon",6,1,8)
+	P_7 = MakeLevelShape("Polygon",7,1,8)
+	P_8 = MakeLevelShape("Polygon",8,1,8)
+		
 	
 	Poly = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 5), 0)
+	
+	NS_HD = CSMakeStar(4, 180, 192, 0, PlotSizeCalc(4*2, 3), 0)
+	NS_SC = CSMakeStar(4, 180, 128, 0, PlotSizeCalc(4*2, 5), 0)
+	
+	function Ufunc(X,Data)
+		return 64*math.sin(math.rad(X))+Data[2][1] --+Ymax
+		end
+	function Dfunc(X,Data)
+		return 64*math.sin(math.rad(X))+Data[2][2] --+Ymin
+		end
+	NS_HDW = CS_Warping(NS_HD,"Ufunc","Dfunc","Ufunc","Dfunc")
+	NS_SCW = CS_Warping(NS_SC,"Ufunc","Dfunc","Ufunc","Dfunc")
+	SpiHD = CSMakeSpiral(6,0.2,0.8,64,0,(8*5)+1,0)
+	SpiSC = CSMakeSpiral(6,0.2,0.8,48,0,(12*6)+1,0)
+	LauncherShHD = CS_RatioXY(CSMakePolygon(6, 160, 0, PlotSizeCalc(6, 3),0), 1, 0.5)
+
+	LauncherShSC = CS_RatioXY(CSMakePolygon(6, 96, 0, PlotSizeCalc(6, 6),0), 1, 0.5)
+
+	
+	TemConnectHD = CS_MoveXY(CS_ConnectPathX(Shape1008, 192, nil),-1744,-2384)
+	TemConnectSC = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, nil),-1744,-2384)
+	TemConnect = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, 1),-1744,-2384)
+
+	
+	
+	
+	
 	
 	
 end

@@ -6,11 +6,8 @@
 	t03 = "\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 	iStrSize1 = GetiStrSize(0,t01)
 	S1 = MakeiTblString(1394,"None",'None',MakeiStrLetter("\x0D",iStrSize1+5),"Base",1) -- 단축키없음
-	iTbl1 = GetiTblId(FP,1394,S1) --DMG
-	iTbl2 = GetiTblId(FP,1395,S1) --DMG
 	iTbl3 = GetiTblId(FP,1396,S1) --DMG
 	iTbl4 = GetiTblId(FP,1397,S1) --DMG
-	iTbl6 = GetiTblId(FP,1398,S1) --DMG
 	iTbl5 = GetiTblId(FP,764,S1) --DMG
 	iTbl9 = GetiTblId(FP,1299,S1) --실명
 	Str1, Str1a, Str1s = SaveiStrArrX(FP,t01)
@@ -130,29 +127,33 @@ local SelShbool = CreateVar(FP)
 		end
 		CS__InputVA(FP,iTbl4,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
-		CElseIfX({TTOR({CV(SelClass,93),CV(SelAtkType,3)})})-- 일반형
+		CElseIfX({CV(SelAtkType,3)})-- 일반형
 		CS__SetValue(FP, Str3, "\x1BN\x04ormal \x04- \x07K\x04ills\x03: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
 		for i = 0, 9 do
 			TriggerX(FP, {CSVA1(SVA1(Str1,6+i), AtLeast, 0x0E*0x1000000, 0xFF000000),CD(CFlag,0)}, {SetCD(CFlag, 1),SetCSVA1(SVA1(Str1,6+i), SetTo, 0x1B, 0xFF)}, {preserved})
 		end
-		CS__InputVA(FP,iTbl2,0,Str1,Str1s,nil,0,Str1s)
+		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
-		CElseIfX({TTOR({CV(SelClass,94),CV(SelAtkType,4)})})-- 방어무시
+		CElseIfX({CV(SelAtkType,4)})-- 방어무시
 		CS__SetValue(FP, Str3, "\x1FI\x04gnore \x04- \x07K\x04ills\x03: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
 		for i = 0, 9 do
 			TriggerX(FP, {CSVA1(SVA1(Str1,6+i), AtLeast, 0x0E*0x1000000, 0xFF000000),CD(CFlag,0)}, {SetCD(CFlag, 1),SetCSVA1(SVA1(Str1,6+i), SetTo, 0x1F, 0xFF)}, {preserved})
 		end
 		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
-		CElseIfX(TTOR({CV(SelClass,92),CV(SelAtkType,1)}))--폭발형
+		CElseIfX(CV(SelAtkType,1))--폭발형
 		CS__SetValue(FP, Str3, "\x11E\x04xplosion \x04- \x07K\x04ills\x03: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
 		for i = 0, 9 do
 			TriggerX(FP, {CSVA1(SVA1(Str1,6+i), AtLeast, 0x0E*0x1000000, 0xFF000000),CD(CFlag,0)}, {SetCD(CFlag, 1),SetCSVA1(SVA1(Str1,6+i), SetTo, 0x11, 0xFF)}, {preserved})
 		end
-		CS__InputVA(FP,iTbl1,0,Str1,Str1s,nil,0,Str1s)
+		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
 		CElseIfX(CV(SelAtkType,2))--진동형
 		CS__SetValue(FP, Str3, "\x1DC\x04oncussive \x04- \x07K\x04ills\x03: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
+		for i = 0, 9 do
+			TriggerX(FP, {CSVA1(SVA1(Str1,6+i), AtLeast, 0x0E*0x1000000, 0xFF000000),CD(CFlag,0)}, {SetCD(CFlag, 1),SetCSVA1(SVA1(Str1,6+i), SetTo, 0x1D, 0xFF)}, {preserved})
+		end
+		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
 		CIfXEnd()
 		CIfXEnd()
@@ -176,13 +177,17 @@ local SelShbool = CreateVar(FP)
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 	
 	WhiteList = def_sIndex()
-
+	LauncherUnit = def_sIndex()
 	for j, i in pairs(MarID) do
 		NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
 	end
 	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
 	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
 	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
+	NJumpX(FP,LauncherUnit,DeathsX(CurrentPlayer,Exactly,119,0,0xFF))
+	TimerUnit = def_sIndex()
+	NJumpX(FP,TimerUnit,{Cond_EXCC(2, AtLeast, 1)}) -- 2 = Timer 4 = Option
+
 	
 	EXCC_ClearCalc({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
 	NJumpXEnd(FP, WhiteList)
@@ -194,20 +199,61 @@ local SelShbool = CreateVar(FP)
 		f_LoadCp()
 	CIfEnd()
 	CIf(FP,{Cond_EXCC(8, AtLeast, 1)})
-	CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 		CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
+			CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 			CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
 			CTrigger(FP, {NTCond2()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
+			CTrigger(FP, {NTCond2(),Cond_EXCC(1, Exactly, 1)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 		CIfEnd()
 		for i = 0, 4 do
 			CIf(FP, {CV(EXCC_TempVarArr[10],i*65536)})
+			CTrigger(FP, {NTCond(),Memory(0x582294+(4*i),Exactly,1),}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)}, {preserved})
+			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),Exactly,1),}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 			CIfEnd()
 		end
 	CIfEnd()
+	EXCC_ClearCalc()
+	NJumpXEnd(FP, TimerUnit)
+	CIf(FP, {Cond_EXCC(2, Exactly, 1)})--타이머 종료시 1회한정 작동
+	f_SaveCp()
+
+	f_Read(FP, _Sub(BackupCp,15), CPos)
+	Convert_CPosXY()
+	local UIDV = CreateVar(FP)
+	local PIDV = CreateVar(FP)
+	f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
+	f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
+	CIf(FP, {Cond_EXCC(5, Exactly, 1)})--타이머 타입 번호
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 6)})
+	CIfEnd()
+	CIf(FP, {Cond_EXCC(5, Exactly, 2)})--타이머 타입 번호
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		Simple_SetLocX(FP,200,EXCC_TempVarArr[12],EXCC_TempVarArr[13],EXCC_TempVarArr[12],EXCC_TempVarArr[13],{Simple_CalcLoc(200,-4,-4,4,4)})
+		CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 201)})
+	CIfEnd()
+	f_LoadCp()
+
+	
+		
+
+
+	CIfEnd()
+
+	EXCC_ClearCalc()
+	NJumpXEnd(FP, LauncherUnit)
+	f_SaveCp()
+	f_Read(FP, _Sub(BackupCp,15), CPos)
+	Convert_CPosXY()
+	Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+	CDoActions(FP, {CreateUnit(1, 94, 1, P6),KillUnit(94, P6)})
+		
+	f_LoadCp()
+	EXCC_ClearCalc()
 	EXCC_Part2()
 	EXCC_Part3X()
 	for i = 0, 1699 do -- Part4X 용 Cunit Loop (x1700)
@@ -361,7 +407,7 @@ end
 			DeathsX(19025+(84*i)+19,Exactly,0*256,0,0xFF00),
 			},
 			{SetDeathsX(19025+(84*i)+40,SetTo,0*16777216,0,0xFF000000),
-			--SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
+			SetDeathsX(19025+(84*i)+9,SetTo,0*65536,0,0xFF0000),
 			SetDeathsX(19025+(84*i)+35,SetTo,0,0,0xFF); -- 
 			MoveCp(Add,19*4),
 			SetCVar(FP,CurCunitI2[2],SetTo,i)
@@ -623,5 +669,5 @@ Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved}
 Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
-DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1)})
+DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
 end

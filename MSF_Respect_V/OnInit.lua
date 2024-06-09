@@ -173,10 +173,10 @@
 	for i =0,4 do
 	SetUnitsDatX(MarID[i+1],{Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
-	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
-	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
-	SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
-	SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
+	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 5*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
+	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
+	SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
+	SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
 
 	SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 	SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛

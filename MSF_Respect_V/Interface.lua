@@ -23,7 +23,10 @@
 		{13,"staredit\\wav\\BGM_EnemyStorm.ogg",107*1000},
 		{14,"staredit\\wav\\BGM_Do_it.ogg",60*1000},
 		{15,"staredit\\wav\\BGM_Dream_it.ogg",44*1000},
-
+		{16,"staredit\\wav\\BGM_Blythe.ogg",92*1000},
+		{17,"staredit\\wav\\BGM_Black_Swan.ogg",88*1000},
+		{18,"staredit\\wav\\BGM_Launcher.ogg",57*1000},
+	
 		
 	})
 	BTDis = {}
@@ -129,13 +132,6 @@
 
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
-		CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
-		CMov(FP,0x6509B0,19025+9) --CUnit 시작지점 +19 (0x4C)
-		CWhile(FP,Memory(0x6509B0,AtMost,19025+9 + (84*1699)),{SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF0000),SetMemory(0x6509b0,Add,84)})
-		CWhileEnd()
-		CMov(FP,0x6509B0,FP)
-		CIfEnd()
-		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		KillTable = {}
 		for j,k in pairs(UnitPointArr) do
 			table.insert(KillTable, KillUnit(k[1], Force2))
@@ -164,15 +160,25 @@
 			if HeroTestMode==1 then
 				local TempUID = CreateVar(FP)
 				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,199),CD(GS,1);}) -- F12 누르면 선택한 유닛 12마리가 적으로 출현함
-				
+					f_SaveCp()
 					CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
 					f_Read(FP, _Add(Cunit2,25), TempUID, nil, 0xFF, 1)
+					CIf(FP,{
+						TTCVar(FP,TempUID[2],NotSame,49,0xFF),
+						TTCVar(FP,TempUID[2],NotSame,111,0xFF),
+						TTCVar(FP,TempUID[2],NotSame,107,0xFF)})
 					DoActions(FP, {Simple_SetLoc(0, 576,832,576,832)})
 					f_TempRepeatX({},TempUID,1,2,FP)
 					CIfEnd()
+					CIfEnd()
+					f_LoadCp()
 				CIfEnd()
+				
+
 			end
 
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
+			CIfEnd()
 			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
 			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 			--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
@@ -191,7 +197,25 @@
 						MoveCp(Add,6*4);
 					},1)
 				CIfEnd()
-	
+				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+				CIf(FP,Deaths(CurrentPlayer,AtLeast,1,208))
+				CMov(FP,0x6509B0,Cunit2,25)
+				f_SaveCp()
+				TestUID = CreateVar(FP)
+				TestP = CreateVar(FP)
+				f_Read(FP,BackupCp,TestUID,nil,0xFF,1)
+				f_Read(FP,_Sub(BackupCp,6),TestP,nil,0xFF,1)
+				CDoActions(FP,{TSetMemory(_Add(_Mul(TestUID,12),TestP),Add,1)})
+				f_LoadCp()
+				CTrigger(FP,{TTDeathsX(CurrentPlayer,NotSame,49,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,111,0,0xFF),TTDeathsX(CurrentPlayer,NotSame,107,0,0xFF)},{
+					MoveCp(Subtract,6*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF00);
+					MoveCp(Add,21*4);
+					SetDeathsX(CurrentPlayer,SetTo,0,0,0xFF000000);
+					MoveCp(Subtract,15*4);
+				},1)
+				CIfEnd()
+
 				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,203)})
 					CMov(FP,0x6509B0,Cunit2,25)
@@ -209,19 +233,29 @@
 					},1)
 				CIfEnd()
 				
+				
 				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 				CMov(FP,0x6509B0,Cunit2,19)
 				--0x00020000 - Is A Building
 
 				f_SaveCp()
 				CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
-				TmpGunNum = CreateVarArr(5,FP)
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*0)/4))), TmpGunNum[1])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*1)/4))), TmpGunNum[2])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*2)/4))), TmpGunNum[3])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*3)/4))), TmpGunNum[4])
+				TmpGunNum = CreateVarArr(6,FP)
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*0)/4))), TmpGunNum[1])
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*1)/4))), TmpGunNum[2])
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*2)/4))), TmpGunNum[3])
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*3)/4))), TmpGunNum[4])
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*4)/4))), TmpGunNum[5])
+				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*5)/4))), TmpGunNum[6])
 				f_Read(FP, _Add(Cunit2,3), TmpGunNum[5])
-				DisplayPrintEr(CurrentOP, {"DC1 : ",TmpGunNum[1],"   DC2 : ",TmpGunNum[2],"   DC3 : ",TmpGunNum[3],"   DC4 : ",TmpGunNum[4],"  CSprite:",TmpGunNum[5]})
+				DisplayPrintEr(CurrentOP, {
+					"UC1 : ",TmpGunNum[1],
+					"   UC2 : ",TmpGunNum[2],
+					"   UC3 : ",TmpGunNum[3],
+					"   UC4 : ",TmpGunNum[4],
+					"   UC5 : ",TmpGunNum[5],
+					"   UC6 : ",TmpGunNum[6],
+				})
 					
 				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 				f_LoadCp()
@@ -281,41 +315,81 @@
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
-	for i = 1, 150 do
-		local rep = i
-		if rep>= 57 then rep = 57 end  
-		Trigger2X(FP, {CD(GST2,i)}, 
-		{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
-		DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-		DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
-		DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
-		DisplayTextX("\x13\x04",4),
-		DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
-		DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
-		DisplayTextX(string.sub(tt,1,i),4),
-		DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
-		DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
-			})
-	end
-	
-	for j = 151, 299 do
-		local i = 299-j+1
-		local rep = i
-		if rep>= 57 then rep = 57 end  
-		Trigger2X(FP, {CD(GST2,j)}, 
-		{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
-		DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-		DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
-		DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
-		DisplayTextX("\x13\x04",4),
-		DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
-		DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
-		DisplayTextX(string.sub(tt,1,i),4),
-		DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
-		DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
-			})
-	end
 
+	
+	if Limit == 1 then
+		for i = 1, 150 do
+			local rep = i
+			if rep>= 57 then rep = 57 end  
+			Trigger2X(FP, {CD(GST2,i)}, 
+			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
+			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
+			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
+			DisplayTextX(string.sub(tt,1,i),4),
+			DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
+				})
+		end
+		
+		for j = 151, 299 do
+			local i = 299-j+1
+			local rep = i
+			if rep>= 57 then rep = 57 end  
+			Trigger2X(FP, {CD(GST2,j)}, 
+			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
+			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
+			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
+			DisplayTextX(string.sub(tt,1,i),4),
+			DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
+				})
+		end
+	
+	else
+		for i = 1, 150 do
+			local rep = i
+			if rep>= 57 then rep = 57 end  
+			Trigger2X(FP, {CD(GST2,i)}, 
+			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
+			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX("\x13\x04",4),
+			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
+			DisplayTextX(string.sub(tt,1,i),4),
+			DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
+				})
+		end
+		
+		for j = 151, 299 do
+			local i = 299-j+1
+			local rep = i
+			if rep>= 57 then rep = 57 end  
+			Trigger2X(FP, {CD(GST2,j)}, 
+			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
+			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX("\x13\x04",4),
+			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
+			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
+			DisplayTextX(string.sub(tt,1,i),4),
+			DisplayTextX(string.sub("\x13\x1ES\x04pecial \x1ET\x04hanks : \x1DSANDELE\x04, And \x07All \x19DJMAX Respect V \x07U\x04sers",1,i),4),
+			DisplayTextX("\x13\x04"..string.rep("―", rep),4)}, HumanPlayers, FP)
+				})
+		end
+	
+	end
 
 	
 
@@ -766,6 +840,9 @@ DoActions(FP,{
 			f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
 			CDoActions(FP, {
 			Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
+			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 3, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 4, SetTo, 0);
 			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
 			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, i*65536);
 			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MCT[p][3]*256);

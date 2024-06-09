@@ -26,6 +26,7 @@ for dir in io.popen(EXTLUA):lines() do
 end
 ------------------------------------------------------------------------------------------------------------------------------
 --PushErrorMsg(string.byte("	"))
+math.randomseed(322,322)
 VerText = "\x04Ver. 0.1"
 EVFPtsMul = 2
 EVFMode = 1
