@@ -988,28 +988,28 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,197))-- testify 전용 비행체 이동속도 중앙비례 일정하게, 공격지점은 중앙
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			local TPosX, TPosY,SRet = CreateVars(3,FP)
+			local TPosX, TPosY,SpeedRet = CreateVars(3,FP)
 			DoActions(FP, Order("Men", Force2, 1, Attack, DefaultAttackLoc+1))
 			CiSub(FP,TPosX,CPosX,G_CA_TempTable[8])
 			CiSub(FP,TPosY,CPosY,G_CA_TempTable[9])
-			f_Sqrt(FP, SRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
+			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
 			CDoActions(FP,{
 				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
-				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
-				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SpeedRet),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SpeedRet,0xFFFF),
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,198))-- testify 전용 비행체 이동속도 중앙비례 일정하게, P9 대기상태
-			local TPosX, TPosY,SRet = CreateVars(3,FP)
+			local TPosX, TPosY,SpeedRet = CreateVars(3,FP)
 			CiSub(FP,TPosX,CPosX,G_CA_TempTable[8])
 			CiSub(FP,TPosY,CPosY,G_CA_TempTable[9])
-			f_Sqrt(FP, SRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
+			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(TPosX),_Square(TPosY)),_Mov(5)))
 			f_CGive(FP, G_CA_Nextptrs, nil, P9, CreatePlayer)
 			CDoActions(FP,{
 				TSetDeathsX(_Add(G_CA_Nextptrs,72),SetTo,0xFF*256,0,0xFF00),
 				TSetMemoryX(_Add(G_CA_Nextptrs,55),SetTo,0x4000000,0x4000000),
 				TSetMemoryX(_Add(G_CA_Nextptrs,8),SetTo,127*65536,0xFF0000),
-				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SRet),
-				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SRet,0xFFFF),
+				TSetMemory(_Add(G_CA_Nextptrs,13),SetTo,SpeedRet),
+				TSetMemoryX(_Add(G_CA_Nextptrs,18),SetTo,SpeedRet,0xFFFF),
 			})
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,2)) -- 버로우 생성(위에서 이미 생성해놨으므로 예외처리만 함)
 			CElseX() -- RepeatType이 잘못 설정되었을경우 에러메세지 표출
