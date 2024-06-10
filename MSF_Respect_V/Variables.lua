@@ -49,6 +49,7 @@
 	SELimit = CreateCcode()
     ExRate = CreateVar2(FP, nil, nil, 20)
 	Nextptrs = CreateVar(FP)
+	NextptrsP = CreateVar(FP)
 	BGMType = CreateVar(FP)
 	TestMode = CreateCcode()
 	BossStart = CreateCcode()

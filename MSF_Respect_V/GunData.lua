@@ -500,7 +500,7 @@ P_8, 7 : 289
 			G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
 			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
 		end
-		CTrigger(FP,{Gun_Line(7,AtLeast,480*(6))},{Gun_DoSuspend(),Order("Men", P6, 64, Patrol, 6)},1)
+		CTrigger(FP,{Gun_Line(7,AtLeast,480*(6))},{Gun_DoSuspend()},1)
 		
 	CIfEnd()
 	--HD

@@ -236,6 +236,17 @@ local SelShbool = CreateVar(FP)
 		Simple_SetLocX(FP,200,EXCC_TempVarArr[12],EXCC_TempVarArr[13],EXCC_TempVarArr[12],EXCC_TempVarArr[13],{Simple_CalcLoc(200,-4,-4,4,4)})
 		CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 201)})
 	CIfEnd()
+	CIf(FP, {Cond_EXCC(5, Exactly, 3)})--타이머 타입 번호(f_CGive 해제 후 기지공격)
+		f_CGive(FP, _Sub(BackupCp,25), _Add(_lShift(_Sub(BackupCp,25),2),0x58A364), P6, PIDV)
+		local NPosX, NPosY = CreateVars(2, FP)
+		GetLocCenter(5, NPosX, NPosY)
+		SpeedRet = CreateVar(FP)
+		f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(_iSub(CPosX,NPosX)),_Square(_iSub(CPosY,NPosY))),_Mov(2)))
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6),TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
+		TSetMemory(_Sub(BackupCp,25-13),SetTo,SpeedRet),
+		TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),})
+	CIfEnd()
 	f_LoadCp()
 
 	
