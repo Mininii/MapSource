@@ -464,6 +464,7 @@ local G_CB_RPTV = CreateVar(FP)
 local G_CB_CTTV = CreateVar(FP)
 local G_CB_CPTV = CreateVar(FP)
 local G_CB_SZTV = CreateVar(FP)
+local G_CB_RTTV = CreateVarArr(4,FP)
 local G_CB_XPos = CreateVar(FP)
 local G_CB_YPos = CreateVar(FP)
 local G_CB_NQOption =CreateVar(FP)
@@ -528,6 +529,11 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,17*(0x20/4)),SetTo,G_CB_DLTV[2]),
 	TSetMemory(_Add(G_CB_LineTemp,18*(0x20/4)),SetTo,G_CB_DLTV[3]),
 	TSetMemory(_Add(G_CB_LineTemp,19*(0x20/4)),SetTo,G_CB_DLTV[4]),
+	TSetMemory(_Add(G_CB_LineTemp,20*(0x20/4)),SetTo,G_CB_RTTV[1]),
+	TSetMemory(_Add(G_CB_LineTemp,21*(0x20/4)),SetTo,G_CB_RTTV[2]),
+	TSetMemory(_Add(G_CB_LineTemp,22*(0x20/4)),SetTo,G_CB_RTTV[3]),
+	TSetMemory(_Add(G_CB_LineTemp,23*(0x20/4)),SetTo,G_CB_RTTV[4]),
+
 })
 CIfX(FP,{CVar(FP,G_CB_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CB_YPos[2],Exactly,0xFFFFFFFF)})
 CDoActions(FP,{
@@ -941,7 +947,7 @@ function G_CBPlot()
 	SetCallEnd2()
 end
 
-function T_to_BiteBuffer(Table)
+function T_to_ByteBuffer(Table)
 	local BiteValue = 0
 	if type(Table) == "table" then
 		local ret = 0
@@ -949,11 +955,8 @@ function T_to_BiteBuffer(Table)
 			PushErrorMsg("BiteStack_is_Over_5")
 		end
 		for i, j in pairs(Table) do
-			if type(j) == "string" and j =="ACAS" then
-				BiteValue = BiteValue + Another_CAPlot_Shape*(256^ret)
-			elseif type(j) == "string" then
+			if type(j) == "string" then
 				BiteValue = BiteValue + ParseUnitNameT[j]*(256^ret)
-				
 			else
 			BiteValue = BiteValue + j*(256^ret)
 			end
@@ -962,6 +965,30 @@ function T_to_BiteBuffer(Table)
 		Table = BiteValue
 	end
 	return BiteValue
+end
+
+function V_to_ByteBuffer(Table)
+	local TempV = CreateVar(FP)
+	if type(Table) == "table" then
+		if #Table >= 5 then
+			PushErrorMsg("BiteStack_is_Over_5")
+		end
+		for i, j in pairs(Table) do
+			if type(j) == "table" and j[4]== "V" then
+				if i~= 1 then
+					CAdd(FP,TempV,_lShift(j, (i-1)*8))
+				else
+					CAdd(FP,TempV,j)
+				end
+				
+			elseif type(j) == "number" then
+				CAdd(FP,TempV,j)
+			else
+				PushErrorMsg("Table_InputData_Error")
+			end
+		end
+	end
+	return TempV
 end
 
 function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_SLTable,G_CB_LMTable,G_CB_RepeatType,G_CB_SizeTable,CenterXY,G_CB_OwnerTable,PreserveFlag,G_CB_NQOpTable)
@@ -1002,48 +1029,34 @@ end
 
 
 function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB_RepeatType,G_CB_Delay,G_CB_SizeTable,G_CB_FNTable,CenterXY,G_CB_OwnerTable,PreserveFlag,G_CB_NQOpTable)
-	if G_CB_SizeTable == nil then G_CB_SizeTable = 100 end
-	if G_CB_NQOpTable == nil then G_CB_NQOpTable = 0 end
-	if G_CB_FNTable == nil then G_CB_FNTable = 0 end
-	if G_CB_RepeatType == nil then G_CB_RepeatType = 0 end
-	if G_CB_Delay == nil then G_CB_Delay = 0 end
+
+	G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,PreserveFlag,{
+		LMTable = G_CB_LMTable,
+		RepeatType = G_CB_RepeatType,
+		Delay = G_CB_Delay,
+		SizeTable = G_CB_SizeTable,
+		FNTable = G_CB_FNTable,
+		OwnerTable = G_CB_OwnerTable,
+		NQOpTable = G_CB_NQOpTable,
+		CenterXY = CenterXY,
+	})
+
+
+end
+
+function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,PreserveFlag,G_CB_Property)
+	--LM == nil then LM = 255
 	if type(G_CB_CUTable) ~= "table" then
 		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
-
-	if type(G_CB_SizeTable) ~= "table" then
-		G_CB_SizeTable = {G_CB_SizeTable,G_CB_SizeTable,G_CB_SizeTable,G_CB_SizeTable}
-	end
-	if type(G_CB_FNTable) ~= "table" then
-		G_CB_FNTable = {G_CB_FNTable,G_CB_FNTable,G_CB_FNTable,G_CB_FNTable}
-	end
-    
-	if type(G_CB_OwnerTable) ~= "table" then
-		G_CB_OwnerTable = {G_CB_OwnerTable,G_CB_OwnerTable,G_CB_OwnerTable,G_CB_OwnerTable}
-	end
-        
-	if type(G_CB_Delay) ~= "table" then
-		G_CB_Delay = {G_CB_Delay,G_CB_Delay,G_CB_Delay,G_CB_Delay}
-	end
-    
+	
 	if type(G_CB_ShapeTable[1]) == "number" then
 		G_CB_ShapeTable = {G_CB_ShapeTable,G_CB_ShapeTable,G_CB_ShapeTable,G_CB_ShapeTable}
 	elseif G_CB_ShapeTable == nil then
 		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
-	if type(G_CB_RepeatType) ~= "table" then
-		G_CB_RepeatType = {G_CB_RepeatType,G_CB_RepeatType,G_CB_RepeatType,G_CB_RepeatType}
-	end
-	if type(G_CB_NQOpTable) ~= "table" then
-		G_CB_NQOpTable = {G_CB_NQOpTable,G_CB_NQOpTable,G_CB_NQOpTable,G_CB_NQOpTable}
-	end
-	for i = 1, 4 do
-		if type(G_CB_RepeatType[i]) == "string" then
-			G_CB_RepeatType[i] = RTypeKey[G_CB_RepeatType[i]]
-		end
-	end
-	
-    
+
+	local TOption = 0
 	local X = {}
 	if type(G_CB_ShapeTable[1]) == "table" then
 		if #G_CB_ShapeTable >= 5 then
@@ -1064,45 +1077,107 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 	else
 		PushErrorMsg("G_CB_SLTable_InputData_Error")
 	end
-	local LMRet = 0
-	if G_CB_LMTable == "MAX" then
-		LMRet = T_to_BiteBuffer({255,255,255,255})
-	elseif type(G_CB_LMTable) == "table" then
-		LMRet = T_to_BiteBuffer(G_CB_LMTable)
-	elseif type(G_CB_LMTable) == "number" then
-		local NumRet = G_CB_LMTable
-		LMRet = T_to_BiteBuffer({NumRet,NumRet,NumRet,NumRet})
-	end
-	local Y = {}
-	if CenterXY == nil then 
-		table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF))
-		table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF))
-	elseif type(CenterXY) == "table" then
-		table.insert(Y,SetCVar(FP,G_CB_XPos[2],SetTo,CenterXY[1]))
-		table.insert(Y,SetCVar(FP,G_CB_YPos[2],SetTo,CenterXY[2]))
-	else
-		PushErrorMsg("G_CB_SetSpawn_CenterXY_Inputdata_Error")
-	end
-	CallTriggerX(FP,Write_SpawnSet,Condition,{
-		SetCVar(FP,G_CB_CUTV[2],SetTo,T_to_BiteBuffer(G_CB_CUTable)),X,
-		SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_ShapeTable[1]),
-		SetCVar(FP,G_CB_SNTV[2][2],SetTo,G_CB_ShapeTable[2]),
-		SetCVar(FP,G_CB_SNTV[3][2],SetTo,G_CB_ShapeTable[3]),
-		SetCVar(FP,G_CB_SNTV[4][2],SetTo,G_CB_ShapeTable[4]),
-		SetCVar(FP,G_CB_DLTV[1][2],SetTo,G_CB_Delay[1]),
-		SetCVar(FP,G_CB_DLTV[2][2],SetTo,G_CB_Delay[2]),
-		SetCVar(FP,G_CB_DLTV[3][2],SetTo,G_CB_Delay[3]),
-		SetCVar(FP,G_CB_DLTV[4][2],SetTo,G_CB_Delay[4]),
-		SetCVar(FP,G_CB_LMTV[2],SetTo,LMRet),
-		SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_BiteBuffer(G_CB_RepeatType)),
-		SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_BiteBuffer(G_CB_SizeTable)),Y,
-		SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_BiteBuffer(G_CB_OwnerTable)),
-		SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_BiteBuffer(G_CB_FNTable)),
-        
-		SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_BiteBuffer(G_CB_NQOpTable))
-	},PreserveFlag)
-end
 
+
+
+	local G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,0)}
+	local G_CB_Delay = {
+		SetCVar(FP,G_CB_DLTV[1][2],SetTo,0),
+		SetCVar(FP,G_CB_DLTV[2][2],SetTo,0),
+		SetCVar(FP,G_CB_DLTV[3][2],SetTo,0),
+		SetCVar(FP,G_CB_DLTV[4][2],SetTo,0),
+	}
+	local G_CB_Rotate = {
+		SetCVar(FP,G_CB_RTTV[1][2],SetTo,0),
+		SetCVar(FP,G_CB_RTTV[2][2],SetTo,0),
+		SetCVar(FP,G_CB_RTTV[3][2],SetTo,0),
+		SetCVar(FP,G_CB_RTTV[4][2],SetTo,0),
+	}
+	local G_CB_SizeTable = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer({100,100,100,100}))}
+	local G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
+	local G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
+	local G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
+	local CenterXY = {SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF),SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF)}
+	local G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer({FP,FP,FP,FP}))}
+	for j,k in pairs(G_CB_Property) do
+		if j == "LMTable" then
+			if k == "MAX" then
+				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,-1)}
+			elseif type(k) == "table" then
+				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		elseif j == "Delay" then
+			if type(k) == "table" then
+				for o, p in pairs(k) do
+					G_CB_Delay[o] = SetCVar(FP,G_CB_DLTV[o][2],SetTo,p)
+				end
+			elseif type(k) == "number" then
+				G_CB_Delay = {
+					SetCVar(FP,G_CB_DLTV[1][2],SetTo,k),
+					SetCVar(FP,G_CB_DLTV[2][2],SetTo,k),
+					SetCVar(FP,G_CB_DLTV[3][2],SetTo,k),
+					SetCVar(FP,G_CB_DLTV[4][2],SetTo,k),
+				}
+			end
+		elseif j == "SizeTable" then
+			if type(k) == "table" then
+				G_CB_Delay = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_Delay = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		elseif j == "FNTable" then
+			if type(k) == "table" then
+				G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		elseif j == "NQOpTable" then
+			if type(k) == "table" then
+				G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		elseif j == "RepeatType" then
+			if type(k) == "table" then
+				G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		elseif j == "RotateTable" then
+			if type(k) == "table" then
+				for o, p in pairs(k) do
+					G_CB_Rotate[o] = SetCVar(FP,G_CB_RTTV[o][2],SetTo,p)
+				end
+			elseif type(k) == "number" then
+				G_CB_Rotate = {
+					SetCVar(FP,G_CB_RTTV[1][2],SetTo,k),
+					SetCVar(FP,G_CB_RTTV[2][2],SetTo,k),
+					SetCVar(FP,G_CB_RTTV[3][2],SetTo,k),
+					SetCVar(FP,G_CB_RTTV[4][2],SetTo,k),
+				}
+			end
+		elseif j == "CenterXY" then
+				CenterXY = {SetCVar(FP,G_CB_XPos[2],SetTo,k[1]),SetCVar(FP,G_CB_YPos[2],SetTo,k[2])}
+		elseif j == "OwnerTable" then
+			if type(k) == "table" then
+				G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer(k))}
+			elseif type(k) == "number" then
+				G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			end
+		end
+	end
+	if TOption == 0 then
+	else
+		CallTriggerX(FP,Write_SpawnSet,Condition,{SetCVar(FP,G_CB_CUTV[2],SetTo,T_to_ByteBuffer(G_CB_CUTable)),
+			SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_ShapeTable[1]),
+			SetCVar(FP,G_CB_SNTV[2][2],SetTo,G_CB_ShapeTable[2]),
+			SetCVar(FP,G_CB_SNTV[3][2],SetTo,G_CB_ShapeTable[3]),
+			SetCVar(FP,G_CB_SNTV[4][2],SetTo,G_CB_ShapeTable[4]),
+			G_CB_LMTable,G_CB_Delay,G_CB_SizeTable,G_CB_FNTable,G_CB_NQOpTable,G_CB_RepeatType,CenterXY,G_CB_OwnerTable,G_CB_Rotate},PreserveFlag)
+	end
+end
 
 
 --[[
@@ -1160,14 +1235,9 @@ SetCall(FP)
             TSetMemoryX(Vi(G_CB_TempH[2],9*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,0,0xFF),
-            TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[14]),
-            TSetMemory(Vi(G_CB_TempH[2],13*(0x20/4)),SetTo,G_CB_TempTable[15]),
-            TSetMemory(Vi(G_CB_TempH[2],14*(0x20/4)),SetTo,G_CB_TempTable[16]),
             TSetMemory(Vi(G_CB_TempH[2],15*(0x20/4)),SetTo,0),
-            TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,G_CB_TempTable[18]),
-            TSetMemory(Vi(G_CB_TempH[2],17*(0x20/4)),SetTo,G_CB_TempTable[19]),
-            TSetMemory(Vi(G_CB_TempH[2],18*(0x20/4)),SetTo,G_CB_TempTable[20]),
             TSetMemory(Vi(G_CB_TempH[2],19*(0x20/4)),SetTo,0),
+            TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,0),
         })
         CIf(FP,{TMemory(Vi(G_CB_TempH[2],0*(0x20/4)), Exactly, 0)})--G_CBPlot 데이터에 유닛아이디가 존재하지 않을경우 배열을 전부 초기화한다.
         local TActArr = {}
@@ -1224,14 +1294,9 @@ SetCall(FP)
                 TSetMemoryX(Vi(G_CB_TempH[2],9*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,0,0xFF),
-                TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[14]),
-                TSetMemory(Vi(G_CB_TempH[2],13*(0x20/4)),SetTo,G_CB_TempTable[15]),
-                TSetMemory(Vi(G_CB_TempH[2],14*(0x20/4)),SetTo,G_CB_TempTable[16]),
                 TSetMemory(Vi(G_CB_TempH[2],15*(0x20/4)),SetTo,0),
-                TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,G_CB_TempTable[18]),
-                TSetMemory(Vi(G_CB_TempH[2],17*(0x20/4)),SetTo,G_CB_TempTable[19]),
-                TSetMemory(Vi(G_CB_TempH[2],18*(0x20/4)),SetTo,G_CB_TempTable[20]),
                 TSetMemory(Vi(G_CB_TempH[2],19*(0x20/4)),SetTo,0),
+				TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,0),
             })
             CIf(FP,{TMemory(Vi(G_CB_TempH[2],0*(0x20/4)), Exactly, 0)})--G_CBPlot 데이터에 유닛아이디가 존재하지 않을경우 배열을 전부 초기화한다.
             local TActArr = {}
@@ -1261,6 +1326,15 @@ SetCall(FP)
         TSetMemory(Vi(G_CB_TempH[2],9*(0x20/4)),SetTo,_rShift(G_CB_TempTable[10],8)),
         TSetMemory(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,_rShift(G_CB_TempTable[11],8)),
         TSetMemory(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,_rShift(G_CB_TempTable[12],8)),
+		TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[14]),
+		TSetMemory(Vi(G_CB_TempH[2],13*(0x20/4)),SetTo,G_CB_TempTable[15]),
+		TSetMemory(Vi(G_CB_TempH[2],14*(0x20/4)),SetTo,G_CB_TempTable[16]),
+		TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,G_CB_TempTable[18]),
+		TSetMemory(Vi(G_CB_TempH[2],17*(0x20/4)),SetTo,G_CB_TempTable[19]),
+		TSetMemory(Vi(G_CB_TempH[2],18*(0x20/4)),SetTo,G_CB_TempTable[20]),
+		TSetMemory(Vi(G_CB_TempH[2],21*(0x20/4)),SetTo,G_CB_TempTable[23]),
+		TSetMemory(Vi(G_CB_TempH[2],22*(0x20/4)),SetTo,G_CB_TempTable[24]),
+		TSetMemory(Vi(G_CB_TempH[2],23*(0x20/4)),SetTo,G_CB_TempTable[25]),
     })
     CIfXEnd()
     DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CB_Launch)})

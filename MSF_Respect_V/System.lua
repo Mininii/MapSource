@@ -14,6 +14,7 @@
 	Str3, Str3a, Str3s = SaveiStrArrX(FP,t03)
 	t04 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚"--일반
 	t05 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つXㅅ<)つ \x1C。\x0F+\x18.\x07˚"--디텍터
+	t06 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ3ㅅ3)つ \x1C。\x0F+\x18.\x07˚"--패로사이트
 	--iTbl7 = GetiTblId(FP,1319,S1) --DMG
 	--iTbl8 = GetiTblId(FP,831,S1) --DMG
 	--Str4, Str4a, Str4s = SaveiStrArrX(FP,t04)
@@ -29,6 +30,7 @@
 		{426,T426},
 		{1365,T1365},
 		{1414,T1414},
+		{827,t06},
 	}
 
 	
@@ -245,7 +247,8 @@ local SelShbool = CreateVar(FP)
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 		CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6),TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
 		TSetMemory(_Sub(BackupCp,25-13),SetTo,SpeedRet),
-		TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),})
+		TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),
+		TSetMemoryX(_Add(RPtr,72-25),SetTo,0*256,0xFF00),})
 	CIfEnd()
 	f_LoadCp()
 

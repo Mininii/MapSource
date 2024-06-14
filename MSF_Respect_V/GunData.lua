@@ -316,7 +316,6 @@ P_8, 7 : 289
 		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,1)}, CUTable1, "ACAS", ShapeHD, 0, 0, nil, nil, P7)
 		G_CB_SetSpawn({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, CUTable1, "ACAS", ShapeSC, 0, 0, nil, nil, P7)
 		G_CB_SetSpawn({Gun_Line(5,Exactly,0)}, {55,53,54,46}, ZunitSh1,ZunitShLV1, 0, 0, nil, nil, P8)
-	
 		G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,1)}, CUTable2, "ACAS", ShapeHD, 0, 0, nil, nil, P7)
 		G_CB_SetSpawn({Gun_Line(6,AtLeast,1),CD(GMode,2,AtLeast)}, CUTable2, "ACAS", ShapeSC, 0, 0, nil, nil, P7)
 		G_CB_SetSpawn({Gun_Line(6,AtLeast,1)}, {56,104,51,48}, ZunitSh2,ZunitShLV2, 0, 0, nil, nil, P8)
@@ -404,10 +403,10 @@ P_8, 7 : 289
 	CenT2={88,21,86,84,98,58}
 	for j,k in pairs(CenT2) do
 		CIf(FP,GNm(j))
-		G_CB_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM1"}, 1, 130, nil, {0,0}, P6,1)
-		G_CB_SetSpawn({CD(GMode,1)}, {k}, {"ACAS"}, {"CenNM2"}, 1, 130, nil, {0,0}, P6,1)
-		G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen1"}, 1, 130, nil, {0,0}, P6,1)
-		G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, {"ACAS"}, {"Cen2"}, 1, 130, nil, {0,0}, P6,1)
+		G_CB_TSetSpawn({CD(GMode,1)},{k},{CenNM1},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
+		G_CB_TSetSpawn({CD(GMode,1)},{k},{CenNM2},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
+		G_CB_TSetSpawn({CD(GMode,2,AtLeast)},{k},{Cen1},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
+		G_CB_TSetSpawn({CD(GMode,2,AtLeast)},{k},{Cen2},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
 		CIfEnd()
 		
 	end
@@ -700,16 +699,27 @@ P_8, 7 : 289
 	
 
 	CIf_GCase(127)
-	CTrigger(FP,{Gun_Line(12, Exactly, 0)},{Gun_SetLine(11,Add,6)},{preserved})
-	CTrigger(FP,{Gun_Line(12, Exactly, 1)},{Gun_SetLine(11,Subtract,6)},{preserved})
-	CTrigger(FP,{Gun_Line(11, AtLeast, 500)},{Gun_SetLine(12,SetTo,1)},{preserved})
-	CTrigger(FP,{Gun_Line(11, Exactly, 0)},{Gun_SetLine(12,SetTo,0)},{preserved})
+
+
+	
+	CTrigger(FP,{Gun_Line(5,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,1830)},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(22,Add,1)},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(22,Subtract,1)},1)
+	CTrigger(FP,{Gun_Line(22,Exactly,0),Gun_Line(50,Exactly,1)},{Gun_SetLine(3,Add,1),Gun_SetLine(50,SetTo,0)},1)
+	CTrigger(FP,{Gun_Line(22,AtLeast,60),Gun_Line(50,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,0)},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(51,Add,Var_TempTable[12])},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(51,Subtract,Var_TempTable[12])},1)
+	CDoActions(FP,{Gun_SetLine(52,Add,3)}) -- 
+	CTrigger(FP,{Gun_Line(52,AtLeast,72)},{Gun_SetLine(52,SetTo,0)},1)
+
+
 	CTrigger(FP,{},{Gun_SetLine(13,Add,3)},{preserved})
 	local NPosX, NPosY = CreateVars(2, FP)
 	
 	CFor(FP, 0, 360, 72)
 	local CI = CForVariable()
 	f_Lengthdir(FP, Var_TempTable[12], _Add(CI,Var_TempTable[14]), NPosX, NPosY)
+	f_Div(FP,NPosY,2)
 	Simple_SetLocX(FP,200, _Add(NPosX,Var_TempTable[2]), _Add(NPosY,Var_TempTable[3]), _Add(NPosX,Var_TempTable[2]), _Add(NPosY,Var_TempTable[3]))
 	CDoActions(FP, {CreateUnit(1, 94, 201, P6),KillUnit(94, P6)})
 	CForEnd()
@@ -731,28 +741,6 @@ P_8, 7 : 289
 	CTrigger(FP,{Gun_Line(6,AtLeast,4)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	
-	
-
-	
-	
-
-	
-	
-
-	
-	
-	
-
-	
-	
-
-	
-	
-	
-
-	
-	
-
 
 	--1024,1088
 	--LauncherShHD
