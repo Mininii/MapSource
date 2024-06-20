@@ -44,7 +44,7 @@ G_CB_X = CreateVar(FP)
 G_CB_Y = CreateVar(FP)
 G_CB_Shapes = {}
 G_CB_ShapeIndexAlloc = 1
-
+G_CB_RotateV = CreateVar(FP)
 Call_RepeatOption = SetCallForward()
 SetCall(FP)
 RBX = CreateVar(FP)
@@ -134,6 +134,11 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				CDoActions(FP,{
 					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
 				})
+			CElseIfX_AddRepeatType(188,"JYD_HP10")
+			CDoActions(FP,{
+				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),10)),
+			})
 			CElseIfX_AddRepeatType_LR(200,203,{"Gene1","Gene2","Gene3","EnemyStorm"})
 			local NPosX, NPosY = CreateVars(2, FP)
 			local SpeedRet = CreateVar(FP)
@@ -241,7 +246,10 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, RBX);
 				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, RBY);
 			})
-
+			CElseIfX_AddRepeatType(217,"Walls")
+			CDoActions(FP, {
+				Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 1);
+			})
 			CElseIfX(CVar(FP,RType[2],Exactly,2))
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
@@ -382,6 +390,11 @@ CWhileEnd()
 CMov(FP,RepeatType,0)
 SetCallEnd()
 function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
+	
+	if type(UnitID) == "string" then
+		UnitID = ParseUnitNameT[UnitID]
+	end
+
 	if Owner == nil then Owner = 0xFFFFFFFF end
 	if NQOp == nil then NQOp = 0 end
 	if Type == nil then Type = 0 end
@@ -461,7 +474,6 @@ local G_CB_DLTV = CreateVarArr(4,FP)
 local G_CB_FNTV = CreateVar(FP)
 local G_CB_LMTV = CreateVar(FP)
 local G_CB_RPTV = CreateVar(FP)
-local G_CB_CTTV = CreateVar(FP)
 local G_CB_CPTV = CreateVar(FP)
 local G_CB_SZTV = CreateVar(FP)
 local G_CB_RTTV = CreateVarArr(4,FP)
@@ -510,6 +522,29 @@ CJumpEnd(FP,Write_SpawnSet_Jump)
 
 CAdd(FP,G_CB_LineTemp,G_CB_LineV,G_CB_InputH)
 NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
+
+--[[
+	Line 0 = UnitID 1Byte
+	Line 1 = PrefuncID 1Byte
+	Line 2 = CBPlot Index 4Byte
+	Line 3 = Current Delay Time 4Byte
+	Line 4 = Loop Limit 1Byte
+	Line 5 = RepeatType 1Byte
+	Line 6 = ??? 
+	Line 9 = CreatePlayer 1Byte
+	Line 10 = ShapeSize 1Byte (100=100%)
+	Line 11 = Use Queue Option 1Byte
+	Line 12 SelectShapeNumber1 4Byte
+	Line 13 SelectShapeNumber2 4Byte
+	Line 14 SelectShapeNumber3 4Byte
+	Line 15 SelectShapeNumber4 4Byte
+	Line 16 Set Delay Timer 1 4Byte
+	Line 17 Set Delay Timer 2 4Byte
+	Line 18 Set Delay Timer 3 4Byte
+	Line 19 Set Delay Timer 4 4Byte
+]]
+
+
 CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,0*(0x20/4)),SetTo,G_CB_CUTV),
 	TSetMemory(_Add(G_CB_LineTemp,1*(0x20/4)),SetTo,G_CB_FNTV),
@@ -517,7 +552,7 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,3*(0x20/4)),SetTo,0),--현재딜레이
 	TSetMemory(_Add(G_CB_LineTemp,4*(0x20/4)),SetTo,G_CB_LMTV),
 	TSetMemory(_Add(G_CB_LineTemp,5*(0x20/4)),SetTo,G_CB_RPTV),
-	TSetMemory(_Add(G_CB_LineTemp,6*(0x20/4)),SetTo,G_CB_CTTV),
+	TSetMemory(_Add(G_CB_LineTemp,6*(0x20/4)),SetTo,0),
 	TSetMemory(_Add(G_CB_LineTemp,9*(0x20/4)),SetTo,G_CB_CPTV),
 	TSetMemory(_Add(G_CB_LineTemp,10*(0x20/4)),SetTo,G_CB_SZTV),
 	TSetMemory(_Add(G_CB_LineTemp,11*(0x20/4)),SetTo,G_CB_NQOption),
@@ -594,6 +629,14 @@ function CA_Func1()
 	CIf(FP,{TTCVar(FP,G_CB_TempTable[11][2],NotSame,100,0xFF)})
 		CMov(FP, SizeTemp, G_CB_TempTable[11], nil, 0xFF, 1)
 		CA_RatioXY(SizeTemp, 100, SizeTemp, 100)
+	CIfEnd()
+
+	CIf(FP,{CV(G_CB_TempTable[21],1,AtLeast)})
+		CIfX(FP,{CV(G_CB_TempTable[21],0xFFFFFFFF)})
+			CA_Rotate(G_CB_RotateV)
+		CElseX()
+			CA_Rotate(G_CB_TempTable[21])
+		CIfXEnd()
 	CIfEnd()
 	local CX = CreateVar(FP)
 	local CY = CreateVar(FP)
@@ -786,7 +829,7 @@ function CB_RandSort()
 	RandRet = f_CRandNum(5)
 	CMov(FP,FncRand,RandRet)
 	if TestStart == 1 then
-		DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
+		--DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
 	end
 	CB_Sort(CFunc1, DirRand, STSize+2, EndRetShape)
 	CurShNum = CreateVar(FP)
@@ -930,10 +973,34 @@ function G_CBPlot()
 
 	local CA = CAPlotForward()
 	SetCall2(FP,Call_G_CBPlot)
+	CTrigger(FP, {CV(G_CB_TempTable[17],0)}, {SetV(G_CB_TempTable[4],0),SetV(V(CA[3]),0)},1)
 	CMov(FP,CA_TempUID,G_CB_TempTable[1],nil,0xFF) -- UnitID
 	CMov(FP,V(CA[1]),G_CB_TempTable[13],nil,0xFF) -- ShapeIndex
-	CMov(FP,V(CA[2]),G_CB_TempTable[4]) -- CurDelayTimer
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
+	CMov(FP,V(CA[2]),G_CB_TempTable[4]) -- CurDelayTimer
+	--DisplayPrint(HumanPlayers, {
+	--	"   G_CB_TempTable[1] : ",G_CB_TempTable[1],--Line 0 = UnitID 1Byte
+	--	"   G_CB_TempTable[2] : ",G_CB_TempTable[2],--Line 1 = PrefuncID 1Byte
+	--	"   G_CB_TempTable[3] : ",G_CB_TempTable[3],--Line 2 = CBPlot Index 4Byte
+	--	"   G_CB_TempTable[4] : ",G_CB_TempTable[4],--Line 3 = Current Delay Time 4Byte
+	--	"   G_CB_TempTable[5] : ",G_CB_TempTable[5],--Line 4 = Loop Limit 1Byte
+	--	"   G_CB_TempTable[6] : ",G_CB_TempTable[6],--Line 5 = RepeatType 1Byte
+	--	"   G_CB_TempTable[7] : ",G_CB_TempTable[7],--Line 6 = ??? 
+	--	"   G_CB_TempTable[8] : ",G_CB_TempTable[8],--.
+	--	"   G_CB_TempTable[9] : ",G_CB_TempTable[9],--.
+	--	"   G_CB_TempTable[10] : ",G_CB_TempTable[10],--Line 9 = CreatePlayer 1Byte
+	--	"   G_CB_TempTable[11] : ",G_CB_TempTable[11],--Line 10 = ShapeSize 1Byte (100=100%)
+	--	"   G_CB_TempTable[12] : ",G_CB_TempTable[12],--Line 11 = Use Queue Option 1Byte
+	--	"   G_CB_TempTable[13] : ",G_CB_TempTable[13],--Line 12 SelectShapeNumber1 4Byte
+	--	"   G_CB_TempTable[14] : ",G_CB_TempTable[14],--Line 13 SelectShapeNumber2 4Byte
+	--	"   G_CB_TempTable[15] : ",G_CB_TempTable[15],--Line 14 SelectShapeNumber3 4Byte
+	--	"   G_CB_TempTable[16] : ",G_CB_TempTable[16],--Line 15 SelectShapeNumber4 4Byte
+	--	"   G_CB_TempTable[17] : ",G_CB_TempTable[17],--Line 16 Set Delay Timer 1 4Byte
+	--	"   G_CB_TempTable[18] : ",G_CB_TempTable[18],--Line 17 Set Delay Timer 2 4Byte
+	--	"   G_CB_TempTable[19] : ",G_CB_TempTable[19],--Line 18 Set Delay Timer 3 4Byte
+	--	"   G_CB_TempTable[20] : ",G_CB_TempTable[20],--Line 19 Set Delay Timer 4 4Byte
+	--})
+
 	CMov(FP,V(CA[6]),G_CB_TempTable[3]) -- CBPlot Index
     CMov(FP,NQOption,G_CB_TempTable[12],nil,0xFF,1) -- QueueOption
 	CMov(FP,V(CA[5]),G_CB_TempTable[5],nil,0xFF,1)
@@ -941,6 +1008,35 @@ function G_CBPlot()
 	CMov(FP,G_CB_BackupY,G_CB_TempTable[9])
     CBPlot(Z, nil, FP,nilunit, 0, {G_CB_TempTable[8],G_CB_TempTable[9]}, 1,32,{0,0,0,0,0,1}, "CA_Func1", "G_CB_Prefunc", FP, nil,nil,{SetCDeaths(FP,Add,1,CA_Suspend)})
     CTrigger(FP, {TTNVar(V(CA[2]), NotSame, G_CB_TempTable[4])}, {SetCDeaths(FP,SetTo,1,G_CB_Launch)},{preserved})
+	if TestStart == 1 then
+		--CIf(FP,{CD(CA_Suspend,1)})
+		
+		--DisplayPrint(HumanPlayers, {
+		--	"   G_CB_TempTable[1] : ",G_CB_TempTable[1],--Line 0 = UnitID 1Byte
+		--	"   G_CB_TempTable[2] : ",G_CB_TempTable[2],--Line 1 = PrefuncID 1Byte
+		--	"   G_CB_TempTable[3] : ",G_CB_TempTable[3],--Line 2 = CBPlot Index 4Byte
+		--	"   G_CB_TempTable[4] : ",G_CB_TempTable[4],--Line 3 = Current Delay Time 4Byte
+		--	"   G_CB_TempTable[5] : ",G_CB_TempTable[5],--Line 4 = Loop Limit 1Byte
+		--	"   G_CB_TempTable[6] : ",G_CB_TempTable[6],--Line 5 = RepeatType 1Byte
+		--	"   G_CB_TempTable[7] : ",G_CB_TempTable[7],--Line 6 = ??? 
+		--	"   G_CB_TempTable[8] : ",G_CB_TempTable[8],--.
+		--	"   G_CB_TempTable[9] : ",G_CB_TempTable[9],--.
+		--	"   G_CB_TempTable[10] : ",G_CB_TempTable[10],--Line 9 = CreatePlayer 1Byte
+		--	"   G_CB_TempTable[11] : ",G_CB_TempTable[11],--Line 10 = ShapeSize 1Byte (100=100%)
+		--	"   G_CB_TempTable[12] : ",G_CB_TempTable[12],--Line 11 = Use Queue Option 1Byte
+		--	"   G_CB_TempTable[13] : ",G_CB_TempTable[13],--Line 12 SelectShapeNumber1 4Byte
+		--	"   G_CB_TempTable[14] : ",G_CB_TempTable[14],--Line 13 SelectShapeNumber2 4Byte
+		--	"   G_CB_TempTable[15] : ",G_CB_TempTable[15],--Line 14 SelectShapeNumber3 4Byte
+		--	"   G_CB_TempTable[16] : ",G_CB_TempTable[16],--Line 15 SelectShapeNumber4 4Byte
+		--	"   G_CB_TempTable[17] : ",G_CB_TempTable[17],--Line 16 Set Delay Timer 1 4Byte
+		--	"   G_CB_TempTable[18] : ",G_CB_TempTable[18],--Line 17 Set Delay Timer 2 4Byte
+		--	"   G_CB_TempTable[19] : ",G_CB_TempTable[19],--Line 18 Set Delay Timer 3 4Byte
+		--	"   G_CB_TempTable[20] : ",G_CB_TempTable[20],--Line 19 Set Delay Timer 4 4Byte
+		--})
+
+			--DisplayPrint(HumanPlayers, {"CA[6] : ",V(CA[6])})
+		--CIfEnd()
+	end
 	CDoActions(FP,{TSetCVar(FP,G_CB_TempTable[3][2],SetTo,V(CA[6])),TSetCVar(FP,G_CB_TempTable[4][2],SetTo,V(CA[2]))})
 
     
@@ -948,48 +1044,66 @@ function G_CBPlot()
 end
 
 function T_to_ByteBuffer(Table)
-	local BiteValue = 0
-	if type(Table) == "table" then
-		local ret = 0
-		if #Table >= 5 then
-			PushErrorMsg("BiteStack_is_Over_5")
-		end
-		for i, j in pairs(Table) do
-			if type(j) == "string" then
-				BiteValue = BiteValue + ParseUnitNameT[j]*(256^ret)
-			else
-			BiteValue = BiteValue + j*(256^ret)
-			end
-			ret = ret + 1
-		end
-		Table = BiteValue
-	end
-	return BiteValue
-end
-
-function V_to_ByteBuffer(Table)
-	local TempV = CreateVar(FP)
-	if type(Table) == "table" then
-		if #Table >= 5 then
-			PushErrorMsg("BiteStack_is_Over_5")
-		end
-		for i, j in pairs(Table) do
-			if type(j) == "table" and j[4]== "V" then
-				if i~= 1 then
-					CAdd(FP,TempV,_lShift(j, (i-1)*8))
-				else
-					CAdd(FP,TempV,j)
-				end
-				
-			elseif type(j) == "number" then
-				CAdd(FP,TempV,j)
+	local VMode = 0
+	for j,k in pairs(Table) do
+		if type(k) == "table" then--V가 한개라도 있을경우 VMode On
+			if k[4] == "V" then
+				VMode = 1
+				G_CBPlotTOption = 1
 			else
 				PushErrorMsg("Table_InputData_Error")
 			end
 		end
 	end
-	return TempV
+	if VMode == 0 then
+		local ByteValue = 0
+		if type(Table) == "table" then
+			local ret = 0
+			if #Table >= 5 then
+				PushErrorMsg("BiteStack_is_Over_5")
+			end
+			for i, j in pairs(Table) do
+				if type(j) == "string" then
+					ByteValue = ByteValue + ParseUnitNameT[j]*(256^ret)
+				else
+				ByteValue = ByteValue + j*(256^ret)
+				end
+				ret = ret + 1
+			end
+			Table = ByteValue
+		end
+		return ByteValue
+	else
+		local ByteValue = 0
+		local TempV = CreateVar(FP)
+		if type(Table) == "table" then
+			local ret = 0
+			if #Table >= 5 then
+				PushErrorMsg("BiteStack_is_Over_5")
+			end
+			for i, j in pairs(Table) do
+				if type(j) == "table" and j[4]== "V" then
+					if i~= 1 then
+						CAdd(FP,TempV,_lShift(j, (i-1)*8))
+					else
+						ByteValue = ByteValue + j*(256^ret)
+					end
+					
+				elseif type(j) == "number" then
+					ByteValue = ByteValue + j*(256^ret)
+				else
+					PushErrorMsg("Table_InputData_Error")
+				end
+				ret = ret + 1
+			end
+		end
+		if ByteValue >= 1 then
+			CAdd(FP,TempV,ByteValue)
+		end
+		return TempV
+	end
 end
+
 
 function G_CB_SetSpawn(Condition,G_CB_CUTable,G_CB_SNTable,G_CB_SLTable,G_CB_LMTable,G_CB_RepeatType,G_CB_SizeTable,CenterXY,G_CB_OwnerTable,PreserveFlag,G_CB_NQOpTable)
     local G_CB_ShapeTable = {}
@@ -1056,7 +1170,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,PreserveFlag,G_CB
 		PushErrorMsg("G_CB_SetSpawn_Inputdata_Error")
 	end
 
-	local TOption = 0
+	G_CBPlotTOption = 0
 	local X = {}
 	if type(G_CB_ShapeTable[1]) == "table" then
 		if #G_CB_ShapeTable >= 5 then
@@ -1070,6 +1184,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,PreserveFlag,G_CB
                     G_CB_ShapeIndexAlloc = G_CB_ShapeIndexAlloc + 1
                 end
                 G_CB_ShapeTable[i] = G_CB_Shapes[G_CB_ShapeTable[i]][2]
+				
             else
                 G_CB_ShapeTable[i] = 0
             end
@@ -1080,106 +1195,179 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,PreserveFlag,G_CB
 
 
 
-	local G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,0)}
+	local G_CB_LMTable = {{G_CB_LMTV,0}}
 	local G_CB_Delay = {
-		SetCVar(FP,G_CB_DLTV[1][2],SetTo,0),
-		SetCVar(FP,G_CB_DLTV[2][2],SetTo,0),
-		SetCVar(FP,G_CB_DLTV[3][2],SetTo,0),
-		SetCVar(FP,G_CB_DLTV[4][2],SetTo,0),
+		{G_CB_DLTV[1],0},
+		{G_CB_DLTV[2],0},
+		{G_CB_DLTV[3],0},
+		{G_CB_DLTV[4],0},
 	}
 	local G_CB_Rotate = {
-		SetCVar(FP,G_CB_RTTV[1][2],SetTo,0),
-		SetCVar(FP,G_CB_RTTV[2][2],SetTo,0),
-		SetCVar(FP,G_CB_RTTV[3][2],SetTo,0),
-		SetCVar(FP,G_CB_RTTV[4][2],SetTo,0),
+		{G_CB_RTTV[1],0},
+		{G_CB_RTTV[2],0},
+		{G_CB_RTTV[3],0},
+		{G_CB_RTTV[4],0},
 	}
-	local G_CB_SizeTable = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer({100,100,100,100}))}
-	local G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
-	local G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
-	local G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer({0,0,0,0}))}
-	local CenterXY = {SetCVar(FP,G_CB_XPos[2],SetTo,0xFFFFFFFF),SetCVar(FP,G_CB_YPos[2],SetTo,0xFFFFFFFF)}
-	local G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer({FP,FP,FP,FP}))}
+	local G_CB_SizeTable = {{G_CB_SZTV,T_to_ByteBuffer({100,100,100,100})}}
+	local G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer({0,0,0,0})}}
+	local G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer({0,0,0,0})}}
+	local G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({0,0,0,0})}}
+	local CenterXY = {{G_CB_XPos,0xFFFFFFFF},{G_CB_YPos,0xFFFFFFFF}}
+	local G_CB_OwnerTable = {{G_CB_CPTV,T_to_ByteBuffer({FP,FP,FP,FP})}}
 	for j,k in pairs(G_CB_Property) do
 		if j == "LMTable" then
 			if k == "MAX" then
-				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,-1)}
-			elseif type(k) == "table" then
-				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_LMTable = {SetCVar(FP,G_CB_LMTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+				G_CB_LMTable = {{G_CB_LMTV,-1}}
+			elseif type(k) == "table" and k[4]~="V" then
+				G_CB_LMTable = {{G_CB_LMTV,T_to_ByteBuffer(k)}}
+			else
+				G_CB_LMTable = {{G_CB_LMTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		elseif j == "Delay" then
-			if type(k) == "table" then
+			--_G[k]()
+			if type(k) == "table" and k[4]~="V" then
 				for o, p in pairs(k) do
-					G_CB_Delay[o] = SetCVar(FP,G_CB_DLTV[o][2],SetTo,p)
+					G_CB_Delay[o] = {G_CB_DLTV[o],p}
 				end
-			elseif type(k) == "number" then
+			else
 				G_CB_Delay = {
-					SetCVar(FP,G_CB_DLTV[1][2],SetTo,k),
-					SetCVar(FP,G_CB_DLTV[2][2],SetTo,k),
-					SetCVar(FP,G_CB_DLTV[3][2],SetTo,k),
-					SetCVar(FP,G_CB_DLTV[4][2],SetTo,k),
+					{G_CB_DLTV[1],k},
+					{G_CB_DLTV[2],k},
+					{G_CB_DLTV[3],k},
+					{G_CB_DLTV[4],k},
 				}
 			end
+
+
+
+			
 		elseif j == "SizeTable" then
-			if type(k) == "table" then
-				G_CB_Delay = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_Delay = {SetCVar(FP,G_CB_SZTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			if type(k) == "table" and k[4]~="V" then
+				G_CB_SizeTable = {{G_CB_SZTV,T_to_ByteBuffer(k)}}
+			else
+				G_CB_SizeTable = {{G_CB_SZTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		elseif j == "FNTable" then
-			if type(k) == "table" then
-				G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_FNTable = {SetCVar(FP,G_CB_FNTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			if type(k) == "table" and k[4]~="V" then
+				G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer(k)}}
+			else
+				G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		elseif j == "NQOpTable" then
-			if type(k) == "table" then
-				G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_NQOpTable = {SetCVar(FP,G_CB_NQOption[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			if type(k) == "table" and k[4]~="V" then
+				G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer(k)}}
+			else
+				G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		elseif j == "RepeatType" then
-			if type(k) == "table" then
-				G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_RepeatType = {SetCVar(FP,G_CB_RPTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+
+			if type(k) == "table" and k[4]~="V" then
+				local RT = {}
+				for o,p in pairs(k) do
+					local retP
+					if type(p) == "string" then
+						retP = RTypeKey[p]
+					else
+						retP = p
+					end
+					RT[o] = retP
+				end
+				G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer(RT)}}
+			else
+				local retP
+				if type(k) == "string" then
+					retP = RTypeKey[k]
+				else
+					retP = k
+				end
+				G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({retP,retP,retP,retP})}}
 			end
 		elseif j == "RotateTable" then
-			if type(k) == "table" then
+			if type(k) == "table" and k[4]~="V" then
 				for o, p in pairs(k) do
-					G_CB_Rotate[o] = SetCVar(FP,G_CB_RTTV[o][2],SetTo,p)
+					G_CB_Rotate[o] = {G_CB_RTTV[o],p}
 				end
-			elseif type(k) == "number" then
+			elseif type(k) == "string" and k=="Main" then
 				G_CB_Rotate = {
-					SetCVar(FP,G_CB_RTTV[1][2],SetTo,k),
-					SetCVar(FP,G_CB_RTTV[2][2],SetTo,k),
-					SetCVar(FP,G_CB_RTTV[3][2],SetTo,k),
-					SetCVar(FP,G_CB_RTTV[4][2],SetTo,k),
+					{G_CB_RTTV[1],0xFFFFFFFF},
+					{G_CB_RTTV[2],0xFFFFFFFF},
+					{G_CB_RTTV[3],0xFFFFFFFF},
+					{G_CB_RTTV[4],0xFFFFFFFF},
+				}
+			else
+				G_CB_Rotate = {
+					{G_CB_RTTV[1],k},
+					{G_CB_RTTV[2],k},
+					{G_CB_RTTV[3],k},
+					{G_CB_RTTV[4],k},
 				}
 			end
 		elseif j == "CenterXY" then
-				CenterXY = {SetCVar(FP,G_CB_XPos[2],SetTo,k[1]),SetCVar(FP,G_CB_YPos[2],SetTo,k[2])}
+				CenterXY = {
+					{G_CB_XPos,k[1]},
+					{G_CB_YPos,k[2]}}
 		elseif j == "OwnerTable" then
-			if type(k) == "table" then
-				G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer(k))}
-			elseif type(k) == "number" then
-				G_CB_OwnerTable = {SetCVar(FP,G_CB_CPTV[2],SetTo,T_to_ByteBuffer({k,k,k,k}))}
+			if type(k) == "table" and k[4]~="V" then
+				G_CB_OwnerTable = {{G_CB_CPTV,T_to_ByteBuffer(k)}}
+			else
+				G_CB_OwnerTable = {{G_CB_CPTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		end
 	end
-	if TOption == 0 then
+	if G_CBPlotTOption == 0 then
+		local Act = {
+		SetCVar(FP,G_CB_CUTV[2],SetTo,T_to_ByteBuffer(G_CB_CUTable)),
+		SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_ShapeTable[1]),
+		SetCVar(FP,G_CB_SNTV[2][2],SetTo,G_CB_ShapeTable[2]),
+		SetCVar(FP,G_CB_SNTV[3][2],SetTo,G_CB_ShapeTable[3]),
+		SetCVar(FP,G_CB_SNTV[4][2],SetTo,G_CB_ShapeTable[4]),
+		}
+		AutoSetV(Act,G_CB_LMTable)
+		AutoSetV(Act,G_CB_Delay)
+		AutoSetV(Act,G_CB_SizeTable)
+		AutoSetV(Act,G_CB_FNTable)
+		AutoSetV(Act,G_CB_NQOpTable)
+		AutoSetV(Act,G_CB_RepeatType)
+		AutoSetV(Act,CenterXY)
+		AutoSetV(Act,G_CB_OwnerTable)
+		AutoSetV(Act,G_CB_Rotate)
+		CallTriggerX(FP,Write_SpawnSet,Condition,Act,PreserveFlag)
 	else
-		CallTriggerX(FP,Write_SpawnSet,Condition,{SetCVar(FP,G_CB_CUTV[2],SetTo,T_to_ByteBuffer(G_CB_CUTable)),
-			SetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_ShapeTable[1]),
-			SetCVar(FP,G_CB_SNTV[2][2],SetTo,G_CB_ShapeTable[2]),
-			SetCVar(FP,G_CB_SNTV[3][2],SetTo,G_CB_ShapeTable[3]),
-			SetCVar(FP,G_CB_SNTV[4][2],SetTo,G_CB_ShapeTable[4]),
-			G_CB_LMTable,G_CB_Delay,G_CB_SizeTable,G_CB_FNTable,G_CB_NQOpTable,G_CB_RepeatType,CenterXY,G_CB_OwnerTable,G_CB_Rotate},PreserveFlag)
+		local Act = {
+		TSetCVar(FP,G_CB_CUTV[2],SetTo,T_to_ByteBuffer(G_CB_CUTable)),
+		TSetCVar(FP,G_CB_SNTV[1][2],SetTo,G_CB_ShapeTable[1]),
+		TSetCVar(FP,G_CB_SNTV[2][2],SetTo,G_CB_ShapeTable[2]),
+		TSetCVar(FP,G_CB_SNTV[3][2],SetTo,G_CB_ShapeTable[3]),
+		TSetCVar(FP,G_CB_SNTV[4][2],SetTo,G_CB_ShapeTable[4]),
+		}
+		TAutoSetV(Act,G_CB_LMTable)
+		TAutoSetV(Act,G_CB_Delay)
+		TAutoSetV(Act,G_CB_SizeTable)
+		TAutoSetV(Act,G_CB_FNTable)
+		TAutoSetV(Act,G_CB_NQOpTable)
+		TAutoSetV(Act,G_CB_RepeatType)
+		TAutoSetV(Act,CenterXY)
+		TAutoSetV(Act,G_CB_OwnerTable)
+		TAutoSetV(Act,G_CB_Rotate)
+		CDoActions(FP, Act,PreserveFlag)
+		CallTriggerX(FP,Write_SpawnSet,Condition,nil,PreserveFlag)
+
 	end
 end
+function AutoSetV(ActT,T)
+	
+for j,k in pairs(T) do
+	table.insert(ActT, SetCVar(FP, k[1][2], SetTo, k[2]))
+end
 
+end
+function TAutoSetV(ActT,T)
+	
+for j,k in pairs(T) do
+	table.insert(ActT, TSetCVar(FP, k[1][2], SetTo, k[2]))
+end
 
+end
 --[[
 	Line 0 = UnitID 1Byte
 	Line 1 = PrefuncID 1Byte
@@ -1235,9 +1423,9 @@ SetCall(FP)
             TSetMemoryX(Vi(G_CB_TempH[2],9*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,0,0xFF),
-            TSetMemory(Vi(G_CB_TempH[2],15*(0x20/4)),SetTo,0),
-            TSetMemory(Vi(G_CB_TempH[2],19*(0x20/4)),SetTo,0),
-            TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,0),
+			TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,0),
+			TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,0),
+			TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,0),
         })
         CIf(FP,{TMemory(Vi(G_CB_TempH[2],0*(0x20/4)), Exactly, 0)})--G_CBPlot 데이터에 유닛아이디가 존재하지 않을경우 배열을 전부 초기화한다.
         local TActArr = {}
@@ -1257,32 +1445,32 @@ SetCall(FP)
         DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
         end
         CElseX()
-        if TestStart == 1 then
             DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
+			if TestStart == 1 then
         	DisplayPrint(HumanPlayers, {
-        		"   G_CB_TempTable[1] : ",G_CB_TempTable[1],
-        		"   G_CB_TempTable[2] : ",G_CB_TempTable[2],
-        		"   G_CB_TempTable[3] : ",G_CB_TempTable[3],
-        		"   G_CB_TempTable[4] : ",G_CB_TempTable[4],
-        		"   G_CB_TempTable[5] : ",G_CB_TempTable[5],
-        		"   G_CB_TempTable[6] : ",G_CB_TempTable[6],
-        		"   G_CB_TempTable[7] : ",G_CB_TempTable[7],
-        		"   G_CB_TempTable[8] : ",G_CB_TempTable[8],
-        		"   G_CB_TempTable[9] : ",G_CB_TempTable[9],
-        		"   G_CB_TempTable[10] : ",G_CB_TempTable[10],
-        		"   G_CB_TempTable[11] : ",G_CB_TempTable[11],
-        		"   G_CB_TempTable[12] : ",G_CB_TempTable[12],
-        		"   G_CB_TempTable[13] : ",G_CB_TempTable[13],
-        		"   G_CB_TempTable[14] : ",G_CB_TempTable[14],
-        		"   G_CB_TempTable[15] : ",G_CB_TempTable[15],
-        		"   G_CB_TempTable[16] : ",G_CB_TempTable[16],
-        		"   G_CB_TempTable[17] : ",G_CB_TempTable[17],
-        		"   G_CB_TempTable[18] : ",G_CB_TempTable[18],
-        		"   G_CB_TempTable[19] : ",G_CB_TempTable[19],
-        		"   G_CB_TempTable[20] : ",G_CB_TempTable[20],
+        		"   G_CB_TempTable[1] : ",G_CB_TempTable[1],--Line 0 = UnitID 1Byte
+        		"   G_CB_TempTable[2] : ",G_CB_TempTable[2],--Line 1 = PrefuncID 1Byte
+        		"   G_CB_TempTable[3] : ",G_CB_TempTable[3],--Line 2 = CBPlot Index 4Byte
+        		"   G_CB_TempTable[4] : ",G_CB_TempTable[4],--Line 3 = Current Delay Time 4Byte
+        		"   G_CB_TempTable[5] : ",G_CB_TempTable[5],--Line 4 = Loop Limit 1Byte
+        		"   G_CB_TempTable[6] : ",G_CB_TempTable[6],--Line 5 = RepeatType 1Byte
+        		"   G_CB_TempTable[7] : ",G_CB_TempTable[7],--Line 6 = ??? 
+        		"   G_CB_TempTable[8] : ",G_CB_TempTable[8],--.
+        		"   G_CB_TempTable[9] : ",G_CB_TempTable[9],--.
+        		"   G_CB_TempTable[10] : ",G_CB_TempTable[10],--Line 9 = CreatePlayer 1Byte
+        		"   G_CB_TempTable[11] : ",G_CB_TempTable[11],--Line 10 = ShapeSize 1Byte (100=100%)
+        		"   G_CB_TempTable[12] : ",G_CB_TempTable[12],--Line 11 = Use Queue Option 1Byte
+        		"   G_CB_TempTable[13] : ",G_CB_TempTable[13],--Line 12 SelectShapeNumber1 4Byte
+        		"   G_CB_TempTable[14] : ",G_CB_TempTable[14],--Line 13 SelectShapeNumber2 4Byte
+        		"   G_CB_TempTable[15] : ",G_CB_TempTable[15],--Line 14 SelectShapeNumber3 4Byte
+        		"   G_CB_TempTable[16] : ",G_CB_TempTable[16],--Line 15 SelectShapeNumber4 4Byte
+        		"   G_CB_TempTable[17] : ",G_CB_TempTable[17],--Line 16 Set Delay Timer 1 4Byte
+        		"   G_CB_TempTable[18] : ",G_CB_TempTable[18],--Line 17 Set Delay Timer 2 4Byte
+        		"   G_CB_TempTable[19] : ",G_CB_TempTable[19],--Line 18 Set Delay Timer 3 4Byte
+        		"   G_CB_TempTable[20] : ",G_CB_TempTable[20],--Line 19 Set Delay Timer 4 4Byte
         	})
 
-        end
+        	end
             CDoActions(FP,{
                 TSetMemoryX(Vi(G_CB_TempH[2],0*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],1*(0x20/4)),SetTo,0,0xFF),
@@ -1294,8 +1482,8 @@ SetCall(FP)
                 TSetMemoryX(Vi(G_CB_TempH[2],9*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],10*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],11*(0x20/4)),SetTo,0,0xFF),
-                TSetMemory(Vi(G_CB_TempH[2],15*(0x20/4)),SetTo,0),
-                TSetMemory(Vi(G_CB_TempH[2],19*(0x20/4)),SetTo,0),
+				TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,0),
+				TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,0),
 				TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,0),
             })
             CIf(FP,{TMemory(Vi(G_CB_TempH[2],0*(0x20/4)), Exactly, 0)})--G_CBPlot 데이터에 유닛아이디가 존재하지 않을경우 배열을 전부 초기화한다.
@@ -1329,12 +1517,15 @@ SetCall(FP)
 		TSetMemory(Vi(G_CB_TempH[2],12*(0x20/4)),SetTo,G_CB_TempTable[14]),
 		TSetMemory(Vi(G_CB_TempH[2],13*(0x20/4)),SetTo,G_CB_TempTable[15]),
 		TSetMemory(Vi(G_CB_TempH[2],14*(0x20/4)),SetTo,G_CB_TempTable[16]),
+		TSetMemory(Vi(G_CB_TempH[2],15*(0x20/4)),SetTo,0),
 		TSetMemory(Vi(G_CB_TempH[2],16*(0x20/4)),SetTo,G_CB_TempTable[18]),
 		TSetMemory(Vi(G_CB_TempH[2],17*(0x20/4)),SetTo,G_CB_TempTable[19]),
 		TSetMemory(Vi(G_CB_TempH[2],18*(0x20/4)),SetTo,G_CB_TempTable[20]),
+		TSetMemory(Vi(G_CB_TempH[2],19*(0x20/4)),SetTo,0),
+		TSetMemory(Vi(G_CB_TempH[2],20*(0x20/4)),SetTo,G_CB_TempTable[22]),
 		TSetMemory(Vi(G_CB_TempH[2],21*(0x20/4)),SetTo,G_CB_TempTable[23]),
 		TSetMemory(Vi(G_CB_TempH[2],22*(0x20/4)),SetTo,G_CB_TempTable[24]),
-		TSetMemory(Vi(G_CB_TempH[2],23*(0x20/4)),SetTo,G_CB_TempTable[25]),
+		TSetMemory(Vi(G_CB_TempH[2],23*(0x20/4)),SetTo,0),
     })
     CIfXEnd()
     DoActionsX(FP,{SetCDeaths(FP,SetTo,0,CA_Suspend),SetCDeaths(FP,SetTo,0,G_CB_Launch)})

@@ -26,6 +26,8 @@
 		{16,"staredit\\wav\\BGM_Blythe.ogg",92*1000},
 		{17,"staredit\\wav\\BGM_Black_Swan.ogg",88*1000},
 		{18,"staredit\\wav\\BGM_Launcher.ogg",57*1000},
+		{19,"staredit\\wav\\BGM_Miles.ogg",44*1000},
+		{20,"staredit\\wav\\BGM_DontDie.ogg",126*1000},
 	
 		
 	})
@@ -326,6 +328,7 @@
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
 			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
 			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
@@ -344,6 +347,7 @@
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
 			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
 			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
@@ -362,6 +366,7 @@
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
 			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX("\x13\x04",4),
 			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),
@@ -380,6 +385,7 @@
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
 			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
+			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX("\x13\x04",4),
 			DisplayTextX(string.sub("\x13\x1BC\x04reated \x1BB\x04y : GALAXY_BURST",1,i),4),
 			DisplayTextX(string.sub("\x13\x1FI\x04nspirated to \x03MSF \x11R\x04espect. \x18B\x04y.\x1DSANDELE",1,i),4),

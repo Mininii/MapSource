@@ -23,6 +23,7 @@
 	T426 = "\x07。\x18˙\x0F+\x1C˚\x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02"
 	T1365 = "\x07。\x18˙\x0F+\x1C˚\x19 흥\x04이오닉 \x08어\x04썰트 \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02 "
 	T1414 = "\x07。\x18˙\x0F+\x1C˚\x1F 행\x04이오닉 \x1C스\x04톰 \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02 "
+	T1366 = "\x07。\x18˙\x0F+\x1C˚\x1F \x10망\x04이 \x08레이저\x16빔 \x19(つ\x08X\x19ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02"
 	TBLData = {
 		{1319,t04},
 		{831,t05},
@@ -30,7 +31,10 @@
 		{426,T426},
 		{1365,T1365},
 		{1414,T1414},
+		{218,T426},
 		{827,t06},
+		{1366,T1366},
+
 	}
 
 	
@@ -248,7 +252,7 @@ local SelShbool = CreateVar(FP)
 		CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6),TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
 		TSetMemory(_Sub(BackupCp,25-13),SetTo,SpeedRet),
 		TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),
-		TSetMemoryX(_Add(RPtr,72-25),SetTo,0*256,0xFF00),})
+		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),})
 	CIfEnd()
 	f_LoadCp()
 
@@ -378,12 +382,19 @@ end
 	for j, k in pairs(f_GunTable) do
 		f_GSend(k)
 	end
+	
 	local HTArr = CreateArr(600, FP)
 	local HPT = CreateVar(FP)
 	local HTSize = CreateVar(FP)
 	CIf(FP,{Cond_EXCC(1,Exactly,1)},SetV(HPT,0)) -- 영작유닛인식
+
 	f_SaveCp()
 	f_Read(FP, BackupCp, HeroIndex, nil, nil, 1)
+	CIf(FP,{CV(HeroIndex,217)})--벽 터진위치에 마인생성
+	f_Read(FP, _Sub(BackupCp,15), CPos)
+	Convert_CPosXY()
+	f_TempRepeatX({}, 13, 1, 2, P6, {CPosX,CPosY})
+	CIfEnd()
 	for j,k in pairs(UnitPointArr) do
 		Trigger2X(FP, {
 			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]),print_utf8_A(HTArr, k[3]..string.rep("\x0D",0x40-(#k[3])))},{preserved})
@@ -504,11 +515,11 @@ if NameTest == 1 then
 		--Leon
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\x1E。˙+˚Sadol。+.˚\x12\x11。˙+˚S\x04adol\x11。+.˚"
+		str33 = "\t\x1E。˙+˚Trap。+.˚\x12\x11。˙+˚T\x04rap\x11。+.˚"--(sp:13 tab:4)
 		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚" --s16 t5
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
-		str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
-		--str55 = "\t\x1E。˙+˚Turret。+.˚\x12\x11。˙+˚T\x04urret\x11。+.˚"--(sp:13 tab:4)
+		--str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
+		str55 = "\t\t\t\x1E。˙+˚Trap。+.˚\x12\x11。˙+˚T\x04rap\x11。+.˚"--(sp:13 tab:4)
 
 		--Yuri
 		--Sena

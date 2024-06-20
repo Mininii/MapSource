@@ -336,6 +336,130 @@ end
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 
 				
+				
+	Trigger { -- 배속방지
+	players = {FP},
+	conditions = {
+		Memory(0x51CE84,AtLeast,1001);
+	},
+	actions = {
+		RotatePlayer({
+		DisplayTextX("\x13\x1B방 제목에서 배속 옵션을 제거해 주십시오. \n\x13\x1B또는 게임 반응속도(턴레이트)를 최대로 올려주십시오.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);
+	}
+}
+for i = 0, 4 do
+	Trigger { -- 게임오버
+		players = {FP},
+		conditions = {
+			MemoryX(0x57EEE8 + 36*i,Exactly,1,0xFF);
+		},
+		actions = {
+			RotatePlayer({
+			DisplayTextX("\x13\x1B사람 슬롯 변경이 감지되었습니다. 컴퓨터 넣지마세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+			Defeat();
+			},HumanPlayers,FP);
+			Defeat();
+			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
+			SetMemory(0xCDDDCDDC,SetTo,1);
+		}
+	}
+end
+for i = 5, 7 do
+	
+Trigger { -- 게임오버
+players = {FP},
+conditions = {
+	MemoryX(0x57EEE8 + 36*i,Exactly,0,0xFF);
+},
+actions = {
+	RotatePlayer({
+	DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+	Defeat();
+	},HumanPlayers,FP);
+	Defeat();
+	SetMemory(0xCDDDCDDC,SetTo,1);
+}
+}
+Trigger { -- 게임오버
+players = {FP},
+conditions = {
+	MemoryX(0x57EEE8 + 36*i,Exactly,2,0xFF);
+},
+actions = {
+	RotatePlayer({
+	DisplayTextX("\x13\x1B컴퓨터 슬롯 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+	Defeat();
+	},HumanPlayers,FP);
+	Defeat();
+	SetMemory(0xCDDDCDDC,SetTo,1);
+}
+}
+end
+
+Trigger { -- 게임오버
+	players = {FP},
+	conditions = {
+		MemoryX(0x57EEE0 + (36*5)+8,AtMost,1*256,0xFF00);
+	},
+	actions = {
+		RotatePlayer({
+		DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);
+	}
+}
+Trigger { -- 게임오버
+	players = {FP},
+	conditions = {
+		MemoryX(0x57EEE0 + (36*6)+8,AtLeast,1*256,0xFF00);
+	},
+	actions = {
+		RotatePlayer({
+		DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);
+	}
+}
+Trigger { -- 게임오버
+	players = {FP},
+	conditions = {
+		MemoryX(0x57EEE0 + (36*7)+8,AtLeast,1*256,0xFF00);
+	},
+	actions = {
+		RotatePlayer({
+		DisplayTextX("\x13\x1B컴퓨터 종족 변경이 감지되었습니다. 다시 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+		Defeat();
+		},HumanPlayers,FP);
+		Defeat();
+		SetMemory(0xCDDDCDDC,SetTo,1);
+	}
+}
+
+	Trigger { -- 혹시 싱글이신가요?
+		players = {FP},
+		conditions = {
+			Label(0);
+			Memory(0x57F0B4, Exactly, 0);
+	},
+		actions = {
+			--SetCDeaths(FP,SetTo,1,isSingle);
+				RotatePlayer({
+				DisplayTextX("\x13\x04싱글플레이로는 플레이할 수 없습니다. 멀티플레이로 시작해주세요.\n\x13\x04실행 방지 코드 0x32223223 작동.",4);
+				Defeat();
+				},HumanPlayers,FP);
+				Defeat();
+				SetMemory(0xCDDDCDDC,SetTo,1);
+	},
+	}
+
 
 
 	if TestStart == 1 then

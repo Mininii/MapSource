@@ -56,6 +56,8 @@ function Include_GunData(Size,LineNum)
 		GunBGM(126,16,"\x1CB\x04lyth\x1CE",250000)
 		GunBGM(174,17,"\x08B\x04lack \x08S\x04wan",250000)
 		GunBGM(127,18,"\x0FL\x04auncher",300000)
+		GunBGM(106,19,"\x1FM\x04iles",150000)
+		GunBGM(168,20,"\x1BD\x04on't \x1BD\x04ie",444444)
 		
 		
 		--{5,"staredit\\wav\\BGM_ALiCE.ogg",43*1000},
@@ -429,7 +431,7 @@ P_8, 7 : 289
 			CForEnd()
 			NJumpXEnd(FP, CheckJump,{RotatePlayer({DisplayTextX("Check",4)},HumanPlayers,FP)})
 			GetLocCenter(201, CPosX, CPosY)
-			DisplayPrint(HumanPlayers, {"CPosX: ",CPosX,"  CPosY: ",CPosY})
+			--DisplayPrint(HumanPlayers, {"CPosX: ",CPosX,"  CPosY: ",CPosY})
 			CNeg(FP,CPosX)
 			CAdd(FP,CPosX,32*64)
 			CNeg(FP,CPosY)
@@ -483,23 +485,54 @@ P_8, 7 : 289
 		CTrigger(FP,{Gun_Line(6,AtLeast,3)},{Gun_DoSuspend()},1)
 		CIfEnd()
 	CIfEnd()
-	GeneCUT1 = {21,86,58,12,60,62}
-	GeneCUT2 = {88,98,80,29,70,64}
-	GeneCUT3 = {28,84,8,7,57,102}
+	GeneCUT1 = {55,21,86,58,12,60,7,"EL FAIL"}
+	GeneCUT2 = {56,88,98,80,29,70,64,"PLAY"}
+	GeneCUT3 = {28,84,8,62,57,102,"Zero","LENA"}
+	
+	
+	
+
+
+
+
 	CIf_GCase(200) -- 제네
 		for j,k in pairs(GeneCUT1) do
-			G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
-			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
+			if j == 8 then
+				G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1R", "MAX", 200, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1P", "MAX", 200, nil, {0,0}, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
+			end
 		end
 		for j,k in pairs(GeneCUT2) do
-			G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
-			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
+			if j == 8 then
+				G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2R", "MAX", 201, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2P", "MAX", 201, nil, {0,0}, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
+			end
 		end
 		for j,k in pairs(GeneCUT3) do
-			G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
-			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,480*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
+			if k == 102 or k == "Zero" then
+				G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3P", "MAX", 202, nil, {0,0}, P6,1)
+			elseif j == 8 then
+				G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3R", "MAX", 202, nil, {0,0}, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,1),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
+			end
+
+
+			if k == 102 or k == "Zero" then
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
+			elseif j == 8 then
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3P", "MAX", 202, nil, {0,0}, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
+			end
 		end
-		CTrigger(FP,{Gun_Line(7,AtLeast,480*(6))},{Gun_DoSuspend()},1)
+		CTrigger(FP,{Gun_Line(7,AtLeast,240*(8))},{Gun_DoSuspend()},1)
 		
 	CIfEnd()
 	--HD
@@ -641,8 +674,8 @@ P_8, 7 : 289
 	TriggerX(FP, {CV(MarNum,480,AtLeast)}, {SetV(MarNum,480)},{preserved})
 	CDiv(FP, SizeV, MarNum, 20)
 		CIf(FP,GNm(2))	
-		G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Kazansky"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
-		G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Kazansky"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
+		G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Kazansky"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
+		G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Kazansky"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
 			for i = 0, 24 do
 			CIf(FP,{CV(SizeV,i)})
 				local SHI = i
@@ -680,16 +713,16 @@ P_8, 7 : 289
 			end
 			CIf(FP,{Gun_Line(7,Exactly,0)})
 				CIf(FP,Gun_Line(6,Exactly,1))
-					G_CB_SetSpawnX({CD(GMode,1)}, {"Hyperion"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
-					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Hyperion"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
+					G_CB_SetSpawnX({CD(GMode,1)}, {"Hyperion"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
+					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Hyperion"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
 				CIfEnd()
 				CIf(FP,Gun_Line(6,Exactly,2))
-					G_CB_SetSpawnX({CD(GMode,1)}, {"Artanis"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
-					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Artanis"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
+					G_CB_SetSpawnX({CD(GMode,1)}, {"Artanis"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
+					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Artanis"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
 				CIfEnd()
 				CIf(FP,Gun_Line(6,Exactly,3))
-					G_CB_SetSpawnX({CD(GMode,1)}, {"Danimoth"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
-					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Danimoth"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P8)
+					G_CB_SetSpawnX({CD(GMode,1)}, {"Danimoth"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
+					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Danimoth"}, TemConnectSC, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
 				CIfEnd()
 			CIfEnd()
 		CIfEnd()
@@ -703,12 +736,12 @@ P_8, 7 : 289
 
 	
 	CTrigger(FP,{Gun_Line(5,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,1830)},1)
-	CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(22,Add,1)},1)
-	CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(22,Subtract,1)},1)
-	CTrigger(FP,{Gun_Line(22,Exactly,0),Gun_Line(50,Exactly,1)},{Gun_SetLine(3,Add,1),Gun_SetLine(50,SetTo,0)},1)
-	CTrigger(FP,{Gun_Line(22,AtLeast,60),Gun_Line(50,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,0)},1)
-	CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(51,Add,Var_TempTable[12])},1)
-	CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(51,Subtract,Var_TempTable[12])},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,0)},{Gun_SetLine(11,Add,1)},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,1)},{Gun_SetLine(11,Subtract,1)},1)
+	CTrigger(FP,{Gun_Line(11,Exactly,0),Gun_Line(50,Exactly,1)},{Gun_SetLine(50,SetTo,0)},1)
+	CTrigger(FP,{Gun_Line(11,AtLeast,60),Gun_Line(50,Exactly,0)},{Gun_SetLine(50,SetTo,1),Gun_SetLine(51,SetTo,0)},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,1)},{TGun_SetLine(51,Add,Var_TempTable[12])},1)
+	CTrigger(FP,{Gun_Line(50,Exactly,0)},{TGun_SetLine(51,Subtract,Var_TempTable[12])},1)
 	CDoActions(FP,{Gun_SetLine(52,Add,3)}) -- 
 	CTrigger(FP,{Gun_Line(52,AtLeast,72)},{Gun_SetLine(52,SetTo,0)},1)
 
@@ -718,7 +751,7 @@ P_8, 7 : 289
 	
 	CFor(FP, 0, 360, 72)
 	local CI = CForVariable()
-	f_Lengthdir(FP, Var_TempTable[12], _Add(CI,Var_TempTable[14]), NPosX, NPosY)
+	f_Lengthdir(FP, _Div(Var_TempTable[52],_Mov(7)),_Add(Var_TempTable[53],CI), NPosX, NPosY)
 	f_Div(FP,NPosY,2)
 	Simple_SetLocX(FP,200, _Add(NPosX,Var_TempTable[2]), _Add(NPosY,Var_TempTable[3]), _Add(NPosX,Var_TempTable[2]), _Add(NPosY,Var_TempTable[3]))
 	CDoActions(FP, {CreateUnit(1, 94, 201, P6),KillUnit(94, P6)})
@@ -774,6 +807,129 @@ P_8, 7 : 289
 
 	CTrigger(FP,{},{Gun_DoSuspend()},1)
 	CIfEnd()
+
+
+	CIf_GCase(106)--커맨드센터
+	CenCUT = {
+		{
+			55,
+			56,
+			"Kazansky",
+		},
+		{
+			"Artanis",
+			"Danimoth",
+			"Raszagal",
+		},
+		{
+			"Lin",
+			"Envy",
+			"Lizzet"
+		},
+		{
+			"Rose",
+			"Norad II",
+			"Nina"
+		},
+		{
+			"Sera",
+			"Sorang",
+			"Sena",
+			"PLAY"
+		},
+		{
+			"Merry",
+			"Sen",
+			"Era",
+			"LENA"
+		},
+		{
+			"Identity",
+			"Division",
+			"Zero",
+			"EL FAIL"
+		},
+	}
+
+	CenCUSh = {
+		RCen1,RCen2,RCen3,RCen4,RCen5,RCen6,RCen7,
+	}
+	CenCUShN = {
+		RCenN1,RCenN2,RCenN3,RCenN4,RCenN5,RCenN6,RCenN7,
+	}
+	
+	CMov(FP,G_CB_RotateV,_Mul(_Div(GTime,24),6))
+	if TestStart == 1 then
+		--DisplayPrint(HumanPlayers, {G_CB_RotateV})
+	end
+	for j,k in pairs(CenCUT) do
+		local SCSh = CenCUSh[j]
+		local NmSh = CenCUShN[j]
+		local RPT = 187
+		if j == 7 then RPT = 188 end -- 디비전 제로 감커는 체력 10%로 설정
+		CIf(FP,{GNm(j)})
+		for l, m in pairs(k) do
+			if l == 4 then
+				f_TempRepeat({CD(GMode,1),Gun_Line(7,AtLeast,120*(10-1))},m,1,188,P6,nil,1)
+				f_TempRepeat({CD(GMode,2,AtLeast),Gun_Line(7,AtLeast,120*(10-1))},m,1,187,P6,nil,1)
+				--G_CB_TSetSpawn({CD(GMode,2,AtLeast),Gun_Line(7,AtLeast,120*(10-1))}, {m}, {NmSh}, 1, {OwnerTable={P6},RepeatType = 187,RotateTable="Main"})
+			else
+				for o = 1, 3 do
+					G_CB_TSetSpawn({CD(GMode,1),Gun_Line(7,AtLeast,120*((o-1)+((l-1)*3)))}, {m}, {NmSh}, 1, {OwnerTable={P6},RepeatType = RPT,RotateTable="Main"})
+					G_CB_TSetSpawn({CD(GMode,2,AtLeast),Gun_Line(7,AtLeast,120*((o-1)+((l-1)*3)))}, {m}, {SCSh}, 1, {OwnerTable={P6},RepeatType = RPT,RotateTable="Main"})
+				end
+			end
+		end
+		CIfEnd()
+	end
+	CTrigger(FP,{Gun_Line(7,AtLeast,120*(10))},{Gun_DoSuspend()},1)
+	CIfEnd()
+
+
+	CIf_GCase(168)
+		TriggerX(FP, {Gun_Line(6, Exactly, 0),Memory(0x657A9C, AtLeast, 1)}, {SetMemory(0x657A9C,Subtract,1)}, {preserved})
+		TriggerX(FP, {Gun_Line(6, Exactly, 1),Memory(0x657A9C, AtMost, 30)}, {SetMemory(0x657A9C,Add,1)}, {preserved})
+		TriggerX(FP, {Memory(0x657A9C, Exactly, 0)}, {Gun_SetLine(6, SetTo, 1)}, {preserved})
+		CIfOnce(FP,Gun_Line(6, Exactly, 1))
+		
+			DoActions2(FP, {Simple_SetLoc(0, 288,3792,288,3792),RotatePlayer({CenterView(1)}, HumanPlayers, FP)})
+			G_CB_TSetSpawn({}, {217}, Shape1217, 1, {CenterXY={0,0},OwnerTable={P6},RepeatType=217})
+			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {160,3712})
+			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {384,3616})
+			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {256,3936})
+			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {416,3872})
+			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {160,3712})
+			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {384,3616})
+			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {256,3936})
+			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {416,3872})
+			CFor(FP,19025,19025+(1700*84),84)
+			local CI = CForVariable()
+			CIf(FP,{TMemoryX(_Add(CI,19), AtMost, 4,0xFF),TMemoryX(_Add(CI,19), AtLeast, 1*256,0xFF00)})
+			f_Read(FP,_Add(CI,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP, 199, CPosX, CPosY, CPosX, CPosY, Simple_CalcLoc(199, -4, -4, 4, 4))
+			DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
+			local RandXY = {
+				{160,3712},
+				{384,3616},
+				{256,3936},
+				{416,3872},}
+				for i = 0, 3 do
+					if i == 0 then RS1 = Cleared RS2=Cleared end
+					if i == 1 then RS1 = Set RS2=Cleared end
+					if i == 2 then RS1 = Cleared RS2=Set end
+					if i == 3 then RS1 = Set RS2=Set end
+					TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
+				end
+			CIfEnd()
+			CForEnd()
+		CIfEnd()
+		CIfOnce(FP, {Gun_Line(6, Exactly, 1),Gun_Line(7, AtLeast, 480),Bring(P8, AtMost, 0, 74, 26)}, {KillUnit(217, Force2),Gun_SetLine(8, SetTo, 1)})
+			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+		CIfEnd()
+
+	CIfEnd()
+
 	if TestStart == 1 then
 		--DisplayPrint(HumanPlayers, {"Executer",f_GunNum," : ",Var_TempTable[1]," ",Var_TempTable[2]," ",Var_TempTable[3]," ",Var_TempTable[4]," ",Var_TempTable[5]," ",Var_TempTable[6]," ",Var_TempTable[7]," ",Var_TempTable[8]," ",Var_TempTable[9]," ",Var_TempTable[10]})
 	end

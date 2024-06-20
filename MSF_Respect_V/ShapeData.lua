@@ -206,8 +206,14 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	
 
 	GeneN1 = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 25)
+	GeneN1P = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 7)
+	GeneN1R = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 2)
 	GeneN2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 25)
+	GeneN2P = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 7)
+	GeneN2R = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 2)
 	GeneN3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 25)
+	GeneN3P = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 7)
+	GeneN3R = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 2)
 	Gene1 = CS_ConnectPath(CSMakePath({2048-32,32},{2048-32,8192-32}), 100)
 	Gene2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 100)
 	Gene3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 100)
@@ -256,7 +262,45 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	TemConnectSC = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, nil),-1744,-2384)
 	TemConnect = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, 1),-1744,-2384)
 
+
+	RCen1 = CS_CropRA(CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 6), 0), {64,4096}, {0,45})
+	RCenN1 = CS_CropRA(CSMakeCircle(8, 96, 0, PlotSizeCalc(8, 3), 0), {64,4096}, {0,45})
+	RCen2 = CS_MoveXY(CSMakeStar(4, 180, 45, 0, PlotSizeCalc(8, 3), PlotSizeCalc(8, 2)), nil, -150)
+	RCenN2 = CS_MoveXY(CSMakeStar(4, 180, 75, 0, PlotSizeCalc(8, 1), PlotSizeCalc(8, 0)), nil, -150)
+	RCen3 = CS_Distortion(CSMakeCircle(25,280,0,26,1),{0,0},{0,0})
+	RCenN3 = CS_Distortion(CSMakeCircle(8,280,0,9,1),{0,0},{0,0})
+	RCen4 = CS_MoveXY(CSMakeStar(4, 180, 90, 45, PlotSizeCalc(8, 2), 0), nil, -180)
+	RCenN4 = CS_MoveXY(CSMakeStar(4, 180, 180, 45, PlotSizeCalc(8, 1), 0), nil, -180)
+	SCir = CSMakeCircle(4, 32, 0, 5, 1)
+	CCir = CSMakeCircle(6, 128, 0, 7, 1)
+	RC4Table = {}
+	for i = 2, #CCir-1 do
+		table.insert(RC4Table,CS_MoveXY(SCir, CCir[i][1], CCir[i][2]))
+	end
 	
+	function CS_OverlapT(Table)
+		local RetShape = {0}
+		local arg = Table
+		for k = 1, #arg do
+			RetShape[1] = RetShape[1] + arg[k][1]
+			for i = 1, arg[k][1] do
+				table.insert(RetShape,{arg[k][i+1][1],arg[k][i+1][2]})
+			end
+		end
+		return RetShape	
+	end
+	RCen5 = CS_MoveXY(CS_OverlapT(RC4Table),nil,-160)
+	RCenN5 = CS_MoveXY(CCir,nil,-160+32)
+	RCen6 = CSMakeLine(1, 12, 0, 25, 0)
+	RCenN6 = CSMakeLine(1, 36, 0, 8, 0)
+	RCen7 = CS_Rotate(CS_OverlapX(CS_Rotate(CSMakeLine(1, 24, 0, 13, 0), 45),CSMakeLine(1, 24, 0, 13, 0)), -45/2)
+	RCenN7 = CS_Rotate(CS_OverlapX(CS_Rotate(CSMakeLine(1, 54, 0, 5, 0), 45),CSMakeLine(1, 54, 0, 5, 0)), -45/2)
+	
+	Shape1217 = {28  ,{48, 3568},{80, 3568},{112, 3536},{144, 3536},{176, 3504},{208, 3504},{240, 3472},{272, 3472},{304, 3440},{336, 3440},{368, 3408},{400, 3408},{432, 3376},{464, 3376},{272, 4144},{304, 4144},{336, 4112},{368, 4112},{400, 4080},{432, 4080},{464, 4048},{496, 4048},{528, 4016},{560, 4016},{592, 3984},{624, 3984},{656, 3952},{688, 3952}}
+
+	Shape1008 = {6   ,{64, 3584},{480, 3360},{480, 3872},{640, 3968},{352, 4096},{64, 3936}}
+	CellMShape = CS_FillPathHX2(Shape1008,1,72,48,1,0,-26.57,5)
+
 	
 	
 	
