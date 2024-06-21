@@ -695,4 +695,10 @@ Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved}
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
 DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
+ChryCcode2 = CreateCcode()
+TriggerX(FP, {CD(ChryCcode,0)}, {AddCD(ChryCcode2,1)}, {preserved})
+CCIText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07。\x18˙\x0F+\x1C˚ \x08E\x04nemy \x08S\x04torm \x1C。\x0F+\x18.\x07˚ \x04의 \x02무적상태\x04가 해제되었습니다.\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14"
+TriggerX(FP, {CD(ChryCcode2,480,AtLeast)}, {SetInvincibility(Disable, 201, P8, 64),
+	RotatePlayer({DisplayTextX(CCIText, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),
+})
 end

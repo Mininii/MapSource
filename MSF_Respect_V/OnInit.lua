@@ -111,7 +111,8 @@
 		CMov(FP, ArrX(OverMePosY,CunitHP), CPosY)
 
 	CIfEnd()
-
+	
+	CTrigger(FP,{CV(RepHeroIndex,201)},{TSetMemoryX(_Add(Nextptrs,55),SetTo,0x04000000,0x04000000)},{preserved})--오버미코쿤 무적
 
 	CIf(FP,{TTOR(condbox)},{AddCD(GunCcode,1)})--블라인드 맥일놈들(건작일경우)
 		CDoActions(FP, {TSetMemoryX(_Add(Nextptrs,72), SetTo, 0xFF000000, 0xFF000000)})

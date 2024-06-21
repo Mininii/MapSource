@@ -924,7 +924,7 @@ P_8, 7 : 289
 			CIfEnd()
 			CForEnd()
 		CIfEnd()
-		CIfOnce(FP, {Gun_Line(6, Exactly, 1),Gun_Line(7, AtLeast, 480),Bring(P8, AtMost, 0, 74, 26)}, {KillUnit(217, Force2),Gun_SetLine(8, SetTo, 1)})
+		CIfOnce(FP, {Gun_Line(6, Exactly, 1),Gun_Line(7, AtLeast, 480),Bring(P8, AtMost, 0, 74, 26)}, {KillUnit(217, Force2),Gun_SetLine(8, SetTo, 1),Gun_DoSuspend()})
 			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
 		CIfEnd()
 

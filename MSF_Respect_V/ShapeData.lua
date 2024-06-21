@@ -192,8 +192,8 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	EllipseMirror = CS_MirrorX(EllipseShape,300,1,1) --나비
 	EllipseMirror2 = CS_MoveXY(EllipseMirror,-300,-250)
 
-	Hy1LC_64= CS_SortR(CS_MoveXY(CS_ConnectPathX(Hy1Line,128,nil),-1024,-368),0)
-	Hy1FP_64= CS_SortR(CS_MoveXY(CS_FillPathXY(Hy1Fill, 1, 64, 64, 0),-1024,-368),0)--하드 저그유닛 SC 약영웅
+	Hy1LC_64= CS_SortR(CS_MoveXY(CS_ConnectPathX(Hy1Line,128,nil),-1024,-80),0)
+	Hy1FP_64= CS_SortR(CS_MoveXY(CS_FillPathXY(Hy1Fill, 1, 64, 64, 0),-1024,-80),0)--하드 저그유닛 SC 약영웅
 	FacHD1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96*2,96*2), 26.565)--9
 	FacSC1=CS_Rotate(CS_FillPathXY(CSMakePath({-256,-256},{256,-256},{256,256},{-256,256}),0,96,96), 26.565)--36
 	EnBayHD1= CSMakePolygon(9, 32*7, 0, 10, 1)--9
