@@ -434,6 +434,7 @@
 	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
 
+	TriggerX(FP,{CD(GS,1)},{SetDeaths(-111923, SetTo, 0, 0)},{preserved})
 
 	CIfOnce(FP,{CD(GS,1)},{
 		--SetV(BGMType,1),
@@ -453,7 +454,7 @@
 		SetMemory(0x5821A4 + (4 * 6),SetTo,1600);
 		SetMemory(0x582144 + (4 * 7),SetTo,1600);
 		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
-		SetCp(FP);
+		SetCp(FP);RemoveUnit(101,P6)
 	})
 	if false then--TestStart == 1 then
 		GSEnable = CreateCcode()
@@ -470,7 +471,6 @@
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 	end
-
 	
 	for k = 1, 5 do
 		Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);}, {

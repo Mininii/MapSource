@@ -179,8 +179,67 @@ local SelShbool = CreateVar(FP)
 
 	DoActions(FP, {ModifyUnitEnergy(All, 40, AllPlayers, 64, 100)})
 
-	
+	--[[
+	Line Usage
+	0 = 
+	]]
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
+
+	--0x4 in air check
+	CAdd(FP,0x6509B0,30)
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x4,0,0x4)},{Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}) -- Lock On
+	--55 to 10
+	
+	CSub(FP,0x6509B0,45)
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,2048,0,0xFFFF),DeathsX(CurrentPlayer,AtMost,3712,0,0xFFFF)}) -- Reflection
+	--10 to 6
+
+	CSub(FP,0x6509B0,4)
+	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,2048,0,0xFFFF)})
+	f_SaveCp()--BackupCp = 6
+	local X_Pos = CreateVar(FP)
+	local Y_Pos = CreateVar(FP)
+	local X_Des = CreateVar(FP)
+	local Y_Des = CreateVar(FP)
+	f_Read(FP,_Add(BackupCp,10),X_Pos,nil,0xFFFF,1)
+	f_Read(FP,_Add(BackupCp,10),Y_Pos,nil,0xFFFF0000,1)
+	CrShift(FP, Y_Pos, 16)
+	f_Read(FP,BackupCp,X_Des,nil,0xFFFF,1)
+	f_Read(FP,BackupCp,Y_Des,nil,0xFFFF0000,1)
+	CrShift(FP, Y_Des, 16)
+
+	if TestStart == 1 then 
+		DisplayPrint(HumanPlayers, {"X_Des : ",X_Des,"   Y_Des : ",Y_Des})
+	end
+	X_Des2= CreateVar(FP)
+	CMov(FP,X_Des2,_Sub(_Mov(4096),X_Des))
+	if TestStart == 1 then 
+		DisplayPrint(HumanPlayers, {"X_Des2 : ",X_Des2,"   Y_Des : ",Y_Des})
+	end
+	local UIDV = CreateVar(FP)
+	local PIDV = CreateVar(FP)
+	f_Read(FP, _Add(BackupCp,19), UIDV, nil,0xFF,1)
+	f_Read(FP, _Add(BackupCp,13), PIDV, nil,0xFF,1)
+	
+
+	CIfX(FP,{TDeathsX(_Add(BackupCp,13),Exactly,187*256,0,0xFF00)})
+	CDoActions(FP,{
+		TSetDeathsX(BackupCp,SetTo,X_Des2,0,0xFFFF),
+		TSetDeathsX(_Add(BackupCp,16),SetTo,X_Des2,0,0xFFFF),
+		TSetDeathsX(_Sub(BackupCp,2),SetTo,X_Des2,0,0xFFFF)})
+	CElseX()
+	Simple_SetLocX(FP,0, X_Pos, Y_Pos, X_Pos, Y_Pos,{Simple_CalcLoc(0, -4,-4,4,4)})
+	Simple_SetLocX(FP,200, X_Des2, Y_Des, X_Des2, Y_Des,{Simple_CalcLoc(200, -4,-4,4,4)})
+	CDoActions(FP,{TOrder(UIDV,PIDV,1,Attack,201)})
+	CIfXEnd()
+	f_LoadCp()
+
+	CIfEnd()
+	CAdd(FP,0x6509B0,4)
+	CIfEnd()
+	CAdd(FP,0x6509B0,45)
+	CIfEnd()
+	CSub(FP,0x6509B0,30)
 	
 	WhiteList = def_sIndex()
 	LauncherUnit = def_sIndex()
@@ -195,7 +254,12 @@ local SelShbool = CreateVar(FP)
 	NJumpX(FP,TimerUnit,{Cond_EXCC(2, AtLeast, 1)}) -- 2 = Timer 4 = Option
 
 	
-	EXCC_ClearCalc({SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})
+	
+	
+
+	
+	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
+	EXCC_ClearCalc()
 	NJumpXEnd(FP, WhiteList)
 	CIf(FP,{CV(EXCC_TempVarArr[9],0)})
 		f_SaveCp()
@@ -229,8 +293,6 @@ local SelShbool = CreateVar(FP)
 
 	f_Read(FP, _Sub(BackupCp,15), CPos)
 	Convert_CPosXY()
-	local UIDV = CreateVar(FP)
-	local PIDV = CreateVar(FP)
 	f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
 	f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
 	CIf(FP, {Cond_EXCC(5, Exactly, 1)})--타이머 타입 번호
@@ -290,7 +352,7 @@ local SelShbool = CreateVar(FP)
 	HeroIndex = CreateVar(FP)
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
 
-	CDoActions(FP, {Set_EXCC2(UnivCunit, CurCunitI2, 0, SetTo, 0)})--죽인수 초기화
+	CDoActions(FP, {Set_EXCC2(UnivCunit, CurCunitI2, 0, SetTo, 0)})--Lock On Disable
 
 	EnemyCheck = def_sIndex()
 	NJump(FP, EnemyCheck,{DeathsX(CurrentPlayer, AtLeast, 5, 0, 0xFF)})
