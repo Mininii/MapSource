@@ -218,6 +218,26 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	Gene2 = CS_ConnectPath(CSMakePath({32,32},{32,8192-32}), 100)
 	Gene3 = CS_ConnectPath(CSMakePath({32,8192-32},{2048-32,8192-32}), 100)
 	
+	
+	function MakeLevelShapeNum(Type,Points,LvMin,LvMax)
+		local X = {}
+		for i = LvMin, LvMax do
+			local ret
+			 if Type == "Polygon" then
+				ret = CSMakePolygon(Points,240/i,0,PlotSizeCalc(Points,i),0)
+				  table.insert(X,ret)
+				  
+			 elseif Type == "Star" then
+				ret = CSMakeStar(Points,165-(12*(Points-2)),240/i,180,PlotSizeCalc(Points*2,i),0)
+				table.insert(X,ret)
+			 end
+			 table.insert(LT,{string.sub(Type,1,1).."_"..Points..", "..(i-1).." : "..(#ret-1).."\n",#ret-1})
+			 --table.insert(LT,{Type.." Point."..Points.." LV. "..(i-1).."  "..string.sub(Type,1,1).."_"..Points..", "..(i-1).." : "..(#ret-1).."\n",#ret-1})
+		end
+		
+		
+	end
+	
 	Cir = {
 		CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 1), 0),
 		CSMakeCircle(8, 60, 0, PlotSizeCalc(8, 2), 0),
@@ -261,6 +281,12 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	TemConnectHD = CS_MoveXY(CS_ConnectPathX(Shape1008, 192, nil),-1744,-2384)
 	TemConnectSC = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, nil),-1744,-2384)
 	TemConnect = CS_MoveXY(CS_ConnectPathX(Shape1008, 48, 1),-1744,-2384)
+	Shape1008_2 = {6   ,{32, 4992},{928, 5440},{928, 5824},{416, 6080},{416, 5856},{32, 5664}}
+	TemConnect2HD = CS_MoveXY(CS_ConnectPathX(Shape1008_2, 192, nil),-400,-5488)
+	TemConnect2SC = CS_MoveXY(CS_ConnectPathX(Shape1008_2, 48, nil),-400,-5488)
+	TemConnect2 = CS_MoveXY(CS_ConnectPathX(Shape1008_2, 48, 1),-400,-5488)
+
+
 
 
 	RCen1 = CS_CropRA(CSMakeCircle(8, 48, 0, PlotSizeCalc(8, 6), 0), {64,4096}, {0,45})
@@ -301,9 +327,47 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	Shape1008 = {6   ,{64, 3584},{480, 3360},{480, 3872},{640, 3968},{352, 4096},{64, 3936}}
 	CellMShape = CS_FillPathHX2(Shape1008,1,72,48,1,0,-26.57,5)
 
+	L1084 = CS_FillPathHX2({4   ,{32, 2816},{448, 2656},{448, 3168},{32, 3360}},1,72,48,1,0,-26.57,5)
+	L2084 = CS_FillPathHX2({3   ,{2016, 6624},{1440, 6912},{2016, 7200}},1,72,48,1,0,-26.57,5)
+
+	WarpZ = {}
+	for i=0, 7 do
+	   table.insert(WarpZ,CS_RatioXY(CSMakeCircle(6+(6*i),64+(64*i),0,7+(6*i),1), 1, 0.5))
+	end
+	WarpZ = CS_CropXY(CS_OverlapX(table.unpack(WarpZ)),{-2048,2048},{-2048,2048})
 	
 	
+	CallStarS = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
+	CallStarSFL = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 2),0)
+	CallStarL = CSMakeStar(4, 135, 90, 45, PlotSizeCalc(4*2, 6), PlotSizeCalc(4*2, 5))
+	CallStarLFL = CSMakeStar(4, 135, 90, 45, PlotSizeCalc(4*2, 5), 0)
+
+	Nex1 = CSMakePolygon(3, 64, 0, PlotSizeCalc(3, 6), 0)
 	
 	
+	PL1 = CSMakeLine(2, 64, 0, 11, 0)
+	PL2 = CSMakeLine(2, 32, 0, 5, 0)
+	PSILSC1 = CS_OverlapX(
+		CS_MoveXY(PL1, -64, nil),
+		CS_MoveXY(PL1, -192, nil),
+		CS_MoveXY(PL1, -192-128, nil),
+		CS_MoveXY(PL1, 64, nil),
+		CS_MoveXY(PL1, 192, nil),
+		CS_MoveXY(PL1, 192+128, nil)
+	)
+	PSILHD1 = CS_OverlapX(
+		CS_MoveXY(PL2, -32, nil),
+		CS_MoveXY(PL2, -32-64, nil),
+		CS_MoveXY(PL2, -32-64-64, nil),
+		CS_MoveXY(PL2, 32, nil),
+		CS_MoveXY(PL2, 32+64, nil),
+		CS_MoveXY(PL2, 32+64+64, nil)
+	)
+	PSILHD1 = CS_SortY(PSILHD1, 0)
+	PSILSC1 = CS_SortY(PSILSC1, 0)
+	PSICHD1 = CS_RatioXY(CSMakeCircle(14, 240, 0, 14+1, 1), 1, 0.5)
+	PSICSC1 = CS_RatioXY(CSMakeCircle(48, 240, 0, 48+1, 1), 1, 0.5)
+	PSISHD1 = CSMakeStar(4, 135, 48, 45, PlotSizeCalc(4*2, 4), PlotSizeCalc(4*2, 3))
+	PSISSC1 = CSMakeStar(4, 135, 32, 45, PlotSizeCalc(4*2, 6), PlotSizeCalc(4*2, 5))
 	
 end

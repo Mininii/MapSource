@@ -339,7 +339,7 @@ function CreateUnitQueue()
 		CMov(FP,RPtr,Nextptrs)
 		CMov(FP,RPtrP,NextptrsP)
 		CMov(FP,RLocV,DefaultAttackLocV)
-		CMov(FP, RBX, BKY)
+		CMov(FP, RBX, BKX)
 		CMov(FP, RBY, BKY)
 		
 

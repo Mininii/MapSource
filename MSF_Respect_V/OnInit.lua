@@ -168,19 +168,21 @@
 	SetUnitsDatX(39, {BuildTime=15})
 	SetUnitsDatX(43, {BuildTime=15})
 	SetUnitsDatX(44, {BuildTime=15})
-	SetUnitsDatX(32,{Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(20,{Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(10,{Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(32,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(10,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for i =0,4 do
-	SetUnitsDatX(MarID[i+1],{Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(MarID[i+1],{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
 	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 5*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
 	SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 	SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
 
-	SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
-	SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
+	if TestStart == 1 then--배속조정기능 테스트모드 한정
+		SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
+		SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
+	end
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(12,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로

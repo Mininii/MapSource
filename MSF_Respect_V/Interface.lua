@@ -28,6 +28,8 @@
 		{18,"staredit\\wav\\BGM_Launcher.ogg",57*1000},
 		{19,"staredit\\wav\\BGM_Miles.ogg",44*1000},
 		{20,"staredit\\wav\\BGM_DontDie.ogg",126*1000},
+		{21,"staredit\\wav\\BGM_Daydream.ogg",44*1000},
+		{22,"staredit\\wav\\BGM_Hello.ogg",49*1000},
 	
 		
 	})
@@ -416,8 +418,8 @@
 		end
 		CMov(FP,CurEPD,SelEPD)
 		TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정의하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+		TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+		TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x075배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		CIfEnd()
 	CIfEnd()
@@ -438,6 +440,7 @@
 
 	CIfOnce(FP,{CD(GS,1)},{
 		--SetV(BGMType,1),
+		ModifyUnitEnergy(All, "Any unit", AllPlayers, 64, 100);
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
 		RunAIScriptAt("Expansion Zerg Campaign Insane","AI"),
@@ -944,6 +947,7 @@ DoActions(FP,{
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
 					DoActionsX(FP,{
+						SetResources(i, Add, 1, Gas);--가스 = 메딕사용횟수
 						ModifyUnitEnergy(All,MedicTrig[1],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[2],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[3],i,64,0);
@@ -1195,7 +1199,7 @@ end
 		actions = {
 			LeaderBoardKills("Any unit",StrDesign("\x11K\x04ills".." - "..GT[j+1][i]));
 			LeaderBoardComputerPlayers(Disable);
-			SetCDeaths(FP,SetTo,400,LeaderBoardT);
+			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
 			PreserveTrigger();
 		},
@@ -1216,6 +1220,19 @@ end
 	}
 	end
 	end
+	Trigger { -- 자원량
+		players = {FP},
+		conditions = {
+			Label(0);
+			CDeaths(FP,Exactly,400,LeaderBoardT);
+		},
+		actions = {
+			
+			LeaderBoardGreed(10000000);
+			LeaderBoardComputerPlayers(Disable);
+			PreserveTrigger();
+	},
+	}
 	CIf(FP,{CDeaths(FP,Exactly,399,LeaderBoardT);})
 	CMov(FP, 0x6509B0, 19025+2)
 	CFor(FP,19025+19,19025+(1700*84)+19,84) -- 좀비유닛탐지

@@ -246,6 +246,13 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, RBX);
 				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, RBY);
 			})
+			CElseIfX_AddRepeatType(14,"Attack_Gun")
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			Simple_SetLocX(FP,20,RBX,RBY,RBX,RBY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {TOrder(RUID, Force2, 1, Attack, 21);})
+
 			CElseIfX_AddRepeatType(217,"Walls")
 			CDoActions(FP, {
 				Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 1);
@@ -624,8 +631,8 @@ function CA_Func1()
 	local CA = CAPlotDataArr
 	local CB = CAPlotCreateArr
 	local SizeTemp = CreateVar(FP)
-	CMov(FP,BX,G_CB_TempTable[8])
-	CMov(FP,BY,G_CB_TempTable[9])
+	CMov(FP,BX,G_CB_BackupX)
+	CMov(FP,BY,G_CB_BackupY)
 	CIf(FP,{TTCVar(FP,G_CB_TempTable[11][2],NotSame,100,0xFF)})
 		CMov(FP, SizeTemp, G_CB_TempTable[11], nil, 0xFF, 1)
 		CA_RatioXY(SizeTemp, 100, SizeTemp, 100)

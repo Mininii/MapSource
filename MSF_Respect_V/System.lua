@@ -185,7 +185,10 @@ local SelShbool = CreateVar(FP)
 	]]
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 
+	MRCheck = def_sIndex()
+	NJumpX(FP,MRCheck,DeathsX(CurrentPlayer,Exactly,101,0,0xFF)) -- 맵리벌러 트리거작동 제외
 	--0x4 in air check
+
 	CAdd(FP,0x6509B0,30)
 	CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x4,0,0x4)},{Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}) -- Lock On
 	--55 to 10
@@ -209,29 +212,33 @@ local SelShbool = CreateVar(FP)
 	CrShift(FP, Y_Des, 16)
 
 	if TestStart == 1 then 
-		DisplayPrint(HumanPlayers, {"X_Des : ",X_Des,"   Y_Des : ",Y_Des})
+		--DisplayPrint(HumanPlayers, {"X_Des : ",X_Des,"   Y_Des : ",Y_Des})
 	end
 	X_Des2= CreateVar(FP)
 	CMov(FP,X_Des2,_Sub(_Mov(4096),X_Des))
 	if TestStart == 1 then 
-		DisplayPrint(HumanPlayers, {"X_Des2 : ",X_Des2,"   Y_Des : ",Y_Des})
+		--DisplayPrint(HumanPlayers, {"X_Des2 : ",X_Des2,"   Y_Des : ",Y_Des})
 	end
 	local UIDV = CreateVar(FP)
 	local PIDV = CreateVar(FP)
-	f_Read(FP, _Add(BackupCp,19), UIDV, nil,0xFF,1)
-	f_Read(FP, _Add(BackupCp,13), PIDV, nil,0xFF,1)
+	--f_Read(FP, _Add(BackupCp,19), UIDV, nil,0xFF,1)
+	--f_Read(FP, _Add(BackupCp,13), PIDV, nil,0xFF,1)
 	
 
-	CIfX(FP,{TDeathsX(_Add(BackupCp,13),Exactly,187*256,0,0xFF00)})
+	--CIfX(FP,{TDeathsX(_Add(BackupCp,13),Exactly,187*256,0,0xFF00)})
+	--CDoActions(FP,{
+	--	TSetDeathsX(BackupCp,SetTo,X_Des2,0,0xFFFF),
+	--	TSetDeathsX(_Add(BackupCp,16),SetTo,X_Des2,0,0xFFFF),
+	--	TSetDeathsX(_Sub(BackupCp,2),SetTo,X_Des2,0,0xFFFF)})
+	--CElseX()
+	--Simple_SetLocX(FP,0, X_Pos, Y_Pos, X_Pos, Y_Pos,{Simple_CalcLoc(0, -4,-4,4,4)})
+	--Simple_SetLocX(FP,200, X_Des2, Y_Des, X_Des2, Y_Des,{Simple_CalcLoc(200, -4,-4,4,4)})
+	--CDoActions(FP,{TOrder(UIDV,PIDV,1,Attack,201)})
+	--CIfXEnd()
 	CDoActions(FP,{
 		TSetDeathsX(BackupCp,SetTo,X_Des2,0,0xFFFF),
 		TSetDeathsX(_Add(BackupCp,16),SetTo,X_Des2,0,0xFFFF),
 		TSetDeathsX(_Sub(BackupCp,2),SetTo,X_Des2,0,0xFFFF)})
-	CElseX()
-	Simple_SetLocX(FP,0, X_Pos, Y_Pos, X_Pos, Y_Pos,{Simple_CalcLoc(0, -4,-4,4,4)})
-	Simple_SetLocX(FP,200, X_Des2, Y_Des, X_Des2, Y_Des,{Simple_CalcLoc(200, -4,-4,4,4)})
-	CDoActions(FP,{TOrder(UIDV,PIDV,1,Attack,201)})
-	CIfXEnd()
 	f_LoadCp()
 
 	CIfEnd()
@@ -257,7 +264,7 @@ local SelShbool = CreateVar(FP)
 	
 	
 
-	
+	NJumpXEnd(FP, MRCheck)
 	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
 	EXCC_ClearCalc()
 	NJumpXEnd(FP, WhiteList)
@@ -505,6 +512,33 @@ end
 	SETimer = CreateCcode()
 	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,SETimer)})
+
+
+	CIf(FP,{CD(GMode,2,AtLeast)})--콜은 MX난이도이상만 나옴
+	--1~6 5분간격
+	--7~9 10분간격
+	--10~13 15분간격
+	--14~17 30분간격
+	--17~21 60분간격
+
+	for i = 1, 6 do
+		f_GunForceSend(256,P8,1024+(1088*65536),i+0,{CV(GTime,i*(24*60*5),AtLeast)},nil,1)
+	end
+	for i = 1, 3 do
+		f_GunForceSend(256,P8,1024+(1088*65536),i+6,{CV(GTime,(24*60*30)+(i*(24*60*10)),AtLeast)},nil,1)
+	end
+	for i = 1, 4 do
+		f_GunForceSend(256,P8,1024+(1088*65536),i+9,{CV(GTime,(24*60*60)+(i*(24*60*15)),AtLeast)},nil,1)
+	end
+	for i = 1, 4 do
+		f_GunForceSend(256,P8,1024+(1088*65536),i+13,{CV(GTime,(24*60*120)+(i*(24*60*30)),AtLeast)},nil,1)
+	end
+	CIf(FP,{CD(GMode,3)})
+	for i = 1, 4 do
+		f_GunForceSend(256,P8,1024+(1088*65536),i+17,{CV(GTime,(24*60*240)+(i*(24*60*60)),AtLeast)},nil,1)
+	end
+	CIfEnd()
+	CIfEnd()
 
 
 	
@@ -757,6 +791,9 @@ Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved}
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
 DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
+if TestStart == 1 then
+	--DoActionsX(FP, {AddV(GTime,10)})
+end
 ChryCcode2 = CreateCcode()
 TriggerX(FP, {CD(ChryCcode,0)}, {AddCD(ChryCcode2,1)}, {preserved})
 CCIText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07。\x18˙\x0F+\x1C˚ \x08E\x04nemy \x08S\x04torm \x1C。\x0F+\x18.\x07˚ \x04의 \x02무적상태\x04가 해제되었습니다.\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14"
