@@ -162,7 +162,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				TSetDeaths(_Add(RPtr,22),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
 			})
 			CIf(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,202)})--fCGive후 타이머 어택
-			f_CGive(FP, RPtr, RPtrP, P9, RPID)
+			f_CGive(FP, RPtr, nil, P9, RPID)
 			
 			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
 			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
@@ -176,13 +176,23 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
 		})
 			CIfEnd()
-			CTrigger(FP, {CV(RType,203)}, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000)},{preserved})
-			
-				
-
+			CIf(FP,{CV(RType,203)},{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000)})
+			f_CGive(FP, RPtr, nil, P9, RPID)
+			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
+			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 4);--f_CGive 해제후 정야독
+			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 999999);
+			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
+		})
+			CIfEnd()
 			CElseIfX_AddRepeatType(84,"Explosion_Guard")
 			CDoActions(FP,{
-				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),KillUnit(84,FP)
+				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),KillUnit(94,FP)
 			})
 
 			CElseIfX_AddRepeatType(129,"Era_Attack")
@@ -301,12 +311,6 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		CIfX(FP,{CV(NQOption,0)}) -- 큐를 사용하여 소환할경우(일반적)
 		local BX, BY = CreateVars(2,FP)
-		CIfX(FP,{CV(RepeatType,4)})
-		CElseX()
-		CMov(FP,BX,0)
-		CMov(FP,BY,0)
-		CIfXEnd()
-		
 			--DisplayPrint(HumanPlayers, {"Queue Executed. X : ",QueueX,"  Y : ",QueueY,"  UID : ",Gun_TempSpawnSet1})
 		CDoActions(FP,{
 			TSetMemory(_Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr),SetTo,QueueX),
@@ -316,11 +320,9 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			TSetMemory(_Add(CreateUnitQueueTypeArr,CreateUnitQueuePtr),SetTo,RepeatType),
 			TSetMemory(_Add(CreateUnitQueueBakXPosArr,CreateUnitQueuePtr),SetTo,BX),
 			TSetMemory(_Add(CreateUnitQueueBakYPosArr,CreateUnitQueuePtr),SetTo,BY),
-			
-
 		})
 		DoActionsX(FP,{AddV(CreateUnitQueueNum,1),AddV(CreateUnitQueuePtr,1)})
-		TriggerX(FP, {CV(CreateUnitQueuePtr,200000,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
+		TriggerX(FP, {CV(CreateUnitQueuePtr,QueueMaxSize,AtLeast)},{SetV(CreateUnitQueuePtr,0),},{preserved})
 		CElseIfX({Memory(0x628438,AtLeast,1)})--큐를 사용하지 않고 소환할경우(무적버그, 큐에 이펙트유닛 쌓이는거 등 방지)
 		
 		NIf(FP,{CV(Gun_TempSpawnSet1,1,AtLeast),CV(Gun_TempSpawnSet1,226,AtMost)})
@@ -339,9 +341,11 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 			end
 		CDoActions(FP, {
 			SetMemoryB(0x6644F8+4,SetTo,158),
+			SetMemoryB(0x6C9858+158,SetTo,2),
 			SetMemoryB(0x6644F8+6,SetTo,200),
 			SetMemory(0x66EC48+(541*4), SetTo, 91),
 			SetMemory(0x66EC48+(956*4), SetTo, 91),
+			
 			TSetMemory(_Add(Gun_TempSpawnSet1,EPDF(0x662860)) ,SetTo,1+65536),
 		})
 		f_Read(FP,0x628438,G_CB_NextptrsP,G_CB_Nextptrs,0xFFFFFF)
@@ -351,6 +355,7 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		DoActions(FP, {
 			SetMemoryB(0x6644F8+4,SetTo,76),
 			SetMemoryB(0x6644F8+6,SetTo,83),
+			SetMemoryB(0x6C9858+158,SetTo,0),
 			SetMemory(0x66EC48+(956*4), SetTo, 377),
 			SetMemory(0x66EC48+(541*4), SetTo, 247),
 		})

@@ -187,6 +187,18 @@ local SelShbool = CreateVar(FP)
 
 	MRCheck = def_sIndex()
 	NJumpX(FP,MRCheck,DeathsX(CurrentPlayer,Exactly,101,0,0xFF)) -- 맵리벌러 트리거작동 제외
+	--CIf(FP,DeathsX(CurrentPlayer,Exactly,3,0,0xFF))--셜리하우스 보조유닛 iScript로 제어하기
+	--	f_SaveCp()
+	--	SubUnitPtr = CreateVar(FP)
+	--	CIf(FP,{TMemory(_Add(BackupCp, 3), AtLeast, 1)})
+	--	f_Read(FP, _Add(BackupCp, 3), nil, SubUnitPtr)
+	--	CDoActions(FP, {TSetMemoryX(_Add(SubUnitPtr,8),SetTo,2+(127*65536),0xFF00FF)})
+	--	CIfEnd()
+	--	f_LoadCp()
+	--	if Limit == 1 then
+	--		EXCC_ClearCalc()
+	--	end
+	--CIfEnd()
 	--0x4 in air check
 
 	CAdd(FP,0x6509B0,30)
@@ -283,8 +295,8 @@ local SelShbool = CreateVar(FP)
 			CTrigger(FP, {NTCond2(),Cond_EXCC(1, Exactly, 1)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 		CIfEnd()
 		for i = 0, 4 do
-			CIf(FP, {CV(EXCC_TempVarArr[10],i*65536)})
-			CTrigger(FP, {NTCond(),Memory(0x582294+(4*i),Exactly,1),}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+			CIf(FP, {CVX(EXCC_TempVarArr[10],i*65536,0xFF0000)})
+			CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)}, {preserved})
 			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)}, {preserved})
@@ -296,39 +308,52 @@ local SelShbool = CreateVar(FP)
 	EXCC_ClearCalc()
 	NJumpXEnd(FP, TimerUnit)
 	CIf(FP, {Cond_EXCC(2, Exactly, 1)})--타이머 종료시 1회한정 작동
-	f_SaveCp()
+		f_SaveCp()
 
-	f_Read(FP, _Sub(BackupCp,15), CPos)
-	Convert_CPosXY()
-	f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
-	f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
-	CIf(FP, {Cond_EXCC(5, Exactly, 1)})--타이머 타입 번호
-		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-		CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 6)})
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
+		f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
+		CIf(FP, {Cond_EXCC(5, Exactly, 1)})--타이머 타입 번호
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 6)})
+		CIfEnd()
+		CIf(FP, {Cond_EXCC(5, Exactly, 2)})--타이머 타입 번호
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			Simple_SetLocX(FP,200,EXCC_TempVarArr[12],EXCC_TempVarArr[13],EXCC_TempVarArr[12],EXCC_TempVarArr[13],{Simple_CalcLoc(200,-4,-4,4,4)})
+			CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 201)})
+		CIfEnd()
+		CIf(FP, {Cond_EXCC(5, Exactly, 3)})--타이머 타입 번호(f_CGive 해제 후 기지공격)
+			f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+			local NPosX, NPosY = CreateVars(2, FP)
+			GetLocCenter(5, NPosX, NPosY)
+			SpeedRet = CreateVar(FP)
+			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(_iSub(CPosX,NPosX)),_Square(_iSub(CPosY,NPosY))),_Mov(2)))
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6),TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
+			TSetMemory(_Sub(BackupCp,25-13),SetTo,SpeedRet),
+			TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),
+			TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),})
+		CIfEnd()
+		f_LoadCp()
 	CIfEnd()
-	CIf(FP, {Cond_EXCC(5, Exactly, 2)})--타이머 타입 번호
-		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-		Simple_SetLocX(FP,200,EXCC_TempVarArr[12],EXCC_TempVarArr[13],EXCC_TempVarArr[12],EXCC_TempVarArr[13],{Simple_CalcLoc(200,-4,-4,4,4)})
-		CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 201)})
-	CIfEnd()
-	CIf(FP, {Cond_EXCC(5, Exactly, 3)})--타이머 타입 번호(f_CGive 해제 후 기지공격)
-		f_CGive(FP, _Sub(BackupCp,25), _Add(_lShift(_Sub(BackupCp,25),2),0x58A364), P6, PIDV)
-		local NPosX, NPosY = CreateVars(2, FP)
-		GetLocCenter(5, NPosX, NPosY)
-		SpeedRet = CreateVar(FP)
-		f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(_iSub(CPosX,NPosX)),_Square(_iSub(CPosY,NPosY))),_Mov(2)))
-		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-		CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6),TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
-		TSetMemory(_Sub(BackupCp,25-13),SetTo,SpeedRet),
-		TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),
-		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),})
-	CIfEnd()
-	f_LoadCp()
-
 	
-		
-
-
+	CIf(FP, {Cond_EXCC(5, Exactly, 4),CD(CocoonCcode,1)})--타이머 타입 번호(조건부 만족시 정야독)
+		f_SaveCp()
+		f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
+		CIf(FP,{CV(PIDV,8)})
+		f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP, {
+		TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
+		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
+		Set_EXCCX(5,SetTo,0),
+		Set_EXCCX(2,SetTo,0)})
+		CIfEnd()
+		f_LoadCp()
 	CIfEnd()
 
 	EXCC_ClearCalc()
@@ -615,7 +640,7 @@ if NameTest == 1 then
 		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚" --s16 t5
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
-		str55 = "\t\t\t\x1E。˙+˚Trap。+.˚\x12\x11。˙+˚T\x04rap\x11。+.˚"--(sp:13 tab:4)
+		str55 = "\t\t\t\x1C。˙+˚Portal。+.˚\x12\x1F。˙+˚P\x04ortal\x1F。+.˚"--(sp:13 tab:4)
 
 		--Yuri
 		--Sena
@@ -790,14 +815,34 @@ Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved}
 Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
-DoActionsX(FP, {KillUnit(94, AllPlayers),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
+DoActionsX(FP, {KillUnit(94, AllPlayers),KillUnit(94, P9),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
 if TestStart == 1 then
 	--DoActionsX(FP, {AddV(GTime,10)})
 end
 ChryCcode2 = CreateCcode()
 TriggerX(FP, {CD(ChryCcode,0)}, {AddCD(ChryCcode2,1)}, {preserved})
 CCIText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07。\x18˙\x0F+\x1C˚ \x08E\x04nemy \x08S\x04torm \x1C。\x0F+\x18.\x07˚ \x04의 \x02무적상태\x04가 해제되었습니다.\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14"
+CCIText2 = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\n\n\x13\x07。\x18˙\x0F+\x1C˚ \x11g\x04lory\x11MAX \x1C。\x0F+\x18.\x07˚ \x04가 \x07본진에 출현\x04했습니다.\n\n\n\x13\x04！！！　\x02ＵＮＬＯＣＫ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14"
+CCIText3 = "\x13\x07。\x18˙\x0F+\x1C˚ \x03N\x04ew\x03G\x04ame\x03S\x04tart 를 모두 파괴하여 \x1F양방향 포탈\x04이 \x07활성화\x04 되었습니다. \x1C。\x0F+\x18.\x07˚"
+
 TriggerX(FP, {CD(ChryCcode2,480,AtLeast)}, {SetInvincibility(Disable, 201, P8, 64),
 	RotatePlayer({DisplayTextX(CCIText, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),
 })
+WinCcode = CreateCcode()
+TriggerX(FP,{CD(GunCcode,0)},{AddCD(WinCcode,1)},{preserved})
+TriggerX(FP, {CD(WinCcode,480,AtLeast)}, {KillUnit(125, AllPlayers),KillUnit(125, P12),RotatePlayer({DisplayTextX(CCIText2, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),})
+f_TempRepeat(CD(WinCcode,480,AtLeast), 189, 1, 0, P8, {1024,1088}, 1)
+
+TriggerX(FP, Deaths(P8, AtLeast, 1, 189), {RotatePlayer({Victory()}, HumanPlayers, FP)})--화홀제작전 임시 승리트리거
+TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
+	RotatePlayer({DisplayTextX(CCIText3, 4)}, HumanPlayers, FP),
+	GiveUnits(All, 204, P8, 64, P6),
+	SetDoodadState(Disable, 204, P6, 27),
+	SetDoodadState(Disable, 204, P6, 28),
+})
+TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
+	MoveUnit(All, "Men", Force1, 28, 29),
+	MoveUnit(All, "Men", Force1, 27, 30),
+},{preserved})
+
 end

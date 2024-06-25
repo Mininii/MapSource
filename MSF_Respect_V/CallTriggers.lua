@@ -162,5 +162,29 @@ CDoActions(FP, {
 CIfEnd()
 SetCallEnd()
 
-
+Call_MarCr=SetCallForward()
+MID = CreateVar(FP)
+MPID = CreateVar(FP)
+MHP = CreateVar(FP)
+MPosX = CreateVar(FP)
+MPosY = CreateVar(FP)
+SetCall(FP)
+CIf(FP, {Memory(0x628438, AtLeast, 1)})
+f_Read(FP, 0x628438, nil, Nextptrs)
+f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
+Simple_SetLocX(FP,0, MPosX,MPosY,MPosX,MPosY)
+CDoActions(FP, {TCreateUnit(1, MID, 1, MPID),TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)
+})
+f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
+CDoActions(FP, {
+Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
+Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 0);
+Set_EXCC2(UnivCunit, CunitIndex, 3, SetTo, 0);
+Set_EXCC2(UnivCunit, CunitIndex, 4, SetTo, 0);
+Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
+Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, _Mul(MPID, 65536));
+Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MHP);
+})
+CIfEnd()
+SetCallEnd()
 end

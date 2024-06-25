@@ -20,7 +20,7 @@
 		 "\0164인",
 		 "\x115인",
 	}
-
+	QueueMaxUnit = 1500
 	NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
 	NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
 	HMBaseAtk=50
@@ -161,7 +161,7 @@
 	SetUnitAbility(86,78,3,25000,10000,22,800,false,1,32*12,6,54000,"Danimoth",4500) --
 	SetUnitAbility(77,65,3,20000,false,15,350,false,2,32*2,3,35000,"Fenix Z",1800) --
 	SetUnitAbility(78,67,3,25000,false,15,320,false,1,32*5,5,45000,"Fenix D",2800) --
-	SetUnitAbility(25,28,1,20000,false,75,1000,false,1,384,12,30000,"Duke Siege",3000) --
+	SetUnitAbility(25,28,1,20000,false,75,1000,{15,30,45},1,384,12,30000,"Duke Siege",3000) --
 	SetUnitAbility(75,85,3,20000,10000,22,900,false,1,32*1,3,35000,"Zeratul",3800) --
 	SetUnitAbility(84,79,4,24000,9000,8,150,false,1,32*4,3,65000,"Lin",3000) --인터셉터
 
@@ -205,11 +205,11 @@
 
 
 	
-	SetUnitAbility(102,22,5,222222,false,30,2550,false,1,224,7,500000,"Division",25000)
+	SetUnitAbility(102,22,5,222222,false,30,1990,false,1,224,7,500000,"Division",25000)
 	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"Deaths",35000)
-	SetUnitAbility(27,70,5,500000,false,30,4200,{30,30,30},1,64,5,500000,"Zero",50000)
-	SetUnitAbility(68,70,5,777777,65535,30,4200,{30,30,30},1,64,4,777777,"Destroy",60000)
-	SetUnitAbility(30,27,5,322,false,75,3222,false,1,384,12,96666,"Identity",5000)
+	SetUnitAbility(27,70,5,500000,false,30,2100,{30,30,30},1,64,5,500000,"Zero",50000)
+	SetUnitAbility(68,70,5,777777,65535,30,2100,{30,30,30},1,64,4,77777,"Destroy",60000)
+	SetUnitAbility(30,27,5,37,false,75,3777,{15,30,45},1,384,12,96666,"Identity",5000)
 
 
 	

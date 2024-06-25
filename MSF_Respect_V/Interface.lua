@@ -27,11 +27,11 @@
 		{17,"staredit\\wav\\BGM_Black_Swan.ogg",88*1000},
 		{18,"staredit\\wav\\BGM_Launcher.ogg",57*1000},
 		{19,"staredit\\wav\\BGM_Miles.ogg",44*1000},
-		{20,"staredit\\wav\\BGM_DontDie.ogg",126*1000},
+		{20,"staredit\\wav\\BGM_DontDie.ogg",78*1000},
 		{21,"staredit\\wav\\BGM_Daydream.ogg",44*1000},
 		{22,"staredit\\wav\\BGM_Hello.ogg",49*1000},
-	
-		
+		{23,"staredit\\wav\\BGM_DIE_IN.ogg",96*1000},
+		{24,"staredit\\wav\\BGM_ReBIRTH.ogg",60*1000},
 	})
 	BTDis = {}
 	for i = 0,4 do
@@ -55,14 +55,13 @@
 		
 
 	for i = 1,5 do
-		Trigger2X(FP, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtLeast,3),HumanCheck(i-1, 0)}, {
+		Trigger2X(i+1, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtLeast,3),HumanCheck(i-1, 0)}, {
 			SetCD(BanCode[1],0),
 			SetCD(BanCode[2],0),
 			SetCD(BanCode[3],0),
 			SetCD(BanCode[4],0),
 			SetCD(BanCode[5],0),
-			RotatePlayer({
-				DisplayTextX(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x07초기화\x04되었습니다."), 0)},HumanPlayers,FP);
+			DisplayText(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x07초기화\x04되었습니다."),4);
 		})
 		Trigger2X(FP, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtMost,2),HumanCheck(i-1, 0)}, {BTDis,
 			RotatePlayer({
@@ -131,6 +130,10 @@
 
 	if Limit == 1 then
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
+		TestCode = CreateCcode()
+		TestCode2 = CreateCcode()
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,198),CD(GS,0)},AddCD(TestCode,1) , {preserved})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
 
@@ -157,10 +160,6 @@
 				}
 				}
 			TestUPtr = CreateVar(FP)
-			TestCode = CreateCcode()
-			TestCode2 = CreateCcode()
-			TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,199),CD(GS,0)},AddCD(TestCode,1) , {preserved})
-			TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
 			if HeroTestMode==1 then
 				local TempUID = CreateVar(FP)
 				CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,199),CD(GS,1);}) -- F12 누르면 선택한 유닛 12마리가 적으로 출현함
@@ -181,8 +180,8 @@
 
 			end
 
-			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
-			CIfEnd()
+			--CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
+			--CIfEnd()
 			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
 			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 			--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
@@ -241,24 +240,13 @@
 				CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 				CMov(FP,0x6509B0,Cunit2,19)
 				--0x00020000 - Is A Building
-
+				
 				f_SaveCp()
 				CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
 				TmpGunNum = CreateVarArr(6,FP)
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*0)/4))), TmpGunNum[1])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*1)/4))), TmpGunNum[2])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*2)/4))), TmpGunNum[3])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*3)/4))), TmpGunNum[4])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*4)/4))), TmpGunNum[5])
-				f_Read(FP, _Add(_Mul(CunitIndex,_Mov(0x970/4)),_Add(UnivCunit[3],((0x20*5)/4))), TmpGunNum[6])
-				f_Read(FP, _Add(Cunit2,3), TmpGunNum[5])
+				f_Read(FP, TtoA("VisionTurbo"), TmpGunNum[1])
 				DisplayPrintEr(CurrentOP, {
-					"UC1 : ",TmpGunNum[1],
-					"   UC2 : ",TmpGunNum[2],
-					"   UC3 : ",TmpGunNum[3],
-					"   UC4 : ",TmpGunNum[4],
-					"   UC5 : ",TmpGunNum[5],
-					"   UC6 : ",TmpGunNum[6],
+					"SeekOffset : ",TmpGunNum[1],
 				})
 					
 				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
@@ -267,9 +255,9 @@
 			CIfEnd()
 		CIfEnd()
 	
-		CMov(FP,0x6509B0,FP)--상위플레이어 단락
-				end
+		end
 
+		CMov(FP,0x6509B0,FP)--상위플레이어 단락
 
     for i = 0, 4 do
 		TriggerX(FP,{HumanCheck(i, 0)},{SetCDeaths(FP,Add,10,PExitFlag)}) -- 나갔을 경우 1회에 한해 인구수 계산기 작동
@@ -420,14 +408,14 @@
 		TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x075배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
+		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		CIfEnd()
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
 
 	
 
-	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x075배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
 
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 8)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,1)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 12)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,2)})
@@ -436,10 +424,8 @@
 	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
 
-	TriggerX(FP,{CD(GS,1)},{SetDeaths(-111923, SetTo, 0, 0)},{preserved})
-
-	CIfOnce(FP,{CD(GS,1)},{
-		--SetV(BGMType,1),
+	CIfOnce(FP,{CD(GS,1)},{SetCDeaths(FP,Add,10,PExitFlag),
+		SetV(BGMType,1),
 		ModifyUnitEnergy(All, "Any unit", AllPlayers, 64, 100);
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
@@ -459,7 +445,7 @@
 		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
 		SetCp(FP);RemoveUnit(101,P6)
 	})
-	if false then--TestStart == 1 then
+	if Limit == 1 then
 		GSEnable = CreateCcode()
 		TriggerX(FP, {CD(TestCode,4),CD(TestCode2,3)}, {SetCD(GSEnable,1)})
 		
@@ -537,9 +523,36 @@
 		Shape4020,
 		Shape5020
 	}
+
+	
+
+
 	for i = 0, 4 do
-		CSPlot(NMT[i+1], i, 32, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
-		CSPlot(HMT[i+1], i, 20, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
+		local MCT = {
+		{NMCr[i+1],32,1500*256},
+		{HMCr[i+1],20,3000*256},
+		{SMCr[i+1],10,6000*256},
+		{RMCr[i+1],MarID[i+1],5000*256}}
+		for o = 2, #NMT[i+1] do
+			CallTriggerX(FP, Call_MarCr,{HumanCheck(i,1),Memory(0x628438, AtLeast, 1)}, {
+			SetV(MID,MCT[1][2]),
+			SetV(MPID,i),
+			SetV(MHP,MCT[1][3]),
+			SetV(MPosX,NMT[i+1][o][1]),
+			SetV(MPosY,NMT[i+1][o][2]),
+		},1)
+		end
+		for o = 2, #HMT[i+1] do
+			CallTriggerX(FP, Call_MarCr,{HumanCheck(i,1),Memory(0x628438, AtLeast, 1)}, {
+			SetV(MID,MCT[2][2]),
+			SetV(MPID,i),
+			SetV(MHP,MCT[2][3]),
+			SetV(MPosX,HMT[i+1][o][1]),
+			SetV(MPosY,HMT[i+1][o][2]),
+		},1)
+		end
+		--CSPlot(NMT[i+1], i, 32, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
+		--CSPlot(HMT[i+1], i, 20, 0, {0,0}, 1, 32, FP, {HumanCheck(i,1)})
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCp(i),RunAIScriptAt("Enter Transport", 64),SetCp(FP)})
 	end
 
@@ -547,23 +560,39 @@
 	CIfEnd()
 	
 
+	Shape6101 = {{2400, 284},{2912, 284},{3424, 284},{3936, 284},{4448, 284},{4960, 284},{5472, 284},{5984, 284},{6496, 284},{7008, 284},{7520, 284},{8032, 284},{2400, 796},{2912, 796},{3424, 796},{3936, 796},{4448, 796},{4960, 796},{5472, 796},{5984, 796},{6496, 796},{7008, 796},{7520, 796},{8032, 796},{2400, 1308},{2912, 1308},{3424, 1308},{3936, 1308},{4448, 1308},{4960, 1308},{5472, 1308},{5984, 1308},{6496, 1308},{7008, 1308},{7520, 1308},{8032, 1308},{2400, 1820},{2912, 1820},{3424, 1820},{3936, 1820},{4448, 1820},{4960, 1820},{5472, 1820},{5984, 1820},{6496, 1820},{7008, 1820},{7520, 1820},{8032, 1820},{2400, 2332},{2912, 2332},{3424, 2332},{3936, 2332},{4448, 2332},{4960, 2332},{5472, 2332},{5984, 2332},{6496, 2332},{7008, 2332},{7520, 2332},{8032, 2332},{2400, 2844},{2912, 2844},{3424, 2844},{3936, 2844},{4448, 2844},{4960, 2844},{5472, 2844},{5984, 2844},{6496, 2844},{7008, 2844},{7520, 2844},{8032, 2844},{2400, 3356},{2912, 3356},{3424, 3356},{3936, 3356},{4448, 3356},{4960, 3356},{5472, 3356},{5984, 3356},{6496, 3356},{7008, 3356},{7520, 3356},{8032, 3356},{2400, 3868},{2912, 3868},{3424, 3868},{3936, 3868},{4448, 3868},{4960, 3868},{5472, 3868},{5984, 3868},{6496, 3868},{7008, 3868},{7520, 3868},{8032, 3868},{2400, 4380},{2912, 4380},{3424, 4380},{3936, 4380},{4448, 4380},{4960, 4380},{5472, 4380},{5984, 4380},{6496, 4380},{7008, 4380},{7520, 4380},{8032, 4380},{2400, 4892},{2912, 4892},{3424, 4892},{3936, 4892},{4448, 4892},{4960, 4892},{5472, 4892},{5984, 4892},{6496, 4892},{7008, 4892},{7520, 4892},{8032, 4892},{2400, 5404},{2912, 5404},{3424, 5404},{3936, 5404},{4448, 5404},{4960, 5404},{5472, 5404},{5984, 5404},{6496, 5404},{7008, 5404},{7520, 5404},{8032, 5404},{2400, 5916},{2912, 5916},{3424, 5916},{3936, 5916},{4448, 5916},{4960, 5916},{5472, 5916},{5984, 5916},{6496, 5916},{7008, 5916},{7520, 5916},{8032, 5916},{2400, 6428},{2912, 6428},{3424, 6428},{3936, 6428},{4448, 6428},{4960, 6428},{5472, 6428},{5984, 6428},{6496, 6428},{7008, 6428},{7520, 6428},{8032, 6428},{2400, 6940},{2912, 6940},{3424, 6940},{3936, 6940},{4448, 6940},{4960, 6940},{5472, 6940},{5984, 6940},{6496, 6940},{7008, 6940},{7520, 6940},{8032, 6940},{2400, 7452},{2912, 7452},{3424, 7452},{3936, 7452},{4448, 7452},{4960, 7452},{5472, 7452},{5984, 7452},{6496, 7452},{7008, 7452},{7520, 7452},{8032, 7452},{2400, 7964},{2912, 7964},{3424, 7964},{3936, 7964},{4448, 7964},{4960, 7964},{5472, 7964},{5984, 7964},{6496, 7964},{7008, 7964},{7520, 7964},{8032, 7964}}
+
+	--TriggerX(FP,{CD(GS,1)},{SetDeaths(-111923, SetTo, 0, 0)},{preserved})
+	CIf(FP, {Deaths(-111923,Exactly,0,0)})
+	local Act = {CreateUnit(1, 91, 31, P6)}
+	for j,k in pairs(Shape6101) do
+		table.insert(Act, Simple_SetLoc(0, k[1], k[2],k[1], k[2]))
+		table.insert(Act, MoveUnit(All, 91, P6, 32, 1))
+	end
+	table.insert(Act, RemoveUnit(91, P6))
+	DoActions2X(FP, Act)
+
+		
+	CIfEnd()
 
 
 for i = 0, 4 do -- 강퇴기능
 	for j=3,5 do
-		Trigger { -- 강퇴토큰
-			players = {FP},
-			conditions = {
-				Label(0);
-				HumanCheck(i, 1);
-				Command(i,AtLeast,1,BanToken[i+1]);
-				CV(PCheckV,j),
-			},
-			actions = {
-				SetCDeaths(FP,Add,1,BanCode[i+1]);
-				RotatePlayer({DisplayTextX(StrDesign(PlayerString[i+1].."\x04에게 \x08강퇴 투표\x04가 \x081회 누적\x04 되었습니다. 투표가 \x03만장일치\x04일 경우 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-				},
-			}
+		for p = 1, 5 do
+			Trigger { -- 강퇴토큰
+				players = {FP},
+				conditions = {
+					Label(0);
+					HumanCheck(p-1, 1);
+					Command(i,AtLeast,1,BanToken[p]);
+					CV(PCheckV,j),
+					},
+				actions = {
+					SetCDeaths(FP,Add,1,BanCode[p]);
+					RotatePlayer({DisplayTextX(StrDesign(PlayerString[p].."\x04에게 \x08강퇴 투표\x04가 \x081회 누적\x04 되었습니다. 투표가 \x03만장일치\x04일 경우 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+					},
+				}
+		end
 			Trigger { -- 강퇴
 			players = {FP},
 			conditions = {
@@ -585,7 +614,6 @@ for i = 0, 4 do -- 강퇴기능
 				CDeaths(FP,AtLeast,j-1,BanCode[i+1]);
 				CV(PCheckV,j),
 				Memory(0x57F1B0, Exactly, i)
-				
 			},
 			actions = {
 				SetCp(i),
@@ -601,21 +629,23 @@ for i = 0, 4 do -- 강퇴기능
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
 				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍 코드 0x32223223 작동.\x07 』",4);
-				SetMemory(0xCDDDCDDC,SetTo,1);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+				CreateUnit(1, 94, 1, FP);
+				RemoveUnit(94, FP);
+				
 				
 				},
 			}
@@ -835,30 +865,18 @@ DoActions(FP,{
 		--
 		--
 		local MCT = {
-		{NMCr[i+1],32,1500},
-		{HMCr[i+1],20,3000},
-		{SMCr[i+1],10,6000},
-		{RMCr[i+1],MarID[i+1],5000}}
+		{NMCr[i+1],32,1500*256},
+		{HMCr[i+1],20,3000*256},
+		{SMCr[i+1],10,6000*256},
+		{RMCr[i+1],MarID[i+1],5000*256}}
 		for p = 1, 4 do
-		CIf(FP, {CD(MCT[p][1],1,AtLeast),Memory(0x628438, AtLeast, 1)},SubCD(MCT[p][1],1))
-			f_Read(FP, 0x628438, nil, Nextptrs)
-			f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
-			CDoActions(FP, {
-				CreateUnit(1, MCT[p][2], 6, i),TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)
+			CallTriggerX(FP, Call_MarCr,{CD(MCT[p][1],1,AtLeast),Memory(0x628438, AtLeast, 1)}, {SubCD(MCT[p][1],1),
+				SetV(MID,MCT[p][2]),
+				SetV(MPID,i),
+				SetV(MHP,MCT[p][3]),
+				SetV(MPosX,1024),
+				SetV(MPosY,1088),
 			})
-			f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
-			CDoActions(FP, {
-			Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
-			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 0);
-			Set_EXCC2(UnivCunit, CunitIndex, 3, SetTo, 0);
-			Set_EXCC2(UnivCunit, CunitIndex, 4, SetTo, 0);
-			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
-			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, i*65536);
-			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MCT[p][3]*256);
-			})
-
-			
-		CIfEnd()
 		end
 		
 		
@@ -897,7 +915,7 @@ DoActions(FP,{
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CMov(FP,0x581F04+(i*4),_Mod(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 		CIfX(FP, {Memory(0x582294+(4*i),AtLeast,1200)})
-		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mul(ExRate, 5)))
+		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),_Mul(ExRate, 2)))
 		CElseX()
 		CAdd(FP,0x57F0F0+(i*4),_Mul(_Mul(ExchangeP,_Mov(10)),ExRate))
 		CIfXEnd()
@@ -940,14 +958,15 @@ DoActions(FP,{
 				--NJumpX(FP,MedicTrigJump,{CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
 				NJumpX(FP,MedicTrigJump,{CD(TestMode,0),CDeaths(FP,Exactly,j-1,DelayMedic[i+1]),Command(i,AtLeast,1,MedicTrig[j])},{})
 			else
-				NJumpX(FP,MedicTrigJump,{Command(i,AtLeast,1,MedicTrig[j])},{})
+				NJumpX(FP,MedicTrigJump,{Command(i,AtLeast,1,MedicTrig[j])},{SetResources(i, Add, 1, Gas);})--가스 = 메딕사용횟수
 			end
 		end
+		NJumpX(FP,MedicTrigJump,{Memory(0x628438, Exactly, 0)},{})--가스 = 메딕사용횟수
 		
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)
 					DoActionsX(FP,{
-						SetResources(i, Add, 1, Gas);--가스 = 메딕사용횟수
+						
 						ModifyUnitEnergy(All,MedicTrig[1],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[2],i,64,0);
 						ModifyUnitEnergy(All,MedicTrig[3],i,64,0);

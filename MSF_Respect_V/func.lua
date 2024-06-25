@@ -267,7 +267,7 @@ function CreateUnitQueue()
 
 --		CIfEnd()
 	end
-	NWhile(FP,{CV(count,1500,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
+	NWhile(FP,{CV(count,QueueMaxUnit,AtMost),Memory(0x628438,AtLeast,1),CV(CreateUnitQueueNum,1,AtLeast)},{})
 	local BKX, BKY = CreateVars(2, FP)
 	f_Read(FP,0x628438,NextptrsP,Nextptrs,0xFFFFFF)
 	f_SHRead(FP, _Add(CreateUnitQueueXPosArr,CreateUnitQueuePtr2), CPosX)
@@ -293,7 +293,7 @@ function CreateUnitQueue()
 
 
 	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
-	TriggerX(FP, {CV(CreateUnitQueuePtr2,200000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
+	TriggerX(FP, {CV(CreateUnitQueuePtr2,QueueMaxSize,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
 
 
 
@@ -316,6 +316,7 @@ function CreateUnitQueue()
 	CDoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,158),
 		SetMemoryB(0x6644F8+6,SetTo,200),
+		SetMemoryB(0x6C9858+158,SetTo,2),
 		SetMemory(0x66EC48+(541*4), SetTo, 91),
 		SetMemory(0x66EC48+(956*4), SetTo, 91),
 		TSetMemory(_Add(QueueUID,EPDF(0x662860)) ,SetTo,1+65536),
@@ -326,6 +327,7 @@ function CreateUnitQueue()
 	DoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,76),
 		SetMemoryB(0x6644F8+6,SetTo,83),
+		SetMemoryB(0x6C9858+158,SetTo,0),
 		SetMemory(0x66EC48+(956*4), SetTo, 377),
 		SetMemory(0x66EC48+(541*4), SetTo, 247),
 	})
@@ -360,7 +362,7 @@ function CreateUnitQueue()
 
 	NWhileEnd()
 	
-	TriggerX(FP, {CV(count,1500,AtMost),CV(CreateUnitQueueNum,0)}, {
+	TriggerX(FP, {CV(count,QueueMaxUnit,AtMost),CV(CreateUnitQueueNum,0)}, {
 		SetInvincibility(Disable, 131, FP, 64),
 		SetInvincibility(Disable, 132, FP, 64),
 		SetInvincibility(Disable, 133, FP, 64),
@@ -372,7 +374,7 @@ function CreateUnitQueue()
 		SetInvincibility(Disable, 154, FP, 64),
 		SetInvincibility(Disable, 116, FP, 64),
 	},{preserved})
-	TriggerX(FP, {CV(count,1501,AtLeast)}, {
+	TriggerX(FP, {CV(count,QueueMaxUnit+1,AtLeast)}, {
 		SetInvincibility(Enable, 131, FP, 64),
 		SetInvincibility(Enable, 132, FP, 64),
 		SetInvincibility(Enable, 133, FP, 64),

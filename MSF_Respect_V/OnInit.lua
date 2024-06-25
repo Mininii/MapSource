@@ -86,6 +86,7 @@
 	DoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,158),
 		SetMemoryB(0x6644F8+6,SetTo,200),
+		SetMemoryB(0x6C9858+158,SetTo,2),
 		SetMemory(0x66EC48+(541*4), SetTo, 91),
 		SetMemory(0x66EC48+(956*4), SetTo, 91),
 	})
@@ -120,6 +121,7 @@
 	DoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,76),
 		SetMemoryB(0x6644F8+6,SetTo,83),
+		SetMemoryB(0x6C9858+158,SetTo,0),
 		SetMemory(0x66EC48+(956*4), SetTo, 377),
 		SetMemory(0x66EC48+(541*4), SetTo, 247),
 	})
@@ -192,7 +194,7 @@
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=1,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--별의 보호막?
-	SetUnitsDatX(125,{HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(125,{HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 
@@ -216,11 +218,11 @@
 
 	
 	for i = 0, 7 do
-		table.insert(PatchArr,SetMemory(0x5821A4 + (i*4),SetTo,1500*2))
-		table.insert(PatchArr,SetMemory(0x582144 + (i*4),SetTo,1500*2))
+		table.insert(PatchArr,SetMemory(0x5821A4 + (i*4),SetTo,QueueMaxUnit*2))
+		table.insert(PatchArr,SetMemory(0x582144 + (i*4),SetTo,QueueMaxUnit*2))
 	end
 	for i = 1, 5 do
-		table.insert(PatchArr,SetMemoryB(0x57F27C + (i * 228) + BanToken[i],SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x57F27C + ((i-1) * 228) + BanToken[i],SetTo,0))
 	end
 	
 	SetUnitsDatX(115,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
@@ -308,8 +310,8 @@ end
 		end
 		
 	T_YY = 2024
-	T_MM = 01
-	T_DD = 28
+	T_MM = 07
+	T_DD = 01
 	T_HH = 00
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
 	if Limit == 1 then

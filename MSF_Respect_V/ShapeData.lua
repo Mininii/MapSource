@@ -344,9 +344,8 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 
 	Nex1 = CSMakePolygon(3, 64, 0, PlotSizeCalc(3, 6), 0)
 	
-	
-	PL1 = CSMakeLine(2, 64, 0, 11, 0)
-	PL2 = CSMakeLine(2, 32, 0, 5, 0)
+	PL1 = CSMakeLine(2, 32, 0, 15, 0)
+	PL2 = CSMakeLine(2, 32, 0, 7, 0)
 	PSILSC1 = CS_OverlapX(
 		CS_MoveXY(PL1, -64, nil),
 		CS_MoveXY(PL1, -192, nil),
@@ -365,9 +364,43 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	)
 	PSILHD1 = CS_SortY(PSILHD1, 0)
 	PSILSC1 = CS_SortY(PSILSC1, 0)
-	PSICHD1 = CS_RatioXY(CSMakeCircle(14, 240, 0, 14+1, 1), 1, 0.5)
-	PSICSC1 = CS_RatioXY(CSMakeCircle(48, 240, 0, 48+1, 1), 1, 0.5)
-	PSISHD1 = CSMakeStar(4, 135, 48, 45, PlotSizeCalc(4*2, 4), PlotSizeCalc(4*2, 3))
-	PSISSC1 = CSMakeStar(4, 135, 32, 45, PlotSizeCalc(4*2, 6), PlotSizeCalc(4*2, 5))
+	PSICHD1 = CS_RatioXY(CSMakeCircle(32, 320, 0, 32+1, 1), 1, 0.5)
+	PSICSC1 = CS_RatioXY(CSMakeCircle(96, 320, 0, 96+1, 1), 1, 0.5)
+	PSISHD1 = CSMakeStar(4, 135, 48, 45, PlotSizeCalc(4*2, 5), PlotSizeCalc(4*2, 4))
+	PSISSC1 = CSMakeStar(4, 135, 32, 45, PlotSizeCalc(4*2, 11), PlotSizeCalc(4*2, 10))
 	
+
+	EnvShVSC = CS_OverlapX(CSMakeLine(1, 16, 30, 45, 0),CSMakeLine(1, 16, -30, 45, 0))
+	EnvShVHD = CS_OverlapX(CSMakeLine(1, 48, 30, 15, 0),CSMakeLine(1, 48, -30, 15, 0))
+	STCirHD = CS_OverlapX(
+	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -220, -50),
+	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 0, -50),
+	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 220, -50),
+	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -110, 50),
+	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 110, 50))
+	STCirSC = CS_OverlapX(
+	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -220, -50),
+	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 0, -50),
+	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 220, -50),
+	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -110, 50),
+	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 110, 50))
+	PaciShHD = CS_OverlapX(CSMakeLine(2, 48, 45, 15, 0),CSMakeLine(2, 48, -45, 15, 0))
+	PaciShSC = CS_OverlapX(CSMakeLine(2, 16, 45, 45, 0),CSMakeLine(2, 16, -45, 45, 0))
+	LSLine = CSMakeStar(4, 135, 32*2, 45, PlotSizeCalc(4*2, 8), PlotSizeCalc(4*2, 7))
+	LSLineHD = CSMakeStar(4, 135, 84*2, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
+	LSFill = CSMakeStar(4, 135, 32*3, 45, PlotSizeCalc(4*2, 4), 0)
+	LSHD = CSMakeStar(4, 135, 256*2, 45, PlotSizeCalc(4*2, 1), 0)
+	LSSC = CSMakeStar(4, 135, 92*2, 45, PlotSizeCalc(4*2, 2), 0)
+	LD = CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 10), 0)
+	LDH = CSMakeCircle(6, 96, 0, PlotSizeCalc(6, 7), 0)
+	RBLine = CSMakeStar(4, 135, 48, 45, PlotSizeCalc(4*2, 8), PlotSizeCalc(4*2, 7))
+	RBLineHD = CSMakeStar(4, 135, 64*2, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
+	RBFill = CSMakeStar(4, 135, 192, 45, PlotSizeCalc(4*2, 2), 0)
+	RBFillHD = CSMakeStar(4, 135, 384, 45, PlotSizeCalc(4*2, 1), 0)
+	RBC = CSMakeLine(64, 384, 0, 64+1, 0)
+	RBCHD = CSMakeLine(24, 384, 0, 24+1, 0)
+	
+
+
+
 end
