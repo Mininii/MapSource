@@ -473,26 +473,26 @@ end
 	--PaciShHD,PaciShSC
 	--P_5, 4 : 76
 	--P_8, 3 : 81
-	Gen2Gun({"Lizzet","Rophe"},{"Lizzet","Rophe"},1,"PaciShHD","PaciShSC",P_5, 4, P_8, 3)
+	Gen2Gun({"Lizzet","Rophe"},{"Lizzet","Rophe"},1,"PaciShHD","PaciShSC",P_5, 4, P_8, 3,1)
 	--S_4, 3 : 81
 	--P_4, 5 : 85
-	Gen2Gun({"Sera","Freyja"},{"Sera","Freyja"},2,"PaciShHD","PaciShSC",S_4, 3, P_4, 5)
+	Gen2Gun({"Sera","Freyja"},{"Sera","Freyja"},2,"PaciShHD","PaciShSC",S_4, 3, P_4, 5,1)
 	--P_3, 6 : 85
 	--S_7, 2 : 85
-	Gen2Gun({"Sen","Kamilia"},{"Sen","Kamilia"},3,"PaciShHD","PaciShSC",P_3, 6, S_7, 2)
+	Gen2Gun({"Sen","Kamilia"},{"Sen","Kamilia"},3,"PaciShHD","PaciShSC",P_3, 6, S_7, 2,1)
 	CIfEnd()
 	CIf_GCase(114)--스타포트
 	--STCirHD
 	--STCirSC
 	--P_3, 5 : 64
 	--P_7, 3 : 71
-	Gen2Gun({"Norad II","Jisoo"},{"Norad II","Jisoo"},1,"STCirHD","STCirSC",P_3, 5, P_7, 3)
+	Gen2Gun({"Norad II","Jisoo"},{"Norad II","Jisoo"},1,"STCirHD","STCirSC",P_3, 5, P_7, 3,1)
 	--S_6, 2 : 73
 	--P_5, 4 : 76
-	Gen2Gun({"Era","Yuri"},{"Era","Yuri"},2,"STCirHD","STCirSC",S_6, 2, P_5, 4)
+	Gen2Gun({"Era","Yuri"},{"Era","Yuri"},2,"STCirHD","STCirSC",S_6, 2, P_5, 4,1)
 	--P_8, 3 : 81
 	--S_4, 3 : 81
-	Gen2Gun({"Nina","Sayu"},{"Nina","Sayu"},3,"STCirHD","STCirSC",P_8, 3, S_4, 3)
+	Gen2Gun({"Nina","Sayu"},{"Nina","Sayu"},3,"STCirHD","STCirSC",P_8, 3, S_4, 3,1)
 
 	CIfEnd()
 	CIf_GCase(160)--게이트
@@ -1124,7 +1124,8 @@ end
 		RCenN1,RCenN2,RCenN3,RCenN4,RCenN5,RCenN6,RCenN7,
 	}
 	
-	CMov(FP,G_CB_RotateV,_Mul(_Div(GTime,24),6))
+	CMov(FP,GTime,_Div(_Mul(_ReadF(0x57F23C),42),1000))
+	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
 	if TestStart == 1 then
 		--DisplayPrint(HumanPlayers, {G_CB_RotateV})
 	end
@@ -1190,10 +1191,19 @@ end
 			CIfEnd()
 			CForEnd()
 		CIfEnd()
-		CIfOnce(FP, {Gun_Line(6, Exactly, 1),Gun_Line(7, AtLeast, 480),Bring(P8, AtMost, 0, 74, 26)}, {KillUnit(217, Force2),Gun_SetLine(8, SetTo, 1),Gun_DoSuspend()})
+		
+		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 0),Bring(P8, AtMost, 0, 74, 26)}, {Gun_SetLine(8, SetTo, 1),Gun_SetLine(7,SetTo,0)})
+			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Kazansky","Schezar"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+			G_CB_TSetSpawn({CD(GMode,1)}, {"Kazansky","Schezar"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+		CIfEnd()
+		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 1)}, {Gun_SetLine(8, SetTo, 2),Gun_SetLine(7,SetTo,0)})
+			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Artanis","Fenix Z"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+			G_CB_TSetSpawn({CD(GMode,1)}, {"Artanis","Fenix Z"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+		CIfEnd()
+		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 2)}, {KillUnit(217, Force2),Gun_DoSuspend(),Gun_SetLine(7,SetTo,0)})
 			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
 		CIfEnd()
-
+--
 	CIfEnd()
 	CIf_GCase(256,1)--강제입력된 콜
 	CDoActions(FP,{Gun_SetLine(8, Add, 0x1D)})
@@ -1332,6 +1342,13 @@ end
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,2,AtLeast)}, {CUT[2]}, {PSICSC1}, 1, {OwnerTable=P7,RepeatType={"Attack_Gun"}})
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,1)}, {CUT[3]}, {PSISHD1}, 1, {OwnerTable=P8,RepeatType={"Attack_Gun"}})
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,2,AtLeast)}, {CUT[3]}, {PSISSC1}, 1, {OwnerTable=P8,RepeatType={"Attack_Gun"}})
+		
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,1)}, {94}, {PSILHD1}, 1, {OwnerTable=P6})
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,2,AtLeast)}, {94}, {PSILSC1}, 1, {OwnerTable=P6})
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,1)}, {94}, {PSICHD1}, 1, {OwnerTable=P6})
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,2,AtLeast)}, {94}, {PSICSC1}, 1, {OwnerTable=P6})
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,1)}, {94}, {PSISHD1}, 1, {OwnerTable=P6})
+		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,2,AtLeast)}, {94}, {PSISSC1}, 1, {OwnerTable=P6})
 		end
 		CIf(FP,GNm(1))
 		PSIGunUID(0,{86,25,75})

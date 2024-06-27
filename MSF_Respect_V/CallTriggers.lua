@@ -173,8 +173,20 @@ CIf(FP, {Memory(0x628438, AtLeast, 1)})
 f_Read(FP, 0x628438, nil, Nextptrs)
 f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
 Simple_SetLocX(FP,0, MPosX,MPosY,MPosX,MPosY)
-CDoActions(FP, {TCreateUnit(1, MID, 1, MPID),TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)
-})
+
+
+for y = 0, 3 do
+	if y == 0 then RS1 = Cleared RS2=Cleared end
+	if y == 1 then RS1 = Set RS2=Cleared end
+	if y == 2 then RS1 = Cleared RS2=Set end
+	if y == 3 then RS1 = Set RS2=Set end
+	CTrigger(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {TCreateUnitWithProperties(1, MID, 16+y, MPID,{energy = 100})}, {preserved})
+end
+
+CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{CDoActions(FP, {TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)})})
+f_Read(FP,_Add(Nextptrs,10),CPos)
+Convert_CPosXY()
+CDoActions(FP, {TOrder(MID,MPID,1,Move,6),TMoveUnit(1, MID, MPID, 1, 6)})
 f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
 CDoActions(FP, {
 Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
@@ -185,6 +197,7 @@ Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
 Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, _Mul(MPID, 65536));
 Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MHP);
 })
+CIfEnd()
 CIfEnd()
 SetCallEnd()
 end

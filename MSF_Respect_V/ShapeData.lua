@@ -326,6 +326,7 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 
 	Shape1008 = {6   ,{64, 3584},{480, 3360},{480, 3872},{640, 3968},{352, 4096},{64, 3936}}
 	CellMShape = CS_FillPathHX2(Shape1008,1,72,48,1,0,-26.57,5)
+	CellMShapeSC = CS_FillPathHX2(Shape1008,1,72/2,48/2,1,0,-26.57,5)
 
 	L1084 = CS_FillPathHX2({4   ,{32, 2816},{448, 2656},{448, 3168},{32, 3360}},1,72,48,1,0,-26.57,5)
 	L2084 = CS_FillPathHX2({3   ,{2016, 6624},{1440, 6912},{2016, 7200}},1,72,48,1,0,-26.57,5)
@@ -370,22 +371,39 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	PSISSC1 = CSMakeStar(4, 135, 32, 45, PlotSizeCalc(4*2, 11), PlotSizeCalc(4*2, 10))
 	
 
-	EnvShVSC = CS_OverlapX(CSMakeLine(1, 16, 30, 45, 0),CSMakeLine(1, 16, -30, 45, 0))
-	EnvShVHD = CS_OverlapX(CSMakeLine(1, 48, 30, 15, 0),CSMakeLine(1, 48, -30, 15, 0))
-	STCirHD = CS_OverlapX(
-	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -220, -50),
-	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 0, -50),
-	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 220, -50),
-	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -110, 50),
-	CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 110, 50))
-	STCirSC = CS_OverlapX(
-	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -220, -50),
-	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 0, -50),
-	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 220, -50),
-	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -110, 50),
-	CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 110, 50))
-	PaciShHD = CS_OverlapX(CSMakeLine(2, 48, 45, 15, 0),CSMakeLine(2, 48, -45, 15, 0))
-	PaciShSC = CS_OverlapX(CSMakeLine(2, 16, 45, 45, 0),CSMakeLine(2, 16, -45, 45, 0))
+	EnvShVSC = CS_OverlapX(
+		CSMakeLine(1, 48, -30, 9, 0),
+		CSMakeLine(1, 48, -15, 9, 0),
+		CSMakeLine(1, 48, 0, 9, 0),
+		CSMakeLine(1, 48, 15, 9, 0),
+		CSMakeLine(1, 48, 30, 9, 0)
+	)
+	EnvShVHD = CS_OverlapX(
+		CSMakeLine(1, 128, -30, 3, 0),
+		CSMakeLine(1, 128, -15, 3, 0),
+		CSMakeLine(1, 128, 0, 3, 0),
+		CSMakeLine(1, 128, 15, 3, 0),
+		CSMakeLine(1, 128, 30, 3, 0)
+	)
+	STCirHD = CS_MoveXY(CS_OverlapX(
+		CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -220, -50),
+		CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 0, -50),
+		CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 220, -50),
+		CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), -110, 50),
+		CS_MoveXY(CSMakeCircle(6, 90, 0, 7, 1), 110, 50)), 0, -240)
+	STCirSC = CS_MoveXY(CS_OverlapX(
+		CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -220, -50),
+		CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 0, -50),
+		CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 220, -50),
+		CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), -110, 50),
+		CS_MoveXY(CSMakeCircle(14, 90, 0, 15, 1), 110, 50)),0,-240)
+	
+
+		PaciShHD= CS_OverlapX(CS_MoveXY(CSMakePolygon(3, 48, 0, PlotSizeCalc(3, 5), PlotSizeCalc(3, 4)),0,  240),
+		CS_MoveXY(CSMakePolygon(3, 48, 180, PlotSizeCalc(3, 5), PlotSizeCalc(3, 4)), 0, -240))
+		PaciShSC= CS_OverlapX(CS_MoveXY(CSMakePolygon(3, 16, 0, PlotSizeCalc(3, 15), PlotSizeCalc(3, 14)),0,  240),
+		CS_MoveXY(CSMakePolygon(3, 16, 180, PlotSizeCalc(3, 15), PlotSizeCalc(3, 14)), 0, -240))
+
 	LSLine = CSMakeStar(4, 135, 32*2, 45, PlotSizeCalc(4*2, 8), PlotSizeCalc(4*2, 7))
 	LSLineHD = CSMakeStar(4, 135, 84*2, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
 	LSFill = CSMakeStar(4, 135, 32*3, 45, PlotSizeCalc(4*2, 4), 0)

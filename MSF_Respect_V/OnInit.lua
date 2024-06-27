@@ -170,11 +170,11 @@
 	SetUnitsDatX(39, {BuildTime=15})
 	SetUnitsDatX(43, {BuildTime=15})
 	SetUnitsDatX(44, {BuildTime=15})
-	SetUnitsDatX(32,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(20,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-	SetUnitsDatX(10,{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=1500,MinCost=7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(10,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=6000,MinCost=30000-7500,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	for i =0,4 do
-	SetUnitsDatX(MarID[i+1],{SizeL = 7, SizeU = 10, SizeR = 7, SizeD = 10,Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(MarID[i+1],{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=5000,Shield=2500,SuppCost=1,MinCost=30000-7500,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	end
 	SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 5*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 	SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})

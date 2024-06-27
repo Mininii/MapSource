@@ -212,6 +212,11 @@ local SelShbool = CreateVar(FP)
 	CSub(FP,0x6509B0,4)
 	CIf(FP,{DeathsX(CurrentPlayer,AtLeast,2048,0,0xFFFF)})
 	f_SaveCp()--BackupCp = 6
+	local UIDV = CreateVar(FP)
+	local PIDV = CreateVar(FP)
+	f_Read(FP, _Add(BackupCp,19), UIDV, nil,0xFF,1)
+	EXCC_BreakCalc({CV(UIDV,33)}, {TSetDeathsX(_Add(BackupCp,13), SetTo, 0, 0,0xFF00)})--스캐너 삭제
+	--f_Read(FP, _Add(BackupCp,13), PIDV, nil,0xFF,1)
 	local X_Pos = CreateVar(FP)
 	local Y_Pos = CreateVar(FP)
 	local X_Des = CreateVar(FP)
@@ -231,10 +236,6 @@ local SelShbool = CreateVar(FP)
 	if TestStart == 1 then 
 		--DisplayPrint(HumanPlayers, {"X_Des2 : ",X_Des2,"   Y_Des : ",Y_Des})
 	end
-	local UIDV = CreateVar(FP)
-	local PIDV = CreateVar(FP)
-	--f_Read(FP, _Add(BackupCp,19), UIDV, nil,0xFF,1)
-	--f_Read(FP, _Add(BackupCp,13), PIDV, nil,0xFF,1)
 	
 
 	--CIfX(FP,{TDeathsX(_Add(BackupCp,13),Exactly,187*256,0,0xFF00)})
@@ -537,6 +538,8 @@ end
 	SETimer = CreateCcode()
 	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
 	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,SETimer)})
+	CMov(FP,GTime,_Div(_Mul(_ReadF(0x57F23C),42),1000))
+	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
 
 
 	CIf(FP,{CD(GMode,2,AtLeast)})--콜은 MX난이도이상만 나옴
@@ -545,24 +548,22 @@ end
 	--10~13 15분간격
 	--14~17 30분간격
 	--17~21 60분간격
-
+	
 	for i = 1, 6 do
-		f_GunForceSend(256,P8,1024+(1088*65536),i+0,{CV(GTime,i*(24*60*5),AtLeast)},nil,1)
+		f_GunForceSend(256,P8,1024+(1088*65536),i+0,{CV(GTime,i*(60*5),AtLeast)},nil,1)
 	end
 	for i = 1, 3 do
-		f_GunForceSend(256,P8,1024+(1088*65536),i+6,{CV(GTime,(24*60*30)+(i*(24*60*10)),AtLeast)},nil,1)
+		f_GunForceSend(256,P8,1024+(1088*65536),i+6,{CV(GTime,(60*30)+(i*(60*10)),AtLeast)},nil,1)
 	end
 	for i = 1, 4 do
-		f_GunForceSend(256,P8,1024+(1088*65536),i+9,{CV(GTime,(24*60*60)+(i*(24*60*15)),AtLeast)},nil,1)
+		f_GunForceSend(256,P8,1024+(1088*65536),i+9,{CV(GTime,(60*60)+(i*(60*15)),AtLeast)},nil,1)
 	end
 	for i = 1, 4 do
-		f_GunForceSend(256,P8,1024+(1088*65536),i+13,{CV(GTime,(24*60*120)+(i*(24*60*30)),AtLeast)},nil,1)
+		f_GunForceSend(256,P8,1024+(1088*65536),i+13,{CV(GTime,(60*120)+(i*(60*30)),AtLeast)},nil,1)
 	end
-	CIf(FP,{CD(GMode,3)})
 	for i = 1, 4 do
-		f_GunForceSend(256,P8,1024+(1088*65536),i+17,{CV(GTime,(24*60*240)+(i*(24*60*60)),AtLeast)},nil,1)
+		f_GunForceSend(256,P8,1024+(1088*65536),i+17,{CV(GTime,(60*240)+(i*(60*60)),AtLeast)},nil,1)
 	end
-	CIfEnd()
 	CIfEnd()
 
 
@@ -815,7 +816,7 @@ Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved}
 Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
-DoActionsX(FP, {KillUnit(94, AllPlayers),KillUnit(94, P9),AddV(GTime,1),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
+DoActionsX(FP, {KillUnit(94, AllPlayers),KillUnit(94, P9),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
 if TestStart == 1 then
 	--DoActionsX(FP, {AddV(GTime,10)})
 end

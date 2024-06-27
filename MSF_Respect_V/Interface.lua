@@ -180,13 +180,13 @@
 
 			end
 
-			--CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
-			--CIfEnd()
-			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
-			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
-			--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
-			--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
-			--CIfEnd()
+			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
+			CIfEnd()
+			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
+			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
+			CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
+				CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
+			CIfEnd()
 	
 			CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 			CIf(FP,{CVar(FP,Cunit2[2],AtLeast,1),CVar(FP,Cunit2[2],AtMost,0x7FFFFFFF)})
@@ -408,14 +408,14 @@
 		TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
+		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
 		CIfEnd()
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
 
 	
 
-	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x082배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
 
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 8)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,1)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 12)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,2)})
@@ -460,14 +460,19 @@
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 	end
+
+	for j = 2, 3 do
+		for k = 1, 5 do
+			local TT
+			if j == 2 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
+			else TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\n\n\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
+			end
+			Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);CD(GMode,j)}, {
+				RotatePlayer({SetMissionObjectivesX(TT)},HumanPlayers,FP);
+				SetCVar(FP,ExRate[2],SetTo,ExRateT[k]);})
 	
-	for k = 1, 5 do
-		Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);}, {
-			RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\x13\x1F"..RMtoSMCost.." Ore\x04을 소모하여 \x19R\x04espect \x19M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x07다운그레이드\x04 할 수 있습니다.\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다.")},HumanPlayers,FP);
-			SetCVar(FP,ExRate[2],SetTo,ExRateT[k]);})
-
+		end
 	end
-
 
 	TriggerX(FP, {CD(EVFCcode,0)}, {SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
@@ -486,14 +491,14 @@
 	SetMemoryB(0x57F27C + (3 * 228) + 12,SetTo,0),
 	SetMemoryB(0x57F27C + (4 * 228) + 12,SetTo,0),})
 	TriggerX(FP, {CD(EVFCcode,1)}, {
-		SetMemoryW(0x656EB0+(0 *2),Add,NMBaseAtk), -- 공격력
-		SetMemoryW(0x657678+(0 *2),Add,NMFactorAtk), -- 추가공격력
-		SetMemoryW(0x656EB0+(1 *2),Add,HMBaseAtk), -- 공격력
-		SetMemoryW(0x657678+(1 *2),Add,HMFactorAtk), -- 추가공격력
-		SetMemoryW(0x656EB0+(2 *2),Add,SMBaseAtk), -- 공격력
-		SetMemoryW(0x657678+(2 *2),Add,SMFactorAtk), -- 추가공격력
-		SetMemoryW(0x656EB0+(3 *2),Add,RMBaseAtk), -- 공격력
-		SetMemoryW(0x657678+(3 *2),Add,RMFactorAtk), -- 추가공격력
+		SetMemoryW(0x656EB0+(0 *2),Add,3), -- 공격력
+		SetMemoryW(0x657678+(0 *2),Add,2), -- 추가공격력
+		SetMemoryW(0x656EB0+(1 *2),Add,HMBaseAtk/2), -- 공격력
+		SetMemoryW(0x657678+(1 *2),Add,HMFactorAtk/2), -- 추가공격력
+		SetMemoryW(0x656EB0+(2 *2),Add,SMBaseAtk/2), -- 공격력
+		SetMemoryW(0x657678+(2 *2),Add,SMFactorAtk/2), -- 추가공격력
+		SetMemoryW(0x656EB0+(3 *2),Add,RMBaseAtk/2), -- 공격력
+		SetMemoryW(0x657678+(3 *2),Add,RMFactorAtk/2), -- 추가공격력
 })
 	
 
@@ -723,25 +728,25 @@ DoActions(FP,{
 		},
 		}
 		
-		Trigger { -- 다운그레이드
-		players = {i},
-		conditions = {
-			Label(0);
-			Bring(i,AtLeast,1,MarID[i+1],13); 
-			Accumulate(i,AtLeast,RMtoSMCost,Ore);
-			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
-			CD(GMode,2,AtMost);
-		},
-		actions = {
-			ModifyUnitEnergy(1,MarID[i+1],i,13,0);
-			RemoveUnitAt(1,MarID[i+1],13,i);
-			SetResources(i,Subtract,RMtoSMCost,Ore);
-			AddCD(SMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x19R\x04espect \x19M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x07다운그레이드 \x04하였습니다. - \x1F"..N_to_EmN(RMtoSMCost).." O r e"),4);
-			PreserveTrigger();
-		},
-		}
-	
+--		Trigger { -- 다운그레이드
+--		players = {i},
+--		conditions = {
+--			Label(0);
+--			Bring(i,AtLeast,1,MarID[i+1],13); 
+--			Accumulate(i,AtLeast,RMtoSMCost,Ore);
+--			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+--			CD(GMode,2,AtMost);
+--		},
+--		actions = {
+--			ModifyUnitEnergy(1,MarID[i+1],i,13,0);
+--			RemoveUnitAt(1,MarID[i+1],13,i);
+--			SetResources(i,Subtract,RMtoSMCost,Ore);
+--			AddCD(SMCr[i+1],1);
+--			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x19R\x04espect \x19M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x07다운그레이드 \x04하였습니다. - \x1F"..N_to_EmN(RMtoSMCost).." O r e"),4);
+--			PreserveTrigger();
+--		},
+--		}
+
 
 
 		for j,k in pairs(KillPointArr) do
@@ -961,7 +966,7 @@ DoActions(FP,{
 				NJumpX(FP,MedicTrigJump,{Command(i,AtLeast,1,MedicTrig[j])},{SetResources(i, Add, 1, Gas);})--가스 = 메딕사용횟수
 			end
 		end
-		NJumpX(FP,MedicTrigJump,{Memory(0x628438, Exactly, 0)},{})--가스 = 메딕사용횟수
+		--NJumpX(FP,MedicTrigJump,{Memory(0x628438, Exactly, 0)},{})
 		
 			NIf(FP,Never())
 				NJumpXEnd(FP,MedicTrigJump)

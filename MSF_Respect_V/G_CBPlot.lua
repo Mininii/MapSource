@@ -841,12 +841,15 @@ function CB_RandSort()
 	RandRet = f_CRandNum(5)
 	CMov(FP,FncRand,RandRet)
 	if TestStart == 1 then
-		--DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
+		DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
 	end
 	CB_Sort(CFunc1, DirRand, STSize+2, EndRetShape)
 	CurShNum = CreateVar(FP)
 	CB_GetNumber(EndRetShape, CurShNum)
-	--DisplayPrint(HumanPlayers, {"Calc "..(STSize+2).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
+	if TestStart == 1 then
+
+	DisplayPrint(HumanPlayers, {"Calc "..(STSize+2).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
+	end
 	
 
 end
