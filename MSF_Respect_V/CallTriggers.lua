@@ -169,10 +169,11 @@ MHP = CreateVar(FP)
 MPosX = CreateVar(FP)
 MPosY = CreateVar(FP)
 SetCall(FP)
-CIf(FP, {Memory(0x628438, AtLeast, 1)})
+CIf(FP, {Memory(0x628438, AtLeast, 1)},{
+	SetSwitch(RandSwitch1, Random),
+	SetSwitch(RandSwitch2, Random)})
 f_Read(FP, 0x628438, nil, Nextptrs)
 f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
-Simple_SetLocX(FP,0, MPosX,MPosY,MPosX,MPosY)
 
 
 for y = 0, 3 do
@@ -183,17 +184,23 @@ for y = 0, 3 do
 	CTrigger(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {TCreateUnitWithProperties(1, MID, 16+y, MPID,{energy = 100})}, {preserved})
 end
 
-CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{CDoActions(FP, {TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)})})
+CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)})
 f_Read(FP,_Add(Nextptrs,10),CPos)
 Convert_CPosXY()
-CDoActions(FP, {TOrder(MID,MPID,1,Move,6),TMoveUnit(1, MID, MPID, 1, 6)})
-f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
+Simple_SetLocX(FP,0, CPosX,CPosY,CPosX,CPosY)
+Simple_SetLocX(FP,200, MPosX,MPosY,MPosX,MPosY)
+CDoActions(FP, {TOrder(MID,MPID,1,Move,6),TMoveUnit(1, MID, MPID, 1, 201)})
+--CIfX(FP, {TMemory(_Add(Nextptrs,3), AtLeast, 1)})
+--f_Read(FP, _Add(Nextptrs,3), nil, CSPtr)
+--CElseX()
+--CMov(FP,CSPtr,-2)
+--CIfXEnd()
 CDoActions(FP, {
 Set_EXCC2(UnivCunit, CunitIndex, 1, SetTo, 24*5);
 Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 0);
 Set_EXCC2(UnivCunit, CunitIndex, 3, SetTo, 0);
 Set_EXCC2(UnivCunit, CunitIndex, 4, SetTo, 0);
-Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, _Add(CSPtr,2));
+Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
 Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, _Mul(MPID, 65536));
 Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MHP);
 })

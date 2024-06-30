@@ -281,31 +281,34 @@ local SelShbool = CreateVar(FP)
 	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
 	EXCC_ClearCalc()
 	NJumpXEnd(FP, WhiteList)
-	CIf(FP,{CV(EXCC_TempVarArr[9],0)})
-		f_SaveCp()
-		local CSPtr = CreateVar(FP)
-		f_Read(FP, _Sub(BackupCp,22), nil, CSPtr)
-		CDoActions(FP, {Set_EXCCX(8, SetTo, _Add(CSPtr,2))})
-		f_LoadCp()
-	CIfEnd()
-	CIf(FP,{Cond_EXCC(8, AtLeast, 1)})
+	--CIf(FP,{CV(EXCC_TempVarArr[9],0)})
+	--	
+	--	f_SaveCp()
+	--	local CSPtr = CreateVar(FP)
+	--	f_Read(FP, _Sub(BackupCp,22), nil, CSPtr)
+	--	CDoActions(FP, {Set_EXCCX(8, SetTo, _Add(CSPtr,2))})
+	--	f_LoadCp()
+	--CIfEnd()
 		CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
-			CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
-			CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
-			CTrigger(FP, {NTCond2()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Cond_EXCC(1, Exactly, 1)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+		CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
 		CIfEnd()
-		for i = 0, 4 do
-			CIf(FP, {CVX(EXCC_TempVarArr[10],i*65536,0xFF0000)})
-			CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)}, {preserved})
-			CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),Exactly,1),}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
-			CIfEnd()
-		end
-	CIfEnd()
+	--CIf(FP,{Cond_EXCC(8, AtLeast, 1)})
+	--	CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
+	--		CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Cond_EXCC(1, Exactly, 1)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+	--	CIfEnd()
+	--	for i = 0, 4 do
+	--		CIf(FP, {CVX(EXCC_TempVarArr[10],i*65536,0xFF0000)})
+	--		CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)}, {preserved})
+	--		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),Exactly,1),}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
+	--		CIfEnd()
+	--	end
+	--CIfEnd()
 	EXCC_ClearCalc()
 	NJumpXEnd(FP, TimerUnit)
 	CIf(FP, {Cond_EXCC(2, Exactly, 1)})--타이머 종료시 1회한정 작동
@@ -816,6 +819,7 @@ Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved}
 Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 Trigger2X(FP,{CD(CocoonCcode,1)},{SetInvincibility(Disable, "Men", P6, 64)},{preserved})
 
+
 DoActionsX(FP, {KillUnit(94, AllPlayers),KillUnit(94, P9),Order(119, P6, 64, Move, 6),KillUnitAt(All, 119, 6, P6)})
 if TestStart == 1 then
 	--DoActionsX(FP, {AddV(GTime,10)})
@@ -846,4 +850,96 @@ TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
 	MoveUnit(All, "Men", Force1, 27, 30),
 },{preserved})
 
+--실험적 메딕 인식 트리거
+
+
+function dwread_epd(Ptr,EPDFlag) -- v=EPD
+	local RetV= CreateVar(FP)
+	if EPDFlag == 1 then
+		f_Read(FP,Ptr,nil,RetV,nil,1)
+	else
+		f_Read(FP,Ptr,RetV,nil,nil,1)
+	end
+	return RetV
+end
+
+
+mouseX = dwread_epd(0x6CDDC4)
+mouseY = dwread_epd(0x6CDDC8)
+screenGridX = dwread_epd(0x62848C)
+screenGridY = dwread_epd(0x6284A8)
+Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
+local LCP = CreateVar(FP)
+local SelPID = CreateVar(FP)
+f_Read(FP,0x512684,LCP)
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
+ScreenX2 = dwread_epd(0x62848C);
+ScreenY2 = dwread_epd(0x6284A8);
+screenSizeX = CreateVar(FP)
+screenSizeY = CreateVar(FP)
+CMov(FP,screenSizeX,_iSub(_Mov(256*16),ScreenX2))
+CMov(FP,screenSizeY,_iSub(_Mov(256*16),ScreenY2))
+screenX = CreateVar(FP)
+screenY = CreateVar(FP)
+CAdd(FP,screenX,screenGridX,screenSizeX)
+CAdd(FP,screenY,screenGridY,screenSizeY)
+Simple_SetLocX(FP,251, screenX, screenY,screenX, screenY)
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
+Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
+CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
+
+screenX2 = CreateVar(FP)
+CiSub(FP,screenX2,screenX,screenSizeX)
+
+CMov(FP, 0x6509B0, FP)
+mmX = mouseX -- 상대좌표 좌측정렬
+mmY = mouseY
+mmX2 = screenX -- 중앙정렬
+mmX3 = screenX2 -- 중앙정렬
+
+--DisplayPrintEr(MapPlayers, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+
+GKeyValue = CreateVar(FP)
+KeyTime = CreateVar(FP)
+CalcValue = CreateVar(FP)
+CAdd(FP,GKeyValue,1)
+--DisplayPrintEr(MapPlayers, {"KeyTime: ",KeyTime,"   GKeyValue: ",GKeyValue,"   Calc : ",CalcValue})
+--185~220
+--398~431
+
+function VRange(Var,Left,Right)
+	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
+	
+end
+CSub(FP,CalcValue,GKeyValue,KeyTime)
+
+
+
+CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+
+f_Read(FP,0x6284B8,nil,SelEPD)
+f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF,1)
+f_Read(FP,_Add(SelEPD,19),SelPID,"X",0xFF,1)
+CIf(FP,{CV(SelUID,111),CV(SelPID,LCP)})
+CTrigger(FP, {TTKeyPress("C", "Down")}, {SetV(KeyTime,GKeyValue)},{preserved})
+CTrigger(FP, {TTMousePress("LEFT", "Down"),VRange(mmX3,185,220),VRange(mmY, 398,431)}, {SetV(KeyTime,GKeyValue)},{preserved})
+CIf(FP,{TMemoryX(_Add(SelEPD,38), AtMost, 227,0xFFFF)})
+local SelBQ1 = CreateVar(FP)
+f_Read(FP, _Add(SelEPD,38), SelBQ1, nil, 0xFFFF, 1)
+CIf(FP, {TTOR({CV(SelBQ1,34),CV(SelBQ1,9),CV(SelBQ1,88),CV(SelBQ1,80),CV(SelBQ1,21)})})
+Trigger2X(FP, {CV(CalcValue,35,AtLeast)}, {RotatePlayer({DisplayTextX("MacroWarn!!!", 4)}, HumanPlayers, FP)},{preserved})
+
+CIfEnd()
+
+
+
+
+
+
+CIfEnd()
+CIfEnd()
+
+
+CIfEnd()
+CMov(FP, 0x6509B0, FP)
 end

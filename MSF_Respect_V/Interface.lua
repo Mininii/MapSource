@@ -245,9 +245,9 @@
 				CMov(FP,CunitIndex,_Div(_Sub(Cunit2,19025),_Mov(84)))
 				TmpGunNum = CreateVarArr(6,FP)
 				f_Read(FP, TtoA("VisionTurbo"), TmpGunNum[1])
-				DisplayPrintEr(CurrentOP, {
-					"SeekOffset : ",TmpGunNum[1],
-				})
+				--DisplayPrintEr(CurrentOP, {
+				--	"SeekOffset : ",TmpGunNum[1],
+				--})
 					
 				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 				f_LoadCp()
@@ -303,7 +303,7 @@
 	CurEPD = CreateVar(FP)
 	
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
-	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, ...(테스터 지원시 더 추가할 예정)"
+	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22 ...(테스터 지원시 더 추가할 예정)"
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
@@ -879,8 +879,8 @@ DoActions(FP,{
 				SetV(MID,MCT[p][2]),
 				SetV(MPID,i),
 				SetV(MHP,MCT[p][3]),
-				SetV(MPosX,1024),
-				SetV(MPosY,1088),
+				SetV(MPosX,NMT[i+1][2][1]),
+				SetV(MPosY,NMT[i+1][2][2]),
 			})
 		end
 		

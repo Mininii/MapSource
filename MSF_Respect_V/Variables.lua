@@ -116,7 +116,7 @@
 
 	
 	UnitPointArr = {}
-	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54}--재배치 등록 위치
+	UnitPointArr2 = {38,37,39,43,44,55,56,48,50,51,53,54,46}--재배치 등록 위치
 	for j, k in pairs(UnitPointArr2) do
 		--PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + k,SetTo,0))
 		--PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + k,SetTo,0))
