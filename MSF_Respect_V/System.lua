@@ -78,6 +78,8 @@ local SelShbool = CreateVar(FP)
 
 		CIf(FP,{TTCVar(FP,SelEPD[2],NotSame,CurEPD)},{SetCD(AFlag,0),SetCD(NWepCcode, 0)})
 			CMov(FP,CurEPD,SelEPD)
+			local LCunitIndex = CreateVar(FP)
+			CMov(FP,LCunitIndex,_Div(_Sub(SelEPD,19025),_Mov(84)))
 			f_BreadX(FP, 0x6647B0, SelUID, SelShbool)
 			f_BreadX(FP, 0x663DD0, SelUID, SelClass)
 			TriggerX(FP,CV(SelUID,5),SetV(SelUID,6),{preserved})
@@ -103,6 +105,23 @@ local SelShbool = CreateVar(FP)
 			CTrigger(FP,{CV(ObjectNumV,2)},{SetCD(AFlag,1)},1)
 			CIf(FP,{CD(AFlag,1)})
 				CAdd(FP,SelATK,SelATK)
+			CIfEnd()
+
+			CIf(FP,CV(SelUID,190))--프사이
+				
+			local PSITBLPtr = CreateVar(FP)
+			local PSIGunNum = CreateVar(FP)
+			f_GetTblptr(FP, PSITBLPtr, 191)
+			local CText1 = CreateCText(FP, "\t\t\t\x1E。˙+˚Hell'o。+.˚\x12\x08。˙+˚H\x04ell'o\x08。+.˚\t\t\t\t\t  ")--HellO
+			local CText2 = CreateCText(FP, "\t\x11。˙+˚O\'men。+.˚\x12\x08。˙+˚O\x04\'men\x08。+.˚\t\t\t\t\t\t\t    ")--OMen
+			f_Read(FP, _Add(_Mul(LCunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*2)/4))), PSIGunNum)
+			CIf(FP,{CV(PSIGunNum,1)})
+			f_Memcpy(FP,PSITBLPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+			CIfEnd()
+			CIf(FP,{CV(PSIGunNum,2)})
+			f_Memcpy(FP,PSITBLPtr,_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+			CIfEnd()
+
 			CIfEnd()
 			
 		CIfEnd()
@@ -495,7 +514,7 @@ end
 	CIfEnd()
 	for j,k in pairs(UnitPointArr) do
 		Trigger2X(FP, {
-			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]),print_utf8_A(HTArr, k[3]..string.rep("\x0D",0x40-(#k[3])))},{preserved})
+			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]/5),print_utf8_A(HTArr, k[3]..string.rep("\x0D",0x40-(#k[3])))},{preserved})
 	end
 	
 	CIf(FP, {CV(HPT,1,AtLeast)})
@@ -509,11 +528,10 @@ end
 		BSize=BSize+0x40
 	end
 	local ExchangeOre = CreateVar(FP)
-	
 
-	f_Div(FP, ExchangeOre, _Mul(_Mul(ExRate,HPT), 10),1000)
+	CMov(FP,ExchangeOre,HPT)
 	CDoActions(FP, {TSetResources(Force1, Add, ExchangeOre, Ore)})
-	DisplayPrint(HumanPlayers,{"\x13",StrD[1],HeroTextFunc,"\x04을(를) \x07처치하였다! \x1F＋ ",ExchangeOre," \x03Ｏｒｅ"..StrD[2]})
+	DisplayPrint(HumanPlayers,{"\x13"..StrD[1],HeroTextFunc,"\x04을(를) \x07처치하였다! \x1F＋ ",ExchangeOre," \x03Ｏｒｅ"..StrD[2]})
 	CIfEnd()
 	f_LoadCp()
 	CIfEnd()
@@ -545,7 +563,7 @@ end
 	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
 
 
-	CIf(FP,{CD(GMode,2,AtLeast)})--콜은 MX난이도이상만 나옴
+	CIf(FP,{CD(GMode,2,AtLeast),Deaths(P8, AtMost, 0, 189)})--콜은 MX난이도이상만 나옴, 워프게이트 깔때까지
 	--1~6 5분간격
 	--7~9 10분간격
 	--10~13 15분간격
@@ -640,11 +658,11 @@ if NameTest == 1 then
 		--Leon
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\x1E。˙+˚Trap。+.˚\x12\x11。˙+˚T\x04rap\x11。+.˚"--(sp:13 tab:4)
-		str44 = "\x15。+.˚Space of Soul\x12\x11S\x04pace \x10o\x04f \x07S\x04oul\x10。+.˚" --s16 t5
+		str33 = "\x11。˙+˚Diomedes。+.˚\x12\x15。˙+˚D\x04iomedes\x15。+.˚"
+		str44 = "\t\t\x11。˙+˚Sadol。+.˚\x12\x15。˙+˚S\x04adol\x15。+.˚"
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
-		str55 = "\t\t\t\x1C。˙+˚Portal。+.˚\x12\x1F。˙+˚P\x04ortal\x1F。+.˚"--(sp:13 tab:4)
+		str55 = "\x11。˙+˚Diomedes。+.˚\x12\x15。˙+˚D\x04iomedes\x15。+.˚"
 
 		--Yuri
 		--Sena
@@ -833,12 +851,12 @@ CCIText3 = "\x13\x07。\x18˙\x0F+\x1C˚ \x03N\x04ew\x03G\x04ame\x03S\x04tart �
 TriggerX(FP, {CD(ChryCcode2,480,AtLeast)}, {SetInvincibility(Disable, 201, P8, 64),
 	RotatePlayer({DisplayTextX(CCIText, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),
 })
-WinCcode = CreateCcode()
 TriggerX(FP,{CD(GunCcode,0)},{AddCD(WinCcode,1)},{preserved})
 TriggerX(FP, {CD(WinCcode,480,AtLeast)}, {KillUnit(125, AllPlayers),KillUnit(125, P12),RotatePlayer({DisplayTextX(CCIText2, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),})
 f_TempRepeat(CD(WinCcode,480,AtLeast), 189, 1, 0, P8, {1024,1088}, 1)
 
-TriggerX(FP, Deaths(P8, AtLeast, 1, 189), {RotatePlayer({Victory()}, HumanPlayers, FP)})--화홀제작전 임시 승리트리거
+--TriggerX(FP, Deaths(P8, AtLeast, 1, 189), {RotatePlayer({Victory()}, HumanPlayers, FP)})--화홀제작전 임시 승리트리거
+f_GunForceSend(189, FP, 1024+(1088*65536), 1, Deaths(P8, AtLeast, 1, 189), nil, 1)--화홀강제입력
 TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
 	RotatePlayer({DisplayTextX(CCIText3, 4)}, HumanPlayers, FP),
 	GiveUnits(All, 204, P8, 64, P6),

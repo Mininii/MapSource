@@ -338,8 +338,8 @@ CenCross = CSMakeLine(4, 64, 0, 256, 0)
 	WarpZ = CS_CropXY(CS_OverlapX(table.unpack(WarpZ)),{-2048,2048},{-2048,2048})
 	
 	
-	CallStarS = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
-	CallStarSFL = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 2),0)
+	CallStarS = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 4), PlotSizeCalc(4*2, 3))
+	CallStarSFL = CSMakeStar(4, 135, 72, 45, PlotSizeCalc(4*2, 3),0)
 	CallStarL = CSMakeStar(4, 135, 90, 45, PlotSizeCalc(4*2, 6), PlotSizeCalc(4*2, 5))
 	CallStarLFL = CSMakeStar(4, 135, 90, 45, PlotSizeCalc(4*2, 5), 0)
 

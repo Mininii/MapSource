@@ -13,12 +13,10 @@
 	ObEff = 84
 	nilunit = 181
 	QueueMaxSize = 50000
-	MSPlayers = {
-		 "\0081인",
-		 "\0142인",
-		 "\0153인",
-		 "\0164인",
-		 "\x115인",
+	MSDiff = {
+		 "\x08HD S\x04tyle",
+		 "\x16MX S\x04tyle",
+		 "\x08SC S\x04tyle",
 	}
 	QueueMaxUnit = 1500
 	NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
@@ -43,7 +41,7 @@
 	PlayerIDArr = CreateFArr(1700, FP)
 	UnitHPArr = CreateFArr(1700, FP)
 	ExRateT = {
-		18,20,22,24,26
+		15,10,11
 	}
 	--Vars
 	SELimit = CreateCcode()
@@ -88,6 +86,12 @@
 	OverMePosX = CreateArr(20, FP)
 	OverMePosY = CreateArr(20, FP)
 	GTime = CreateVar(FP)
+	WinCcode = CreateCcode()
+	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
+	HStr4 = SaveiStrArrX(FP,MakeiStrVoid(54)) 
+	HVA3 = CVArray(FP,4*5) 
+	
+	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	--strings
 	
 	_0D = string.rep("\x0D",200) 
@@ -194,7 +198,7 @@
 	SetUnitAbility(7,13,2,70000,30000,15,1150,false,1,260,8,150000,"Era",15000) --에시비
 	SetUnitAbility(60,100,4,50000,30000,8,550,{5,50,100},1,32*5,9,130000,"Nina",19000) --강커세어
 	SetUnitAbility(70,74,1,70000,40000,15,2200,false,1,32*7,7,140000,"Sera",22000) --강스카2
-	SetUnitAbility(40,42,3,80000,30000,15,1200,false,1,16,3,150000,"Sayu",15000) --부르드링
+	SetUnitAbility(40,42,3,80000,30000,15,1200,false,1,16,3,150000,"Sadol",15000) --부르드링
 	SetUnitAbility(57,92,1,85000,25000,15,2300,false,1,32*5,4,100000,"Sorang",10000) --퀸
 	SetUnitAbility(62,104,4,90000,45000,100,1500,false,1,32*4,4,150000,"Sena",23000) --디바우러
 	SetUnitAbility(64,62,3,70000,25000,22,1111,false,1,32*5,4,100000,"Sen",10000) --프로브
@@ -273,7 +277,7 @@
 	SetUnitAbility(7,13,3,120000,50000,15,950,false,1,260,8,150000,"Era",15000) --에시비
 	SetUnitAbility(60,100,4,100000,50000,8,550,{5,50,100},1,32*5,9,130000,"Nina",19000) --강커세어
 	SetUnitAbility(70,74,1,150000,60000,15,3000,false,1,32*7,7,140000,"Sera",22000) --강스카2
-	SetUnitAbility(40,42,3,120000,30000,15,1200,false,1,16,3,150000,"Sayu",15000) --부르드링
+	SetUnitAbility(40,42,3,120000,30000,15,1200,false,1,16,3,150000,"Sadol",15000) --부르드링
 	SetUnitAbility(57,92,1,150000,35000,15,2300,false,1,32*5,4,200000,"Sorang",20000) --퀸
 	SetUnitAbility(62,104,4,150000,50000,100,1500,false,1,32*4,4,150000,"Sena",23000) --디바우러
 	SetUnitAbility(64,62,3,150000,25000,22,1111,false,1,32*5,4,100000,"Sen",10000) --프로브

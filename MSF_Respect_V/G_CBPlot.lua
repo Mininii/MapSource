@@ -671,40 +671,30 @@ end
 
 local Ret = CreateVar(FP)
 local CalcX, CalcY = CreateVars(2, FP)
+local CalcA = CreateVar(FP)
 local FncRand = CreateVar(FP)
 CFunc1 = InitCFunc(FP)
-Para = CFunc(CFunc1)--n*X + (10-n)*Y -100 = k
+Para = CFunc(CFunc1)
 CIfX(FP, {CV(FncRand,0)})
-CiSub(FP,Ret,_iMul(Para[1],CalcX),100)
-CElseIfX({CV(FncRand,1)})
-CiSub(FP,Ret,_iMul(Para[2],CalcY),100)
-CElseIfX({CV(FncRand,2)})
+local NG = CreateVar(FP)
 CiSub(FP,Ret,_Add(_iMul(Para[1],CalcX),_iMul(Para[2],CalcY)),100)
-CElseIfX({CV(FncRand,3)})
+CIf(FP,{CV(NG,1),CV(Ret,0x80000000,AtLeast)})
+CNeg(FP,Ret)
+CIfEnd()
+
+CElseIfX({CV(FncRand,1)})--SortR
 CMov(FP,Ret,_Sqrt(_Add(_Square(Para[1]),_Square(Para[2]))))
-CElseIfX({CV(FncRand,4)})
+CElseIfX({CV(FncRand,2)})--SortA
 local RetAbs= CreateVar(FP)
-CMov(FP,RetAbs,_Abs(_Atan2(_iDiv(_iMul(Para[2],100),_iMul(Para[1],100)),_Mov(0))))
-CIfX(FP,{TTCVar(FP, Para[1][2], iAtLeast, 0),TTCVar(FP, Para[2][2], iAtLeast, 0)})
-CMov(FP,Ret,RetAbs)
-CElseIfX({TTCVar(FP, Para[1][2], iAtMost, -1),TTCVar(FP, Para[2][2], iAtLeast, 0)})
-CMov(FP,Ret,_iSub(_Mov(math.pi*100),RetAbs))
-CElseIfX({TTCVar(FP, Para[1][2], iAtMost, -1),TTCVar(FP, Para[2][2], iAtMost, -1)})
-CMov(FP,Ret,_Add(_Mov(math.pi*100),RetAbs))
-CElseIfX({TTCVar(FP, Para[1][2], iAtLeast, 0),TTCVar(FP, Para[2][2], iAtMost, -1)})
-CMov(FP,Ret,_iSub(_Mov(math.pi*200),RetAbs))
 
+CMov(FP,RetAbs,_Abs(_Atan2(Para[2],Para[1])))
+CAdd(FP,Ret,RetAbs,CalcA)
+CMod(FP,Ret,360)
 
-
-
-CIfXEnd()
 CIfXEnd()
 CFuncReturn({Ret})
 CFuncEnd()
 
-local Ret = CreateVar(FP)
-local CalcX, CalcY = CreateVars(2, FP)
-local FncRand = CreateVar(FP)
 CFunc2 = InitCFunc(FP)
 Para = CFunc(CFunc2)--
 CMov(FP,Ret,_Sqrt(_Add(_Square(Para[1]),_Square(Para[2]))))
@@ -825,20 +815,17 @@ CJumpEnd(FP,CB_PrfcInit)
 
 function CB_RandSort()
 		
-	GetXCntr,GetXmax,GetXmin = CreateVars(3, FP) CB_GetXCntr(STSize+2,GetXCntr,GetXmax,GetXmin)
-	GetYCntr,GetYmax,GetYmin = CreateVars(3, FP) CB_GetYCntr(STSize+2,GetYCntr,GetYmax,GetYmin)
-	RandXmax = CreateVar(FP) f_iMod(FP, RandXmax,_Rand(), GetXmax)
-	RandXmin = CreateVar(FP) f_iMod(FP, RandXmin,_Rand(), GetXmin)
-	RandYmax = CreateVar(FP) f_iMod(FP, RandYmax,_Rand(), GetYmax)
-	RandYmin = CreateVar(FP) f_iMod(FP, RandYmin,_Rand(), GetYmin)
-	CAdd(FP,CalcX,RandXmax,RandXmin)
-	CAdd(FP,CalcY,RandYmax,RandYmin)
+	CMov(FP,CalcX,_Mod(_Rand(),200),-100)
+	CMov(FP,CalcY,_Mod(_Rand(),200),-100)
+	CMov(FP,CalcA,_Mod(_Rand(),360))
+	DoActions(FP,SetSwitch(RandSwitch1,Random))
+	TriggerX(FP,Switch(RandSwitch1,Cleared),{SetV(NG,1)},{preserved})
+	TriggerX(FP,Switch(RandSwitch1,Set),{SetV(NG,0)},{preserved})
 
 	RandRet = f_CRandNum(2)
 	DirRand = CreateVar(FP)
 	CMov(FP,DirRand,RandRet)
-	
-	RandRet = f_CRandNum(5)
+	RandRet = f_CRandNum(3)
 	CMov(FP,FncRand,RandRet)
 	if TestStart == 1 then
 		DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
@@ -870,7 +857,6 @@ function CB_MarNumFill()
 	--CB_Fill(Xm, Ym, SizeV, SizeV,32,32, STSize+2)
 	--CB_CropPath(G_CB_Shapes[TemConnect][2],0,STSize+2,STSize+3)
 	RandRet = f_CRandNum(2)
-	DirRand = CreateVar(FP)
 	CMov(FP,DirRand,RandRet)
 	CB_Sort(CFunc2,DirRand,STSize+2,EndRetShape)
 
@@ -887,7 +873,7 @@ end
 	
 	CIfX(FP,{CVX(G_CB_TempTable[2],1,0xFF,AtLeast)})
 	CB_TCopy(V(CA[1]),STSize+2)
-	--DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+2).." TempFunc : ",G_CB_TempTable[2]})
+	DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+2).." TempFunc : ",G_CB_TempTable[2]})
 	for j, k in pairs(G_CB_PrefuncArr) do
 		CIf(FP,CVX(G_CB_TempTable[2],k[1],0xFF))
 			_G[k[2]]()
@@ -898,7 +884,7 @@ end
 	CB_TCopy(EndRetShape,TempRetShape)
 	CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
 	CMov(FP,G_CB_TempTable[13],G_CB_Num,EndRetShape)
---	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
+	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
 
 	CIf(FP,CVX(G_CB_TempTable[5],0,0xFF))
 	local RetNum = CreateVar(FP)

@@ -34,12 +34,14 @@ function Include_GunData(Size,LineNum)
 		CIfEnd()
 
 		CIf(FP, {TTOR({CV(GunPlayer,7),CV(GunID,119)})}) -- P8건물과 탄막유닛만 건작으로 작동
-		function GunBGM(ID,Type,Text,Point,OtherTrig)
+		function GunBGM(ID,Type,Text,Point,OtherTrig,GNum)
+			Act = {}
+			if GNum ~= nil then Act = {CV(DUnitCalc[4][3],GNum)} end
 			local GText = "\n\n\n\n\n"..StrDesignX(Text.." \x04을(를) 파괴하였습니다\x17 + "..Point.." P t s").."\n\n"
 			if Type == nil then
-				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
+				TriggerX(FP,{CV(GunID,ID),Act},{SetScore(Force1,Add,Point,Kills),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			else
-				TriggerX(FP,{CV(GunID,ID)},{SetScore(Force1,Add,Point,Kills),SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
+				TriggerX(FP,{CV(GunID,ID),Act},{SetScore(Force1,Add,Point,Kills),SetV(BGMType,Type),RotatePlayer({DisplayTextX(GText,4)},HumanPlayers,FP),OtherTrig},{preserved})
 			end
 		end
 		GunBGM(131,2,"\x1CB\x04lue \x1CW\x04hite",50000)
@@ -52,9 +54,9 @@ function Include_GunData(Size,LineNum)
 		GunBGM(148,9,"\x1CH\x04ypernaid",150000)
 		GunBGM(130,10,"\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'",300000)
 		GunBGM(200,11,"\x03N\x04ew\x03G\x04ame\x03S\x04tart",500000)
-		GunBGM(150,12,"\x1FO\x04ver \x1FM\x04e",6974)
+		GunBGM(150,12,"\x1FO\x04ver \x1FM\x04e",13737)
 		GunBGM(201,13,"\x08E\x04nemy \x08S\x04torm",250000)
-		GunBGM(160,14,"\x1CD\x04o \x1Ci\x04t",80000)
+		GunBGM(160,14,"\x1CD\x04iomedes",80000)
 		GunBGM(167,15,"\x11D\x04ream \x11i\x04t",80000)
 		GunBGM(126,16,"\x1CB\x04lyth\x1CE",250000)
 		GunBGM(174,17,"\x08B\x04lack \x08S\x04wan",250000)
@@ -62,7 +64,8 @@ function Include_GunData(Size,LineNum)
 		GunBGM(106,19,"\x1FM\x04iles",150000)
 		GunBGM(168,20,"\x1BD\x04on't \x1BD\x04ie",444444)
 		GunBGM(154,21,"\x11D\x04aydream",150000)
-		GunBGM(190,22,"\x08H\x04ell\'o",150000)
+		GunBGM(190,22,"\x08H\x04ell\'o",150000,nil,1)
+		GunBGM(190,25,"\x08O\x04\'men",150000,nil,2)
 		GunBGM(175,23,"\x1DL\x04ENA \x1DT\x04ower",555555)
 		GunBGM(147,23,"\x08D\x04IE \x08I\x04N",555555)
 		GunBGM(152,24,"\x1FR\x04e:\x1FB\x04IRTH",444444)
@@ -403,7 +406,7 @@ end
 	--1536,7824
 	Gen2GunH({"Nina","Freyja"},{"Nina","Freyja"},8,"LSLineHD","LSLine","LSFill","LSFill","EL FAIL",{1536,7696})
 	Gen2GunH({"Sera","Kamilia"},{"Sera","Kamilia"},9,"LSLineHD","LSLine","LSFill","LSFill","DIEIN",{1536,7696})
-	Gen2GunH({"Sorang","Sayu"},{"Sorang","Sayu"},10,"LSLineHD","LSLine","LSFill","LSFill","PLAY",{1536,7696})
+	Gen2GunH({"Sorang","Sadol"},{"Sorang","Sadol"},10,"LSLineHD","LSLine","LSFill","LSFill","PLAY",{1536,7696})
 	Gen2GunH({"Sena","Gaya"},{"Sena","Gaya"},11,"LSLineHD","LSLine","LSFill","LSFill","EL CLEAR",{1536,7696})
 	Gen2GunH({"Sen","Leon"},{"Sen","Leon"},12,"LSLineHD","LSLine","LSFill","LSFill","LENA",{1536,7696})
 
@@ -492,7 +495,7 @@ end
 	Gen2Gun({"Era","Yuri"},{"Era","Yuri"},2,"STCirHD","STCirSC",S_6, 2, P_5, 4,1)
 	--P_8, 3 : 81
 	--S_4, 3 : 81
-	Gen2Gun({"Nina","Sayu"},{"Nina","Sayu"},3,"STCirHD","STCirSC",P_8, 3, S_4, 3,1)
+	Gen2Gun({"Nina","Sadol"},{"Nina","Sadol"},3,"STCirHD","STCirSC",P_8, 3, S_4, 3,1)
 
 	CIfEnd()
 	CIf_GCase(160)--게이트
@@ -838,8 +841,8 @@ end
 				CIf(FP,Gun_Line(6,Exactly,3))
 					G_CB_SetSpawnX({CD(GMode,1)}, {"Sena"}, NS_HD, 1, "Timer_Attack", 3, nil, 1, nil, P8)
 					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Sena"}, NS_SC, 1, "Timer_Attack", 3, nil, 1, nil, P8)
-					G_CB_SetSpawnX({CD(GMode,1)}, {"Sayu"}, NS_HDW, 1, 0, 2, nil, 1, nil, P8)
-					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Sayu"}, NS_SCW, 1, 0, 2, nil, 1, nil, P8)
+					G_CB_SetSpawnX({CD(GMode,1)}, {"Sadol"}, NS_HDW, 1, 0, 2, nil, 1, nil, P8)
+					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Sadol"}, NS_SCW, 1, 0, 2, nil, 1, nil, P8)
 					G_CB_SetSpawnX({CD(GMode,1)}, {"Gaya"}, SpiHD, 1, 0, 0, nil, nil, nil, P8)
 					G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Gaya"}, SpiSC, 1, 0, 0, nil, nil, nil, P8)
 					G_CB_SetSpawnX({}, {55,53,54,46}, SpiSC, 1, 0, 0, nil, nil, nil, P8)
@@ -962,9 +965,9 @@ end
 						G_CB_SetSpawnX({}, {55,53,54,46}, ShRet, 0, 0, 0, nil, 2, nil, P8)
 					CIfEnd()
 					CIf(FP,Gun_Line(6,Exactly,3))
-						G_CB_SetSpawnX({CD(GMode,1)}, {"Sayu"}, ShRet2, 0, 0, 0, nil, 2, nil, P8)
+						G_CB_SetSpawnX({CD(GMode,1)}, {"Sadol"}, ShRet2, 0, 0, 0, nil, 2, nil, P8)
 						G_CB_SetSpawnX({CD(GMode,1)}, {"Gaya"}, ShRet2, 0, 0, 0, nil, 2, nil, P8)
-						G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Sayu"}, ShRet, 0, 0, 0, nil, 2, nil, P8)
+						G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Sadol"}, ShRet, 0, 0, 0, nil, 2, nil, P8)
 						G_CB_SetSpawnX({CD(GMode,2,AtLeast)}, {"Gaya"}, ShRet, 0, 0, 0, nil, 2, nil, P8)
 						G_CB_SetSpawnX({}, {55,53,54,46}, ShRet, 0, 0, 0, nil, 2, nil, P8)
 					CIfEnd()
@@ -1124,8 +1127,6 @@ end
 		RCenN1,RCenN2,RCenN3,RCenN4,RCenN5,RCenN6,RCenN7,
 	}
 	
-	CMov(FP,GTime,_Div(_Mul(_ReadF(0x57F23C),42),1000))
-	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
 	if TestStart == 1 then
 		--DisplayPrint(HumanPlayers, {G_CB_RotateV})
 	end
@@ -1388,7 +1389,7 @@ end
 	LDSetSpawn(1,{"Rose","Sui"})
 	LDSetSpawn(2,{"Era","Jisoo"})
 	LDSetSpawn(3,{"Sera","Freyja"})
-	LDSetSpawn(4,{"Sena","Sayu"})
+	LDSetSpawn(4,{"Sena","Sadol"})
 
 	CTrigger(FP,{Gun_Line(7,AtLeast,480*4)},{Gun_DoSuspend()},1)
 	CIfEnd()
@@ -1413,13 +1414,210 @@ end
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(SNm*480)),CD(GMode,1)}, CUTable3, RBCHD, 1, {OwnerTable=P7,LMTable="MAX",CenterXY={1024,7776}})
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(SNm*480)),CD(GMode,2,AtLeast)}, CUTable3, RBC, 1, {OwnerTable=P7,LMTable="MAX",CenterXY={1024,7776}})
 	end
-	RBSetSpawn(0,{"Sorang"},{"Gaya"},{"Sera"})
+	
+	RBSetSpawn(0,{"Sorang"},{"Gaya","Yuri"},{"Sera"})
 	RBSetSpawn(1,{"Sena"},{"Deaths"},{"Era"})
-	RBSetSpawn(2,{"Sen"},{"Sayu"},{"Zero"})
+	RBSetSpawn(2,{"Sen"},{"Sadol","Leon"},{"Zero"})
 	RBSetSpawn(3,{"Identity"},{"Destroy"},{"Division"})
 	CTrigger(FP,{Gun_Line(7,AtLeast,480*3)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	--1024,7776
+	CIf_GCase(189,1)--강제입력된 화홀
+	--6 = CurSpeed
+	DoActionsX(FP, {Gun_SetLine(6, SetTo, 0x1D)}, 1)--처음기본배속
+	CDoActions(FP, {TGun_SetLine(8, Add, Var_TempTable[7]),TSetMemory(0x5124F0, SetTo, Var_TempTable[7])})--배속은 변수에 의해 고정되고 배속에 따라 화홀의 밀리세컨드 단위가 달라진다.
+	
+	local Lyrics = {
+		{"\x0D\x0D!H\x13\x07♪ \x0FS\x04ong \x08T\x04itle \x07♪",2520},
+		{"\x0D\x0D!H\x13\x07♪ \x11g\x04lory\x11MAX \x07♪",5050},
+		{"\x0D\x0D!H\x13\x07♪ \x07나\x04의 \x11최대치\x04로 \x08너\04와 \x1F함께할게 \x07♪",7570},
+		{"\x0D\x0D!H\x13\x07♪ \x07from \x17DJMAX \x17R\x04espect \x17V \x07♪",10100},
+		{"\x0D\x0D!H\x13\x07♪ \x17V E\x04XTENSION \x17V \x04(2023) \x07♪",10100},
+		{"\x0D\x0D!H\x13\x07♪ \x11we go\x04, \x0Ewe go\x04, \x0Fwe go \x17H\x04igher \x07♪",24310},
+		{"\x0D\x0D!H\x13\x07♪ \x1C저 하늘 위로 \x1FSkydive \x07♪",26840},
+		{"\x0D\x0D!H\x13\x07♪ \x04미뤄 미뤄 버린 \x08걱정 \x07♪",29680},
+		{"\x0D\x0D!H\x13\x07♪ \x04이제 \x07Goodbye \x07♪",31260},
+		{"\x0D\x0D!H\x13\x07♪ \x1FForever\x04, and \x1CEver \x07♪",32360},
+		{"\x0D\x0D!H\x13\x07♪ \x10Whatever\x04, \x08no \x11Matter \x10what \x07♪",33630},
+		{"\x0D\x0D!H\x13\x07♪ \x04난 \x08너 \x19하나면 \x07충분한 걸 \x07♪",35210},
+		{"\x0D\x0D!H\x13\x07♪ \x1E손끝\x04에 닿은 \x17멜로디\x04에 \x07♪",37570},
+		{"\x0D\x0D!H\x13\x07♪ \x10꿈\x04에서 깬 우린 지금 \x07만나게 돼 \x07♪",39940},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x10기억 속 너\x04의 \x1F낮\x04과 \x1C밤 \x04사이 \x07♪",42470},
+		{"\x0D\x0D!H\x13\x07♪ \x04남겨진 \x18추억들 \x11위\x04에 \x07♪",45000},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x1F반짝이는 나\x04를 꺼내 \x07♪",47840},
+		{"\x0D\x0D!H\x13\x07♪ \x04언제든 \x0FPlay \x04me \x07once again \x07♪",50360},
+
+		{"\x0D\x0D!H\x13\x07♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",52570},
+		{"\x0D\x0D!H\x13\x07♪ \x19별들\x04이 하나씩 \x08사라진다 해도 \x07♪",55420},
+		{"\x0D\x0D!H\x13\x07♪ \x11(그런대도) \x07♪",58420},
+
+		{"\x0D\x0D!H\x13\x07♪ \x07나\x04의 \x11최대치\x04로 \x07♪",60150},
+		{"\x0D\x0D!H\x13\x07♪ \x08너\x04와 \x1F함께할게 \x07♪",61730},
+
+		
+		--{"\x0D\x0D!H\x13\x07♪ ~ \x10M\x04isty \x10E\x04'ra '\x10M\x04ui' ~ \x07♪",72780},
+		{"\x0D\x0D!H\x13\x07♪ \x10fah shu nee \x07♪",72780},
+		{"\x0D\x0D!H\x13\x07♪ \x10주문\x04의 \x11목소리\x04가 들리네. \x07♪",72780},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x10veshu, me de su te ar \x07♪",75470},
+		{"\x0D\x0D!H\x13\x07♪ \x08두려워하라\x04, \x11내\x04가 \x17눈\x04을 뜰 것이니 \x07♪",75470},
+
+		{"\x0D\x0D!H\x13\x07♪ \x10Nich jak fa hef khan \x07♪",77680},
+		{"\x0D\x0D!H\x13\x07♪ \x08너희\x04는 \x06지옥불\x04로 떨어져 \x07♪",77680},
+
+		{"\x0D\x0D!H\x13\x07♪ \x10vir muk ar \x07♪",80840},
+		{"\x0D\x0D!H\x13\x07♪ \x1F심판\x04을 받으리라 \x07♪",80840},
+
+		
+		{"\x0D\x0D!H\x13\x07♪ \x11G\x04lory \x19Day \x07♪",86360},
+		{"\x0D\x0D!H\x13\x07♪ \x04(I \x10Never \x08Die\x04) \x07♪",87150},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x11G\x04lory \x1FLight \x07♪",91570},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x1D시간\x04을 넘어) \x07♪",91570},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x1E널 만날 수 있다면\x04) \x07♪",94100},
+
+		{"\x0D\x0D!H\x13\x07♪ \x04My \x17Only \x1DOne \x07♪",96470},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x10결과 \x04속 \x17흥\x10망\x04에) \x07♪",96470},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x1C상관없이 \x04그저 \x1B끌리는 대로\x04) \x07♪",99150},
+
+		{"\x0D\x0D!H\x13\x07♪ \x04My \x17Only \x1FLight \x07♪",101360},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x07달려갔던 \x04지금 \x08너\x04와 \x07나\x04) \x07♪",104360},
+
+		
+		
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x19Day\x04) \x07♪",109100},
+		{"\x0D\x0D!H\x13\x07♪ \x10기억 속 너\x04의 \x1F낮\x04과 \x1C밤 \x04사이 \x07♪",109420},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x1FLight\x04) \x07♪",111630},
+		{"\x0D\x0D!H\x13\x07♪ \x04남겨진 \x18추억들 \x11위\x04에 \x07♪",111940},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x04My \x17Only \x1DOne\x04) \x07♪",114150},
+		{"\x0D\x0D!H\x13\x07♪ \x1F반짝이는 나\x04를 꺼내 \x07♪",114780},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x04My \x17Only \x1FLight\x04) \x07♪",116680},
+		{"\x0D\x0D!H\x13\x07♪ \x04언제든 \x0FPlay \x04me \x07once again \x07♪",117310},
+
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x19Day\x04) \x07♪",119210},
+		{"\x0D\x0D!H\x13\x07♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",119520},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x1FLight\x04) \x07♪",121730},
+		
+		{"\x0D\x0D!H\x13\x07♪ \x19별들\x04이 하나씩 \x08사라진다 해도 \x07♪",122360},
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x11그런대도\x04) \x07♪",125360},
+
+		{"\x0D\x0D!H\x13\x07♪ \x1F끝없는 \x11최대치\x04로 \x07♪",127100},
+		{"\x0D\x0D!H\x13\x07♪ \x08너\x04와 \x1F함께할게 \x07♪",129940},
+
+		
+		
+
+		
+		
+
+		{"\x0D\x0D!H\x13\x07♪ \x04my \x11g\x04lory \x11MAX \x07♪",133100},
+		{"\x0D\x0D!H\x13\x07♪ \x04for \x08You \x04and \x07I \x07♪",135470},
+		{"\x0D\x0D!H\x13\x07♪ \x04to the \x11MAX\x16imum \x07♪",140520},
+		
+		
+		
+		{"\x0D\x0D!H\x13\x07♪ \x04(\x07I \x1Fnever \x08\"D\x04IE \x08I\x04N\x08\"\x04) \x07♪",143840},
+		{"\x0D\x0D!H\x13\x07♪ \x0F바람\x04의 \x18끝\x04까지 \x07♪",144940},
+		{"\x0D\x0D!H\x13\x07♪ \x07나\x04의 \x11최대치\x04로 \x07♪",148570},
+		{"\x0D\x0D!H\x13\x07♪ \x08너\x04와 \x10영원할게 \x07♪",150150},
+
+		
+		
+
+		
+		
+		
+
+		
+		
+
+		
+		
+
+
+
+
+	}
+	
+    for i = 1, 61 do
+		local WAVS
+        if i <= 9 then
+            WAVS = "staredit\\wav\\gMAX_00"..i..".ogg"
+        elseif i >= 10 and i<= 99 then
+            WAVS = "staredit\\wav\\gMAX_0"..i..".ogg"
+        else
+            WAVS = "staredit\\wav\\gMAX_"..i..".ogg"
+        end
+		Trigger2X(FP,{Gun_Line(8,AtLeast,(i-1)*2520)},{RotatePlayer({PlayWAVX(WAVS),PlayWAVX(WAVS),PlayWAVX(WAVS)},HumanPlayers,FP)})
+    end
+	for j, k in pairs(Lyrics) do
+		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
+	end
+
+
+	SpCodeBase = 0x8080E200 
+	SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 
+	SpCode3 = 0x8B80E200 -- \x0D\x0D!H
+	function HTextEff() -- ScanChat -> 11줄 전체를 utf8 -> iutf8화 (식별자로 중복방지) 
+	CA__SetNext(HStr2,8,SetTo,0,54*11-1,0)
+	CA__SetNext(HStr4,8,SetTo,0,54-1,0)
+	CMov(FP,HLine,0)
+	EffCV2 = CreateVArr(11, FP)
+	VArrI,VArrI4 = CreateVars(2,FP)
+
+	DoActionsX(FP, {SetV(VArrI,0),SetV(VArrI4,0)})
+
+	CWhile(FP,NVar(HLine,AtMost,10),SetNVar(HCheck,SetTo,0))
+		f_ChatOffset(FP,HLine,0,ChatOff) 
+		CMovX(FP,HCheck,VArrX(EffCV2, VArrI, VArrI4))
+		CIfX(FP,{TTbytecmp(ChatOff,VArr(HVA3,0),GetStrSize(0,"\x0D\x0D!H"))},{SetNVar(HCheck,SetTo,3)})
+	--    for i = 0, 3 do
+	--        CElseIfX({HumanCheck(i, 1),TTbytecmp(ChatOff,VArr(Names2[i+1],0),PLength[i+1])},{SetNVar(HCheck,SetTo,4)})
+	--    end
+		CElseIfX({TTDisplayX(HLine,0,NotSame,SpCode3,0xFFFFFF00)},{SetNVar(HCheck,SetTo,0)})
+		CIfXEnd()
+
+		CurLiV = CreateVar(FP)
+		EffCV = CreateVArr(11, FP)
+		CIf(FP,{NVar(HCheck,AtLeast,3),NVar(HCheck,AtMost,4)})
+		CIfX(FP,{TTDisplayX(HLine,0,"!=",SpCodeBase,0xF0FFFF00)}) -- 0x8080E2 ~ 0x8F80F2 인식
+			CMovX(FP,VArr(EffCV,HLine),0)
+			CMov(FP,CurLiV, _Mul(HLine,54*604))
+			CA__SetValue(HStr2,MakeiStrLetter("\x0D",53),0xFFFFFFFF,CurLiV,1,1) 
+			CD__ScanChat(SVA1(HStr2,CurLiV),ChatOff,52,ChatSize,0,1) 
+			CIfX(FP,NVar(HCheck,Exactly,3))
+				CA__SetValue(HStr2,MakeiStrLetter("\x0D",2),0xFFFFFFFF,CurLiV,1,1) 
+				CA__SetMemoryX(_GIndex2(HLine,0),SpCode3+0x0D,0xFFFFFFFF,1) 
+			CElseX()
+				CA__SetMemoryX(_GIndex2(HLine,0),SpCode0+0x0D,0xFFFFFFFF,1) 
+			CIfXEnd()
+
+			CIf(FP,{TTNVar(HCheck, NotSame, 3)})
+			CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+			CIfEnd()
+			CD__InputMask(HLine,0xFFFFFFFF,0,52) 
+		CElseIfX({TTDisplay(HLine,"On"),TTDisplayX(HLine,0,Exactly,SpCode3,0xFFFFFF00)}) 
+		TempEC = CreateVar(FP)
+			CMov(FP,CurLiV, _Mul(HLine,54*604))
+			CMovX(FP,TempEC,VArr(EffCV,HLine))
+			CD__InputVAX(_GIndex2(HLine,1),HStr4,52,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+			CD__InputVAX(_GIndex2(HLine,1),SVA1(HStr2,CurLiV),TempEC,0xFFFFFFFF,0xFFFFFFFF,8,604*11-1)
+			CIf(FP,NVar(TempEC,AtMost,51),SetNVar(TempEC, Add, 1))
+				CMovX(FP,VArr(EffCV,HLine),TempEC)
+			CIfEnd()
+		CIfXEnd()
+		CIfEnd()
+
+
+		CMovX(FP,VArrX(EffCV2, VArrI, VArrI4),HCheck)
+	CWhileEnd({SetNVar(HLine,Add,1),AddV(VArrI,604),AddV(VArrI4,2416)}) 
+	end 
+	CDPrint(0,11,{"\x0D",0,0},{Force1,Force2,Force5},{1,0,0,0,1,1,0,0},"HTextEff",FP) 
+
+	CIfEnd()
 	
 
 	if TestStart == 1 then
@@ -1438,7 +1636,6 @@ end
 			Gun_Line(0,Exactly,154),
 			Gun_Line(0,Exactly,116),
 		}),})
-		CMov(FP,G_CB_RotateV,_Mul(_Div(GTime,24),6))
 		CIf(FP,{Gun_Line(54,AtMost,0)},{Gun_SetLine(5,SetTo,1)})
 		CTrigger(FP,{Gun_Line(6,AtLeast,1)},{Gun_DoSuspend()},1)
 		CTrigger(FP,{Gun_Line(7,AtLeast,480)},{Gun_SetLine(6,SetTo,1)},1)

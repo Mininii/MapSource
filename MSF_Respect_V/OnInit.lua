@@ -511,6 +511,7 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	--AddCD(GunCcode,#Shape8116);--건작들 갯수 입력(무적해제 컨디션)
 },1)
 
+CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H")) 
 
 
 	CFor(FP,19025,19025+(84*1700),84)
@@ -591,7 +592,7 @@ DoActionsX(FP, { -- 기타 시작시 1회실행 트리거
 	CreateUnit(1, 133, 1, P7),	CreateUnit(1, 132, 1, P7),	CreateUnit(1, 131, 1, P7),
 },1)
 
-	HeroTestMode = 1
+	HeroTestMode = 0
 	if HeroTestMode == 1 then
 		for j,k in pairs(UnitPointArr) do
 			--f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)

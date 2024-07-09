@@ -346,6 +346,26 @@ function CreateUnitQueue()
 		
 
 		CallTrigger(FP, Call_RepeatOption)
+		if TestStart == 1 then
+			local RKillScore = CreateVar(FP)
+			local RKillScoreTotal = CreateVar(FP)
+			local RKillScoreP = CreateVar(FP)
+			local RKillScoreMin = CreateVar(FP)
+			CMov(FP,RKillScore,0)
+			f_WreadX(FP, 0x663EB8, QueueUID, RKillScore)
+			for j,k in pairs(KillPointArr) do
+				TriggerX(FP, CV(QueueUID,k[1]),AddV(RKillScore,k[2]), {preserved})
+			end	
+			CAdd(FP,RKillScoreTotal,RKillScore)
+			CIf(FP,{CV(RKillScoreTotal,1000,AtLeast)})
+			CMov(FP,RKillScoreP,_Div(RKillScoreTotal,_Mov(1000)))
+			CMod(FP,RKillScoreTotal,1000)
+			CAdd(FP,RKillScoreMin,_Mul(_Mul(RKillScoreP,_Mov(10)),ExRate))
+			DisplayPrintEr(MapPlayers, {"RKillScoreMin : ",RKillScoreMin})
+			CIfEnd()
+
+
+		end
 
 
 

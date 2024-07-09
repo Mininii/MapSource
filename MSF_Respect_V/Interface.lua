@@ -21,7 +21,7 @@
 		{11,"staredit\\wav\\BGM_NewGameStart.ogg",115*1000},
 		{12,"staredit\\wav\\BGM_OverMe.ogg",62*1000},
 		{13,"staredit\\wav\\BGM_EnemyStorm.ogg",107*1000},
-		{14,"staredit\\wav\\BGM_Do_it.ogg",60*1000},
+		{14,"staredit\\wav\\BGM_Diomedes.ogg",41*1000},
 		{15,"staredit\\wav\\BGM_Dream_it.ogg",44*1000},
 		{16,"staredit\\wav\\BGM_Blythe.ogg",92*1000},
 		{17,"staredit\\wav\\BGM_Black_Swan.ogg",88*1000},
@@ -32,6 +32,7 @@
 		{22,"staredit\\wav\\BGM_Hello.ogg",49*1000},
 		{23,"staredit\\wav\\BGM_DIE_IN.ogg",96*1000},
 		{24,"staredit\\wav\\BGM_ReBIRTH.ogg",60*1000},
+		{25,"staredit\\wav\\BGM_Omen.ogg",44*1000},
 	})
 	BTDis = {}
 	for i = 0,4 do
@@ -133,17 +134,24 @@
 		TestCode = CreateCcode()
 		TestCode2 = CreateCcode()
 		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,198),CD(GS,0)},AddCD(TestCode,1) , {preserved})
-		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,196),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
 
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		KillTable = {}
+		KillTable2 = {}
 		for j,k in pairs(UnitPointArr) do
 			table.insert(KillTable, KillUnit(k[1], Force2))
 		end
+		for j,k in pairs(f_GunTable) do
+			table.insert(KillTable2, ModifyUnitEnergy(All, k, Force2, 64, 0))
+			table.insert(KillTable2, KillUnit(k, Force2))
+		end
+		table.insert(KillTable2, SetCD(WinCcode,480))
 			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,1);}, KillTable, {preserved})
+			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,210),CD(GS,1);}, KillTable2, {preserved})
 			Trigger {
 				players = {FP},
 				conditions = {
@@ -423,9 +431,11 @@
 	
 	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
+	local BGMAct = SetV(BGMType,1)
+	if TestStart == 1 then BGMAct = SetV(BGMType,0) end
 
 	CIfOnce(FP,{CD(GS,1)},{SetCDeaths(FP,Add,10,PExitFlag),
-		SetV(BGMType,1),
+		BGMAct,
 		ModifyUnitEnergy(All, "Any unit", AllPlayers, 64, 100);
 		SetResources(Force2, SetTo, 99999999, OreAndGas),
 		SetCp(FP),
@@ -461,17 +471,15 @@
 		
 	end
 
-	for j = 2, 3 do
-		for k = 1, 5 do
+	for j = 1, 3 do
 			local TT
-			if j == 2 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
-			else TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSPlayers[k].." \x17환전률 : \x1B"..ExRateT[k].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\n\n\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
+			if j == 3 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\n\n\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
+			else TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
 			end
-			Trigger2X(FP, {CVar(FP,SetPlayers[2],Exactly,k);CD(GMode,j)}, {
+			Trigger2X(FP, {CD(GMode,j)}, {
 				RotatePlayer({SetMissionObjectivesX(TT)},HumanPlayers,FP);
-				SetCVar(FP,ExRate[2],SetTo,ExRateT[k]);})
+				SetCVar(FP,ExRate[2],SetTo,ExRateT[j]);})
 	
-		end
 	end
 
 	TriggerX(FP, {CD(EVFCcode,0)}, {SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
@@ -666,8 +674,9 @@ DoActions(FP,{
 	RemoveUnitAt(1,BanToken[5],"Anywhere",Force1);
 
 })
-		BanCode2 = CreateCcodeArr(7)
-		WanCT = CreateCcodeArr(7)
+	local PColorC = { 111, 165, 159, 164, 156 }
+	BanCode2 = CreateCcodeArr(7)
+	WanCT = CreateCcodeArr(7)
 	local ExchangeP = CreateVar(FP)
 	MacroWarn1 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08경고를 무시하고 계속 사용하실 경우 드랍됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 	MacroWarn2 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
@@ -760,6 +769,15 @@ DoActions(FP,{
 		CreatingUID = CreateVar(FP)
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
+		
+		CTrigger(FP, {NTCond()}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
+		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
+		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {SetPlayerColor(i, SetTo, 128)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)
+		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {SetPlayerColor(i, SetTo, 51)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)
+		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {SetPlayerColor(i, SetTo, 42)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)
+		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),Exactly,1),}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
+
+
 		CDoActions(FP, {TSetDeathsX(i, Subtract, Dt, 12,0xFFFFFF)})
         DoActions(FP, {
             SetMemory(0x5822C4+(i*4),SetTo,1200);
