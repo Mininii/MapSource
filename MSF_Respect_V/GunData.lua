@@ -1265,7 +1265,7 @@ end
 					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, {CallStarSFL}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1760,400}})
 				end
 				function WaveGM3(GNum,ACUTable,GCUTable)
-					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, {CallStarL}, nil, {OwnerTable=P6,LMTable="MAX"})
+					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, CallStarL, nil, {OwnerTable=P6,LMTable="MAX"})
 					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, {CallStarLFL}, nil, {OwnerTable=P6,LMTable="MAX"})
 				end
 				WaveGM2(1,{43},{37,38})
@@ -1424,7 +1424,24 @@ end
 	--1024,7776
 	CIf_GCase(189,1)--강제입력된 화홀
 	--6 = CurSpeed
-	DoActionsX(FP, {Gun_SetLine(6, SetTo, 0x1D)}, 1)--처음기본배속
+	local lAct = {}
+	for j,k in pairs({25,17,19,77,78,75,76,79,81,83,95,93,5,2,3,34,52,65,66,40,64,87,74,23,68,61,63,67}) do
+		table.insert(lAct, SetMemoryX(0x664080 + (k*4),SetTo,4,4))
+		table.insert(lAct, SetMemoryB(0x663150 + (k),SetTo,12))
+			
+		end
+ 	DoActions2X(FP, {
+		Gun_SetLine(6, SetTo, 0x1D),
+		SetMemoryX(0x664080 + (25*4),SetTo,4,4),
+		SetMemoryB(0x663150 + (25),SetTo,12),
+		SetMemoryB(0x58CE24 + (5 * 24) + 19,SetTo,0),
+		SetMemoryB(0x58CE24 + (5 * 24) + 22,SetTo,0),
+		SetMemoryB(0x58F050 + (5 * 20) + (31-20),SetTo,0),
+		SetMemoryB(0x58CF44 + (5 * 24) + 19,SetTo,0),
+		SetMemoryB(0x58CF44 + (5 * 24) + 22,SetTo,0),
+		SetMemoryB(0x58F140 + (5 * 20) + (31-20),SetTo,0),lAct
+	}, 1)--처음기본배속, 탱크공중화
+
 	CDoActions(FP, {TGun_SetLine(8, Add, Var_TempTable[7]),TSetMemory(0x5124F0, SetTo, Var_TempTable[7])})--배속은 변수에 의해 고정되고 배속에 따라 화홀의 밀리세컨드 단위가 달라진다.
 	
 	local Lyrics = {
@@ -1449,7 +1466,7 @@ end
 		{"\x0D\x0D!H\x13\x07♪ \x1F반짝이는 나\x04를 꺼내 \x07♪",47840},
 		{"\x0D\x0D!H\x13\x07♪ \x04언제든 \x0FPlay \x04me \x07once again \x07♪",50360},
 
-		{"\x0D\x0D!H\x13\x07♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",52570},
+		{"\x0D\x0D!H\x13\x05♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",52570},
 		{"\x0D\x0D!H\x13\x07♪ \x19별들\x04이 하나씩 \x08사라진다 해도 \x07♪",55420},
 		{"\x0D\x0D!H\x13\x07♪ \x11(그런대도) \x07♪",58420},
 
@@ -1498,7 +1515,7 @@ end
 		{"\x0D\x0D!H\x13\x07♪ \x04언제든 \x0FPlay \x04me \x07once again \x07♪",117310},
 
 		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x19Day\x04) \x07♪",119210},
-		{"\x0D\x0D!H\x13\x07♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",119520},
+		{"\x0D\x0D!H\x13\x05♪ \x05새까만 밤하늘 빛을 잃어간 \x07♪",119520},
 		{"\x0D\x0D!H\x13\x07♪ \x04(\x11G\x04lory \x1FLight\x04) \x07♪",121730},
 		
 		{"\x0D\x0D!H\x13\x07♪ \x19별들\x04이 하나씩 \x08사라진다 해도 \x07♪",122360},
@@ -1523,23 +1540,6 @@ end
 		{"\x0D\x0D!H\x13\x07♪ \x0F바람\x04의 \x18끝\x04까지 \x07♪",144940},
 		{"\x0D\x0D!H\x13\x07♪ \x07나\x04의 \x11최대치\x04로 \x07♪",148570},
 		{"\x0D\x0D!H\x13\x07♪ \x08너\x04와 \x10영원할게 \x07♪",150150},
-
-		
-		
-
-		
-		
-		
-
-		
-		
-
-		
-		
-
-
-
-
 	}
 	
     for i = 1, 61 do
@@ -1556,7 +1556,247 @@ end
 	for j, k in pairs(Lyrics) do
 		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
 	end
+	---------------------------------------건작보스 패턴 영역-------------------------------------------------
+	gMAXCcodeArr= CreateCcodeArr(10)
 
+	--RepeatType : "gMAX1"
+	GMAXSh1 = CS_MoveXY(CSMakePolygon(3, 32, 0, PlotSizeCalc(3, 11), PlotSizeCalc(3, 10)), 0, 176*2)
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,630)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=0})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,1100)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=60})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,1420)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=120})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,1730)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=180})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,2050)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=240})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,2210)}, {88}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RepeatType={"gMAX1"},RotateTable=300})
+	TriggerX(FP, {Gun_Line(8,AtLeast,12630)}, {SetCD(gMAXCcodeArr[1],1)})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=0})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=60})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=120})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=180})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=240})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,12630)}, {77}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=300})
+
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=0})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=60})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=120})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=180})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=240})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,17680)}, {21,17}, GMAXSh1, 1, {LMTable="MAX",OwnerTable=P6,RotateTable=300})
+	--1024
+	--1088
+	GMAXSh2_1 = CSMakeLine(2, 64, 0, 11, 0)
+	GMAXSh2_2 = CSMakeLine(2, 64, 90, 11, 0)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,22730)}, {"Raynor V","Hyperion"}, GMAXSh2_1, 1, {CenterXY={1024-256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,22730+160)}, {"Raynor V","Hyperion"}, GMAXSh2_1, 1, {CenterXY={1024+256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,23210)}, {"Danimoth","Fenix Z"}, GMAXSh2_2, 1, {CenterXY={1024,1088-256},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,23210+160)}, {"Danimoth","Fenix Z"}, GMAXSh2_2, 1, {CenterXY={1024,1088+256},LMTable="MAX",OwnerTable=P6})
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,23680)}, {"Fenix D","Lin"}, GMAXSh2_1, 1, {CenterXY={1024-256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,23680+160)}, {"Fenix D","Lin"}, GMAXSh2_1, 1, {CenterXY={1024+256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,24150)}, {"Kazansky","Zeratul"}, GMAXSh2_2, 1, {CenterXY={1024,1088-256},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,24150+160)}, {"Kazansky","Zeratul"}, GMAXSh2_2, 1, {CenterXY={1024,1088+256},LMTable="MAX",OwnerTable=P6})
+	GMAXSh2_3 = CSMakeLine(1, 32, 0, 11, 0)
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,25260)}, {"Danimoth","Raynor V"}, GMAXSh2_3, 1, {RotateTable=0,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,25260+160)}, {"Danimoth","Raynor V"}, GMAXSh2_3, 1, {RotateTable=45,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,25730)}, {"Hyperion","Fenix Z"}, GMAXSh2_3, 1, {RotateTable=90,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,25730+160)}, {"Hyperion","Fenix Z"}, GMAXSh2_3, 1, {RotateTable=135,LMTable="MAX",OwnerTable=P6})
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,26210)}, {"Kazansky","Fenix D"}, GMAXSh2_3, 1, {RotateTable=180,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,26210+160)}, {"Kazansky","Fenix D"}, GMAXSh2_3, 1, {RotateTable=225,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,26680)}, {"Lin","Zeratul"}, GMAXSh2_3, 1, {RotateTable=270,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,26680+160)}, {"Lin","Zeratul"}, GMAXSh2_3, 1, {RotateTable=315,LMTable="MAX",OwnerTable=P6})
+
+	GMAXSh2_4 = CSMakePath({0,0}, {-32,-32},{32,32},{-64,0},{64,0},{-96,32},{96,-32},{-128,0},{128,0},{-160,-32},{160,32})
+	GMAXSh2_5 = CS_Rotate(GMAXSh2_4, 90)
+
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780)}, {"Raynor V","Lin"}, GMAXSh2_4, 1, {CenterXY={1024-256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+160)}, {"Raynor V","Lin"}, GMAXSh2_4, 1, {CenterXY={1024+256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480)}, {"Danimoth","Zeratul"}, GMAXSh2_4, 1, {CenterXY={1024,1088-256},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480+160)}, {"Danimoth","Zeratul"}, GMAXSh2_4, 1, {CenterXY={1024,1088+256},LMTable="MAX",OwnerTable=P6})
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480+480)}, {"Fenix D","Hyperion"}, GMAXSh2_5, 1, {CenterXY={1024-256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480+480+160)}, {"Fenix D","Hyperion"}, GMAXSh2_5, 1, {CenterXY={1024+256,1088},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480+480+480)}, {"Kazansky","Fenix Z"}, GMAXSh2_5, 1, {CenterXY={1024,1088-256},LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,27780+480+480+480+160)}, {"Kazansky","Fenix Z"}, GMAXSh2_5, 1, {CenterXY={1024,1088+256},LMTable="MAX",OwnerTable=P6})
+	GMAXSh2_6 = CSMakePath({0,0}, {-32,-32},{0,-64},{32,-96},{0,-128},{-32,-160},{0,-192},{32,-224},{0,-256},{-32,-288},{0,-320})
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310)}, {"Danimoth","Lin"}, GMAXSh2_6, 1, {RotateTable=0,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310+160)}, {"Danimoth","Lin"}, GMAXSh2_6, 1, {RotateTable=45,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310+480)}, {"Raynor V","Zeratul"}, GMAXSh2_6, 1, {RotateTable=90,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310+480+160)}, {"Raynor V","Zeratul"}, GMAXSh2_6, 1, {RotateTable=135,LMTable="MAX",OwnerTable=P6})
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310+480+480)}, {"Kazansky","Hyperion"}, GMAXSh2_6, 1, {RotateTable=180,LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,30310+480+480+160)}, {"Kazansky","Hyperion"}, GMAXSh2_6, 1, {RotateTable=225,LMTable="MAX",OwnerTable=P6})
+
+
+
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,32360)}, {"Raynor V","Hyperion"}, CallStarL, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,33000)}, {"Danimoth","Fenix Z"}, CallStarL, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,33630)}, {"Fenix D","Lin"}, CallStarL, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,34260)}, {"Kazansky","Zeratul"}, CallStarL, 1, {LMTable="MAX",OwnerTable=P6})
+
+	GMAXSh3 = CSMakeLine(1, 32, 0, 12,0)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500-0x1D)}, {94}, GMAXSh3, 1, {RotateTable=0,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500)}, {94}, GMAXSh3, 1, {RotateTable=45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=90,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=90+45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=180,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=180+45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=270,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D+0x1D+0x1D)}, {94}, GMAXSh3, 1, {RotateTable=270+45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500-0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=0,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=90,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=90+45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=180,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=180+45,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=270,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,37500+0x1D+0x1D+0x1D+0x1D+0x1D+0x1D)}, {"Duke Siege"}, GMAXSh3, 1, {RotateTable=270+45,OwnerTable=P6})
+	
+	
+	
+
+	GMAXSh4_1 = CSMakeStar(4, 135, 160, 45, PlotSizeCalc(4*2, 4), 0)
+	GMAXSh4_2 = CSMakeStar(4, 135, 256, 45, PlotSizeCalc(4*2, 2), 0)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,42940),CD(GMode,1)}, {"Lizzet","Jisoo"}, GMAXSh4_1, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,48000),CD(GMode,1)}, {"Merry","Yona"}, GMAXSh4_1, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,53050),CD(GMode,1)}, {"Rose","Yuri"}, GMAXSh4_1, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,78310),CD(GMode,1)}, {"DIEIN","EL CLEAR"}, GMAXSh4_2, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,79570),CD(GMode,1)}, {"PLAY","LENA"}, GMAXSh4_2, 1, {LMTable="MAX",OwnerTable=P6})
+	
+	GMAXSh4_3 = CSMakeStar(4, 135, 96, 45, PlotSizeCalc(4*2, 7), 0)
+	GMAXSh4_4 = CSMakeStar(4, 135, 128, 45, PlotSizeCalc(4*2, 3), 0)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,42940),CD(GMode,2,AtLeast)}, {"Tassadar","Raszagal"}, GMAXSh4_3, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,48000),CD(GMode,2,AtLeast)}, {"Danimoth","Darly"}, GMAXSh4_3, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,53050),CD(GMode,2,AtLeast)}, {"Envy","Yumi"}, GMAXSh4_3, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,78310),CD(GMode,2,AtLeast)}, {"DIEIN","EL CLEAR"}, GMAXSh4_4, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,79570),CD(GMode,2,AtLeast)}, {"PLAY","LENA"}, GMAXSh4_4, 1, {LMTable="MAX",OwnerTable=P6})
+
+	GMAXSh5_1 = CSMakeCircle(24, 120, 0, 25, 1)
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,51630)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,51940)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,52260)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,56680)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57000)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57310)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57630)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57940)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,51630)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,51940)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,52260)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,56680)}, {"Lin"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57000)}, {"Lin"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57310)}, {"Lin"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57630)}, {"Lin"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57940)}, {"Lin"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+
+	GMAXSh5_2 = CSMakeCircle(100, 960, 0, 99, 1)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57940)}, {94}, GMAXSh5_2, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,57940)}, {88}, GMAXSh5_2, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+
+
+	GMAXSh5_4 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, 25, 0), 0), 45)
+	GMAXSh5_5 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, 25, 0), 0), -45)
+
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,63150)}, {88}, GMAXSh5_4, 1, {LMTable=5,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,63780)}, {21}, GMAXSh5_5, 1, {LMTable=5,OwnerTable=P6})
+	GMAXSh5_6 = CSMakePolygon(6, 32, 0, PlotSizeCalc(6, 9), PlotSizeCalc(6, 8))
+	
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,64420),CD(GMode,1)}, {"Lin"}, RBLineHD, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,64420),CD(GMode,2,AtLeast)}, {"Lin"}, RBLine, 1, {LMTable="MAX",OwnerTable=P6})
+
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,64890),CD(GMode,1)}, {77}, EnvShVHD, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,64890),CD(GMode,2,AtLeast)}, {77}, EnvShVSC, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,65210),CD(GMode,1)}, {78}, PaciShHD, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,65210),CD(GMode,2,AtLeast)}, {78}, PaciShSC, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,65520),CD(GMode,1)}, {"Raynor V"}, STCirHD, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,65520),CD(GMode,2,AtLeast)}, {"Raynor V"}, STCirSC, 1, {LMTable="MAX",OwnerTable=P6})
+	
+	
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,68050)}, {"Era"}, CSMakeCircle(6, 32, 0, PlotSizeCalc(6, 1), PlotSizeCalc(6, 0)), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,68680)}, {"Kamilia"}, CSMakeCircle(6, 32, 0, PlotSizeCalc(6, 2), PlotSizeCalc(6, 1)), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,69310)}, {"Archon"}, CSMakeCircle(6, 32, 0, PlotSizeCalc(6, 3), PlotSizeCalc(6, 2)), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,69940)}, {"Zeratul"}, CSMakeCircle(6, 32, 0, PlotSizeCalc(6, 4), PlotSizeCalc(6, 3)), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,70570)}, {"Schezar"}, CSMakeCircle(6, 32, 0, PlotSizeCalc(6, 5), PlotSizeCalc(6, 4)), 1, {LMTable="MAX",OwnerTable=P6})
+
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72000)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72310)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72470)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72780)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,73100)}, {94}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72000)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72310)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72470)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72780)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,73100)}, {"Hyperion"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+
+
+
+
+
+	GMAXSh5_3 = CSMakeCircle(10, 120, 0, 11, 1)
+	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,80840)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=100})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,80840+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=110})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,81310)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=120})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,81310+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=130})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,81780)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=140})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,81780+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=150})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,82260)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=160})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,82260+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=170})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,82730)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=180})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83050)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=190})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83360)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=200})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83360+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=210})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83840)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83840+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=230})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,84310)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=240})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,84310+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=250})
+	TriggerX(FP, Gun_Line(8,AtLeast,72630), {SetCD(gMAXCcodeArr[2], 1)})--무덤기믹
+	
+	Trigger2X(FP, Gun_Line(8,AtLeast,84470), {Gun_SetLine(6, SetTo, 0x2A),RotatePlayer({SetAllianceStatus(Force2, Ally)}, Force1, FP),RotatePlayer({SetAllianceStatus(Force1, Ally)}, Force2, FP)})--배속기믹, 동맹설정
+	
+	TriggerX(FP, {Gun_Line(8,AtLeast,87120),Gun_Line(8,AtMost,107360)}, {KillUnit("Men", P6)},{preserved})--무덤기믹해제
+
+	
+	TriggerX(FP, Gun_Line(8,AtLeast,87120), {SetCD(gMAXCcodeArr[2], 0),KillUnit(215, Force1)})--무덤기믹해제s
+	TriggerX(FP, {HumanCheck(0, 0)}, {ModifyUnitEnergy(All, 215, 0, 64, 0),KillUnit(215, 0)},{preserved})--무덤기믹 버그방지
+	TriggerX(FP, {HumanCheck(1, 0)}, {ModifyUnitEnergy(All, 215, 1, 64, 0),KillUnit(215, 1)},{preserved})--무덤기믹 버그방지
+	TriggerX(FP, {HumanCheck(2, 0)}, {ModifyUnitEnergy(All, 215, 2, 64, 0),KillUnit(215, 2)},{preserved})--무덤기믹 버그방지
+	TriggerX(FP, {HumanCheck(3, 0)}, {ModifyUnitEnergy(All, 215, 3, 64, 0),KillUnit(215, 3)},{preserved})--무덤기믹 버그방지
+	TriggerX(FP, {HumanCheck(4, 0)}, {ModifyUnitEnergy(All, 215, 4, 64, 0),KillUnit(215, 4)},{preserved})--무덤기믹 버그방지
+
+	
+	
+	
+	GM_CenNM = CS_SortY(CS_OverlapX(CS_MoveXY(CenNM1,-1024,-1088),CS_MoveXY(CenNM2,-1024,-1088)), 0)
+	GM_Cen = CS_SortY(CS_OverlapX(CS_MoveXY(Cen1,-1024,-1088),CS_MoveXY(Cen2,-1024,-1088)), 0)
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72630),CD(GMode,1)},{"Zero"},GM_CenNM,1,{LMTable = 1,RepeatType="GMAX_Era_Patrol",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,72630),CD(GMode,2,AtLeast)},{"Zero"},GM_CenNM,1,{LMTable = 1,RepeatType="GMAX_Era_Patrol",OwnerTable=P6})
+
+
+	---------------------------------------건작보스 패턴 영역-------------------------------------------------
 
 	SpCodeBase = 0x8080E200 
 	SpCode0 = 0x8880E200 -- 식별자 (텍스트 미출력 라인은 첫 1바이트가 00으로 고정됨) 

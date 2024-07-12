@@ -149,7 +149,9 @@
 			table.insert(KillTable2, ModifyUnitEnergy(All, k, Force2, 64, 0))
 			table.insert(KillTable2, KillUnit(k, Force2))
 		end
+		table.insert(KillTable2, KillUnit("Any unit", Force2))
 		table.insert(KillTable2, SetCD(WinCcode,480))
+		table.insert(KillTable2, SetResources(Force1, Add, 322322322, Ore))
 			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,1);}, KillTable, {preserved})
 			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,210),CD(GS,1);}, KillTable2, {preserved})
 			Trigger {

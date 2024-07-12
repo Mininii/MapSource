@@ -378,6 +378,26 @@ local SelShbool = CreateVar(FP)
 		CIfEnd()
 		f_LoadCp()
 	CIfEnd()
+	CIf(FP, {Cond_EXCC(5, Exactly, 5),CD(gMAXCcodeArr[1],1)})--타이머 타입 번호(조건부 만족시 글로리맥스 발동 공격)
+		f_SaveCp()
+		f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
+		CIf(FP,{CV(PIDV,8)})
+		f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
+		f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP, {TOrder(UIDV, P6, 1, Attack, 6)})
+		CDoActions(FP, {
+		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
+		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
+		Set_EXCCX(5,SetTo,0),
+		Set_EXCCX(2,SetTo,0)})
+		
+
+		CIfEnd()
+		f_LoadCp()
+	CIfEnd()
 
 	EXCC_ClearCalc()
 	NJumpXEnd(FP, LauncherUnit)
@@ -425,6 +445,8 @@ for i = 0, 4 do
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,0)})
+		
 		f_LoadCp()
 		CIfEnd()
 
@@ -436,6 +458,7 @@ for i = 0, 4 do
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,20)})
 		f_LoadCp()
 		CIfEnd()
 		
@@ -447,6 +470,7 @@ for i = 0, 4 do
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,10)})
 		f_LoadCp()
 		CIfEnd()
 
@@ -458,8 +482,23 @@ for i = 0, 4 do
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,MarID[i+1])})
 		f_LoadCp()
 		CIfEnd()
+		
+		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 215, 0, 0xFF),},{})
+		f_SaveCp()
+		f_Read(FP,_Sub(BackupCp,15),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+		f_TempRepeatX({}, EXCC_TempVarArr[5], 1, 2, i, {CPosX,CPosY})
+		TriggerX(FP, {CV(EXCC_TempVarArr[5],0)}, {SetScore(i, Subtract, 1, Custom)},{preserved})
+		TriggerX(FP, {CV(EXCC_TempVarArr[5],20)}, {SetScore(i, Subtract, 2, Custom)},{preserved})
+		TriggerX(FP, {CV(EXCC_TempVarArr[5],10)}, {SetScore(i, Subtract, 3, Custom)},{preserved})
+		TriggerX(FP, {CV(EXCC_TempVarArr[5],MarID[i+1])}, {SetScore(i, Subtract, 4, Custom)},{preserved})
+		f_LoadCp()
+		CIfEnd()
+
 		
 
 	DoActions(FP, {SetMemory(0x6509B0, Subtract, 6)})
@@ -467,6 +506,7 @@ for i = 0, 4 do
 	--CDoActions(FP, {TSetDeathsX(CurrentPlayer, SetTo, EXCC_TempVarArr[5], 0, 0xFF)})
 	--CIfEnd()
 	CIfEnd()
+
 end
 
 

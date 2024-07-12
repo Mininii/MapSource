@@ -207,4 +207,24 @@ Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MHP);
 CIfEnd()
 CIfEnd()
 SetCallEnd()
+
+CallTombTrig =SetCallForward()
+TPL = CreateVar(FP)
+TUID = CreateVar(FP)
+SetCall(FP)
+f_Read(FP,_Sub(BackupCp,15),CPos)
+Convert_CPosXY()
+Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+
+CIf(FP,{Memory(0x628438, AtLeast, 1)})
+f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+CMov(FP,CunitIndex,_Div(_Sub(Nextptrs,19025),_Mov(84)))
+CDoActions(FP, {
+	TCreateUnitWithProperties(1, 215, 1, TPL, {energy = 100}),
+	Set_EXCC2(DUnitCalc,CunitIndex,4,SetTo,TUID),
+})
+CIfEnd()
+
+
+SetCallEnd()
 end

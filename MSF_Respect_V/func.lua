@@ -299,7 +299,7 @@ function CreateUnitQueue()
 
 
 
-	NIf(FP,{CV(QueueUID,1,AtLeast),CV(QueueUID,226,AtMost)})
+	NIf(FP,{CV(QueueUID,0,AtLeast),CV(QueueUID,226,AtMost)})
 	local CRLID = CreateVar(FP)
 
 	
