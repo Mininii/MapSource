@@ -18,7 +18,7 @@
 		 "\x16MX S\x04tyle",
 		 "\x08SC S\x04tyle",
 	}
-	QueueMaxUnit = 1500
+	QueueMaxUnit = 1650
 	NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
 	NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
 	HMBaseAtk=50

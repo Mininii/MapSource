@@ -1111,3 +1111,14 @@ function Getdebugmsg(infonum)
 	local DebugMsg = string.sub(file1, #file1-13, #file1)..":"..debug.getinfo(infonum).currentline.." in global "..debug.getinfo(infonum).name
 	return DebugMsg
 end
+
+
+function TimerToggle(Time)--Time 초 마다 0, 1 왔다갔다하는거
+	local TCC = CreateCcode()
+	local TCC2 = CreateCcode()
+	DoActionsX(FP, {AddCD(TCC,1)})
+	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,0)}, {SetCD(TCC2,0),SetCD(TCC2,1)},{preserved})
+	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,1)}, {SetCD(TCC2,0),SetCD(TCC2,0)},{preserved})
+	return TCC2
+	
+end

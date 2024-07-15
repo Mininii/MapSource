@@ -1429,7 +1429,7 @@ end
 		table.insert(lAct, SetMemoryX(0x664080 + (k*4),SetTo,4,4))
 		table.insert(lAct, SetMemoryB(0x663150 + (k),SetTo,12))
 			
-		end
+	end
  	DoActions2X(FP, {
 		Gun_SetLine(6, SetTo, 0x1D),
 		SetMemoryX(0x664080 + (25*4),SetTo,4,4),
@@ -1441,14 +1441,13 @@ end
 		SetMemoryB(0x58CF44 + (5 * 24) + 22,SetTo,0),
 		SetMemoryB(0x58F140 + (5 * 20) + (31-20),SetTo,0),lAct
 	}, 1)--처음기본배속, 탱크공중화
-
+	
 	CDoActions(FP, {TGun_SetLine(8, Add, Var_TempTable[7]),TSetMemory(0x5124F0, SetTo, Var_TempTable[7])})--배속은 변수에 의해 고정되고 배속에 따라 화홀의 밀리세컨드 단위가 달라진다.
 	
 	local Lyrics = {
-		{"\x0D\x0D!H\x13\x07♪ \x0FS\x04ong \x08T\x04itle \x07♪",2520},
-		{"\x0D\x0D!H\x13\x07♪ \x11g\x04lory\x11MAX \x07♪",5050},
-		{"\x0D\x0D!H\x13\x07♪ \x07나\x04의 \x11최대치\x04로 \x08너\04와 \x1F함께할게 \x07♪",7570},
-		{"\x0D\x0D!H\x13\x07♪ \x07from \x17DJMAX \x17R\x04espect \x17V \x07♪",10100},
+		{"\x0D\x0D!H\x13\x07♪ \x0FS\x04ong \x08T\x04itle : \x11g\x04lory\x11MAX \x07♪",2520},
+		{"\x0D\x0D!H\x13\x07♪ \x04~ \x07나\x04의 \x11최대치\x04로 \x08너\04와 \x1F함께할게 \x04~ \x07♪",5050},
+		{"\x0D\x0D!H\x13\x07♪ \x07from \x04: \x17DJMAX \x17R\x04espect \x17V \x07♪",7570},
 		{"\x0D\x0D!H\x13\x07♪ \x17V E\x04XTENSION \x17V \x04(2023) \x07♪",10100},
 		{"\x0D\x0D!H\x13\x07♪ \x11we go\x04, \x0Ewe go\x04, \x0Fwe go \x17H\x04igher \x07♪",24310},
 		{"\x0D\x0D!H\x13\x07♪ \x1C저 하늘 위로 \x1FSkydive \x07♪",26840},
@@ -1476,16 +1475,16 @@ end
 		
 		--{"\x0D\x0D!H\x13\x07♪ ~ \x10M\x04isty \x10E\x04'ra '\x10M\x04ui' ~ \x07♪",72780},
 		{"\x0D\x0D!H\x13\x07♪ \x10fah shu nee \x07♪",72780},
-		{"\x0D\x0D!H\x13\x07♪ \x10주문\x04의 \x11목소리\x04가 들리네. \x07♪",72780},
+		{"\x0D\x0D!H\x13\x07♪ \x04< \x10주문\x04의 \x11목소리\x04가 들리네. \x04> \x07♪",72780},
 		
 		{"\x0D\x0D!H\x13\x07♪ \x10veshu, me de su te ar \x07♪",75470},
-		{"\x0D\x0D!H\x13\x07♪ \x08두려워하라\x04, \x11내\x04가 \x17눈\x04을 뜰 것이니 \x07♪",75470},
+		{"\x0D\x0D!H\x13\x07♪ \x04< \x08두려워하라\x04, \x11내\x04가 \x17눈\x04을 뜰 것이니 \x04> \x07♪",75470},
 
 		{"\x0D\x0D!H\x13\x07♪ \x10Nich jak fa hef khan \x07♪",77680},
-		{"\x0D\x0D!H\x13\x07♪ \x08너희\x04는 \x06지옥불\x04로 떨어져 \x07♪",77680},
+		{"\x0D\x0D!H\x13\x07♪ \x04< \x08너희\x04는 \x06지옥불\x04로 떨어져 \x04> \x07♪",77680},
 
 		{"\x0D\x0D!H\x13\x07♪ \x10vir muk ar \x07♪",80840},
-		{"\x0D\x0D!H\x13\x07♪ \x1F심판\x04을 받으리라 \x07♪",80840},
+		{"\x0D\x0D!H\x13\x07♪ \x04< \x1F심판\x04을 받으리라 \x04> \x07♪",80840},
 
 		
 		{"\x0D\x0D!H\x13\x07♪ \x11G\x04lory \x19Day \x07♪",86360},
@@ -1557,7 +1556,83 @@ end
 		Trigger2X(FP, {Gun_Line(8,AtLeast,k[2])}, {RotatePlayer({DisplayTextX(k[1], 4)},HumanPlayers,FP)})
 	end
 	---------------------------------------건작보스 패턴 영역-------------------------------------------------
+	
 	gMAXCcodeArr= CreateCcodeArr(10)
+for i = 500, 1500, 500 do
+	Trigger2X(FP, {CD(gMAXCcodeArr[1],1),CV(CreateUnitQueueNum,i,AtLeast)}, {RotatePlayer({
+		DisplayTextX(string.rep("\n", 20),4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
+		DisplayTextX("\n",4);
+		DisplayTextX("\x13\x08유닛 생성 큐 수치가 "..i.." 이상입니다.\n",4);
+		DisplayTextX("\x13\x08유닛 생성 큐 수치가 2000 이상일 경우 게임에서 패배합니다.",4);
+		DisplayTextX("\n",4);
+		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		},HumanPlayers,FP)})
+end
+
+Trigger2X(FP, {CD(gMAXCcodeArr[1],1),CV(CreateUnitQueueNum,2000,AtLeast)}, {RotatePlayer({
+	DisplayTextX(string.rep("\n", 20),4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x08유닛 생성 큐 수치가 2000 이상입니다.\n",4);
+	DisplayTextX("\x13\x08게임에서 패배하였습니다.",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	},HumanPlayers,FP),
+	RotatePlayer({
+		Defeat()
+		},Force1,FP)})
+for i = 300,100,-50 do
+	Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, i, "Men", 64)}, {RotatePlayer({
+		DisplayTextX(string.rep("\n", 20),4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
+		DisplayTextX("\n",4);
+		DisplayTextX("\x13\x08마린이 "..i.."기 이하입니다.\n",4);
+		DisplayTextX("\x13\x08마린이 50기 이하일 경우 게임에서 패배합니다.",4);
+		DisplayTextX("\n",4);
+		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
+		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
+		},HumanPlayers,FP)})
+end
+Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {RotatePlayer({
+	DisplayTextX(string.rep("\n", 20),4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x08마린이 50기 이하입니다.\n",4);
+	DisplayTextX("\x13\x08게임에서 패배하였습니다.",4);
+	DisplayTextX("\n",4);
+	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
+	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	},HumanPlayers,FP),
+	RotatePlayer({
+		Defeat()
+		},Force1,FP)})
+
+
 
 	--RepeatType : "gMAX1"
 	GMAXSh1 = CS_MoveXY(CSMakePolygon(3, 32, 0, PlotSizeCalc(3, 11), PlotSizeCalc(3, 10)), 0, 176*2)
@@ -1773,6 +1848,23 @@ end
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,83840+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=230})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,84310)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=240})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,84310+160)}, {"Identity"}, GMAXSh5_3, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=250})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 80840)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 80840+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 81310)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 81310+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 81780)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 81780+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 82260)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 82260+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 82730)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 83050)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 83360)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 83360+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 83840)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 83840+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 84310)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 84310+160)}, {SetMemory(0x657A9C, Subtract, 2)})
+	TriggerX(FP, {Gun_Line(8, AtLeast, 87120)}, {SetMemory(0x657A9C, SetTo, 15)})
 	TriggerX(FP, Gun_Line(8,AtLeast,72630), {SetCD(gMAXCcodeArr[2], 1)})--무덤기믹
 	
 	Trigger2X(FP, Gun_Line(8,AtLeast,84470), {Gun_SetLine(6, SetTo, 0x2A),RotatePlayer({SetAllianceStatus(Force2, Ally)}, Force1, FP),RotatePlayer({SetAllianceStatus(Force1, Ally)}, Force2, FP)})--배속기믹, 동맹설정
@@ -1787,6 +1879,12 @@ end
 	TriggerX(FP, {HumanCheck(3, 0)}, {ModifyUnitEnergy(All, 215, 3, 64, 0),KillUnit(215, 3)},{preserved})--무덤기믹 버그방지
 	TriggerX(FP, {HumanCheck(4, 0)}, {ModifyUnitEnergy(All, 215, 4, 64, 0),KillUnit(215, 4)},{preserved})--무덤기믹 버그방지
 
+	wing = {281     ,{50, 18},{49, 19},{50, 19},{47, 20},{48, 20},{49, 20},{50, 20},{30, 21},{31, 21},{32, 21},{33, 21},{34, 21},{44, 21},{45, 21},{46, 21},{47, 21},{48, 21},{49, 21},{50, 21},{25, 22},{26, 22},{27, 22},{28, 22},{29, 22},{30, 22},{31, 22},{32, 22},{33, 22},{34, 22},{35, 22},{36, 22},{37, 22},{38, 22},{39, 22},{40, 22},{41, 22},{42, 22},{43, 22},{44, 22},{45, 22},{46, 22},{47, 22},{48, 22},{49, 22},{50, 22},{22, 23},{23, 23},{24, 23},{25, 23},{26, 23},{27, 23},{28, 23},{29, 23},{30, 23},{31, 23},{32, 23},{33, 23},{34, 23},{35, 23},{36, 23},{37, 23},{38, 23},{39, 23},{40, 23},{41, 23},{42, 23},{43, 23},{44, 23},{45, 23},{46, 23},{49, 23},{50, 23},{21, 24},{22, 24},{23, 24},{24, 24},{25, 24},{26, 24},{48, 24},{49, 24},{50, 24},{19, 25},{20, 25},{21, 25},{22, 25},{23, 25},{48, 25},{49, 25},{50, 25},{18, 26},{19, 26},{20, 26},{21, 26},{47, 26},{48, 26},{49, 26},{18, 27},{19, 27},{20, 27},{46, 27},{47, 27},{48, 27},{49, 27},{17, 28},{18, 28},{19, 28},{45, 28},{46, 28},{47, 28},{48, 28},{16, 29},{17, 29},{18, 29},{43, 29},{44, 29},{45, 29},{46, 29},{47, 29},{15, 30},{16, 30},{17, 30},{18, 30},{31, 30},{32, 30},{33, 30},{34, 30},{35, 30},{36, 30},{37, 30},{38, 30},{39, 30},{40, 30},{41, 30},{42, 30},{43, 30},{44, 30},{45, 30},{46, 30},{15, 31},{16, 31},{17, 31},{35, 31},{36, 31},{37, 31},{38, 31},{39, 31},{40, 31},{41, 31},{42, 31},{43, 31},{44, 31},{45, 31},{46, 31},{14, 32},{15, 32},{16, 32},{43, 32},{44, 32},{45, 32},{46, 32},{14, 33},{15, 33},{16, 33},{42, 33},{43, 33},{44, 33},{45, 33},{14, 34},{15, 34},{41, 34},{42, 34},{43, 34},{44, 34},{13, 35},{14, 35},{15, 35},{27, 35},{38, 35},{39, 35},{40, 35},{41, 35},{42, 35},{43, 35},{13, 36},{14, 36},{15, 36},{27, 36},{28, 36},{29, 36},{30, 36},{31, 36},{32, 36},{33, 36},{34, 36},{35, 36},{36, 36},{37, 36},{38, 36},{39, 36},{40, 36},{41, 36},{42, 36},{13, 37},{14, 37},{15, 37},{16, 37},{17, 37},{18, 37},{19, 37},{32, 37},{33, 37},{34, 37},{35, 37},{36, 37},{37, 37},{38, 37},{39, 37},{40, 37},{12, 38},{13, 38},{14, 38},{15, 38},{16, 38},{17, 38},{18, 38},{19, 38},{20, 38},{21, 38},{22, 38},{37, 38},{38, 38},{39, 38},{40, 38},{12, 39},{13, 39},{19, 39},{20, 39},{21, 39},{22, 39},{23, 39},{24, 39},{36, 39},{37, 39},{38, 39},{39, 39},{21, 40},{22, 40},{23, 40},{24, 40},{25, 40},{26, 40},{27, 40},{33, 40},{34, 40},{35, 40},{36, 40},{37, 40},{38, 40},{23, 41},{24, 41},{25, 41},{26, 41},{27, 41},{28, 41},{29, 41},{30, 41},{31, 41},{32, 41},{33, 41},{34, 41},{35, 41},{36, 41},{26, 42},{27, 42},{28, 42},{29, 42},{30, 42},{31, 42},{32, 42},{33, 42},{34, 42}}
+	Wing_1 = CS_MoveXY(CS_RatioXY(wing, 16, 16), -900, -352)
+	Wing_2 = CS_MirrorX(Wing_1, 0, 10)
+	Wing_3 = CS_Rotate(Wing_2, 180)
+	TriggerX(FP, Gun_Line(8,AtLeast,87120), {SetCD(gMAXCcodeArr[1],0)})--무덤기믹해제
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,87120)},{"Lin"},Wing_3,1,{LMTable = 3,RepeatType="gMAX1",OwnerTable=P6})
 	
 	
 	

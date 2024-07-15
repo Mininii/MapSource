@@ -682,6 +682,7 @@ DoActions(FP,{
 	local ExchangeP = CreateVar(FP)
 	MacroWarn1 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08경고를 무시하고 계속 사용하실 경우 드랍됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
 	MacroWarn2 = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n"..StrDesignX("\x08매크로 또는 핵이 감지되었습니다.").."\n"..StrDesignX("\x08패널티로 모든 미네랄, 유닛 몰수, 무한 찌릿찌릿이 제공됩니다.").."\n\n\x14\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x0D\x0D\x13\x04"
+	ColorTimer = TimerToggle(0x1D/2)
 	for i = 0, 4 do
 		
 		
@@ -761,7 +762,7 @@ DoActions(FP,{
 
 
 		for j,k in pairs(KillPointArr) do
-			TriggerX(i, {Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
+			TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
 		end
 		Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,150000,Kills)},{preserved})
@@ -772,12 +773,12 @@ DoActions(FP,{
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
 		
-		CTrigger(FP, {NTCond()}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
-		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
-		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {SetPlayerColor(i, SetTo, 128)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)
-		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {SetPlayerColor(i, SetTo, 51)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)
-		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {SetPlayerColor(i, SetTo, 42)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)
-		CTrigger(FP, {NTCond2(),Memory(0x582294+(4*i),Exactly,1),}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
+		CTrigger(FP, {CD(ColorTimer,0)}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
+		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
+		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {SetPlayerColor(i, SetTo, 128)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)
+		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,1500),Memory(0x582294+(4*i),AtMost,1800)}, {SetPlayerColor(i, SetTo, 51)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P12*0x10000, 0xFF0000)
+		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,1200),Memory(0x582294+(4*i),AtMost,1500)}, {SetPlayerColor(i, SetTo, 42)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P7*0x10000, 0xFF0000)
+		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),Exactly,1),}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
 
 
 		CDoActions(FP, {TSetDeathsX(i, Subtract, Dt, 12,0xFFFFFF)})
