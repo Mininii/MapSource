@@ -205,6 +205,24 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
 		})
 
+		CElseIfX_AddRepeatType(191,"gMAX2")
+			
+		f_CGive(FP, RPtr, nil, P9, RPID)
+		CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+		TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
+		TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+		TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
+		TSetMemory(_Add(RPtr,13),SetTo,640),
+		TSetMemoryX(_Add(RPtr,18),SetTo,640,0xFFFF),
+		Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 6);--f_CGive 해제후 정야독
+		Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 999999);
+		Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+		Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+		Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+		Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+		Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
+	})
+
 			CElseIfX_AddRepeatType(84,"Explosion_Guard")
 			CDoActions(FP,{
 				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),KillUnit(94,FP)
@@ -596,7 +614,7 @@ NIfX(FP,{TMemory(G_CB_LineTemp,AtMost,0)})
 CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,0*(0x20/4)),SetTo,G_CB_CUTV),
 	TSetMemory(_Add(G_CB_LineTemp,1*(0x20/4)),SetTo,G_CB_FNTV),
-	TSetMemory(_Add(G_CB_LineTemp,2*(0x20/4)),SetTo,1),
+	TSetMemory(_Add(G_CB_LineTemp,2*(0x20/4)),SetTo,0),
 	TSetMemory(_Add(G_CB_LineTemp,3*(0x20/4)),SetTo,0),--현재딜레이
 	TSetMemory(_Add(G_CB_LineTemp,4*(0x20/4)),SetTo,G_CB_LMTV),
 	TSetMemory(_Add(G_CB_LineTemp,5*(0x20/4)),SetTo,G_CB_RPTV),
@@ -1012,7 +1030,7 @@ function G_CBPlot()
 	SetCall2(FP,Call_G_CBPlot)
 	CTrigger(FP, {CV(G_CB_TempTable[17],0)}, {SetV(G_CB_TempTable[4],0),SetV(V(CA[3]),0)},1)
 	CMov(FP,CA_TempUID,G_CB_TempTable[1],nil,0xFF) -- UnitID
-	CMov(FP,V(CA[1]),G_CB_TempTable[13],nil,0xFF) -- ShapeIndex
+	CMov(FP,V(CA[1]),G_CB_TempTable[13]) -- ShapeIndex
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
 	CMov(FP,V(CA[2]),G_CB_TempTable[4]) -- CurDelayTimer
 	--DisplayPrint(HumanPlayers, {
@@ -1452,7 +1470,7 @@ SetCall(FP)
         CDoActions(FP,{
             TSetMemoryX(Vi(G_CB_TempH[2],0*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],1*(0x20/4)),SetTo,0,0xFF),
-            TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,1),
+            TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,0),
             TSetMemory(Vi(G_CB_TempH[2],3*(0x20/4)),SetTo,0),
             TSetMemoryX(Vi(G_CB_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
             TSetMemoryX(Vi(G_CB_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
@@ -1511,7 +1529,7 @@ SetCall(FP)
             CDoActions(FP,{
                 TSetMemoryX(Vi(G_CB_TempH[2],0*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],1*(0x20/4)),SetTo,0,0xFF),
-                TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,1),
+                TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,0),
                 TSetMemory(Vi(G_CB_TempH[2],3*(0x20/4)),SetTo,0),
                 TSetMemoryX(Vi(G_CB_TempH[2],4*(0x20/4)),SetTo,0,0xFF),
                 TSetMemoryX(Vi(G_CB_TempH[2],5*(0x20/4)),SetTo,0,0xFF),
@@ -1543,7 +1561,7 @@ SetCall(FP)
 
         TSetMemory(Vi(G_CB_TempH[2],0*(0x20/4)),SetTo,_rShift(G_CB_TempTable[1],8)),
         TSetMemory(Vi(G_CB_TempH[2],1*(0x20/4)),SetTo,_rShift(G_CB_TempTable[2],8)),
-        TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,1),
+        TSetMemory(Vi(G_CB_TempH[2],2*(0x20/4)),SetTo,0),
         TSetMemory(Vi(G_CB_TempH[2],3*(0x20/4)),SetTo,0),
         TSetMemory(Vi(G_CB_TempH[2],4*(0x20/4)),SetTo,_rShift(G_CB_TempTable[5],8)),
         TSetMemory(Vi(G_CB_TempH[2],5*(0x20/4)),SetTo,_rShift(G_CB_TempTable[6],8)),
