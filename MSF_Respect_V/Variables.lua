@@ -41,7 +41,7 @@
 	PlayerIDArr = CreateFArr(1700, FP)
 	UnitHPArr = CreateFArr(1700, FP)
 	ExRateT = {
-		15,10,11
+		15,13,12
 	}
 	--Vars
 	SELimit = CreateCcode()

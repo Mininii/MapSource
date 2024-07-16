@@ -393,8 +393,24 @@ local SelShbool = CreateVar(FP)
 		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
 		Set_EXCCX(5,SetTo,0),
 		Set_EXCCX(2,SetTo,0)})
-		
-
+		CIfEnd()
+		f_LoadCp()
+	CIfEnd()
+	CIf(FP, {Cond_EXCC(5, Exactly, 6),CD(gMAXCcodeArr[3],1)})--타이머 타입 번호(조건부 만족시 글로리맥스 발동 정야독)
+		f_SaveCp()
+		f_Read(FP, _Sub(BackupCp,6), PIDV, nil,0xFF,1)
+		CIf(FP,{CV(PIDV,8)})
+		f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
+		f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP, {
+		TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
+		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
+		Set_EXCCX(5,SetTo,0),
+		Set_EXCCX(2,SetTo,0)})
 		CIfEnd()
 		f_LoadCp()
 	CIfEnd()
@@ -445,7 +461,7 @@ for i = 0, 4 do
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
-		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,0)})
+		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,32)})
 		
 		f_LoadCp()
 		CIfEnd()
