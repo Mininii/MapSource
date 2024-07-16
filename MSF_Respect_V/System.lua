@@ -358,6 +358,11 @@ local SelShbool = CreateVar(FP)
 			TSetMemoryX(_Sub(BackupCp,25-18),SetTo,SpeedRet,0xFFFF),
 			TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),})
 		CIfEnd()
+		CIf(FP, {Cond_EXCC(5, Exactly, 7)})--타이머 타입 번호
+			CDoActions(FP,{
+				TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+			})
+		CIfEnd()
 		f_LoadCp()
 	CIfEnd()
 	
@@ -368,13 +373,23 @@ local SelShbool = CreateVar(FP)
 		f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
 		f_Read(FP, _Sub(BackupCp,15), CPos)
 		Convert_CPosXY()
+		f_Read(FP, BackupCp, UIDV, nil,0xFF,1)
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CIfX(FP,{TTOR({CV(UIDV,86),CV(UIDV,71)})})
+		CDoActions(FP, {TSetMemory(0x6509B0, SetTo, P6),Simple_CalcLoc(0,-4,-4,4,4),KillUnitAt(1, nilunit, 1, FP),RunAIScriptAt(JYD,1),SetCp(FP)})
+		CElseX()
+			CDoActions(FP,{
+				TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+			})
+		CIfXEnd()
+
+
 		CDoActions(FP, {
-		TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
 		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
 		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
 		Set_EXCCX(5,SetTo,0),
 		Set_EXCCX(2,SetTo,0)})
+		
 		CIfEnd()
 		f_LoadCp()
 	CIfEnd()
@@ -405,8 +420,14 @@ local SelShbool = CreateVar(FP)
 		f_Read(FP, _Sub(BackupCp,15), CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		
+		CDoActions(FP,{
+			TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
+		})
+
+
+
 		CDoActions(FP, {
-		TSetDeathsX(_Sub(BackupCp,6),SetTo,187*256,0,0xFF00),
 		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
 		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),
 		Set_EXCCX(5,SetTo,0),
@@ -919,7 +940,7 @@ TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
 	SetDoodadState(Disable, 204, P6, 27),
 	SetDoodadState(Disable, 204, P6, 28),
 })
-TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
+TriggerX(FP, {Deaths(P8, AtLeast, 3, 200),Deaths(P8, AtMost, 0, 189)}, {--양방향 포탈 활성화
 	MoveUnit(All, "Men", Force1, 28, 29),
 	MoveUnit(All, "Men", Force1, 27, 30),
 },{preserved})
@@ -997,6 +1018,7 @@ f_Read(FP,_Add(SelEPD,19),SelPID,"X",0xFF,1)
 CIf(FP,{CV(SelUID,111),CV(SelPID,LCP)})
 CTrigger(FP, {TTKeyPress("C", "Down")}, {SetV(KeyTime,GKeyValue)},{preserved})
 CTrigger(FP, {TTMousePress("LEFT", "Down"),VRange(mmX3,185,220),VRange(mmY, 398,431)}, {SetV(KeyTime,GKeyValue)},{preserved})
+CTrigger(FP, {Memory(0x6509B0,Exactly,0)}, {SetV(KeyTime,GKeyValue)},{preserved})
 CIf(FP,{TMemoryX(_Add(SelEPD,38), AtMost, 227,0xFFFF)})
 local SelBQ1 = CreateVar(FP)
 f_Read(FP, _Add(SelEPD,38), SelBQ1, nil, 0xFFFF, 1)

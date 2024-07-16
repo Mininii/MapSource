@@ -313,7 +313,7 @@
 	CurEPD = CreateVar(FP)
 	
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
-	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22 ...(테스터 지원시 더 추가할 예정)"
+	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22, AwakenSense"
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
@@ -457,6 +457,9 @@
 		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
 		SetCp(FP);RemoveUnit(101,P6)
 	})
+	if TestStart == 0 then
+		DoActions(FP,{KillUnit(218, AllPlayers),KillUnit(128, AllPlayers),KillUnit(129, AllPlayers)})
+	end
 	if Limit == 1 then
 		GSEnable = CreateCcode()
 		TriggerX(FP, {CD(TestCode,4),CD(TestCode2,3)}, {SetCD(GSEnable,1)})
@@ -592,7 +595,7 @@
 
 
 for i = 0, 4 do -- 강퇴기능
-	TriggerX(FP, {Deaths(i, AtLeast, 1, 218)},{SetCDeaths(FP,SetTo,99999,BanCode[i+1])})
+	--TriggerX(FP, {Deaths(i, AtLeast, 1, 218)},{SetCDeaths(FP,SetTo,99999,BanCode[i+1])})
 	for j=3,5 do
 		for p = 1, 5 do
 			Trigger { -- 강퇴토큰
@@ -771,9 +774,9 @@ DoActions(FP,{
 		CreatingUID = CreateVar(FP)
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
-		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 190)}, SetCD(CrCheck1[1],1))
-		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 191)}, SetCD(CrCheck2[2],1))
-		TriggerX(FP, {CD(CrCheck2[1],1),CD(CrCheck2[2],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
+		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 190)}, SetCD(CrCheck1[i+1],1))
+		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 191)}, SetCD(CrCheck2[i+1],1))
+		TriggerX(FP, {CD(CrCheck1[i+1],1),CD(CrCheck2[i+1],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
 		
 		CTrigger(FP, {CD(ColorTimer,0)}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
@@ -868,7 +871,7 @@ DoActions(FP,{
 		CIf(FP,{TTMemory(_Add(BarPos[i+1],62), NotSame, BarRally[i+1])})
 			f_Read(FP, _Add(BarPos[i+1],62), BarRally[i+1])
 			Convert_CPosXY(BarRally[i+1])
-			DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"})
+			--DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 랠리 포인트가 갱신되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"})
 		CIfEnd()
 		CIf(FP,{TMemory(_Add(BarPos[i+1],59), AtLeast, 1)})
 		f_Read(FP,_Add(BarPos[i+1],59), nil, CreatingUnit,nil, 1)

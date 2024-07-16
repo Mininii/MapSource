@@ -131,12 +131,44 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),2)),
 			})
 			CElseIfX_AddRepeatType(187,"JYD")
+			CIfX(FP,{TTOR({CV(RUID,86),CV(RUID,71)})})
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {
+			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 7);--잠시후 정야독
+			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 3);
+			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);})	
+			CElseX()
 				CDoActions(FP,{
 					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
 				})
+			CIfXEnd()
 			CElseIfX_AddRepeatType(188,"JYD_HP10")
+			
+			CIfX(FP,{TTOR({CV(RUID,86),CV(RUID,71)})})
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {
+			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 7);--잠시후 정야독
+			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 3);
+			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);})	
+			CElseX()
+				CDoActions(FP,{
+					TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
+				})
+			CIfXEnd()
+
 			CDoActions(FP,{
-				TSetDeathsX(_Add(RPtr,19),SetTo,187*256,0,0xFF00),
 				TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),10)),
 			})
 			CElseIfX_AddRepeatType_LR(200,203,{"Gene1","Gene2","Gene3","EnemyStorm"})
@@ -151,6 +183,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CiSub(FP,CPosY,QueueOY)
 			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(2)))
 			CDoActions(FP,{
+				--TOrder(RUID, RPID, 1, Move, 64);
 				TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
 				TSetMemory(_Add(RPtr,13),SetTo,SpeedRet),
 				TSetMemoryX(_Add(RPtr,18),SetTo,SpeedRet,0xFFFF),
@@ -159,6 +192,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				SetDeathsX(_Add(RPtr,19),SetTo,14*256,0,0xFF00),
 				TSetDeaths(_Add(RPtr,4),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
 				TSetDeaths(_Add(RPtr,6),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
+				--TSetDeaths(_Add(RPtr,7),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
 				TSetDeaths(_Add(RPtr,22),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
 			})
 			CIf(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,202)})--fCGive후 타이머 어택
@@ -882,14 +916,14 @@ function CB_RandSort()
 	RandRet = f_CRandNum(3)
 	CMov(FP,FncRand,RandRet)
 	if TestStart == 1 then
-		DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
+		--DisplayPrint(HumanPlayers, {"DirRand : ",DirRand,"  FncRand : ",FncRand})
 	end
 	CB_Sort(CFunc1, DirRand, STSize+2, EndRetShape)
 	CurShNum = CreateVar(FP)
 	CB_GetNumber(EndRetShape, CurShNum)
 	if TestStart == 1 then
 
-	DisplayPrint(HumanPlayers, {"Calc "..(STSize+2).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
+	--DisplayPrint(HumanPlayers, {"Calc "..(STSize+2).." to "..EndRetShape.." DirRand : ",DirRand,"  FncRand : ",FncRand,"   CurShNum : ",CurShNum})
 	end
 	
 
@@ -927,7 +961,7 @@ end
 	
 	CIfX(FP,{CVX(G_CB_TempTable[2],1,0xFF,AtLeast)})
 	CB_TCopy(V(CA[1]),STSize+2)
-	DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+2).." TempFunc : ",G_CB_TempTable[2]})
+	--DisplayPrint(HumanPlayers, {"ShapeData ",V(CA[1])," to "..(STSize+2).." TempFunc : ",G_CB_TempTable[2]})
 	for j, k in pairs(G_CB_PrefuncArr) do
 		CIf(FP,CVX(G_CB_TempTable[2],k[1],0xFF))
 			_G[k[2]]()
@@ -938,7 +972,7 @@ end
 	CB_TCopy(EndRetShape,TempRetShape)
 	CMov(FP,V(CA[1]),G_CB_Num,EndRetShape)
 	CMov(FP,G_CB_TempTable[13],G_CB_Num,EndRetShape)
-	DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
+	--DisplayPrint(HumanPlayers, {"ShapeData "..EndRetShape.." to ",V(CA[1])," G_CB_TempTable[13] : ",G_CB_TempTable[13]})
 
 	CIf(FP,CVX(G_CB_TempTable[5],0,0xFF))
 	local RetNum = CreateVar(FP)

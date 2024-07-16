@@ -297,6 +297,7 @@ end
 			actions = {
 				SetCDeaths(FP,SetTo,1,LimitC);
 				SetCDeaths(FP,SetTo,1,LimitT[Player+1]);
+				SetDeaths(Player, SetTo, Num, 217);--217번 데스값을 특정숫자로
 				
 				
 			}

@@ -582,7 +582,7 @@ end
 
 			CIfEnd()
 			CForEnd()
-			NJumpXEnd(FP, CheckJump,{RotatePlayer({DisplayTextX("Check",4)},HumanPlayers,FP)})
+			NJumpXEnd(FP, CheckJump)--{RotatePlayer({DisplayTextX("Check",4)},HumanPlayers,FP)}
 			GetLocCenter(201, CPosX, CPosY)
 			--DisplayPrint(HumanPlayers, {"CPosX: ",CPosX,"  CPosY: ",CPosY})
 			CNeg(FP,CPosX)
