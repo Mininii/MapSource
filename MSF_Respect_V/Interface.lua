@@ -431,7 +431,7 @@
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 12)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,2)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 9)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,3)})
 	
-	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
+	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),SetSwitch("Switch 250", Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
 	local BGMAct = SetV(BGMType,1)
 	if TestStart == 1 then BGMAct = SetV(BGMType,0) end
@@ -592,6 +592,7 @@
 
 
 for i = 0, 4 do -- 강퇴기능
+	TriggerX(FP, {Deaths(i, AtLeast, 1, 218)},{SetCDeaths(FP,SetTo,99999,BanCode[i+1])})
 	for j=3,5 do
 		for p = 1, 5 do
 			Trigger { -- 강퇴토큰
@@ -660,8 +661,6 @@ for i = 0, 4 do -- 강퇴기능
 				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
 				CreateUnit(1, 94, 1, FP);
 				RemoveUnit(94, FP);
-				
-				
 				},
 			}
 	end
@@ -772,6 +771,9 @@ DoActions(FP,{
 		CreatingUID = CreateVar(FP)
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
+		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 190)}, SetCD(CrCheck1[1],1))
+		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 191)}, SetCD(CrCheck2[2],1))
+		TriggerX(FP, {CD(CrCheck2[1],1),CD(CrCheck2[2],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
 		
 		CTrigger(FP, {CD(ColorTimer,0)}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)

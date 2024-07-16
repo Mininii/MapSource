@@ -82,6 +82,8 @@
 	HMCr = CreateCcodeArr(5)
 	SMCr = CreateCcodeArr(5)
 	RMCr = CreateCcodeArr(5)
+	CrCheck1 = CreateCcodeArr(5)
+	CrCheck2 = CreateCcodeArr(5)
 	CSPtr = CreateVar(FP)
 	OverMePosX = CreateArr(20, FP)
 	OverMePosY = CreateArr(20, FP)
