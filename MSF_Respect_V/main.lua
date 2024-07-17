@@ -30,7 +30,7 @@ math.randomseed(322,322)
 VerText = "\x04Ver. 0.1"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(0)
+TestSet(2)
 FP = P8
 EUDTurbo(FP)
 NormalTurboSet(FP,214)

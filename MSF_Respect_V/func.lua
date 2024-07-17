@@ -420,7 +420,25 @@ function CreateUnitQueue()
 
 	},{preserved})
 FixText(FP, 1)
-DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08"..QueueMaxSize.." \x07』"})
+TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,0),},{SubV(CreateUnitQueuePenaltyT,2)},{preserved})
+TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
+TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,500,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
+TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1000,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
+Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+	},HumanPlayers,FP),SetV(CreateUnitQueuePenaltyT,0),AddV(CreateUnitQueuePenaltyAct,1),},{preserved})
+DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," || \x08P\x04enalty \x08T\x04imer : \x08",CreateUnitQueuePenaltyT," \x04/ \x034800 \x07』"})
+TriggerX(FP,{LocalPlayerID(128);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(128),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
+TriggerX(FP,{LocalPlayerID(129);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(129),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
+TriggerX(FP,{LocalPlayerID(130);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(130),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
+TriggerX(FP,{LocalPlayerID(131);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(131),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
+
+
+
 FixText(FP, 2)
 end
 

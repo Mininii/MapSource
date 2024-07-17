@@ -34,13 +34,6 @@
 		{24,"staredit\\wav\\BGM_ReBIRTH.ogg",60*1000},
 		{25,"staredit\\wav\\BGM_Omen.ogg",44*1000},
 	})
-	BTDis = {}
-	for i = 0,4 do
-		for j = 0,4 do
-			table.insert(BTDis, SetMemoryB(0x57F27C + (j * 228) + BanToken[i+1],SetTo,0))
-		end
-	end
-
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
 	for i = 0, 4 do
@@ -55,21 +48,6 @@
 		end
 		
 
-	for i = 1,5 do
-		Trigger2X(i+1, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtLeast,3),HumanCheck(i-1, 0)}, {
-			SetCD(BanCode[1],0),
-			SetCD(BanCode[2],0),
-			SetCD(BanCode[3],0),
-			SetCD(BanCode[4],0),
-			SetCD(BanCode[5],0),
-			DisplayText(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x07초기화\x04되었습니다."),4);
-		})
-		Trigger2X(FP, {Deaths(i-1,AtLeast,1,227),CVar(FP,PCheckV[2],AtMost,2),HumanCheck(i-1, 0)}, {BTDis,
-			RotatePlayer({
-				DisplayTextX(StrDesignX("\x07플레이어 퇴장\x04이 \x03감지\x04되어 \x08강되 투표\x04가 \x02비활성화\x04되었습니다.\x03 (사유 : 2인이하)"), 0)},HumanPlayers,FP);
-		})
-	end
-	Trigger2X(FP, {CVar(FP,PCheckV[2],AtMost,2)}, {BTDis})
 	CIfEnd()
 	DoActions(FP, {
 		SetMemoryB(0x57F27C + (0 * 228) + 62,SetTo,0),
@@ -192,7 +170,7 @@
 
 			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
 			CIfEnd()
-			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
+			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
 			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 			CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
 				CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
@@ -313,7 +291,7 @@
 	CurEPD = CreateVar(FP)
 	
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
-	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22, AwakenSense"
+	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22, AwakenSense, Mystia_Lorelei"
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
@@ -455,8 +433,12 @@
 		SetMemory(0x5821A4 + (4 * 6),SetTo,1600);
 		SetMemory(0x582144 + (4 * 7),SetTo,1600);
 		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
-		SetCp(FP);RemoveUnit(101,P6)
+		SetCp(FP);RemoveUnit(101,P6),
 	})
+	for i = 0, 4 do
+		f_TempRepeat({HumanCheck(i, 1)}, 96, 1, "BanUnit", i, {2896,112})
+		
+	end
 	if TestStart == 0 then
 		DoActions(FP,{KillUnit(218, AllPlayers),KillUnit(128, AllPlayers),KillUnit(129, AllPlayers)})
 	end
@@ -478,8 +460,8 @@
 
 	for j = 1, 3 do
 			local TT
-			if j == 3 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\n\n\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
-			else TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine\n\n\x13\x07영작 \x04시 획득하는 자원은 \x08환전률\x04이 \x11적용\x04된 값입니다."
+			if j == 3 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine"
+			else TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine"
 			end
 			Trigger2X(FP, {CD(GMode,j)}, {
 				RotatePlayer({SetMissionObjectivesX(TT)},HumanPlayers,FP);
@@ -593,83 +575,7 @@
 		
 	CIfEnd()
 
-
-for i = 0, 4 do -- 강퇴기능
-	--TriggerX(FP, {Deaths(i, AtLeast, 1, 218)},{SetCDeaths(FP,SetTo,99999,BanCode[i+1])})
-	for j=3,5 do
-		for p = 1, 5 do
-			Trigger { -- 강퇴토큰
-				players = {FP},
-				conditions = {
-					Label(0);
-					HumanCheck(p-1, 1);
-					Command(i,AtLeast,1,BanToken[p]);
-					CV(PCheckV,j),
-					},
-				actions = {
-					SetCDeaths(FP,Add,1,BanCode[p]);
-					RotatePlayer({DisplayTextX(StrDesign(PlayerString[p].."\x04에게 \x08강퇴 투표\x04가 \x081회 누적\x04 되었습니다. 투표가 \x03만장일치\x04일 경우 \x08강퇴 처리 \x04됩니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-					},
-				}
-		end
-			Trigger { -- 강퇴
-			players = {FP},
-			conditions = {
-				Label(0);
-				HumanCheck(i, 1);
-				CDeaths(FP,AtLeast,j-1,BanCode[i+1]);
-				CV(PCheckV,j),
-			},
-			actions = {
-				RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
-				},
-			}
 	
-			Trigger { -- 강퇴 드랍
-			players = {FP},
-			conditions = {
-				Label(0);
-				HumanCheck(i, 1);
-				CDeaths(FP,AtLeast,j-1,BanCode[i+1]);
-				CV(PCheckV,j),
-				Memory(0x57F1B0, Exactly, i)
-			},
-			actions = {
-				SetCp(i),
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
-				CreateUnit(1, 94, 1, FP);
-				RemoveUnit(94, FP);
-				},
-			}
-	end
-			
-		
-end
 DoActions(FP,{
 	RemoveUnitAt(1,BanToken[1],"Anywhere",Force1);
 	RemoveUnitAt(1,BanToken[2],"Anywhere",Force1);
@@ -742,6 +648,59 @@ DoActions(FP,{
 		},
 		}
 		
+
+		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(AllPlayers, AtLeast, 3, 96, 34+i)
+		},
+		actions = {
+			RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04의 강퇴처리가 완료되었습니다."),4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			},
+		}
+
+		Trigger { -- 강퇴 드랍
+		players = {i},
+		conditions = {
+			Label(0);
+			Bring(AllPlayers, AtLeast, 3, 96, 34+i);
+			Memory(0x57F1B0, Exactly, i)
+		},
+		actions = {
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			DisplayText("\x07『 \x04당신은 강되당했습니다. 드랍되어 싱글플레이로 전환됩니다.\x07 』",4);
+			CreateUnit(1, 94, 1, FP);
+			RemoveUnit(94, FP);
+			},
+		}
+
+		
 --		Trigger { -- 다운그레이드
 --		players = {i},
 --		conditions = {
@@ -769,11 +728,13 @@ DoActions(FP,{
 		Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,150000,Kills)},{preserved})
+		Trigger2X(i,{Kills(i,AtLeast,1,188)},{SetKills(i,Subtract,1,188),SetScore(i,Add,150000*2,Kills)},{preserved})
 
 		CreatingUnit = CreateVar(FP)
 		CreatingUID = CreateVar(FP)
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
+		
 		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 190)}, SetCD(CrCheck1[i+1],1))
 		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 191)}, SetCD(CrCheck2[i+1],1))
 		TriggerX(FP, {CD(CrCheck1[i+1],1),CD(CrCheck2[i+1],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
@@ -936,7 +897,7 @@ DoActions(FP,{
 			},
 			flag = {preserved}
 		}
-		Trigger2X(FP,{},{SubCD(WanCT[i+1],1)})
+		Trigger2X(FP,{},{SubCD(WanCT[i+1],1)},{preserved})
 
 		Trigger2X(FP,{CDeaths(FP,AtLeast,1,BanCode2[i+1]);},{RotatePlayer({DisplayTextX(StrDesign("\x04"..PlayerString[i+1].."\x04가 매크로를 사용하여 \x08찌리리릿 500배 \x04당하셨습니다."),4),PlayWAVX("staredit\\wav\\zzirizziri.ogg"),PlayWAVX("staredit\\wav\\zzirizziri.ogg")},HumanPlayers,FP);})
 

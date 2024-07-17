@@ -98,6 +98,7 @@
 	CDoActions(FP, {
 		TSetMemory(_Add(RepHeroIndex,EPDF(0x662860)) ,SetTo,1+65536),
 		TCreateUnit(1, RepHeroIndex, 1, RepPlayerID),
+		TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000),
 		Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1),
 		Set_EXCC2(DUnitCalc,CunitIndex,2,SetTo,CunitHP),
 	})
@@ -110,6 +111,15 @@
 	
 		CMov(FP, ArrX(OverMePosX,CunitHP), CPosX)
 		CMov(FP, ArrX(OverMePosY,CunitHP), CPosY)
+
+	CIfEnd()
+	
+	CIf(FP,{CV(RepHeroIndex,133),CV(CunitHP,3,AtLeast),CV(CunitHP,12,AtMost)},{})
+	CDoActions(FP, {
+		TSetMemoryX(_Add(Nextptrs,55),SetTo,0xB00,0xB00),
+		TSetMemoryX(_Add(Nextptrs,57),SetTo,0,0xFFFFFFFF),
+		TSetMemoryX(_Add(Nextptrs,37),SetTo,0,0xFF0000),})
+	
 
 	CIfEnd()
 	
@@ -224,12 +234,32 @@
 	for i = 1, 5 do
 		table.insert(PatchArr,SetMemoryB(0x57F27C + ((i-1) * 228) + BanToken[i],SetTo,0))
 	end
+	for i = 5, 7 do
+		table.insert(PatchArr,SetMemoryB(0x58CE24 + (i * 24) + 15,SetTo,0))
+		table.insert(PatchArr,SetMemoryB(0x58CF44 + (i * 24) + 15,SetTo,0))
+	end
 	
+	table.insert(PatchArr,SetMemoryB(0x58CE24 + (5 * 24) + 19,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x58CE24 + (5 * 24) + 22,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x58F050 + (5 * 20) + (31-20),SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x58CF44 + (5 * 24) + 19,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x58CF44 + (5 * 24) + 22,SetTo,0))
+	table.insert(PatchArr,SetMemoryB(0x58F140 + (5 * 20) + (31-20),SetTo,0))
+	
+	
+	
+	
+	
+	
+	
+
+
 	SetUnitsDatX(115,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 	SetUnitsDatX(107,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 
 	CIfOnce(FP)
 
+	f_Read(FP,0x512684,LCP)
 	DoActions2(FP, PatchArr)
 	DoActions2(FP, PatchArr2)
 	LimitX = CreateCcode()
@@ -246,11 +276,13 @@
 			SetMemoryB(0x58D088+(46*i)+20,SetTo,1),
 			GiveUnits(1, 111, P12, 4, i),
             GiveUnits(1, 125, P12, 2, i),
-            Simple_CalcLoc(3, 0, 64, 0, 64)
+            Simple_CalcLoc(3, 0, 64, 0, 64),
+			SetCp(i),
+			SetAllianceStatus(P12, Enemy),SetCp(FP)
 
 		},1)
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 320,992+(64*i), 320,992+(64*i)),CreateUnit(1, 107, 1, i),Simple_CalcLoc(0, 64, 0, 64, 0),
-		CreateUnit(1, 115, 1, i)})
+		CreateUnit(1, 115, 34+i, i),GiveUnits(All, 115, i, 34+i, P9)})
 	end
 	for i = 4, 0,-1 do
 		DoActions(FP, {
@@ -258,7 +290,7 @@
 		},1)
 		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i),RemoveUnit(145, i)})
 	end
-	TriggerX(FP, {}, {})
+	
 	
 	
 if TestStart == 1 then
@@ -267,7 +299,7 @@ end
 if Limit == 1 then
 	DoActionsX(FP,{SetSwitch("Switch 253", Set)}) -- Limit설정
 end
-	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64),}) -- Limit설정
+	DoActionsX(FP,{SetCDeaths(FP,SetTo,Limit,LimitX),SetCDeaths(FP,SetTo,TestStart,TestMode),SetInvincibility(Disable, 188, P12, 64),SetInvincibility(Disable, 176, P12, 64),SetInvincibility(Disable, 177, P12, 64),SetInvincibility(Disable, 178, P12, 64),}) -- Limit설정
 	function InputTesterID(Player,ID,Num)
 		if Limit == 1 then
 			
@@ -593,7 +625,7 @@ CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H"))
 	CreateUnit(1, 133, 1, P7),	CreateUnit(1, 132, 1, P7),	CreateUnit(1, 131, 1, P7),
 },1)
 
-	HeroTestMode = 0
+	HeroTestMode = 1
 	if HeroTestMode == 1 then
 		for j,k in pairs(UnitPointArr) do
 			--f_TempRepeat({}, k[1], 1, 2, FP, {1600,4352+(j*32)}, 1)

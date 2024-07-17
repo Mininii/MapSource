@@ -122,6 +122,15 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, RLocV);}, {preserved})
+			CElseIfX_AddRepeatType(5,"Attack_HP10")
+			
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, RLocV);TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),10)),}, {preserved})
+			CElseIfX_AddRepeatType(6,"BanUnit")
+			CDoActions(FP,{TSetMemoryX(_Add(RPtr,35),SetTo,6*16777216,0xFF000000)})
+			
 			CElseIfX_AddRepeatType(1,"Attack_HP50")
 			f_Read(FP,_Add(RPtr,10),CPos)
 			Convert_CPosXY()
@@ -301,6 +310,21 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Simple_SetLocX(FP,20,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
 			
+			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
+			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+			TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
+			TSetMemory(_Add(RPtr,13),SetTo,640),
+			TSetMemoryX(_Add(RPtr,18),SetTo,640,0xFFFF),
+			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 7);--60초후 정야독
+			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 480*3);
+			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
+		})
+		
 			CElseIfX_AddRepeatType(131,"GMAX_Era_Patrol")
 			GetLocCenter(5, NPosX, NPosY)
 			

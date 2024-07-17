@@ -62,15 +62,99 @@ local SelATK = CreateVar(FP)
 local SelClass = CreateVar(FP)
 local SelAtkType = CreateVar(FP)
 local SelShbool = CreateVar(FP)
-	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
+
+
+--실험적 메딕 인식 트리거
+
+
+function dwread_epd(Ptr,EPDFlag) -- v=EPD
+	local RetV= CreateVar(FP)
+	if EPDFlag == 1 then
+		f_Read(FP,Ptr,nil,RetV,nil,1)
+	else
+		f_Read(FP,Ptr,RetV,nil,nil,1)
+	end
+	return RetV
+end
+
+
+mouseX = dwread_epd(0x6CDDC4)
+mouseY = dwread_epd(0x6CDDC8)
+screenGridX = dwread_epd(0x62848C)
+screenGridY = dwread_epd(0x6284A8)
+Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
+local SelPID = CreateVar(FP)
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
+ScreenX2 = dwread_epd(0x62848C);
+ScreenY2 = dwread_epd(0x6284A8);
+screenSizeX = CreateVar(FP)
+screenSizeY = CreateVar(FP)
+CMov(FP,screenSizeX,_iSub(_Mov(256*16),ScreenX2))
+CMov(FP,screenSizeY,_iSub(_Mov(256*16),ScreenY2))
+screenX = CreateVar(FP)
+screenY = CreateVar(FP)
+CAdd(FP,screenX,screenGridX,screenSizeX)
+CAdd(FP,screenY,screenGridY,screenSizeY)
+Simple_SetLocX(FP,251, screenX, screenY,screenX, screenY)
+CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
+Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
+CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
+
+screenX2 = CreateVar(FP)
+CiSub(FP,screenX2,screenX,screenSizeX)
+
+CMov(FP, 0x6509B0, FP)
+mmX = mouseX -- 상대좌표 좌측정렬
+mmY = mouseY
+mmX2 = screenX -- 중앙정렬
+mmX3 = screenX2 -- 중앙정렬
+
+--DisplayPrintEr(MapPlayers, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
+
+GKeyValue = CreateVar(FP)
+KeyTime = CreateVar(FP)
+CalcValue = CreateVar(FP)
+CAdd(FP,GKeyValue,1)
+--DisplayPrintEr(MapPlayers, {"KeyTime: ",KeyTime,"   GKeyValue: ",GKeyValue,"   Calc : ",CalcValue})
+--185~220
+--398~431
+
+function VRange(Var,Left,Right)
+	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
+	
+end
+CSub(FP,CalcValue,GKeyValue,KeyTime)
+
+
+
+CMov(FP, 0x6509B0, FP)
+
+
+	CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0),CD(GS,1)})
 		f_Read(FP,0x6284B8,nil,SelEPD)
 		f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF)
 		f_Read(FP,_Add(SelEPD,2),SelHP)
 		f_Read(FP,_Add(SelEPD,24),SelSh,"X",0xFFFFFF)
+		f_Read(FP,_Add(SelEPD,19),SelPID,"X",0xFF,1)
 		f_Div(FP,SelHP,_Mov(256))
 		f_Div(FP,SelSh,_Mov(256))
-		CS__SetValue(FP, Str1, t01, nil, 0,1,1)
 
+		CIf(FP,{CV(SelUID,111),CV(SelPID,LCP)})
+			CTrigger(FP, {TTKeyPress("C", "Down")}, {SetV(KeyTime,GKeyValue)},{preserved})
+			CTrigger(FP, {TTMousePress("LEFT", "Down"),VRange(mmX3,185,220),VRange(mmY, 398,431)}, {SetV(KeyTime,GKeyValue)},{preserved})
+			CTrigger(FP, {TMemoryX(_Add(SelEPD,38), Exactly, 228+(228*65536),0xFFFFFFFF)}, {SetV(KeyTime,GKeyValue)},{preserved})
+			
+			CIf(FP,{TMemoryX(_Add(SelEPD,38), AtMost, 227,0xFFFF)})
+				local SelBQ1 = CreateVar(FP)
+				f_Read(FP, _Add(SelEPD,38), SelBQ1, nil, 0xFFFF, 1)
+				CIf(FP, {TTOR({CV(SelBQ1,34),CV(SelBQ1,9),CV(SelBQ1,88),CV(SelBQ1,80),CV(SelBQ1,21)})})
+					Trigger2X(FP, {CV(CalcValue,35,AtLeast)}, {RotatePlayer({DisplayTextX("MacroWarn!!!", 4)}, HumanPlayers, FP),},{preserved})--SetMemoryX(0x58F45C,SetTo,16,16)
+				CIfEnd()
+			CIfEnd()
+		CIfEnd()
+
+
+		CS__SetValue(FP, Str1, t01, nil, 0,1,1)
 		CS__ItoCustom(FP,SVA1(Str1,0+5),SelHP,nil,nil,{10,10},1,nil,"\x040",0x04,{0,1,2,3,4,5,6,7,8,9})
 		CS__ItoCustom(FP,SVA1(Str1,13+5),SelSh,nil,nil,{10,5},1,nil,"\x1C0",0x1C,{0,1,2,3,4})
 		--CS__ItoCustom(FP,SVA1(Str2,23),SelATK,nil,nil,{10,3},1,{"\x0D","\x1F0","\x1F0"},nil,0x1F,{0,1,3})
@@ -152,6 +236,11 @@ local SelShbool = CreateVar(FP)
 		end
 		CS__InputVA(FP,iTbl4,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
+		
+		CElseIfX({CV(SelUID,96)})-- 곰탱이일경우
+		CS__SetValue(FP, Str3, "\x08강되 \x03투표 \x04기능 (\x103인 \x03이상\x04)\x14\x0D\x14\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
+		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
+		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
 		CElseIfX({CV(SelAtkType,3)})-- 일반형
 		CS__SetValue(FP, Str3, "\x1BN\x04ormal \x04- \x07K\x04ills\x03: \x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D", 0xFFFFFFFF,1)
 		for i = 0, 9 do
@@ -206,6 +295,7 @@ local SelShbool = CreateVar(FP)
 
 	MRCheck = def_sIndex()
 	NJumpX(FP,MRCheck,DeathsX(CurrentPlayer,Exactly,101,0,0xFF)) -- 맵리벌러 트리거작동 제외
+	EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,40,0,0xFF)}, {SetMemory(0x6509B0, Add, 68-25),SetDeathsX(CurrentPlayer, SetTo, 0, 0,0xFFFF),SetMemory(0x6509B0, Subtract, 68-40),SetDeathsX(CurrentPlayer, SetTo, 200*16777216, 0,0xFFFF0000)})--68, 40
 	--CIf(FP,DeathsX(CurrentPlayer,Exactly,3,0,0xFF))--셜리하우스 보조유닛 iScript로 제어하기
 	--	f_SaveCp()
 	--	SubUnitPtr = CreateVar(FP)
@@ -299,6 +389,8 @@ local SelShbool = CreateVar(FP)
 	NJumpXEnd(FP, MRCheck)
 	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
 	EXCC_ClearCalc()
+
+
 	NJumpXEnd(FP, WhiteList)
 	--CIf(FP,{CV(EXCC_TempVarArr[9],0)})
 	--	
@@ -477,11 +569,13 @@ for i = 0, 4 do
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 32, 0, 0xFF)},{SetScore(i, Add, 1, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CIfEnd()
 		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,32)})
 		
 		f_LoadCp()
@@ -490,11 +584,13 @@ for i = 0, 4 do
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),},{SetScore(i, Add, 2, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CIfEnd()
 		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,20)})
 		f_LoadCp()
 		CIfEnd()
@@ -502,11 +598,13 @@ for i = 0, 4 do
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 10, 0, 0xFF),},{SetScore(i, Add, 3, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CIfEnd()
 		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,10)})
 		f_LoadCp()
 		CIfEnd()
@@ -514,11 +612,13 @@ for i = 0, 4 do
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, MarID[i+1], 0, 0xFF),},{SetScore(i, Add, 4, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
+		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1],PName(i)," \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CIfXEnd()
+		CIfEnd()
 		CallTriggerX(FP, CallTombTrig, CD(gMAXCcodeArr[2],1),{SetV(TPL,i),SetV(TUID,MarID[i+1])})
 		f_LoadCp()
 		CIfEnd()
@@ -663,11 +763,16 @@ end
 		f_GunForceSend(256,P8,1024+(1088*65536),i+17,{CV(GTime,(60*240)+(i*(60*60)),AtLeast)},nil,1)
 	end
 	CIfEnd()
-
+	CIf(FP,{CV(CreateUnitQueuePenaltyAct,1,AtLeast)},{SubV(CreateUnitQueuePenaltyAct,1)})
+	f_TempRepeat({}, 94, 1, nil, P6, {288,3792})
+	f_TempRepeat({}, 11, 25, 187, P7, {288,3792})
+	f_TempRepeat({}, 69, 25, 187, P8, {288,3792})
+	CIfEnd()
 
 	
 	Install_GunStack()
 	Create_G_CB_Arr()
+	--DoActions(FP, {ModifyUnitEnergy(All, 40, Force2, 64, 100)})
 
 	function ToggleFunc(CondArr,Mode,EnterFlag)
 		local KeyToggle = CreateCcode()
@@ -735,11 +840,11 @@ if NameTest == 1 then
 		--Leon
 		--퀸 60000 1000 노멀
 		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\x11。˙+˚Diomedes。+.˚\x12\x15。˙+˚D\x04iomedes\x15。+.˚"
-		str44 = "\t\t\x11。˙+˚Sadol。+.˚\x12\x15。˙+˚S\x04adol\x15。+.˚"
+		str33 = "\t\x1C。˙+˚Penalty。+.˚\x12\x1F。˙+˚P\x04enalty\x1F。+.˚"
+		str44 = "\t\x11。˙+˚Turret。+.˚\x12\x15。˙+˚T\x04urret\x15。+.˚"
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
-		str55 = "\x11。˙+˚Diomedes。+.˚\x12\x15。˙+˚D\x04iomedes\x15。+.˚"
+		str55 = "\t\t\t\x10。˙+˚Tomb。+.˚\x12\x18。˙+˚T\x04omb\x15。+.˚"
 
 		--Yuri
 		--Sena
@@ -931,6 +1036,9 @@ TriggerX(FP, {CD(ChryCcode2,480,AtLeast)}, {SetInvincibility(Disable, 201, P8, 6
 TriggerX(FP,{CD(GunCcode,0)},{AddCD(WinCcode,1)},{preserved})
 TriggerX(FP, {CD(WinCcode,480,AtLeast)}, {KillUnit(125, AllPlayers),KillUnit(125, P12),RotatePlayer({DisplayTextX(CCIText2, 4),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg"),PlayWAVX("staredit\\wav\\unlock.ogg")}, HumanPlayers, FP),})
 f_TempRepeat(CD(WinCcode,480,AtLeast), 189, 1, 0, P8, {1024,1088}, 1)
+TriggerX(FP,{CD(WinCcode2,1,AtLeast)},{AddCD(WinCcode2,1)},{preserved})
+
+TriggerX(FP, {CD(WinCcode2,480,AtLeast)}, {RotatePlayer({Victory()}, Force1, FP)})
 
 --TriggerX(FP, Deaths(P8, AtLeast, 1, 189), {RotatePlayer({Victory()}, HumanPlayers, FP)})--화홀제작전 임시 승리트리거
 f_GunForceSend(189, FP, 1024+(1088*65536), 1, Deaths(P8, AtLeast, 1, 189), nil, 1)--화홀강제입력
@@ -945,97 +1053,4 @@ TriggerX(FP, {Deaths(P8, AtLeast, 3, 200),Deaths(P8, AtMost, 0, 189)}, {--양방
 	MoveUnit(All, "Men", Force1, 27, 30),
 },{preserved})
 
---실험적 메딕 인식 트리거
-
-
-function dwread_epd(Ptr,EPDFlag) -- v=EPD
-	local RetV= CreateVar(FP)
-	if EPDFlag == 1 then
-		f_Read(FP,Ptr,nil,RetV,nil,1)
-	else
-		f_Read(FP,Ptr,RetV,nil,nil,1)
-	end
-	return RetV
-end
-
-
-mouseX = dwread_epd(0x6CDDC4)
-mouseY = dwread_epd(0x6CDDC8)
-screenGridX = dwread_epd(0x62848C)
-screenGridY = dwread_epd(0x6284A8)
-Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
-local LCP = CreateVar(FP)
-local SelPID = CreateVar(FP)
-f_Read(FP,0x512684,LCP)
-CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
-ScreenX2 = dwread_epd(0x62848C);
-ScreenY2 = dwread_epd(0x6284A8);
-screenSizeX = CreateVar(FP)
-screenSizeY = CreateVar(FP)
-CMov(FP,screenSizeX,_iSub(_Mov(256*16),ScreenX2))
-CMov(FP,screenSizeY,_iSub(_Mov(256*16),ScreenY2))
-screenX = CreateVar(FP)
-screenY = CreateVar(FP)
-CAdd(FP,screenX,screenGridX,screenSizeX)
-CAdd(FP,screenY,screenGridY,screenSizeY)
-Simple_SetLocX(FP,251, screenX, screenY,screenX, screenY)
-CDoActions(FP,{TSetMemory(0x6509B0, SetTo, LCP),CenterView(252)})
-Simple_SetLocX(FP,251, 256*16, 256*16,256*16, 256*16) --중앙 (맵사이즈*16, 맵사이즈*16)
-CMov(FP,screenX,_iSub(_Add(mouseX,320),screenSizeX))
-
-screenX2 = CreateVar(FP)
-CiSub(FP,screenX2,screenX,screenSizeX)
-
-CMov(FP, 0x6509B0, FP)
-mmX = mouseX -- 상대좌표 좌측정렬
-mmY = mouseY
-mmX2 = screenX -- 중앙정렬
-mmX3 = screenX2 -- 중앙정렬
-
---DisplayPrintEr(MapPlayers, {"상대좌표 X : ", mmX, "  Y : ", mmY, " || 중앙정렬 X : ", mmX2, "  Y : ", mmY," || 우측정렬 X : ",mmX3,"  Y : ",mmY});
-
-GKeyValue = CreateVar(FP)
-KeyTime = CreateVar(FP)
-CalcValue = CreateVar(FP)
-CAdd(FP,GKeyValue,1)
---DisplayPrintEr(MapPlayers, {"KeyTime: ",KeyTime,"   GKeyValue: ",GKeyValue,"   Calc : ",CalcValue})
---185~220
---398~431
-
-function VRange(Var,Left,Right)
-	return {CV(Var,Left,AtLeast),CV(Var,Right,AtMost)}
-	
-end
-CSub(FP,CalcValue,GKeyValue,KeyTime)
-
-
-
-CIf(FP,{Memory(0x6284B8 ,AtLeast,1),Memory(0x6284B8 + 4,AtMost,0)})
-
-f_Read(FP,0x6284B8,nil,SelEPD)
-f_Read(FP,_Add(SelEPD,25),SelUID,"X",0xFF,1)
-f_Read(FP,_Add(SelEPD,19),SelPID,"X",0xFF,1)
-CIf(FP,{CV(SelUID,111),CV(SelPID,LCP)})
-CTrigger(FP, {TTKeyPress("C", "Down")}, {SetV(KeyTime,GKeyValue)},{preserved})
-CTrigger(FP, {TTMousePress("LEFT", "Down"),VRange(mmX3,185,220),VRange(mmY, 398,431)}, {SetV(KeyTime,GKeyValue)},{preserved})
-CTrigger(FP, {Memory(0x6509B0,Exactly,0)}, {SetV(KeyTime,GKeyValue)},{preserved})
-CIf(FP,{TMemoryX(_Add(SelEPD,38), AtMost, 227,0xFFFF)})
-local SelBQ1 = CreateVar(FP)
-f_Read(FP, _Add(SelEPD,38), SelBQ1, nil, 0xFFFF, 1)
-CIf(FP, {TTOR({CV(SelBQ1,34),CV(SelBQ1,9),CV(SelBQ1,88),CV(SelBQ1,80),CV(SelBQ1,21)})})
-Trigger2X(FP, {CV(CalcValue,35,AtLeast)}, {RotatePlayer({DisplayTextX("MacroWarn!!!", 4)}, HumanPlayers, FP)},{preserved})
-
-CIfEnd()
-
-
-
-
-
-
-CIfEnd()
-CIfEnd()
-
-
-CIfEnd()
-CMov(FP, 0x6509B0, FP)
 end

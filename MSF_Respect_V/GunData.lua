@@ -726,11 +726,53 @@ end
 	--P_5, 3 : 51
 	--P_5, 3 : 51
 	--P_5, 3 : 51
+
+
 	
+	--P_8, 4 : 121
+	--P_8, 4 : 121
+	--P_8, 4 : 121
+	--P_4, 6 : 113
+	--P_4, 6 : 113
+	--P_4, 6 : 113
+	--P_3, 7 : 109
+	--P_3, 7 : 109
+	--P_3, 7 : 109
+	--P_7, 4 : 106
+	--P_7, 4 : 106
+	--P_7, 4 : 106
+	--S_5, 3 : 101
+	--S_5, 3 : 101
+	--S_5, 3 : 101
+	--S_8, 2 : 97
+	--S_8, 2 : 97
+	--S_8, 2 : 97
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
 	KimrhegbArr = {55,56,"Kazansky","Artanis","Danimoth","Lin","Raszagal","Envy","Lizzet","Merry","Rose","Norad II","Era","Nina","Sera","Sorang","Sena","Sen"}
-	
-	KimrhegbArr2 = {{P_3, 5},{P_3, 5},{P_3, 5},{S_3, 3},{S_3, 3},{S_3, 3},{P_4, 4},{P_4, 4},{P_4, 4},{P_6, 3},{P_6, 3},{P_6, 3},{S_5, 2},{S_5, 2},{S_5, 2},{P_5, 3},{P_5, 3},{P_5, 3}}
-	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0},}
+	KimrhegbArr2 = {{P_8, 4},{P_8, 4},{P_8, 4},{P_4, 6},{P_4, 6},{P_4, 6},{P_3, 7},{P_3, 7},{P_3, 7},{P_7, 4},{P_7, 4},{P_7, 4},{S_5, 3},{S_5, 3},{S_5, 3},{S_8, 2},{S_8, 2},{S_8, 2}}
+	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0}}
+
 	CIf_GCase(150)--오버미
 		for j,k in pairs(KimrhegbArr) do
 			G_CB_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
@@ -739,17 +781,22 @@ end
 		CTrigger(FP,{},{Gun_DoSuspend(),SubCD(ChryCcode, 1),Gun_SetLine(6,SetTo,1)},1)
 
 	CIfEnd()
+	KimrhegbArr = {"Division","Zero","Kazansky","Artanis","Danimoth","Lin","Raszagal","Envy","Lizzet","Merry","Rose","Norad II","Era","Nina","Sera","Sorang","Sena","Sen"}
+	
+	KimrhegbArr2 = {{P_3, 4},{P_3, 4},{P_3, 5},{S_3, 3},{S_3, 3},{S_3, 3},{P_4, 4},{P_4, 4},{P_4, 4},{P_6, 3},{P_6, 3},{P_6, 3},{S_5, 2},{S_5, 2},{S_5, 2},{P_5, 3},{P_5, 3},{P_5, 3}}
+	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0},}
+
 	CIf_GCase(201)--에너미스톰
 			for j,k in pairs(KimrhegbArr) do
-			CIfOnce(FP, {Gun_Line(7,AtLeast,(j-1)*12)})
+			CIfOnce(FP, {Gun_Line(7,AtLeast,(j-1)*12)},{SetV(CreateUnitQueuePenaltyLock,1)})
 			f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
 			f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
 			G_CB_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
 			G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
-			DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(10, 94, 1, P6)})
+			DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(1, 94, 1, P6)})
 			CIfEnd()
 			end
-			CIf(FP,{Gun_Line(7,AtLeast,640)},{Gun_DoSuspend(),SetCD(CocoonCcode,1),SetCp(P6),RunAIScriptAt(JYD, 64),SetCp(FP)})
+			CIf(FP,{Gun_Line(7,AtLeast,640)},{Gun_DoSuspend(),SetCD(CocoonCcode,1),SetCp(P6),RunAIScriptAt(JYD, 64),SetCp(FP),SetV(CreateUnitQueuePenaltyLock,0)})
 			for j,k in pairs(KimrhegbArr) do
 				f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
 				f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
@@ -1430,16 +1477,10 @@ end
 		table.insert(lAct, SetMemoryB(0x663150 + (k),SetTo,12))
 			
 	end
- 	DoActions2X(FP, {
+ 	DoActions2X(FP, {Order("Any unit", Force2, 64, Attack, 6),
 		Gun_SetLine(6, SetTo, 0x1D),
 		SetMemoryX(0x664080 + (25*4),SetTo,4,4),
-		SetMemoryB(0x663150 + (25),SetTo,12),
-		SetMemoryB(0x58CE24 + (5 * 24) + 19,SetTo,0),
-		SetMemoryB(0x58CE24 + (5 * 24) + 22,SetTo,0),
-		SetMemoryB(0x58F050 + (5 * 20) + (31-20),SetTo,0),
-		SetMemoryB(0x58CF44 + (5 * 24) + 19,SetTo,0),
-		SetMemoryB(0x58CF44 + (5 * 24) + 22,SetTo,0),
-		SetMemoryB(0x58F140 + (5 * 20) + (31-20),SetTo,0),lAct
+		SetMemoryB(0x663150 + (25),SetTo,12),lAct
 	}, 1)--처음기본배속, 탱크공중화
 	
 	CDoActions(FP, {TGun_SetLine(8, Add, Var_TempTable[7]),TSetMemory(0x5124F0, SetTo, Var_TempTable[7])})--배속은 변수에 의해 고정되고 배속에 따라 화홀의 밀리세컨드 단위가 달라진다.
@@ -1786,8 +1827,8 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,61730)}, {"Duke Siege"}, GMAXSh5_1, 1, {LMTable="MAX",OwnerTable=P6,SizeTable=220})
 
 
-	GMAXSh5_4 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(8, 3), 0), 0), 45)
-	GMAXSh5_5 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(8, 3), 0), 0), -45)
+	GMAXSh5_4 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(8, 5), 0), 0), 45)
+	GMAXSh5_5 = CS_Rotate(CS_SortY(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(8, 5), 0), 0), -45)
 
 	
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,63150)}, {88}, GMAXSh5_4, 1, {LMTable=5,OwnerTable=P6})
@@ -1936,7 +1977,8 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260)}, {62}, HCA, 1, {LMTable="MAX",OwnerTable=P6})
 
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680)}, {94}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680)}, {"Identity"}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680),CD(GMode,2,AtLeast)}, {"Identity"}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680),CD(GMode,1)}, {"Duke Siege"}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
 	
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,124890)}, {94}, GMAXSh5_2, 1, {LMTable=1,OwnerTable=P6})
 
@@ -1948,14 +1990,29 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360)}, {94}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470)}, {94}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150)}, {94}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360)}, {"Division"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470)}, {"Zero"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150)}, {"LENA"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360)}, {"Destroy"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470)}, {"Deaths"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150)}, {"DIEIN"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,2,AtLeast)}, {"Division"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,2,AtLeast)}, {"Zero"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,2,AtLeast)}, {"LENA"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,2,AtLeast)}, {"Destroy"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,2,AtLeast)}, {"Deaths"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,2,AtLeast)}, {"DIEIN"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
+
 	
-	TriggerX(FP, {Gun_Line(8,AtLeast,154100),CV(CreateUnitQueueNum,0),Bring(P6, AtMost, 0, "Men", 64)}, {RotatePlayer({Victory()}, Force1, FP)})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,1)}, {"Division"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,1)}, {"Zero"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,1)}, {"LENA"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,1)}, {"Destroy"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,1)}, {"Deaths"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,1)}, {"DIEIN"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+
+	GT = {{"\x08H\x04D \x08S\x04tyle","\x16M\x04X \x16S\x04tyle","\x11S\x04C \x11S\x04tyle"},{"\x08H\x04D \x08S\x04tyle - \x07EVF","\x16M\x04X \x16S\x04tyle - \x07EVF","\x11S\x04C \x11S\x04tyle - \x07EVF"}}
+	for i = 1, 3 do
+		for j= 0,1 do
+			WinText = "\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ\x04　！！！\n\n\x13\x04"..GT[j+1][i].." 클리어 하셨습니다.\n\n\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ\n\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.\n\n\x13\x04！！！　\x07Ｔｈａｎｋ　ｙｏｕ　ｆｏｒ　Ｐｌａｙｉｎｇ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+			Trigger2X(FP, {CD(GMode,i),CD(EVFCcode,j),Gun_Line(8,AtLeast,154100),CV(CreateUnitQueueNum,0),Bring(P6, AtMost, 0, "Men", 64)}, {RotatePlayer({DisplayTextX(WinText,4),PlayWAVX("staredit\\wav\\PP_SFX.ogg"),PlayWAVX("staredit\\wav\\PP_SFX.ogg"),PlayWAVX("staredit\\wav\\PP_SFX.ogg"),PlayWAVX("staredit\\wav\\PP_SFX.ogg")}, HumanPlayers, FP),SetCD(WinCcode2,1)})
+		end
+	end
+
 
 	---------------------------------------건작보스 패턴 영역-------------------------------------------------
 
