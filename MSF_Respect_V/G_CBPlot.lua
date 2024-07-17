@@ -310,7 +310,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Simple_SetLocX(FP,20,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
 			
-			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+			CDoActions(FP, {
 			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
 			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
 			TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
