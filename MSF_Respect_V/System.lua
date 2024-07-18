@@ -310,6 +310,7 @@ CMov(FP, 0x6509B0, FP)
 	--CIfEnd()
 	--0x4 in air check
 
+	CTrigger(FP, {DeathsX(CurrentPlayer,Exactly,35,0,0xFF)}, {Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}, {preserved})--라바 Lock On
 	CAdd(FP,0x6509B0,30)
 	CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x4,0,0x4)},{Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}) -- Lock On
 	--55 to 10

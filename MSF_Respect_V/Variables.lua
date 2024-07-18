@@ -95,6 +95,7 @@
 	HVA3 = CVArray(FP,4*5) 
 	LCP = CreateVar(FP)
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
+	GS = CreateCcode()
 	--strings
 	
 	_0D = string.rep("\x0D",200) 

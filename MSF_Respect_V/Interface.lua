@@ -66,7 +66,8 @@
 	local Cunit2 = CreateVar(FP)
     CIfX(FP,Never()) -- 상위플레이어 단락 시작
         for i = 0, 4 do
-            CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),GiveUnits(All, 96, AllPlayers, 64, i),SetMemoryB(0x57F27C + (i * 228) + 62,SetTo,1),SetMemoryB(0x57F27C + (i * 228) + 63,SetTo,1)})
+            CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 62,SetTo,1),SetMemoryB(0x57F27C + (i * 228) + 63,SetTo,1)})
+			TriggerX(FP, {CD(GS,0)}, {GiveUnits(All, 96, AllPlayers, 64, i),},{preserved})
             if Limit == 1 then
                 f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
             end
@@ -104,7 +105,6 @@
 			SetMemory(0x5124F0,SetTo,SpeedV[i]);},{preserved})
 	end
 	CIfEnd()
-	GS = CreateCcode()
 
 
 	if Limit == 1 then
@@ -167,9 +167,11 @@
 				
 
 			end
-
-			CIf(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})}) -- F12 누르면 마린소환
-			CIfEnd()
+			
+			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,197),CD(GS,1);},{TCreateUnitWithProperties(12,20,_Add(CurrentOP,21),CurrentOP,{energy=100})},{preserved}) -- F12 누르면 마린소환
+			for i = 0, 4 do
+				CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,189),CD(GS,1);CV(CurrentOP,i)},{TCreateUnitWithProperties(12,MarID[i+1],_Add(CurrentOP,21),CurrentOP,{energy=100})},{preserved}) -- F8 누르면 마린소환
+			end
 			--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved})
 			CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 			CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
@@ -437,7 +439,6 @@
 	})
 	for i = 0, 4 do
 		f_TempRepeat({HumanCheck(i, 1)}, 96, 1, "BanUnit", i, {2896,112})
-		
 	end
 	if TestStart == 0 then
 		DoActions(FP,{KillUnit(218, AllPlayers),KillUnit(128, AllPlayers),KillUnit(129, AllPlayers)})

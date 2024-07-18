@@ -563,24 +563,23 @@ end
 		G_CB_TSetSpawn({CD(GMode,2,AtLeast)},{k},{Cen1},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
 		G_CB_TSetSpawn({CD(GMode,2,AtLeast)},{k},{Cen2},1,{LMTable = 1,RepeatType=130,CenterXY={0,0},OwnerTable=P6})
 		CIfEnd()
-		
 	end
+
 	CheckJump = def_sIndex()
 		CIf(FP,{Gun_Line(7,AtLeast,480)},{Gun_DoSuspend()})
 			CIf(FP, {CD(GMode,3)})
 			CFor(FP, 0, 2048,64)
 			local NI = CForVariable()
-			CIf(FP,{TTOR({GNm(1),GNm(3),GNm(5)})})
+			NIf(FP,{TTOR({GNm(1),GNm(3),GNm(5)})})
 			Simple_SetLocX(FP, 200, NI, 0, _Add(NI,64), 8192)
 			DoActions(FP, {KillUnitAt(All,nilunit,201,FP),Simple_SetLoc(201, 0, 0, 0, 0)})
 			NJumpX(FP, CheckJump,{Bring(Force1, AtLeast, 1, "Men", 201)},{MoveLocation(202, "Men", Force1, 201)})
-			CIfEnd()
-			CIf(FP,{TTOR({GNm(2),GNm(4),GNm(6)})})
+			NIfEnd()
+			NIf(FP,{TTOR({GNm(2),GNm(4),GNm(6)})})
 			Simple_SetLocX(FP, 200, _Sub(_Mov(2048-64),NI), 0, _Sub(_Mov(2048),NI), 8192)
 			DoActions(FP, {KillUnitAt(All,nilunit,201,FP),Simple_SetLoc(201, 0, 0, 0, 0)})
 			NJumpX(FP, CheckJump,{Bring(Force1, AtLeast, 1, "Men", 201)},{MoveLocation(202, "Men", Force1, 201)})
-
-			CIfEnd()
+			NIfEnd()
 			CForEnd()
 			NJumpXEnd(FP, CheckJump)--{RotatePlayer({DisplayTextX("Check",4)},HumanPlayers,FP)}
 			GetLocCenter(201, CPosX, CPosY)
@@ -953,6 +952,7 @@ end
 						G_CB_SetSpawnX({}, {55,53,54,46}, ShRet, 0, 0, 0, nil, 2, nil, P8)
 					CIfEnd()
 				CIfEnd()
+				
 			CIfEnd()
 			end
 			G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Kazansky"}, TemConnectHD, 0, "Timer_Attack_Gun", 2, nil, 1, nil, P7)
@@ -989,8 +989,8 @@ end
 			for i = 0, 24 do
 			CIf(FP,{CV(SizeV,i)})
 				local SHI = i
-				local ShRet = CS_FillPathHX2(TemConnect2,1,72+72+72-(8.4*SHI),48+48+48-(5.6*SHI),1,0,26.57,5)
-				local ShRet2 = CS_FillPathHX2(TemConnect2,1,72+72+72-((4.5)*SHI),48+48+48-((3)*SHI),1,0,26.57,5)
+				local ShRet = CS_FillPathHX2(TemConnect2,1,72+72+72-(7.4*SHI),48+48+48-(4.8*SHI),1,0,26.57,5)
+				local ShRet2 = CS_FillPathHX2(TemConnect2,1,72+72+36-((4.5)*SHI),48+48+24-((3)*SHI),1,0,26.57,5)
 				G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Yuna"}, ShRet2, 0, 0, 0, nil, 2, nil, P8)
 				G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,1)}, {"Darly"}, ShRet2, 0, 0, 0, nil, 2, nil, P8)
 				G_CB_SetSpawnX({Gun_Line(5,Exactly,0),CD(GMode,2,AtLeast)}, {"Yuna"}, ShRet, 0, 0, 0, nil, 2, nil, P8)

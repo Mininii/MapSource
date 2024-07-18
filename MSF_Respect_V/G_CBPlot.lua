@@ -309,13 +309,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CAdd(FP,CPosY,32*256)
 			Simple_SetLocX(FP,20,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
-			
 			CDoActions(FP, {
-			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
-			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
-			TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
-			TSetMemory(_Add(RPtr,13),SetTo,640),
-			TSetMemoryX(_Add(RPtr,18),SetTo,640,0xFFFF),
 			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 7);--60초후 정야독
 			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 480*3);
 			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
