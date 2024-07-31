@@ -361,7 +361,7 @@ function CreateUnitQueue()
 			CMov(FP,RKillScoreP,_Div(RKillScoreTotal,_Mov(1000)))
 			CMod(FP,RKillScoreTotal,1000)
 			CAdd(FP,RKillScoreMin,_Mul(_Mul(RKillScoreP,_Mov(10)),ExRate))
-			DisplayPrintEr(MapPlayers, {"RKillScoreMin : ",RKillScoreMin})
+			--DisplayPrintEr(MapPlayers, {"RKillScoreMin : ",RKillScoreMin})
 			CIfEnd()
 
 
@@ -424,6 +424,7 @@ TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,0),},{SubV(C
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,500,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1000,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
+TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,50000,AtLeast)},{RotatePlayer({Defeat()}, Force1, FP)},{preserved})
 Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
 	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
 	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
@@ -1135,8 +1136,8 @@ function TimerToggle(Time)--Time 초 마다 0, 1 왔다갔다하는거
 	local TCC = CreateCcode()
 	local TCC2 = CreateCcode()
 	DoActionsX(FP, {AddCD(TCC,1)})
-	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,0)}, {SetCD(TCC2,0),SetCD(TCC2,1)},{preserved})
-	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,1)}, {SetCD(TCC2,0),SetCD(TCC2,0)},{preserved})
+	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,0)}, {SetCD(TCC,0),SetCD(TCC2,1)},{preserved})
+	TriggerX(FP, {CD(TCC,Time,AtLeast),CD(TCC2,1)}, {SetCD(TCC,0),SetCD(TCC2,0)},{preserved})
 	return TCC2
 	
 end

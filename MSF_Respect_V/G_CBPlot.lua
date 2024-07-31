@@ -327,7 +327,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CiSub(FP,CPosX,NPosX)
 			CiSub(FP,CPosY,NPosY)
-			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(5)))
+			f_Sqrt(FP, SpeedRet, _Div(_Add(_Square(CPosX),_Square(CPosY)),_Mov(2)))
 			
 			CDoActions(FP, {TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
 			TSetMemory(_Add(RPtr,13),SetTo,SpeedRet),

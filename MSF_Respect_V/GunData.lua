@@ -1,5 +1,14 @@
 ﻿
 function Include_GunData(Size,LineNum)
+	AA1,AA2,AA3 = CreateNcodes(3)
+
+	for i = 0,3 do
+		TriggerX(i, {LocalPlayerID(i)}, {
+			SetCp(P12),RunAIScriptAt("Set Unit Order To: Junk Yard Dog",64)
+		})
+	end
+
+
 	local G_TempV,G_A,GunID = CreateVariables(3,FP)
 	local GunPlayer = CreateVar(FP)
 	local CIndex = FuncAlloc
@@ -58,8 +67,10 @@ function Include_GunData(Size,LineNum)
 		GunBGM(201,13,"\x08E\x04nemy \x08S\x04torm",250000)
 		GunBGM(160,14,"\x1CD\x04iomedes",80000)
 		GunBGM(167,15,"\x11D\x04ream \x11i\x04t",80000)
-		GunBGM(126,16,"\x1CB\x04lyth\x1CE",250000)
-		GunBGM(174,17,"\x08B\x04lack \x08S\x04wan",250000)
+		GunBGM(126,16,"\x1CB\x04lyth\x1CE",250000,nil,1)
+		GunBGM(126,27,"\x0ES\x04pace \x0Eo\x04f \x0ES\x04oul",250000,nil,2)
+		GunBGM(174,26,"\x11S\x04ummer \x112\x04017",250000,nil,1)
+		GunBGM(174,17,"\x08B\x04lack \x08S\x04wan",250000,nil,2)
 		GunBGM(127,18,"\x0FL\x04auncher",300000)
 		GunBGM(106,19,"\x1FM\x04iles",150000)
 		GunBGM(168,20,"\x1BD\x04on't \x1BD\x04ie",444444)
@@ -70,6 +81,7 @@ function Include_GunData(Size,LineNum)
 		GunBGM(147,23,"\x08D\x04IE \x08I\x04N",555555)
 		GunBGM(152,24,"\x1FR\x04e:\x1FB\x04IRTH",444444)
 		
+
 		
 		
 		--{5,"staredit\\wav\\BGM_ALiCE.ogg",43*1000},
@@ -344,8 +356,8 @@ end
 	G_CB_SetSpawn({GNm(4),Gun_Line(6,AtLeast,1)}, {56,104,51,48}, P_4, 3, 0, 0, nil, nil, P7)
 
 	Gen2GunS({"Division"},{"Destroy"},5,"LSHD","LSSC","LSFill","LSFill","EL FAIL")
-	Gen2GunS({"Deaths"},{"Division"},6,"LSHD","LSSC","LSFill","LSFill","DIEIN")
-	Gen2GunS({"Zero"},{"Deaths"},7,"LSHD","LSSC","LSFill","LSFill","PLAY")
+	Gen2GunS({"DeathsX"},{"Division"},6,"LSHD","LSSC","LSFill","LSFill","DIEIN")
+	Gen2GunS({"Zero"},{"DeathsX"},7,"LSHD","LSSC","LSFill","LSFill","PLAY")
 	Gen2GunS({"Identity"},{"Zero"},8,"LSHD","LSSC","LSFill","LSFill","EL CLEAR")
 	Gen2GunS({"Destroy"},{"Identity"},9,"LSHD","LSSC","LSFill","LSFill","LENA")
 	
@@ -912,12 +924,52 @@ end
 
 
 	CTrigger(FP,{Gun_Line(7,AtLeast,480)},{Gun_SetLine(6,Add,1),Gun_SetLine(7,SetTo,0),},1)
-	local MarNum = CreateVars(FP)
+	local TotalM = CreateVar(FP)
+	local MarNum = CreateVar(FP)
+	local MarNum2 = CreateVar(FP)
+	local MarNum3 = CreateVar(FP)
+	local MarNum4 = CreateVarArr(5,FP)
 	local SizeV = CreateVar(FP)
 	Simple_SetLocX(FP, 200, Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3],{Simple_CalcLoc(200, -32*15, -32*15, 32*15, 32*15),KillUnitAt(All, nilunit, 201, FP)})
-	UnitReadX(FP, Force1, "Men", 201, MarNum)
-	TriggerX(FP, {CV(MarNum,480,AtLeast)}, {SetV(MarNum,480)},{preserved})
-	CDiv(FP, SizeV, MarNum, 20)
+	UnitReadX(FP, Force1, 32, 201, MarNum)--*1
+	UnitReadX(FP, Force1, 20, 201, MarNum2)--*2
+	CMov(FP,TotalM,0)
+	CAdd(FP,TotalM,MarNum)
+	CAdd(FP,TotalM,MarNum2)
+	CAdd(FP,TotalM,MarNum2)
+	
+	CIfX(FP,{CD(GMode,2,AtMost)})
+	UnitReadX(FP, Force1, 10, 201, MarNum3)--*3
+	for i = 0, 4 do
+		CIf(FP,{HumanCheck(i, 1)})
+		UnitReadX(FP, i, MarID[i+1], 201, MarNum4[i+1])--*4
+		CIfEnd()
+	end
+	
+	CAdd(FP,TotalM,MarNum3)
+	CAdd(FP,TotalM,MarNum3)
+	CAdd(FP,TotalM,MarNum3)
+	for i = 0, 4 do
+		CAdd(FP,TotalM,MarNum4[i+1])
+		CAdd(FP,TotalM,MarNum4[i+1])
+		CAdd(FP,TotalM,MarNum4[i+1])
+		CAdd(FP,TotalM,MarNum4[i+1])
+	end
+
+	f_Div(FP,TotalM,4)
+
+
+	CElseX()
+	f_Div(FP,TotalM,2)
+
+	CIfXEnd()
+	TriggerX(FP, {CV(TotalM,480,AtLeast)}, {SetV(TotalM,480)},{preserved})
+	CDiv(FP, SizeV, TotalM, 20)
+	if Limit == 1 then -- 테스트용확인트리거
+		DisplayPrintEr(MapPlayers, {"TotalM : ",TotalM})
+	end
+
+
 		CIf(FP,GNm(2))	
 			for i = 0, 24 do
 			CIf(FP,{CV(SizeV,i)})
@@ -1202,27 +1254,32 @@ end
 
 
 	CIf_GCase(168)
+		CIfOnce(FP)
+		G_CB_TSetSpawn({}, {217}, Shape1217, 1, {CenterXY={0,0},OwnerTable={P6},RepeatType=217})
+		f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {160,3712})
+		f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {384,3616})
+		f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {256,3936})
+		f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {416,3872})
+		f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {160,3712})
+		f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {384,3616})
+		f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {256,3936})
+		f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {416,3872})
+		CIfEnd()
+
 		TriggerX(FP, {Gun_Line(6, Exactly, 0),Memory(0x657A9C, AtLeast, 1)}, {SetMemory(0x657A9C,Subtract,1)}, {preserved})
 		TriggerX(FP, {Gun_Line(6, Exactly, 1),Memory(0x657A9C, AtMost, 30)}, {SetMemory(0x657A9C,Add,1)}, {preserved})
 		TriggerX(FP, {Memory(0x657A9C, Exactly, 0)}, {Gun_SetLine(6, SetTo, 1)}, {preserved})
+
 		CIfOnce(FP,Gun_Line(6, Exactly, 1))
 		
 			DoActions2(FP, {Simple_SetLoc(0, 288,3792,288,3792),RotatePlayer({CenterView(1)}, HumanPlayers, FP)})
-			G_CB_TSetSpawn({}, {217}, Shape1217, 1, {CenterXY={0,0},OwnerTable={P6},RepeatType=217})
-			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {160,3712})
-			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {384,3616})
-			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {256,3936})
-			f_TempRepeat({CD(GMode,1)}, 74, 3, 2, P8, {416,3872})
-			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {160,3712})
-			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {384,3616})
-			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {256,3936})
-			f_TempRepeat({CD(GMode,2,AtLeast)}, 74, 27, 2, P8, {416,3872})
 			CFor(FP,19025,19025+(1700*84),84)
 			local CI = CForVariable()
 			CIf(FP,{TMemoryX(_Add(CI,19), AtMost, 4,0xFF),TMemoryX(_Add(CI,19), AtLeast, 1*256,0xFF00)})
 			f_Read(FP,_Add(CI,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP, 199, CPosX, CPosY, CPosX, CPosY, Simple_CalcLoc(199, -4, -4, 4, 4))
+			DoActions(FP,{SetSwitch(RandSwitch3,Random),SetSwitch(RandSwitch4,Random)})
 			DoActions(FP,{SetSwitch(RandSwitch1,Random),SetSwitch(RandSwitch2,Random)})
 			local RandXY = {
 				{160,3712},
@@ -1234,7 +1291,19 @@ end
 					if i == 1 then RS1 = Set RS2=Cleared end
 					if i == 2 then RS1 = Cleared RS2=Set end
 					if i == 3 then RS1 = Set RS2=Set end
-					TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
+					TriggerX(FP,{Switch(RandSwitch3,Set),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
+				end
+			local RandXY = {
+				{128,3280},
+				{544,3184},
+				{368,4288},
+				{720,4128},}
+				for i = 0, 3 do
+					if i == 0 then RS1 = Cleared RS2=Cleared end
+					if i == 1 then RS1 = Set RS2=Cleared end
+					if i == 2 then RS1 = Cleared RS2=Set end
+					if i == 3 then RS1 = Set RS2=Set end
+					TriggerX(FP,{Switch(RandSwitch3,Cleared),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
 				end
 			CIfEnd()
 			CForEnd()
@@ -1373,7 +1442,7 @@ end
 				WaveGM3(17,{60},{64})
 
 				
-				WaveGM3(18,{"Division"},{"Deaths"})
+				WaveGM3(18,{"Division"},{"DeathsX"})
 				WaveGM3(19,{"Zero"},{"Destroy"})
 				WaveGM3(20,{"EL FAIL"},{"DIEIN"})
 				WaveGM3(21,{"LENA"},{"EL CLEAR"})
@@ -1463,7 +1532,7 @@ end
 	end
 	
 	RBSetSpawn(0,{"Sorang"},{"Gaya","Yuri"},{"Sera"})
-	RBSetSpawn(1,{"Sena"},{"Deaths"},{"Era"})
+	RBSetSpawn(1,{"Sena"},{"DeathsX"},{"Era"})
 	RBSetSpawn(2,{"Sen"},{"Sadol","Leon"},{"Zero"})
 	RBSetSpawn(3,{"Identity"},{"Destroy"},{"Division"})
 	CTrigger(FP,{Gun_Line(7,AtLeast,480*3)},{Gun_DoSuspend()},1)
@@ -1961,20 +2030,23 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,109100),CD(GMode,1)}, {94,"Yuri"}, STCirHD, 1, {LMTable="MAX",OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,109100),CD(GMode,2,AtLeast)}, {94,"Yuri"}, STCirSC, 1, {LMTable="MAX",OwnerTable=P6})
 
+
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630),CD(GMode,2,AtLeast)}, {94,"Sen"}, HCC, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940),CD(GMode,2,AtLeast)}, {94,"Gaya"}, HCB, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260),CD(GMode,2,AtLeast)}, {94,"Leon"}, HCA, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630),CD(GMode,2,AtLeast)}, {70}, HCC, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940),CD(GMode,2,AtLeast)}, {57}, HCB, 1, {LMTable="MAX",OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260),CD(GMode,2,AtLeast)}, {62}, HCA, 1, {LMTable="MAX",OwnerTable=P6})
+
 	
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630),CD(GMode,1)}, {94,"Sen"}, HCC, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940),CD(GMode,1)}, {94,"Gaya"}, HCB, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260),CD(GMode,1)}, {94,"Leon"}, HCA, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630),CD(GMode,1)}, {70}, HCC, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940),CD(GMode,1)}, {57}, HCB, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260),CD(GMode,1)}, {62}, HCA, 1, {LMTable="MAX",OwnerTable=P6,RepeatType="Attack_HP50"})
 	
-	
-	
-	
-	
-	
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630)}, {94,"Sen"}, HCC, 1, {LMTable="MAX",OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940)}, {94,"Gaya"}, HCB, 1, {LMTable="MAX",OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260)}, {94,"Leon"}, HCA, 1, {LMTable="MAX",OwnerTable=P6})
-	
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111630)}, {70}, HCC, 1, {LMTable="MAX",OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,111940)}, {57}, HCB, 1, {LMTable="MAX",OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,112260)}, {62}, HCA, 1, {LMTable="MAX",OwnerTable=P6})
+
 
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680)}, {94}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,128680),CD(GMode,2,AtLeast)}, {"Identity"}, CS_FillPathXY(CS_RatioXY(HCC, 2, 2), 0, 32, 32, 0), 1, {LMTable="MAX",OwnerTable=P6})
@@ -1994,7 +2066,7 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,2,AtLeast)}, {"Zero"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,2,AtLeast)}, {"LENA"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,2,AtLeast)}, {"Destroy"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,2,AtLeast)}, {"Deaths"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,2,AtLeast)}, {"DeathsX"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,2,AtLeast)}, {"DIEIN"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6})
 
 	
@@ -2002,7 +2074,7 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,1)}, {"Zero"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,1)}, {"LENA"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,131360),CD(GMode,1)}, {"Destroy"}, GMAXSh7_1, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
-	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,1)}, {"Deaths"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
+	G_CB_TSetSpawn({Gun_Line(8,AtLeast,141470),CD(GMode,1)}, {"DeathsX"}, GMAXSh7_2, 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
 	G_CB_TSetSpawn({Gun_Line(8,AtLeast,150150),CD(GMode,1)}, {"DIEIN"}, CS_RatioXY(HCC, 2, 2), 1, {LMTable=1,OwnerTable=P6,RepeatType="Attack_HP10"})
 
 	GT = {{"\x08H\x04D \x08S\x04tyle","\x16M\x04X \x16S\x04tyle","\x11S\x04C \x11S\x04tyle"},{"\x08H\x04D \x08S\x04tyle - \x07EVF","\x16M\x04X \x16S\x04tyle - \x07EVF","\x11S\x04C \x11S\x04tyle - \x07EVF"}}

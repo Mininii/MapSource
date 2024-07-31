@@ -191,23 +191,50 @@ CMov(FP, 0x6509B0, FP)
 				CAdd(FP,SelATK,SelATK)
 			CIfEnd()
 
-			CIf(FP,CV(SelUID,190))--프사이
+			CIf(FP,{TTOR({CV(SelUID,190),CV(SelUID,126),CV(SelUID,174)})})--프사이or 노라드
 				
-			local PSITBLPtr = CreateVar(FP)
-			local PSIGunNum = CreateVar(FP)
-			f_GetTblptr(FP, PSITBLPtr, 191)
-			local CText1 = CreateCText(FP, "\t\t\t\x1E。˙+˚Hell'o。+.˚\x12\x08。˙+˚H\x04ell'o\x08。+.˚\t\t\t\t\t  ")--HellO
-			local CText2 = CreateCText(FP, "\t\x11。˙+˚O\'men。+.˚\x12\x08。˙+˚O\x04\'men\x08。+.˚\t\t\t\t\t\t\t    ")--OMen
-			f_Read(FP, _Add(_Mul(LCunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*2)/4))), PSIGunNum)
-			CIf(FP,{CV(PSIGunNum,1)})
-			f_Memcpy(FP,PSITBLPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+			local TBLPtr = CreateVar(FP)
+			local GunNum = CreateVar(FP)
+			f_Read(FP, _Add(_Mul(LCunitIndex,_Mov(0x970/4)),_Add(DUnitCalc[3],((0x20*2)/4))), GunNum)
+			CIf(FP,{CV(SelUID,190)})
+				local CText1 = CreateCText(FP, "\t\t\t\x1E。˙+˚Hell'o。+.˚\x12\x08。˙+˚H\x04ell'o\x08。+.˚\t\t\t\t\t  ")--HellO
+				local CText2 = CreateCText(FP, "\t\x11。˙+˚O\'men。+.˚\x12\x08。˙+˚O\x04\'men\x08。+.˚\t\t\t\t\t\t\t    ")--OMen
+				f_GetTblptr(FP, TBLPtr, 191)
+				CIf(FP,{CV(GunNum,1)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+				CIfEnd()
+				CIf(FP,{CV(GunNum,2)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+				CIfEnd()
 			CIfEnd()
-			CIf(FP,{CV(PSIGunNum,2)})
-			f_Memcpy(FP,PSITBLPtr,_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+			CIf(FP,{CV(SelUID,126)})
+				local CTextR = CreateCText(FP, string.rep("\x0D", 75))--R
+				local CText1 = CreateCText(FP, "\t\x0E。˙+˚BlythE。+.˚\x12\x1C。˙+˚B\x04lyth\x1CE。+.˚\t\t\t\t\t\t\t\t   ")--BlythE
+				local CText2 = CreateCText(FP, "\x1C。+.˚Space of Soul\x12\x0ES\x04pace \x0Eo\x04f \x0ES\x04oul\x0E。+.˚\t\t\t\t\t\t\t\t")--Space of Soul
+				f_GetTblptr(FP, TBLPtr, 126+1)
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CTextR[3],0),"X","X",1),CTextR[2])
+				CIf(FP,{CV(GunNum,1)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+				CIfEnd()
+				CIf(FP,{CV(GunNum,2)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+				CIfEnd()
+			CIfEnd()
+			CIf(FP,{CV(SelUID,174)})
+				local CTextR = CreateCText(FP, string.rep("\x0D", 75))--R
+				local CText1 = CreateCText(FP, "\x08。+.˚Summer 2017\x12\x11S\x04ummer \x112\x04017\x11。+.˚\t\t\t\t\t\t\t\t  ")--Summer 2017
+				local CText2 = CreateCText(FP, "\x15。˙+˚Black Swan。+.˚\x12\x08。˙+˚B\x04lack \x08S\x04wan\x08。+.˚\t\t\t\t\t\t\t\t\t\t ")--Black Swan
+				f_GetTblptr(FP, TBLPtr, 174+1)
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CTextR[3],0),"X","X",1),CTextR[2])
+				CIf(FP,{CV(GunNum,1)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText1[3],0),"X","X",1),CText1[2])
+				CIfEnd()
+				CIf(FP,{CV(GunNum,2)})
+				f_Memcpy(FP,TBLPtr,_TMem(Arr(CText2[3],0),"X","X",1),CText2[2])
+				CIfEnd()
 			CIfEnd()
 
 			CIfEnd()
-			
 		CIfEnd()
 
 		CIf(FP, {CV(SelShbool,0)})
@@ -800,6 +827,10 @@ end
 		
 NameTest = 0
 if NameTest == 1 then
+	DoActions(FP, {
+		CreateUnit(1, 129-1, 6, FP),
+		CreateUnit(1, 130-1, 6, FP),
+		CreateUnit(1, 219-1, 6, FP),},1)
 		testc = CreateCcode()
 		testc2 = CreateCcode()
 		testc3 = CreateCcode()
@@ -840,9 +871,11 @@ if NameTest == 1 then
 		--Aram
 		--Leon
 		--퀸 60000 1000 노멀
-		--str33 = "\x08。+.˚Heart of Witch\x12\x10H\x04eart \x10o\x04f \x10W\x04itch\x10。+.˚"
-		str33 = "\t\x1C。˙+˚Penalty。+.˚\x12\x1F。˙+˚P\x04enalty\x1F。+.˚"
-		str44 = "\t\x11。˙+˚Turret。+.˚\x12\x15。˙+˚T\x04urret\x15。+.˚"
+		str33 = "\x1C。+.˚Space of Soul\x12\x0ES\x04pace \x0Eo\x04f \x0ES\x04oul\x0E。+.˚"
+		--str33 = "\t\x1C。˙+˚DeathsX。+.˚\x12\x1F。˙+˚D\x04eathsX\x1F。+.˚"
+		str44 = "\x08。+.˚Summer 2017\x12\x11S\x04ummer \x112\x04017\x11。+.˚"
+		--str44 = "\t\x11。˙+˚Turret。+.˚\x12\x15。˙+˚T\x04urret\x15。+.˚"
+		
 		--str44 = "\t\t\t\x15。˙+˚Leon。+.˚\x12\x1B。˙+˚L\x04eon。+.˚"
 		--str55 = "\x15。+.˚Misty E'ra 'Mui'\x12\x10M\x04isty \x10E\x04'ra '\x10M\x04ui'\x10。+.˚"
 		str55 = "\t\t\t\x10。˙+˚Tomb。+.˚\x12\x18。˙+˚T\x04omb\x15。+.˚"
@@ -852,6 +885,9 @@ if NameTest == 1 then
 		--Yona
 		--Sayu
 		--Sorang
+		
+		
+		
 		str = str33.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"
 	
 		S6 = MakeiTblString(1480,"None",'None',str,"Base",1)
@@ -943,7 +979,6 @@ if NameTest == 1 then
 		Str2, Str2a, Str2s = SaveiStrArrX(FP,str)
 		BarTblptr = GetiTblId(FP,129,S6)
 		CJumpEnd(FP, TestJ)
-		
 		for i = 0, 19 do
 		CIf(FP,CD(testc2,i),{SetCp(0),DisplayText("Uraj space:"..i, 4),SetCp(FP)})
 		CS__SetValue(FP,Str2,str55.."\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D\x0D"..string.rep(" ", i)..string.rep("\x0D",19-i),nil,0,nil,1) 
@@ -1042,7 +1077,6 @@ TriggerX(FP,{CD(WinCcode2,1,AtLeast)},{AddCD(WinCcode2,1)},{preserved})
 TriggerX(FP, {CD(WinCcode2,480,AtLeast)}, {RotatePlayer({Victory()}, Force1, FP)})
 
 --TriggerX(FP, Deaths(P8, AtLeast, 1, 189), {RotatePlayer({Victory()}, HumanPlayers, FP)})--화홀제작전 임시 승리트리거
-f_GunForceSend(189, FP, 1024+(1088*65536), 1, Deaths(P8, AtLeast, 1, 189), nil, 1)--화홀강제입력
 TriggerX(FP, {Deaths(P8, AtLeast, 3, 200)}, {--양방향 포탈 활성화
 	RotatePlayer({DisplayTextX(CCIText3, 4)}, HumanPlayers, FP),
 	GiveUnits(All, 204, P8, 64, P6),
@@ -1053,5 +1087,18 @@ TriggerX(FP, {Deaths(P8, AtLeast, 3, 200),Deaths(P8, AtMost, 0, 189)}, {--양방
 	MoveUnit(All, "Men", Force1, 28, 29),
 	MoveUnit(All, "Men", Force1, 27, 30),
 },{preserved})
+CIfOnce(FP, {Deaths(P8, AtLeast, 1, 189)})
+f_GunForceSend(189, FP, 1024+(1088*65536), 1, nil, nil, 1)--화홀강제입력
+CFor(FP, 0, 900, 1)
+local NX,NY = CreateVars(2,FP)
+f_Lengthdir(FP, _Mod(_Rand(), 32*20), _Mod(_Rand(), 360), NX,NY)
+f_Div(FP,NY,2)
+Simple_SetLocX(FP, 0, NX,NY,NX,NY,{Simple_CalcLoc(0, 1024,1088,1024,1088)})
+DoActions(FP, MoveUnit(1, "Men", Force1, 39, 1))
+CForEnd()
+CIfEnd()
+TriggerX(FP, {ElapsedTime(AtLeast, 240),CD(EVFCcode,1)}, {SetCD(HongEnable,1)})
+Trigger2X(FP, {CD(HongEnable,1),CD(EVFCcode,1)},{Order("Men", Force2, 64, Move, 6),ModifyUnitHitPoints(All, "Men", Force2, 64, 1),RotatePlayer({PlayWAVX("staredit\\wav\\hongparksa.ogg"),PlayWAVX("staredit\\wav\\hongparksa.ogg"),PlayWAVX("staredit\\wav\\hongparksa.ogg"),PlayWAVX("staredit\\wav\\hongparksa.ogg"),PlayWAVX("staredit\\wav\\hongparksa.ogg"),DisplayTextX("\n\n\n\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x07ＨＯＮＧＨＯＮＧＨＯＮＧＨＯＮＧＨＯＮＧ\x04　！！！\n\n\n\x13\x07누군가가 \x03DJMAX \x1C유니버스\x04에 \x08홍박사 바이러스\x04를 \x07심었습니다!!! \n\n\n\x13\x04！！！　\x07ＨＯＮＧＨＯＮＧＨＯＮＧＨＯＮＧＨＯＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\x0d\x0d\x0d\x0d\x14\x14\x14\x14\x14\x14\x14\x14", 4)}, HumanPlayers, FP)})
+
 
 end

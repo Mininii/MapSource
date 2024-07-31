@@ -6,8 +6,6 @@
 --속도측정용
 --local x = os.clock()
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
-
-
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
@@ -30,15 +28,16 @@ math.randomseed(322,322)
 VerText = "\x04Ver. 0.1"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(2)
+TestSet(0)
 FP = P8
-EUDTurbo(FP)
-NormalTurboSet(FP,214)
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
+StartCtrig(1,FP,nil,1,"C:\\Temp")
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0),HumanCheck(4,0)},{Defeat()})
-StartCtrig(1,FP,nil,1,"C:\\Temp")
+STRxIn(AllPlayers)
+NormalTurboSet(FP,214)
+EUDTurbo(FP)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 DP_Start_init(FP)
 init_func = def_sIndex()
@@ -82,7 +81,7 @@ end
 
 
 
-
+STRxOut(AllPlayers)
 
 EndCtrig()
 LabelUseCheck()

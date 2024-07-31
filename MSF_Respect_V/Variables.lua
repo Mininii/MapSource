@@ -41,9 +41,10 @@
 	PlayerIDArr = CreateFArr(1700, FP)
 	UnitHPArr = CreateFArr(1700, FP)
 	ExRateT = {
-		15,13,12
+		18,13,12
 	}
 	--Vars
+	HongEnable = CreateCcode()
 	SELimit = CreateCcode()
     ExRate = CreateVar2(FP, nil, nil, 20)
 	Nextptrs = CreateVar(FP)
@@ -101,6 +102,8 @@
 	_0D = string.rep("\x0D",200) 
 	RandSwitch1 = "Switch 100"
 	RandSwitch2 = "Switch 101"
+	RandSwitch3 = "Switch 102"
+	RandSwitch4 = "Switch 103"
 	JYD = "Set Unit Order To: Junk Yard Dog"
 	DelayMedicT = {
 		StrDesign("\x1D예약메딕\x04을 \x1B2Tick\x04으로 변경합니다. - \x1F225 Ore\x07"),
@@ -215,7 +218,7 @@
 
 	
 	SetUnitAbility(102,22,5,222222,false,30,1990,false,1,224,7,500000,"Division",25000)
-	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"Deaths",35000)
+	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"DeathsX",35000)
 	SetUnitAbility(27,70,5,500000,false,30,2100,{30,30,30},1,64,5,500000,"Zero",50000)
 	SetUnitAbility(68,70,5,777777,65535,30,2100,{30,30,30},1,64,4,777777,"Destroy",60000)
 	SetUnitAbility(30,27,5,37,false,75,3737,{15,30,45},1,384,12,96666,"Identity",5000)
@@ -296,7 +299,7 @@
 
 	
 	SetUnitAbility(102,22,5,222222,false,30,2550,false,1,224,7,500000,"Division",25000)
-	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"Deaths",35000)
+	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"DeathsX",35000)
 	SetUnitAbility(27,70,5,500000,false,30,4200,{30,30,30},1,64,5,500000,"Zero",50000)
 	SetUnitAbility(68,70,5,777777,65535,30,4200,{30,30,30},1,64,4,777777,"Destroy",60000)
 	SetUnitAbility(30,27,5,322,false,75,3222,false,1,384,12,96666,"Identity",5000)

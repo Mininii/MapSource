@@ -204,7 +204,7 @@
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=1,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--별의 보호막?
-	SetUnitsDatX(125,{HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(125,{Playerable = 2, HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 
@@ -336,10 +336,29 @@ end
 		}
 		end
 	end
+	function InputSubtitleID(Player,ID,Num)
+		Trigger {
+			players = {FP},
+			conditions = {
+				Label(0);
+				isname(Player,ID);
+				--CDeaths(FP,AtLeast,1,LimitX);
+			},
+			actions = {
+				SetDeaths(Player, SetTo, Num, 217);--217번 데스값을 특정숫자로
+				
+				
+			}
+		}
+	end
 
 		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 			InputTesterID(i,"GALAXY_BURST",1) --Creator 칭호
 			InputTesterID(i,"Natori_sana",2) --名取さな 칭호 및 사망 닉네임 효과
+			InputSubtitleID(i,"Standible",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Mejiro_McQueen",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Zahirsm",3) --SC 솔플클리어자 칭호
+			
 		end
 		
 	T_YY = 2024

@@ -19,12 +19,12 @@
 		{9,"staredit\\wav\\BGM_Hypernaid.ogg",98*1000},
 		{10,"staredit\\wav\\BGM_Mysti_Era_Mui.ogg",68*1000},
 		{11,"staredit\\wav\\BGM_NewGameStart.ogg",115*1000},
-		{12,"staredit\\wav\\BGM_OverMe.ogg",62*1000},
+		{12,"staredit\\wav\\BGM_OverMe.ogg",111*1000},
 		{13,"staredit\\wav\\BGM_EnemyStorm.ogg",107*1000},
 		{14,"staredit\\wav\\BGM_Diomedes.ogg",41*1000},
 		{15,"staredit\\wav\\BGM_Dream_it.ogg",44*1000},
 		{16,"staredit\\wav\\BGM_Blythe.ogg",92*1000},
-		{17,"staredit\\wav\\BGM_Black_Swan.ogg",88*1000},
+		{17,"staredit\\wav\\BGM_Black_Swan.ogg",76*1000},
 		{18,"staredit\\wav\\BGM_Launcher.ogg",57*1000},
 		{19,"staredit\\wav\\BGM_Miles.ogg",44*1000},
 		{20,"staredit\\wav\\BGM_DontDie.ogg",78*1000},
@@ -33,6 +33,9 @@
 		{23,"staredit\\wav\\BGM_DIE_IN.ogg",96*1000},
 		{24,"staredit\\wav\\BGM_ReBIRTH.ogg",60*1000},
 		{25,"staredit\\wav\\BGM_Omen.ogg",44*1000},
+		{26,"staredit\\wav\\BGM_Summer2017.ogg",50*1000},
+		{27,"staredit\\wav\\BGM_SpaceofSoul.ogg",76*1000},
+		
 	})
 	
 	DoActionsX(FP,{SetCDeaths(FP,SetTo,0,PCheck),SetCVar(FP,PCheckV[2],SetTo,0)})
@@ -111,8 +114,8 @@
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		TestCode = CreateCcode()
 		TestCode2 = CreateCcode()
-		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,198),CD(GS,0)},AddCD(TestCode,1) , {preserved})
-		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,196),CD(GS,0)},AddCD(TestCode2,1) , {preserved})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,198)},AddCD(TestCode,1) , {preserved})
+		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,196)},AddCD(TestCode2,1) , {preserved})
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
 
@@ -129,7 +132,7 @@
 		end
 		table.insert(KillTable2, KillUnit("Any unit", Force2))
 		table.insert(KillTable2, SetCD(WinCcode,480))
-		table.insert(KillTable2, SetResources(Force1, Add, 322322322, Ore))
+		table.insert(KillTable2, SetResources(Force1, Add, 322322322, OreAndGas))
 			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,204),CD(GS,1);}, KillTable, {preserved})
 			Trigger2X(FP, {Deaths(CurrentPlayer,AtLeast,1,210),CD(GS,1);}, KillTable2, {preserved})
 			Trigger {
@@ -293,7 +296,7 @@
 	CurEPD = CreateVar(FP)
 	
 	CIf(FP,{CD(GS,0)},{AddCD(GST2,1)})--MoveUnit(All, 0, Force1, 64, 46),MoveUnit(All, 20, Force1, 64, 46)
-	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22, AwakenSense, Mystia_Lorelei"
+	tt = "\x13\x1ET\x04hanks \x1CT\x04o : CheezeNacho, Marine_T_T, Hybrid)_GOD60, Mint22, AwakenSense, Mystia_Lorelei, Standible"
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
@@ -411,7 +414,7 @@
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 12)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,2)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 9)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,3)})
 	
-	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),SetSwitch("Switch 250", Set),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
+	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
 	local BGMAct = SetV(BGMType,1)
 	if TestStart == 1 then BGMAct = SetV(BGMType,0) end
@@ -736,10 +739,12 @@ DoActions(FP,{
 		CreatingUnitHP = CreateVar(FP)
 		CIf(FP,HumanCheck(i,1),{ModifyUnitEnergy(All, "Any unit", i, 64, 100)})
 		
-		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 190)}, SetCD(CrCheck1[i+1],1))
-		TriggerX(FP, {Deaths(i, AtLeast, 1, 217),Deaths(i, AtLeast, 1, 191)}, SetCD(CrCheck2[i+1],1))
+		TriggerX(FP, {Deaths(i, Exactly, 1, 217),Deaths(i, AtLeast, 1, 190)}, AddCD(CrCheck1[i+1],1),{preserved})
+		TriggerX(FP, {Deaths(i, Exactly, 1, 217),Deaths(i, AtLeast, 1, 191)}, AddCD(CrCheck2[i+1],1),{preserved})
+		TriggerX(FP, {Deaths(i, Exactly, 2, 217),Deaths(i, AtLeast, 1, 190)}, AddCD(CrCheck1[i+1],1),{preserved})
+		TriggerX(FP, {Deaths(i, Exactly, 2, 217),Deaths(i, AtLeast, 1, 191)}, AddCD(CrCheck2[i+1],1),{preserved})
 		TriggerX(FP, {CD(CrCheck1[i+1],1),CD(CrCheck2[i+1],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
-		
+		Trigger2X(FP, {Deaths(i, AtLeast, 1, 217),Bring(i, AtLeast, 1, 96, 34+i);},{SetCD(HongEnable,1)})
 		CTrigger(FP, {CD(ColorTimer,0)}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {SetPlayerColor(i, SetTo, 128)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)
@@ -886,6 +891,18 @@ DoActions(FP,{
 			SetMemory(0x59CC78, SetTo, -1048576),
 			SetMemory(0x59CC80, SetTo, 2),SetCp(i),PlayWAV("staredit\\wav\\zzirizziri.ogg"),PlayWAV("staredit\\wav\\zzirizziri.ogg"),DisplayText(MacroWarn2, 4),SetCp(FP),SetResources(i, SetTo, 0, Ore),ModifyUnitEnergy(All, "Men", i, 64, 0),ModifyUnitEnergy(All, "Buildings", i, 64, 0),RemoveUnit("Men", i),RemoveUnit(203, i),RemoveUnit(125, i)},{preserved})
 	
+			Trigger {--찌릿찌릿 ExitDrop
+				players = {FP},
+				conditions = {
+					Label(0);
+					LocalPlayerID(i);
+					CD(BanCode2[i+1],1)
+				},
+				actions = {
+					SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);
+				},
+				flag = {preserved}
+			}
 		Trigger {
 			players = {FP},
 			conditions = {
