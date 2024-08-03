@@ -1122,9 +1122,13 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거�
 		CMov(PlayerID,DestY,RetY)
 	end
 	function TGetLocCenter(Location,DestX,DestY)
-		CDoActions(PlayerID, {TMoveLocation(TempLoc, TempUnit, PlayerID, Location)})
-
-		CallTrigger(PlayerID,Call_GetCLoc,{Simple_SetLoc(TempLocID,0,0,0,0)})
+		CDoActions(PlayerID, {
+			SetMemory(0x58DC60+(20*TempLocID),SetTo,0),
+			SetMemory(0x58DC64+(20*TempLocID),SetTo,0),
+			SetMemory(0x58DC68+(20*TempLocID),SetTo,0),
+			SetMemory(0x58DC6C+(20*TempLocID),SetTo,0),
+			TMoveLocation(TempLoc, TempUnit, PlayerID, Location)})
+		CallTrigger(PlayerID,Call_GetCLoc)
 		CMov(PlayerID,DestX,RetX)
 		CMov(PlayerID,DestY,RetY)
 	end
@@ -1142,7 +1146,17 @@ function Install_GetCLoc(TriggerPlayer,TempLoc,TempUnit) -- TempLoc = 안쓰거�
 		DoActions(PlayerID,{Simple_SetLoc(TempLocID,0,0,0,0),MoveLocation(TempLoc, TempUnit, PlayerID, Location)})
 	end
 end
-
+--[[
+function f_LengthfdirLoc(PlayerID,Radius,Angle,CenterLoc)
+	local LocX,LocY = CreateVars(2, Player)
+	local RLocX,RLocY = CreateVars(2, Player)
+	f_Lengthfdir(PlayerID,Radius,Angle,LocX,LocY)
+	GetLocCenter(CenterLoc, RLocX,RLocY)
+	CAdd(FP, LocX, RLocX)
+	CAdd(FP, LocY, RLocY)
+	return RLocX,RLocY
+end
+]]
 function CreateVar3(PlayerID,Value,Offset,Type,Mask)
 	CreateVarXAlloc = CreateVarXAlloc + 1
 	if CreateVarXAlloc > CreateMaxVAlloc then

@@ -816,10 +816,10 @@
 	function DP_Start_init(FixedPlayer,DP_OP_Hold,AllocStart,AllocEnd,SettingOp)
 		
 	ColorCode = {0x08,0x0E,0x0F,0x10,0x11,0x15,0x16,0x17}
+		if FixedPlayer~=nil then FP = FixedPlayer end
 		if FixedPlayer == nil and FP == nil then
 			PushErrorMsg("Need FixedPlayer")
 		end
-		if FixedPlayer~=nil then FP = FixedPlayer end
 		if DP_OP_Hold ~= nil then
 			if type(DP_OP_Hold)~= "table" then
 				PushErrorMsg("OP_Hold Factor Error. Help: {DeathUnit,Value}")
