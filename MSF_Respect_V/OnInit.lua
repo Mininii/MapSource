@@ -358,6 +358,8 @@ end
 			InputSubtitleID(i,"Standible",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"Mejiro_McQueen",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"Zahirsm",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"marine_T_T",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"lptime106",3) --SC 솔플클리어자 칭호
 			
 		end
 		
