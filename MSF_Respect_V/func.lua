@@ -222,8 +222,8 @@ function SetUnitsDatX(UnitID,Property)
 			elseif j=="PissedEnd" then
 				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
 				PatchInsert(SetMemoryW(0x661EE8+(UnitID*2),SetTo,k))
-			elseif j=="Reqptr" then
-				PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
+			elseif j=="Reqptr" then -- 지원되지 않음. 뎡디터에서 직접 고칠것
+				--PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
 			elseif j== "SeekRange" then
 				PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,k)) -- SeekRange
 			elseif j== "Graphic" then

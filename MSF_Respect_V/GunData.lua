@@ -1286,14 +1286,7 @@ end
 				{384,3616},
 				{256,3936},
 				{416,3872},}
-				for i = 0, 3 do
-					if i == 0 then RS1 = Cleared RS2=Cleared end
-					if i == 1 then RS1 = Set RS2=Cleared end
-					if i == 2 then RS1 = Cleared RS2=Set end
-					if i == 3 then RS1 = Set RS2=Set end
-					TriggerX(FP,{Switch(RandSwitch3,Set),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
-				end
-			local RandXY = {
+			local RandXY2 = {
 				{128,3280},
 				{544,3184},
 				{368,4288},
@@ -1303,7 +1296,7 @@ end
 					if i == 1 then RS1 = Set RS2=Cleared end
 					if i == 2 then RS1 = Cleared RS2=Set end
 					if i == 3 then RS1 = Set RS2=Set end
-					TriggerX(FP,{Switch(RandSwitch3,Cleared),Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
+					TriggerX(FP,{Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)},{Simple_SetLoc(0, RandXY[i+1][1], RandXY[i+1][2], RandXY[i+1][1], RandXY[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1),Simple_SetLoc(0, RandXY2[i+1][1], RandXY2[i+1][2], RandXY2[i+1][1], RandXY2[i+1][2]),MoveUnit(1, "Men", Force1, 200, 1)},{preserved})
 				end
 			CIfEnd()
 			CForEnd()

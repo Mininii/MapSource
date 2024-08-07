@@ -195,6 +195,7 @@
 		SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 		SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 	end
+	SetUnitsDatX(74,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(12,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -360,6 +361,8 @@ end
 			InputSubtitleID(i,"Zahirsm",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"marine_T_T",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"lptime106",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"TurtlePunch",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Ask",3) --SC 솔플클리어자 칭호
 			
 		end
 		

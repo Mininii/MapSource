@@ -439,6 +439,11 @@
 		SetMemory(0x582144 + (4 * 7),SetTo,1600);
 		SetMemory(0x5821A4 + (4 * 7),SetTo,1600);
 		SetCp(FP);RemoveUnit(101,P6),
+		SetMemoryB(0x57F27C + (0 * 228) + 74,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 74,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 74,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 74,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 74,SetTo,0)
 	})
 	for i = 0, 4 do
 		f_TempRepeat({HumanCheck(i, 1)}, 96, 1, "BanUnit", i, {2896,112})
@@ -473,11 +478,13 @@
 	
 	end
 
-	TriggerX(FP, {CD(EVFCcode,0)}, {SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
-	SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
-	SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
-	SetMemoryB(0x57F27C + (3 * 228) + 19,SetTo,0),
-	SetMemoryB(0x57F27C + (4 * 228) + 19,SetTo,0)})
+	TriggerX(FP, {CD(EVFCcode,0)}, {
+		SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 19,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 19,SetTo,0),
+	})
 	TriggerX(FP, {CD(GMode,3)}, {SetMemoryB(0x663CE8 + 8,SetTo,4),
 	SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0),
 	SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0),
@@ -744,7 +751,7 @@ DoActions(FP,{
 		TriggerX(FP, {Deaths(i, Exactly, 2, 217),Deaths(i, AtLeast, 1, 190)}, AddCD(CrCheck1[i+1],1),{preserved})
 		TriggerX(FP, {Deaths(i, Exactly, 2, 217),Deaths(i, AtLeast, 1, 191)}, AddCD(CrCheck2[i+1],1),{preserved})
 		TriggerX(FP, {CD(CrCheck1[i+1],1),CD(CrCheck2[i+1],1),}, {SetDeaths(i, SetTo, 1, 219),SetCp(i),DisplayText(StrDesignX("\x03제작자\x04 인식되었습니다.\x07환영합니다."), 4),PlayWAV("staredit\\wav\\ADEnd.ogg");PlayWAV("staredit\\wav\\ADEnd.ogg"),SetCp(FP)})
-		Trigger2X(FP, {Deaths(i, AtLeast, 1, 217),Bring(i, AtLeast, 1, 96, 34+i);},{SetCD(HongEnable,1)})
+		Trigger2X(FP, {Deaths(i, AtLeast, 1, 217),Bring(i, AtLeast, 1, 96, 34+i);CD(EVFCcode,1)},{SetCD(HongEnable,1)})
 		CTrigger(FP, {CD(ColorTimer,0)}, {SetPlayerColor(i, SetTo, PColorC[i+1])}, {preserved})
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,2100),Memory(0x582294+(4*i),AtMost,2400)}, {SetPlayerColor(i, SetTo, 255)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P6*0x10000, 0xFF0000)
 		CTrigger(FP, {CD(ColorTimer,1),Memory(0x582294+(4*i),AtLeast,1800),Memory(0x582294+(4*i),AtMost,2100)}, {SetPlayerColor(i, SetTo, 128)}, {preserved})--TSetMemoryX(EXCC_TempVarArr[9],SetTo,P8*0x10000, 0xFF0000)
@@ -758,8 +765,8 @@ DoActions(FP,{
             SetMemory(0x5822C4+(i*4),SetTo,1200);
             SetMemory(0x582264+(i*4),SetTo,1200);}, 1)
 
-
-
+		TriggerX(FP, {CD(EVFCcode,1),MemoryB(0x58D2B0+(46*i)+7,AtLeast,255)}, {--evf, 공업완료시
+			SetMemoryB(0x57F27C + (i * 228) + 74,SetTo,1),})
 
 		NIf(FP,MemoryB(0x58D2B0+(46*i)+18,Exactly,1)) -- 공업 255회
 		CDoActions(FP,{
@@ -829,6 +836,11 @@ DoActions(FP,{
 		UnitButton(i,12,{MemoryX(0x664080 + (MarID[i+1]*4),Exactly,0x8000,0x8000)},{SetCp(i),
 			SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0,0x8000),
 			DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine 의 \x03디텍터 \x04기능을 \x08비활성화\x04합니다"),4);
+			SetCp(FP),
+		})
+		UnitButton(i,74,{},{SetCp(i),
+			SetDeaths(i, Add, 1, 74),
+			DisplayText(StrDesign("\x04원격 \x1B스팀팩\x04기능을 사용합니다."),4);
 			SetCp(FP),
 		})
 	

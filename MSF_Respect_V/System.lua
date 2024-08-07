@@ -320,26 +320,24 @@ CMov(FP, 0x6509B0, FP)
 	]]
 	EXCC_Part1(UnivCunit) -- 기타 구조오프셋 단락 시작
 
-	MRCheck = def_sIndex()
-	NJumpX(FP,MRCheck,DeathsX(CurrentPlayer,Exactly,101,0,0xFF)) -- 맵리벌러 트리거작동 제외
+	--MRCheck = def_sIndex()
+	--NJumpX(FP,MRCheck,DeathsX(CurrentPlayer,Exactly,101,0,0xFF)) -- 맵리벌러 트리거작동 제외
 	EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,40,0,0xFF)}, {SetMemory(0x6509B0, Add, 68-25),SetDeathsX(CurrentPlayer, SetTo, 0, 0,0xFFFF),SetMemory(0x6509B0, Subtract, 68-40),SetDeathsX(CurrentPlayer, SetTo, 200*16777216, 0,0xFFFF0000)})--68, 40
-	--CIf(FP,DeathsX(CurrentPlayer,Exactly,3,0,0xFF))--셜리하우스 보조유닛 iScript로 제어하기
-	--	f_SaveCp()
-	--	SubUnitPtr = CreateVar(FP)
-	--	CIf(FP,{TMemory(_Add(BackupCp, 3), AtLeast, 1)})
-	--	f_Read(FP, _Add(BackupCp, 3), nil, SubUnitPtr)
-	--	CDoActions(FP, {TSetMemoryX(_Add(SubUnitPtr,8),SetTo,2+(127*65536),0xFF00FF)})
-	--	CIfEnd()
-	--	f_LoadCp()
-	--	if Limit == 1 then
-	--		EXCC_ClearCalc()
-	--	end
-	--CIfEnd()
+	NIf(FP,DeathsX(CurrentPlayer,Exactly,3,0,0xFF))--셜리하우스 보조유닛 iScript로 제어하기, 1회만
+		f_SaveCp()
+		CDoActions(FP, {TSetDeathsX(_Sub(BackupCp,25-9),SetTo,1*65536,0,0xFF0000)})
+		SubUnitPtr = CreateVar(FP)
+		CIf(FP,{TMemory(_Add(BackupCp, 3), AtLeast, 1)},{})
+		f_Read(FP, _Add(BackupCp, 3), nil, SubUnitPtr)
+		CDoActions(FP, {TSetMemoryX(_Add(SubUnitPtr,8),SetTo,2+(127*65536),0xFF00FF)})
+		CIfEnd()
+		f_LoadCp()
+	NIfEnd()
 	--0x4 in air check
 
 	CTrigger(FP, {DeathsX(CurrentPlayer,Exactly,35,0,0xFF)}, {Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}, {preserved})--라바 Lock On
 	CAdd(FP,0x6509B0,30)
-	CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x4,0,0x4)},{Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}) -- Lock On
+	CIf(FP,{DeathsX(CurrentPlayer,Exactly,0x4,0,0x4)},{Set_EXCCX(0, SetTo, 1),Set_EXCC(0, SetTo, 1)}) -- Air Unit Lock On
 	--55 to 10
 	
 	CSub(FP,0x6509B0,45)
@@ -398,28 +396,36 @@ CMov(FP, 0x6509B0, FP)
 	CIfEnd()
 	CSub(FP,0x6509B0,30)
 	
-	WhiteList = def_sIndex()
+	--WhiteList = def_sIndex()
 	LauncherUnit = def_sIndex()
-	for j, i in pairs(MarID) do
-		NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,i,0,0xFF))
-	end
-	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,32,0,0xFF))
-	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,20,0,0xFF))
-	NJumpX(FP,WhiteList,DeathsX(CurrentPlayer,Exactly,10,0,0xFF))
 	NJumpX(FP,LauncherUnit,DeathsX(CurrentPlayer,Exactly,119,0,0xFF))
 	TimerUnit = def_sIndex()
 	NJumpX(FP,TimerUnit,{Cond_EXCC(2, AtLeast, 1)}) -- 2 = Timer 4 = Option
 
+	--for j, i in pairs(MarID) do
+	--	NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+	--end
+	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,32,0,0xFF)})
+	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,20,0,0xFF)})
+	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,10,0,0xFF)})
+
 	
 	
 	
 
-	NJumpXEnd(FP, MRCheck)
+	--NJumpXEnd(FP, MRCheck)
 	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
 	EXCC_ClearCalc()
 
 
-	NJumpXEnd(FP, WhiteList)
+	--NJumpXEnd(FP, WhiteList)
+	--CSub(FP,0x6509B0,6)
+	--for i = 0, 4 do
+	--	TriggerX(FP, {Deaths(i, AtLeast, 1, 74),DeathsX(CurrentPlayer, Exactly, i, 0, 0xFF)}, {
+	--		SetMemory(0x6509B0, Add, 69-19),
+	--		SetDeathsX(CurrentPlayer,SetTo,255*256,0,0xFF00),
+	--	}, {preserved})--
+	--end
 	--CIf(FP,{CV(EXCC_TempVarArr[9],0)})
 	--	
 	--	f_SaveCp()
@@ -428,9 +434,9 @@ CMov(FP, 0x6509B0, FP)
 	--	CDoActions(FP, {Set_EXCCX(8, SetTo, _Add(CSPtr,2))})
 	--	f_LoadCp()
 	--CIfEnd()
-		CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
-		CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
-		CIfEnd()
+	--CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
+	--CDoActions(FP, {TSetDeaths(_Add(CurCunitI,19025+2), SetTo,EXCC_TempVarArr[11],0)})
+	--CIfEnd()
 	--CIf(FP,{Cond_EXCC(8, AtLeast, 1)})
 	--	CIf(FP,{Cond_EXCC(1, AtLeast, 1)})
 	--		CTrigger(FP, {NTCond()}, {TSetMemoryX(EXCC_TempVarArr[9],SetTo,EXCC_TempVarArr[10], 0xFF0000)}, {preserved})
@@ -580,6 +586,19 @@ CMov(FP, 0x6509B0, FP)
 	end
 	EXCC_End()
 
+	--오토스팀
+	for i = 0, 4 do
+		CIf(FP,{HumanCheck(i, 1),Deaths(i, AtLeast, 1, 74)})
+		CFor(FP, 19025+19, 19025+19 + (84*1700), 84)
+			CI=CForVariable()
+			CTrigger(FP, {TDeathsX(CI, Exactly, i, 0, 0xFF)}, {TSetDeathsX(_Add(CI,69-19), SetTo,255*256,0,0xFF00)}, {preserved})
+		CForEnd()
+		--SetMemory(0x6509B0, Add, 69-19),
+		--SetDeathsX(CurrentPlayer,SetTo,255*256,0,0xFF00),
+		CIfEnd()
+	end
+	DoActions(FP, {SetDeaths(Force1, SetTo, 0, 74)})
+
 
 	HeroIndex = CreateVar(FP)
 	EXCC_Part1(DUnitCalc) -- 죽은유닛 인식 단락 시작
@@ -717,6 +736,7 @@ end
 	Convert_CPosXY()
 	f_TempRepeatX({}, 13, 1, 2, P6, {CPosX,CPosY})
 	CIfEnd()
+	Trigger2X(FP, {CV(HeroIndex,124),CD(HongEnable,1),CD(EVFCcode,1)},{KillUnit(25, Force2),KillUnit(30, Force2)})
 	for j,k in pairs(UnitPointArr) do
 		Trigger2X(FP, {
 			CVX(HeroIndex, k[1], 0xFF)}, {SetV(HPT, k[2]/5),print_utf8_A(HTArr, k[3]..string.rep("\x0D",0x40-(#k[3])))},{preserved})
