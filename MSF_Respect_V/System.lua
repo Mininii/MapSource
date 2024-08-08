@@ -325,13 +325,13 @@ CMov(FP, 0x6509B0, FP)
 	EXCC_BreakCalc({DeathsX(CurrentPlayer,Exactly,40,0,0xFF)}, {SetMemory(0x6509B0, Add, 68-25),SetDeathsX(CurrentPlayer, SetTo, 0, 0,0xFFFF),SetMemory(0x6509B0, Subtract, 68-40),SetDeathsX(CurrentPlayer, SetTo, 200*16777216, 0,0xFFFF0000)})--68, 40
 	NIf(FP,DeathsX(CurrentPlayer,Exactly,3,0,0xFF))--셜리하우스 보조유닛 iScript로 제어하기, 1회만
 		f_SaveCp()
-		CDoActions(FP, {TSetDeathsX(_Sub(BackupCp,25-9),SetTo,1*65536,0,0xFF0000)})
 		SubUnitPtr = CreateVar(FP)
 		CIf(FP,{TMemory(_Add(BackupCp, 3), AtLeast, 1)},{})
 		f_Read(FP, _Add(BackupCp, 3), nil, SubUnitPtr)
 		CDoActions(FP, {TSetMemoryX(_Add(SubUnitPtr,8),SetTo,2+(127*65536),0xFF00FF)})
 		CIfEnd()
 		f_LoadCp()
+		EXCC_ClearCalc()
 	NIfEnd()
 	--0x4 in air check
 
