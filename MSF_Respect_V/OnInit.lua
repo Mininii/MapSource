@@ -373,14 +373,15 @@ end
 		for i = 0, 7 do -- 정버아닌데 플레이어중 해당하는 닉네임 없으면 겜튕김
 			InputTesterID(i,"GALAXY_BURST",1) --Creator 칭호
 			InputTesterID(i,"Natori_sana",2) --名取さな 칭호 및 사망 닉네임 효과
-			InputSubtitleID(i,"Standible",3) --SC 솔플클리어자 칭호
-			InputSubtitleID(i,"Mejiro_McQueen",3) --SC 솔플클리어자 칭호
-			InputSubtitleID(i,"Zahirsm",3) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Standible",5) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Mejiro_McQueen",6) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"Zahirsm",7) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"marine_T_T",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"lptime106",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"TurtlePunch",3) --SC 솔플클리어자 칭호
 			InputSubtitleID(i,"Ask",3) --SC 솔플클리어자 칭호
-			
+			InputSubtitleID(i,"HereticSentinel",4) --SC 솔플클리어자 칭호
+			InputSubtitleID(i,"ARTANlS",4) --SC 솔플클리어자 칭호
 		end
 		
 	T_YY = 2024
