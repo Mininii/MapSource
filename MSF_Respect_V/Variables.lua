@@ -115,6 +115,29 @@
 	LCP = CreateVar(FP)
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	GS = CreateCcode()
+
+	CurHealUpgrade = CreateVarArr(5, FP)
+	HealUpgrade = CreateVarArr(5, FP)
+	CurRebirthUp = CreateVarArr(5, FP)
+	RebirthUp = CreateVarArr(5, FP)
+	CurInvUp = CreateVarArr(5, FP)
+	InvUp = CreateVarArr(5, FP)
+
+	HealUpMaskRetArr = {}
+	HealUpPtrArr = {}
+	RebirthUpMaskRetArr = {}
+	RebirthUpPtrArr = {}
+	InvUpMaskRetArr = {}
+	InvUpPtrArr = {}
+	for i = 0, 4 do
+	table.insert(HealUpMaskRetArr,(0x58D2B0+(i*46)+22)%4)
+	table.insert(HealUpPtrArr,0x58D2B0+(i*46)+22 - HealUpMaskRetArr[i+1])
+	table.insert(RebirthUpMaskRetArr,(0x58D2B0+(i*46)+23)%4)
+	table.insert(RebirthUpPtrArr,0x58D2B0+(i*46)+23 - RebirthUpMaskRetArr[i+1])
+	table.insert(InvUpMaskRetArr,(0x58D2B0+(i*46)+43)%4)
+	table.insert(InvUpPtrArr,0x58D2B0+(i*46)+43 - InvUpMaskRetArr[i+1])
+	end
+
 	--strings
 	
 	_0D = string.rep("\x0D",200) 

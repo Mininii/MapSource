@@ -493,24 +493,26 @@ else
 	end
 end
 
-	TriggerX(FP, {CD(EVFCcode,0)}, {
-		SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
-		SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
-		SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
-		SetMemoryB(0x57F27C + (3 * 228) + 19,SetTo,0),
-		SetMemoryB(0x57F27C + (4 * 228) + 19,SetTo,0),
-	})
-	TriggerX(FP, {CD(GMode,3)}, {SetMemoryB(0x663CE8 + 8,SetTo,4),
-	SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (4 * 228) + 7,SetTo,0),
-	SetMemoryB(0x57F27C + (0 * 228) + 12,SetTo,0),
-	SetMemoryB(0x57F27C + (1 * 228) + 12,SetTo,0),
-	SetMemoryB(0x57F27C + (2 * 228) + 12,SetTo,0),
-	SetMemoryB(0x57F27C + (3 * 228) + 12,SetTo,0),
-	SetMemoryB(0x57F27C + (4 * 228) + 12,SetTo,0),})
+	if DLC_Project== 0 then
+		TriggerX(FP, {CD(EVFCcode,0)}, {
+			SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
+			SetMemoryB(0x57F27C + (1 * 228) + 19,SetTo,0),
+			SetMemoryB(0x57F27C + (2 * 228) + 19,SetTo,0),
+			SetMemoryB(0x57F27C + (3 * 228) + 19,SetTo,0),
+			SetMemoryB(0x57F27C + (4 * 228) + 19,SetTo,0),
+		})
+		TriggerX(FP, {CD(GMode,3)}, {SetMemoryB(0x663CE8 + 8,SetTo,4),
+		SetMemoryB(0x57F27C + (0 * 228) + 7,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 7,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 7,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 7,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 7,SetTo,0),
+		SetMemoryB(0x57F27C + (0 * 228) + 12,SetTo,0),
+		SetMemoryB(0x57F27C + (1 * 228) + 12,SetTo,0),
+		SetMemoryB(0x57F27C + (2 * 228) + 12,SetTo,0),
+		SetMemoryB(0x57F27C + (3 * 228) + 12,SetTo,0),
+		SetMemoryB(0x57F27C + (4 * 228) + 12,SetTo,0),})
+	end
 	TriggerX(FP, {CD(EVFCcode,1)}, {
 		SetMemoryW(0x656EB0+(0 *2),Add,3), -- 공격력
 		SetMemoryW(0x657678+(0 *2),Add,2), -- 추가공격력
@@ -868,6 +870,69 @@ DoActions(FP,{
 		CallTrigger(FP,OneClickUpgrade)
 		TriggerX(FP, {CD(UpMaster,1)}, {SetMemoryB(0x58D088 + (i * 46) + 20,SetTo,0)}, {preserved})
 		NIfEnd()
+
+		if DLC_Project==1 then
+			
+		--CurHealUpgrade = CreateVarArr(5, FP)
+		--HealUpgrade = CreateVarArr(5, FP)
+		--CurRebirthUp = CreateVarArr(5, FP)
+		--RebirthUp = CreateVarArr(5, FP)
+		--CurInvUp = CreateVarArr(5, FP)
+		--InvUp = CreateVarArr(5, FP)
+		
+		--HealUpMaskRetArr = {}
+		--HealUpPtrArr = {}
+		--RebirthUpMaskRetArr = {}
+		--RebirthUpPtrArr = {}
+		--InvUpMaskRetArr = {}
+		--InvUpPtrArr = {}
+
+
+		DoActionsX(FP,{SetCVar(FP,CurHealUpgrade[i+1][2],SetTo,0)})
+		DoActionsX(FP,{SetCVar(FP,CurRebirthUp[i+1][2],SetTo,0)})
+
+
+		for j = 0, 7 do
+			TriggerX(FP,{MemoryX(HealUpPtrArr[i+1],Exactly,2^(j+(8*HealUpMaskRetArr[i+1])),2^(j+(8*HealUpMaskRetArr[i+1])))},{SetCVar(FP,CurHealUpgrade[i+1][2],SetTo,2^j,2^j)},{preserved})
+		end
+		for j = 0, 7 do
+			TriggerX(FP,{MemoryX(RebirthUpPtrArr[i+1],Exactly,2^(j+(8*RebirthUpMaskRetArr[i+1])),2^(j+(8*RebirthUpMaskRetArr[i+1])))},{SetCVar(FP,CurRebirthUp[i+1][2],SetTo,2^j,2^j)},{preserved})
+		end
+
+
+		CIf(FP,{TTCVar(FP,CurHealUpgrade[i+1][2],NotSame,HealUpgrade[i+1])})
+			CIfX(FP,{Accumulate(i,AtLeast,300000,Ore)},{SetResources(i,Subtract,300000,Ore)})
+				CMov(FP,HealUpgrade[i+1],CurHealUpgrade[i+1])
+			CElseX()
+				CDoActions(FP,{TSetMemoryX(HealUpPtrArr[i+1],SetTo,_Mul(HealUpgrade[i+1],(256^HealUpMaskRetArr[i+1])),255*(256^HealUpMaskRetArr[i+1])),
+				SetCp(i),DisplayText(StrDesign("\x04잔액이 부족합니다."),4),SetCp(FP)})
+				CMov(FP,CurHealUpgrade[i+1],HealUpgrade[i+1])
+			CIfXEnd()
+		CIfEnd()
+
+		
+		CIf(FP,{TTCVar(FP,CurRebirthUp[i+1][2],NotSame,RebirthUp[i+1])})
+			CIfX(FP,{Accumulate(i,AtLeast,200000,Ore)},{SetResources(i,Subtract,200000,Ore)})
+				CMov(FP,RebirthUp[i+1],CurRebirthUp[i+1])
+			CElseX()
+				CDoActions(FP,{TSetMemoryX(RebirthUpPtrArr[i+1],SetTo,_Mul(RebirthUp[i+1],(256^RebirthUpMaskRetArr[i+1])),255*(256^RebirthUpMaskRetArr[i+1])),
+				SetCp(i),DisplayText(StrDesign("\x04잔액이 부족합니다."),4),SetCp(FP)})
+				CMov(FP,CurRebirthUp[i+1],RebirthUp[i+1])
+			CIfXEnd()
+		CIfEnd()
+
+		
+		CIf(FP,{TTCVar(FP,CurInvUp[i+1][2],NotSame,InvUp[i+1])})
+			CIfX(FP,{Accumulate(i,AtLeast,1500000,Ore)},{SetResources(i,Subtract,1500000,Ore)})
+				CMov(FP,InvUp[i+1],CurInvUp[i+1])
+			CElseX()
+				CDoActions(FP,{TSetMemoryX(InvUpPtrArr[i+1],SetTo,_Mul(InvUp[i+1],(256^InvUpMaskRetArr[i+1])),255*(256^InvUpMaskRetArr[i+1])),
+				SetCp(i),DisplayText(StrDesign("\x04잔액이 부족합니다."),4),SetCp(FP)})
+				CMov(FP,CurInvUp[i+1],InvUp[i+1])
+			CIfXEnd()
+		CIfEnd()
+
+		end
 		UnitButton(i,82,nil,{SetCp(i),
 			DisplayText(StrDesign("\x1DM\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
 			AddCD(NMCr[i+1],1),SetCp(FP)

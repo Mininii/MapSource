@@ -143,6 +143,21 @@
 	
 	DoActions2X(FP, AfterPatchExec,1)
 	CIfEnd()
+	if DLC_Project == 1 then
+		for i = 0, 4 do
+			
+			PatchInsert(SetMemoryB(0x58D088 + 17+(i*46),SetTo,24))
+			PatchInsert(SetMemoryB(0x58D088 + 21+(i*46),SetTo,9))
+			PatchInsert(SetMemoryB(0x58D088 + 22+(i*46),SetTo,5))
+			PatchInsert(SetMemoryB(0x58D088 + 23+(i*46),SetTo,3))
+			PatchInsert(SetMemoryB(0x58D088 + 43+(i*46),SetTo,1))
+			PatchInsert(SetMemoryB(0x58D2B0 + 17+(i*46),SetTo,0))
+			PatchInsert(SetMemoryB(0x58D2B0 + 21+(i*46),SetTo,0))
+			PatchInsert(SetMemoryB(0x58D2B0 + 22+(i*46),SetTo,0))
+			PatchInsert(SetMemoryB(0x58D2B0 + 23+(i*46),SetTo,0))
+			PatchInsert(SetMemoryB(0x58D2B0 + 43+(i*46),SetTo,0))
+		end
+	end
 
 	for i = 0, 227 do
 	SetUnitsDatX(i,{AdvFlag={0x200000,0x200000},Armor=0})--모든 유닛을 마법사로, 아머를 0으로
