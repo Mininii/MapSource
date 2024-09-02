@@ -28,7 +28,9 @@ math.randomseed(322,322)
 VerText = "\x04Ver. 0.1"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(0)
+DLC_Project = 1 
+MapText = {"\x04Marine Special Forces \x17R\x04espect \x17V","\x04Marine Special Forces \x17R\x04espect \x17V \x06L\x11I\x17B\x18E\x1CR\x0ET\x10Y"}
+TestSet(1)
 FP = P8
 SetForces({P1,P2,P3,P4,P5},{P6,P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)

@@ -19,20 +19,38 @@
 		 "\x08SC S\x04tyle",
 	}
 	QueueMaxUnit = 1650
-	NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
-	NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
-	HMBaseAtk=50
-	HMFactorAtk=10
-	SMBaseAtk = 50 -- 파벳베이스 : 1/2 데미지로 설정할것
-	SMFactorAtk = 8 -- 파벳베이스 : 1/2 데미지로 설정할것
-	RMBaseAtk = 0
-	RMFactorAtk = 12
-
-	NMCost = 5000
-	HMCost = 20000
-	SMCost = 25000
-	RMCost = 10000
-	RMtoSMCost = 2000
+	if DLC_Project == 1 then
+		NMBaseAtk=40 -- 파벳베이스 : 1/2 데미지로 설정할것
+		NMFactorAtk=7 -- 파벳베이스 : 1/2 데미지로 설정할것
+		HMBaseAtk=100
+		HMFactorAtk=20
+		SMBaseAtk = 100 -- 파벳베이스 : 1/2 데미지로 설정할것
+		SMFactorAtk = 15 -- 파벳베이스 : 1/2 데미지로 설정할것
+		RMBaseAtk = 90
+		RMFactorAtk = 40
+	else
+		NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
+		NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
+		HMBaseAtk=50
+		HMFactorAtk=10
+		SMBaseAtk = 50 -- 파벳베이스 : 1/2 데미지로 설정할것
+		SMFactorAtk = 8 -- 파벳베이스 : 1/2 데미지로 설정할것
+		RMBaseAtk = 0
+		RMFactorAtk = 12
+	end
+	if DLC_Project == 1 then
+		NMCost = 20000
+		HMCost = 40000
+		SMCost = 50000--유닛죽이기용
+		RMCost = 300000--건작용
+		RMtoSMCost = 2000
+	else
+		NMCost = 5000
+		HMCost = 20000
+		SMCost = 25000
+		RMCost = 10000
+		RMtoSMCost = 2000
+	end
 
 
 	--Arr

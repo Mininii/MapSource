@@ -35,6 +35,7 @@
 		{25,"staredit\\wav\\BGM_Omen.ogg",44*1000},
 		{26,"staredit\\wav\\BGM_Summer2017.ogg",50*1000},
 		{27,"staredit\\wav\\BGM_SpaceofSoul.ogg",76*1000},
+		{28,"staredit\\wav\\BGM_OP_DLC.ogg",127*1000},
 		
 	})
 	
@@ -300,7 +301,7 @@
 	TriggerX(FP, {},{RotatePlayer({PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav"),PlayWAVX("staredit\\wav\\scan.wav")}, HumanPlayers, FP)})
 	TriggerX(FP, {CD(GST2,299-#tt,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav"),PlayWAVX("staredit\\wav\\scanr.wav")}, HumanPlayers, FP)})
 	
-
+	
 	
 	if Limit == 1 then
 		for i = 1, 150 do
@@ -309,7 +310,7 @@
 			Trigger2X(FP, {CD(GST2,i)}, 
 			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13"..MapText[DLC_Project+1],1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
 			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
@@ -328,7 +329,7 @@
 			Trigger2X(FP, {CD(GST2,j)}, 
 			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13"..MapText[DLC_Project+1],1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
 			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX(string.sub("\x13\x03TESTMODE OP \x04: "..G_CB_ShNm.." Shapes Initiated",1,i),4),
@@ -347,7 +348,7 @@
 			Trigger2X(FP, {CD(GST2,i)}, 
 			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13"..MapText[DLC_Project+1],1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
 			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX("\x13\x04",4),
@@ -366,7 +367,7 @@
 			Trigger2X(FP, {CD(GST2,j)}, 
 			{RotatePlayer({DisplayTextX(string.rep("\n", 5),4),
 			DisplayTextX("\x13\x04"..string.rep("―", rep),4),
-			DisplayTextX(string.sub("\x13\x04Marine Special Forces \x17R\x04espect \x17V",1,i),4),
+			DisplayTextX(string.sub("\x13"..MapText[DLC_Project+1],1,i),4),
 			DisplayTextX(string.sub("\x13\x1FSTRCtrig \x04Assembler \x07v5.4\x04, \x1FCB \x16Paint \x07v2.4 \x04in Used \x19(つ>ㅅ<)つ",1,i),4),
 			DisplayTextX(string.sub("\x13\x0Fⓒ \x08NEOWIZ\x04, \x17DJMAX\x04. \x07A\x04ll \x1BR\x04ights \x11R\x04eserved.",1,i),4),
 			DisplayTextX("\x13\x04",4),
@@ -416,7 +417,12 @@
 	
 	TriggerX(FP, {CD(GST,1,AtLeast)},{SetV(SpeedVar,4),SetCD(GS,1),RotatePlayer({PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav"),PlayWAVX("sound\\glue\\bnetclick.wav")}, HumanPlayers, FP)},{preserved})
 	CIfEnd()
-	local BGMAct = SetV(BGMType,1)
+	local BGMAct
+	if DLC_Project == 1 then
+		BGMAct = SetV(BGMType,28)
+	else
+		BGMAct = SetV(BGMType,1)
+	end
 	if TestStart == 1 then BGMAct = SetV(BGMType,0) end
 
 	CIfOnce(FP,{CD(GS,1)},{SetCDeaths(FP,Add,10,PExitFlag),
@@ -466,7 +472,15 @@
 				SetMemory(0xCDDDCDDC,SetTo,1);})
 		
 	end
-
+if DLC_Project == 1 then
+	for j = 1, 3 do
+			local TT = "\x13\x04마린키우기 \x17R\x04espect \x17V \x06L\x11I\x17B\x18E\x1CR\x0BT\x10Y\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine\n\x13\x1BH\x04ero \x1BM\x04arine * 12 + \x1F"..SMCost.." Ore \x04= \x1DS\x04pecial \x1DM\x04arine (MAX 1)\n\x13\x1DS\x04pecial \x1DM\x04arine + \x1F"..RMCost.." Ore \x04= \x19R\x04espect \x19M\x04arine (MAX 1)"
+			Trigger2X(FP, {CD(GMode,j)}, {
+				RotatePlayer({SetMissionObjectivesX(TT)},HumanPlayers,FP);
+				SetCVar(FP,ExRate[2],SetTo,ExRateT[j]);})
+	
+	end
+else
 	for j = 1, 3 do
 			local TT
 			if j == 3 then TT = "\x13\x04마린키우기 \x17R\x04espect \x17V\n\x13"..MSDiff[j].." \x17환전률 : \x1B"..ExRateT[j].."%\n\x13\x04Marine + \x1F"..HMCost.." Ore\x04 = \x1BH\x04ero \x1BM\x04arine"
@@ -477,6 +491,7 @@
 				SetCVar(FP,ExRate[2],SetTo,ExRateT[j]);})
 	
 	end
+end
 
 	TriggerX(FP, {CD(EVFCcode,0)}, {
 		SetMemoryB(0x57F27C + (0 * 228) + 19,SetTo,0),
@@ -622,42 +637,85 @@ DoActions(FP,{
 			PreserveTrigger();
 		},
 		}
-		Trigger { -- 조합 스마
-		players = {i},
-		conditions = {
-			Label(0);
-			Bring(i,AtLeast,1,20,13); 
-			Accumulate(i,AtLeast,SMCost,Ore);
-			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
-			CD(GMode,2,AtMost);
-		},
-		actions = {
-			ModifyUnitEnergy(1,20,i,13,0);
-			RemoveUnitAt(1,20,13,i);
-			SetResources(i,Subtract,SMCost,Ore);
-			AddCD(SMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BH\x04ero M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
-			PreserveTrigger();
-		},
-		}
-		Trigger { -- 조합 근
-		players = {i},
-		conditions = {
-			Label(0);
-			Bring(i,AtLeast,1,10,13); 
-			Accumulate(i,AtLeast,RMCost,Ore);
-			Accumulate(i,AtMost,0x7FFFFFFF,Ore);
-			CD(GMode,2,AtMost);
-		},
-		actions = {
-			ModifyUnitEnergy(1,10,i,13,0);
-			RemoveUnitAt(1,10,13,i);
-			SetResources(i,Subtract,RMCost,Ore);
-			AddCD(RMCr[i+1],1);
-			DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1DS\x04pecial \x1DM\x04arine을 \x19R\x04espect \x19M\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
-			PreserveTrigger();
-		},
-		}
+		
+		
+		if DLC_Project == 1 then
+			Trigger { -- 조합 스마
+			players = {i},
+			conditions = {
+				Label(0);
+				Command(i,AtMost,0,10),
+				Bring(i,AtLeast,12,20,13); 
+				Accumulate(i,AtLeast,SMCost,Ore);
+				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+				CD(SMCr[i+1],0)
+			},
+			actions = {
+				ModifyUnitEnergy(12,20,i,13,0);
+				RemoveUnitAt(12,20,13,i);
+				SetResources(i,Subtract,SMCost,Ore);
+				AddCD(SMCr[i+1],1);
+				DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BH\x04ero M\x04arine 12기를 \x1DS\x04pecial \x1DM\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
+				PreserveTrigger();
+			},
+			}
+			Trigger { -- 조합 근
+			players = {i},
+			conditions = {
+				Label(0);
+				Command(i,AtMost,0,MarID[i+1]),
+				Bring(i,AtLeast,1,10,13); 
+				Accumulate(i,AtLeast,RMCost,Ore);
+				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+				CD(RMCr[i+1],0)
+			},
+			actions = {
+				ModifyUnitEnergy(1,10,i,13,0);
+				RemoveUnitAt(1,10,13,i);
+				SetResources(i,Subtract,RMCost,Ore);
+				AddCD(RMCr[i+1],1);
+				DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1DS\x04pecial \x1DM\x04arine을 \x19R\x04espect \x19M\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
+				PreserveTrigger();
+			},
+			}
+		else
+			Trigger { -- 조합 스마
+			players = {i},
+			conditions = {
+				Label(0);
+				Bring(i,AtLeast,1,20,13); 
+				Accumulate(i,AtLeast,SMCost,Ore);
+				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+				CD(GMode,2,AtMost);
+			},
+			actions = {
+				ModifyUnitEnergy(1,20,i,13,0);
+				RemoveUnitAt(1,20,13,i);
+				SetResources(i,Subtract,SMCost,Ore);
+				AddCD(SMCr[i+1],1);
+				DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1BH\x04ero M\x04arine을 \x1DS\x04pecial \x1DM\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(SMCost).." O r e"),4);
+				PreserveTrigger();
+			},
+			}
+			Trigger { -- 조합 근
+			players = {i},
+			conditions = {
+				Label(0);
+				Bring(i,AtLeast,1,10,13); 
+				Accumulate(i,AtLeast,RMCost,Ore);
+				Accumulate(i,AtMost,0x7FFFFFFF,Ore);
+				CD(GMode,2,AtMost);
+			},
+			actions = {
+				ModifyUnitEnergy(1,10,i,13,0);
+				RemoveUnitAt(1,10,13,i);
+				SetResources(i,Subtract,RMCost,Ore);
+				AddCD(RMCr[i+1],1);
+				DisplayText(StrDesign("\x1F광물\x04을 소모하여 \x1DS\x04pecial \x1DM\x04arine을 \x19R\x04espect \x19M\x04arine으로 \x19변환\x04하였습니다. - \x1F"..N_to_EmN(RMCost).." O r e"),4);
+				PreserveTrigger();
+			},
+			}
+		end
 		
 
 		
@@ -814,18 +872,25 @@ DoActions(FP,{
 			DisplayText(StrDesign("\x1DM\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost.." O r e"),4);
 			AddCD(NMCr[i+1],1),SetCp(FP)
 		})
-		UnitButton(i,8,{CD(GMode,2,AtMost)},{SetCp(i),
-			DisplayText(StrDesign("\x1DS\x04pecial \x1DM\x04arine 을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
-			AddCD(SMCr[i+1],1),SetCp(FP)
-		})
-		UnitButton(i,8,{CD(GMode,3,AtLeast)},{SetCp(i),
-			DisplayText(StrDesign("\x1BH\x04ero M\x04arine을 2기 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
-			AddCD(HMCr[i+1],2),SetCp(FP)
-		})
-		UnitButton(i,7,{},{SetCp(i),
-			DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost+RMCost.." O r e"),4);
-			AddCD(RMCr[i+1],1),SetCp(FP)
-		})
+		if DLC_Project==1 then
+			UnitButton(i,8,{},{SetCp(i),
+				DisplayText(StrDesign("\x1BH\x04ero M\x04arine을 을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost.." O r e"),4);
+				AddCD(HMCr[i+1],1),SetCp(FP)
+			})
+		else
+			UnitButton(i,8,{CD(GMode,2,AtMost)},{SetCp(i),
+				DisplayText(StrDesign("\x1DS\x04pecial \x1DM\x04arine 을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
+				AddCD(SMCr[i+1],1),SetCp(FP)
+			})
+			UnitButton(i,8,{CD(GMode,3,AtLeast)},{SetCp(i),
+				DisplayText(StrDesign("\x1BH\x04ero M\x04arine을 2기 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost.." O r e"),4);
+				AddCD(HMCr[i+1],2),SetCp(FP)
+			})
+			UnitButton(i,7,{},{SetCp(i),
+				DisplayText(StrDesign("\x19R\x04espect \x19M\x04arine을 \x19소환\x04하였습니다. - \x1F"..NMCost+HMCost+SMCost+RMCost.." O r e"),4);
+				AddCD(RMCr[i+1],1),SetCp(FP)
+			})
+		end
 		
 		UnitButton(i,12,{MemoryX(0x664080 + (MarID[i+1]*4),Exactly,0,0x8000)},{SetCp(i),
 			SetMemoryX(0x664080 + (MarID[i+1]*4),SetTo,0x8000,0x8000),
