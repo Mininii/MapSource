@@ -18,7 +18,12 @@
 		 "\x16MX S\x04tyle",
 		 "\x08SC S\x04tyle",
 	}
-	QueueMaxUnit = 1650
+	if DLC_Project == 1 then
+		QueueMaxUnit = 1500
+	else
+		QueueMaxUnit = 1650
+
+	end
 	if DLC_Project == 1 then
 		NMBaseAtk=40 -- 파벳베이스 : 1/2 데미지로 설정할것
 		NMFactorAtk=7 -- 파벳베이스 : 1/2 데미지로 설정할것
@@ -29,10 +34,14 @@
 		RMBaseAtk = 90
 		RMFactorAtk = 40
 		
-		SMSkillBaseAtk = 150
+		SMSkillBaseAtk = 50
 		SMSkillFactorAtk = 20
+		SMSkillBaseAtk2 = 100
+		SMSkillFactorAtk2 = 25
+		SMSkillBaseAtk3 = 150
+		SMSkillFactorAtk3 = 35
 		RMSkillBaseAtk = 350
-		RMSkillFactorAtk = 70
+		RMSkillFactorAtk = 100
 	else
 		NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
 		NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
@@ -63,9 +72,15 @@
 	UnitPosArr = CreateFArr(1700, FP)
 	PlayerIDArr = CreateFArr(1700, FP)
 	UnitHPArr = CreateFArr(1700, FP)
-	ExRateT = {
-		18,13,12
-	}
+	if DLC_Project == 1 then 
+		ExRateT = {
+			{20,22,24,26,28},{14,15,16,17,18},{12,13,14,15,16}
+		}
+	else
+		ExRateT = {
+			18,13,12
+		}
+	end
 	--Vars
 	HongEnable = CreateCcode()
 	SELimit = CreateCcode()
@@ -120,6 +135,7 @@
 	LCP = CreateVar(FP)
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	GS = CreateCcode()
+	
 	SMPtr = CreateVarArr(5, FP)
 	RMPtr = CreateVarArr(5, FP)
 	SMRebirthT = CreateVarArr(5,FP)
@@ -137,12 +153,53 @@
 	CurInvUp = CreateVarArr(5, FP)
 	InvUp = CreateVarArr(5, FP)
 
+	
+	CurSMUp = CreateVarArr(5, FP)
+	SMUp = CreateVarArr(5, FP)
+
+	
+	CurRMUp = CreateVarArr(5, FP)
+	RMUp = CreateVarArr(5, FP)
+
+	HealCost = {}
+	HealCostFactor = 100000
+	for i = 1, 5 do
+		table.insert(HealCost,CreateVar2(FP,nil,nil,100000))
+	end
+
+	RebirthCost = {}
+	RebirthCostFactor = 300000
+	for i = 1, 5 do
+		table.insert(RebirthCost,CreateVar2(FP,nil,nil,300000))
+	end
+
+	SMSkillCost = {}
+	SMSkillCostFactor = 10000
+	for i = 1, 5 do
+		table.insert(SMSkillCost,CreateVar2(FP,nil,nil,20000))
+	end
+	RMSkillCost = {}
+	RMSkillCostFactor = 25000
+	for i = 1, 5 do
+		table.insert(RMSkillCost,CreateVar2(FP,nil,nil,50000))
+	end
+
+
 	HealUpMaskRetArr = {}
 	HealUpPtrArr = {}
 	RebirthUpMaskRetArr = {}
 	RebirthUpPtrArr = {}
 	InvUpMaskRetArr = {}
 	InvUpPtrArr = {}
+	
+	SMUpMaskRetArr = {}
+	SMUpPtrArr = {}
+
+	
+	RMUpMaskRetArr = {}
+	RMUpPtrArr = {}
+
+
 	for i = 0, 4 do
 	table.insert(HealUpMaskRetArr,(0x58D2B0+(i*46)+22)%4)
 	table.insert(HealUpPtrArr,0x58D2B0+(i*46)+22 - HealUpMaskRetArr[i+1])
@@ -150,6 +207,13 @@
 	table.insert(RebirthUpPtrArr,0x58D2B0+(i*46)+23 - RebirthUpMaskRetArr[i+1])
 	table.insert(InvUpMaskRetArr,(0x58D2B0+(i*46)+43)%4)
 	table.insert(InvUpPtrArr,0x58D2B0+(i*46)+43 - InvUpMaskRetArr[i+1])
+	
+	table.insert(SMUpMaskRetArr,(0x58D2B0+(i*46)+17)%4)
+	table.insert(SMUpPtrArr,0x58D2B0+(i*46)+17 - SMUpMaskRetArr[i+1])
+	
+	table.insert(RMUpMaskRetArr,(0x58D2B0+(i*46)+21)%4)
+	table.insert(RMUpPtrArr,0x58D2B0+(i*46)+21 - RMUpMaskRetArr[i+1])
+
 	end
 
 	--strings

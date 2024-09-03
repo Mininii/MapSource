@@ -139,6 +139,16 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CDoActions(FP,{
 				TSetMemory(_Add(RPtr,2), SetTo, _Div(_ReadF(_Add(RUID,EPD(0x662350))),2)),
 			})
+			
+			CElseIfX_AddRepeatType(168,"Attack_Cell")
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			DoActions(FP,{Simple_SetLoc(20,288,3792,288,3792)})
+			CDoActions(FP, {TOrder(RUID, RPID, 1, Attack, 21);})
+			
+
+
 			CElseIfX_AddRepeatType(187,"JYD")
 			CIfX(FP,{TTOR({CV(RUID,86),CV(RUID,71)})})
 			f_Read(FP,_Add(RPtr,10),CPos)

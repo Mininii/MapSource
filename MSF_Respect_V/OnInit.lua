@@ -150,7 +150,8 @@
 			PatchInsert(SetMemoryB(0x58D088 + 21+(i*46),SetTo,9))
 			PatchInsert(SetMemoryB(0x58D088 + 22+(i*46),SetTo,5))
 			PatchInsert(SetMemoryB(0x58D088 + 23+(i*46),SetTo,3))
-			PatchInsert(SetMemoryB(0x58D088 + 43+(i*46),SetTo,1))
+			--PatchInsert(SetMemoryB(0x58D088 + 43+(i*46),SetTo,1))
+			PatchInsert(SetMemoryB(0x58D088 + 43+(i*46),SetTo,0))
 			PatchInsert(SetMemoryB(0x58D2B0 + 17+(i*46),SetTo,0))
 			PatchInsert(SetMemoryB(0x58D2B0 + 21+(i*46),SetTo,0))
 			PatchInsert(SetMemoryB(0x58D2B0 + 22+(i*46),SetTo,0))
@@ -205,29 +206,37 @@
 	SetUnitsDatX(32,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(12,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+	SetUnitsDatX(5,{Playerable = 2, Reqptr=5,MinCost=0,GasCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	if DLC_Project == 1 then
-		SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=6000,Shield = 3000,SuppCost=1,MinCost=0,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetUnitsDatX(10,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=20000,Shield = 20000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(125,{Playerable = 2, HP=45000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000},SeekRange=6})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=6000,Shield = 3000,SuppCost=1,MinCost=0,AdvFlag={0x4000,0x4000},SeekRange=7})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetUnitsDatX(10,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=15000,Shield = 15000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		for i =0,4 do
-			SetUnitsDatX(MarID[i+1],{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=30000,Shield=30000,SuppCost=1,MinCost=0,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+			SetUnitsDatX(MarID[i+1],{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=20000,Shield=20000,SuppCost=1,MinCost=0,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		end
-		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 5*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
-		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
+		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
+		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
 		SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 		SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
 		SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetWeaponsDatX(119, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk,DmgFactor=SMSkillFactorAtk,Splash={10,20,30}})
+		SetWeaponsDatX(119, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk,DmgFactor=SMSkillFactorAtk})
 		SetWeaponsDatX(120, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMSkillBaseAtk,DmgFactor=RMSkillFactorAtk})
+		SetWeaponsDatX(121, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk2,DmgFactor=SMSkillFactorAtk2,Splash={5,10,15}})
+		SetWeaponsDatX(122, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk3,DmgFactor=SMSkillFactorAtk3,Splash={10,20,30}})
 		
 
 
 
 
 
+
+
+
 	else
+		SetUnitsDatX(125,{Playerable = 2, HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=1500,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=0,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(10,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=6000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -245,7 +254,6 @@
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=1,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=60000,GasCost=0,BuildTime=1})--별의 보호막?
-	SetUnitsDatX(125,{Playerable = 2, HP=9000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(124,{HP=1500,MinCost=1000,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 
@@ -299,6 +307,15 @@
 	SetUnitsDatX(107,{AdvFlag={1612709889,0xFFFFFFFF},BdDimX=1,BdDimY=1})--강퇴건물세팅
 
 	CIfOnce(FP)
+	for i = 0, 4 do
+		CIf(FP,{LocalPlayerID(i)})
+		DisplayPrintTbl(1391,{"z\x02\x07。\x18˙\x0F+\x1C˚\x19 \x07자동 \x0F회복 \x04업그레이드 (\x1F",HealCost[i+1]," Ore\x04) \x11(\x07",HealUpgrade[i+1],"\x04/\x1C5\x11) \x04(\x03Z\x04) \x1C。\x0F+\x18.\x07˚\n\x07업그레이드 단계\x04마다 \x0F회복\x1F속도\x04가 점점 빨라집니다."})
+		DisplayPrintTbl(1390,{"x\x02\x07。\x18˙\x0F+\x1C˚\x19 부활의 가호 \x04업그레이드 (\x1F",RebirthCost[i+1]," Ore\x04) \x11(\x07",RebirthUp[i+1],"\x04/\x1C3\x11) \x04(\x03X\x04) \x1C。\x0F+\x18.\x07˚\n\x041회 : \x18S\x04pecial \x18M\x04arine \x19부활 적용\n\x042회 : \x19R\x04espect \x19M\x04arine \x19부활 적용\n\x043회 : \x07쿨타임\x04이 \x1F5분에서 3분으로 단축\x04됨"})
+		DisplayPrintTbl(1387,{"q\x02\x07。\x18˙\x0F+\x1C˚\x19 \x18S\x04pecial \x18M\x04arine \x1F특수 \x04업그레이드 (\x1F",SMSkillCost[i+1]," Ore\x04) \x11(\x07",SMUp[i+1],"\x04/\x1C24\x11) \x04(\x03Q\x04)\x1C。\x0F+\x18.\x07˚\x14\x14\x14\x14"})
+		DisplayPrintTbl(1388,{"w\x02\x07。\x18˙\x0F+\x1C˚\x19 \x19R\x04espect \x19M\x04arine \x1F특수 \x04업그레이드 (\x1F",RMSkillCost[i+1]," Ore\x04) \x11(\x07",RMUp[i+1],"\x04/\x1C9\x11) \x04(\x03W\x04) \x1C。\x0F+\x18.\x07˚"})
+		--DisplayPrintTbl(1389,"c\x02\x07。\x18˙\x0F+\x1C˚\x1A 무적의 가호 \x04업그레이드 (\x1F1500000 Ore\x04) \x11(MAX 1) \x04(\x03C\x04) \x1C。\x0F+\x18.\x07˚\n\x16일정한 주기\x04마다 \x1A무적상태\x04가 적용됩니다. ")
+		CIfEnd()
+	end
 
 	f_Read(FP,0x512684,LCP)
 	DoActions2(FP, PatchArr)
@@ -408,8 +425,8 @@ end
 		end
 		
 	T_YY = 2024
-	T_MM = 07
-	T_DD = 01
+	T_MM = 09
+	T_DD = 05
 	T_HH = 00
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
 	if Limit == 1 then

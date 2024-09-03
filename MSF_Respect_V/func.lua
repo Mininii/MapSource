@@ -437,8 +437,28 @@ TriggerX(FP,{LocalPlayerID(128);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144
 TriggerX(FP,{LocalPlayerID(129);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(129),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
 TriggerX(FP,{LocalPlayerID(130);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(130),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
 TriggerX(FP,{LocalPlayerID(131);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(131),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
+if DLC_Project == 1 then
+CIf(FP,{LocalPlayerID(0, AtLeast),LocalPlayerID(4, AtMost)})
+for i = 0, 4 do
+
+	CIf(FP,{LocalPlayerID(i),CV(RebirthUp[i+1],1,AtLeast)})
+		local SS = CreateVar(FP)
+		local RS = CreateVar(FP)
+		CIfX(FP,{CV(RebirthUp[i+1],3)})
+		f_Div(FP, SS, SMRebirthT[i+1], 1000*2)
+		f_Div(FP, RS, RMRebirthT[i+1], 1000*2)
+		CElseX()
+		f_Div(FP, SS, SMRebirthT[i+1], 1000)
+		f_Div(FP, RS, RMRebirthT[i+1], 1000)
+		CIfXEnd()
+		DisplayPrint(i, {"\x07『 \x19부활 \x1F남은 시간 \x04: \x18",SS," \x1F초\x04, \x19",RS, " \x1F초\x07 』"})
+	CIfEnd()
+
+end
 
 
+CIfEnd()
+end
 
 FixText(FP, 2)
 end

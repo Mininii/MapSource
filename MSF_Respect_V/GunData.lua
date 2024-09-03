@@ -603,8 +603,14 @@ end
 			CMov(FP,G_CB_X,CPosX)
 			CMov(FP,G_CB_Y,CPosY)
 			CenT = {7,60,70,57,62,64}
+			CenT2 = {60,70,57,62,64,7}
 			for j,k in pairs(CenT) do
 				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
+			end
+			if DLC_Project == 1 then
+				for j,k in pairs(CenT2) do
+				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross2"}, "MAX", 129, nil, nil, P8,1)
+				end
 			end
 			CIfEnd()
 		CIfEnd()
@@ -739,7 +745,7 @@ end
 	--P_5, 3 : 51
 
 
-	
+	--original
 	--P_8, 4 : 121
 	--P_8, 4 : 121
 	--P_8, 4 : 121
@@ -763,31 +769,56 @@ end
 	
 	
 	
+	--dlc
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	--P_6, 7 : 217
+	--P_6, 7 : 217
+	--P_6, 7 : 217
+	--P_7, 6 : 197
+	--P_7, 6 : 197
+	--P_7, 6 : 197
+	--P_5, 7 : 181
+	--P_5, 7 : 181
+	--P_5, 7 : 181
+	--P_6, 6 : 169
+	--P_6, 6 : 169
+	--P_6, 6 : 169
+	--P_8, 5 : 169
+	--P_8, 5 : 169
+	--P_8, 5 : 169
+	--S_8, 3 : 161
+	--S_8, 3 : 161
+	--S_8, 3 : 161
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	KimrhegbArr = {55,56,"Kazansky","Artanis","Danimoth","Lin","Raszagal","Envy","Lizzet","Merry","Rose","Norad II","Era","Nina","Sera","Sorang","Sena","Sen"}
 	KimrhegbArr2 = {{P_8, 4},{P_8, 4},{P_8, 4},{P_4, 6},{P_4, 6},{P_4, 6},{P_3, 7},{P_3, 7},{P_3, 7},{P_7, 4},{P_7, 4},{P_7, 4},{S_5, 3},{S_5, 3},{S_5, 3},{S_8, 2},{S_8, 2},{S_8, 2}}
 	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0}}
+	KimrhegbArr4 = {{P_6, 7},{P_6, 7},{P_6, 7},{P_7, 6},{P_7, 6},{P_7, 6},{P_5, 7},{P_5, 7},{P_5, 7},{P_6, 6},{P_6, 6},{P_6, 6},{P_8, 5},{P_8, 5},{P_8, 5},{S_8, 3},{S_8, 3},{S_8, 3}}
 
 	CIf_GCase(150)--오버미
 		for j,k in pairs(KimrhegbArr) do
-			G_CB_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
-			G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 187, nil, nil, P6,1)
+			if DLC_Project==1 then
+				G_CB_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 168, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,2),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 168, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(j-1)}, {k,94}, KimrhegbArr4[j][1],KimrhegbArr4[j][2], "MAX", 168, nil, nil, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,1),GNm(j-1)}, {k,94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 187, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast),GNm(j-1)}, {k,94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 187, nil, nil, P6,1)
+			end
 		end
 		CTrigger(FP,{},{Gun_DoSuspend(),SubCD(ChryCcode, 1),Gun_SetLine(6,SetTo,1)},1)
 
@@ -938,7 +969,28 @@ end
 	CAdd(FP,TotalM,MarNum2)
 	CAdd(FP,TotalM,MarNum2)
 	
-	CIfX(FP,{CD(GMode,2,AtMost)})
+	if DLC_Project == 1 then
+	UnitReadX(FP, Force1, 10, 201, MarNum3)--*3
+	for i = 0, 4 do
+		CIf(FP,{HumanCheck(i, 1)})
+		UnitReadX(FP, i, MarID[i+1], 201, MarNum4[i+1])--*4
+		CIfEnd()
+	end
+	
+	CAdd(FP,TotalM,_Mul(MarNum3,20))
+	for i = 0, 4 do
+		CAdd(FP,TotalM,_Mul(MarNum4[i+1],20))
+	end
+	CIf(FP,{CD(GMode,3)})
+	CAdd(FP,TotalM,_Mul(MarNum3,60))
+	for i = 0, 4 do
+		CAdd(FP,TotalM,_Mul(MarNum4[i+1],60))
+	end
+	CIfEnd()
+
+
+	else
+		CIfX(FP,{CD(GMode,2,AtMost)})
 	UnitReadX(FP, Force1, 10, 201, MarNum3)--*3
 	for i = 0, 4 do
 		CIf(FP,{HumanCheck(i, 1)})
@@ -963,6 +1015,7 @@ end
 	f_Div(FP,TotalM,2)
 
 	CIfXEnd()
+	end
 	TriggerX(FP, {CV(TotalM,480,AtLeast)}, {SetV(TotalM,480)},{preserved})
 	CDiv(FP, SizeV, TotalM, 20)
 	if Limit == 1 then -- 테스트용확인트리거
@@ -1465,6 +1518,9 @@ end
 		PSIGunUID(1,{84,76,79})
 		PSIGunUID(2,{98,83,95})
 		PSIGunUID(3,{58,81,5})
+		if DLC_Project == 1 then
+		else
+		end
 		CIfEnd()
 
 		CIf(FP,GNm(2))
@@ -1472,6 +1528,9 @@ end
 		PSIGunUID(1,{29,3,52})
 		PSIGunUID(2,{7,65,66})
 		PSIGunUID(3,{64,40,87})
+		if DLC_Project == 1 then
+		else
+		end
 		CIfEnd()
 
 		
@@ -1538,6 +1597,14 @@ end
 		table.insert(lAct, SetMemoryX(0x664080 + (k*4),SetTo,4,4))
 		table.insert(lAct, SetMemoryB(0x663150 + (k),SetTo,12))
 			
+	end
+	if DLC_Project == 1 then
+		for i = 0, 4 do
+			table.insert(lAct, SetV(SMRebirthT[i+1],0))
+			table.insert(lAct, SetV(RMRebirthT[i+1],0))
+			
+			
+		end
 	end
  	DoActions2X(FP, {Order("Any unit", Force2, 64, Attack, 6),
 		Gun_SetLine(6, SetTo, 0x1D),
@@ -2161,7 +2228,11 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 		}),})
 		CIf(FP,{Gun_Line(54,AtMost,0)},{Gun_SetLine(5,SetTo,1)})
 		CTrigger(FP,{Gun_Line(6,AtLeast,1)},{Gun_DoSuspend()},1)
-		CTrigger(FP,{Gun_Line(7,AtLeast,480)},{Gun_SetLine(6,SetTo,1)},1)
+		if DLC_Project == 1 then
+			CTrigger(FP,{Gun_Line(7,AtLeast,360)},{Gun_SetLine(6,SetTo,1)},1)
+		else
+			CTrigger(FP,{Gun_Line(7,AtLeast,480)},{Gun_SetLine(6,SetTo,1)},1)
+		end
 		CIfEnd()
 	CIfEnd()
 	
