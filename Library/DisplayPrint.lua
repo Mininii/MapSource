@@ -1,5 +1,47 @@
 
 		
+
+	function DisplayPrintTbl(TBLID,arg)
+		local TBLPtr = CreateVar(FP)
+		f_GetTblptr(FP,TBLPtr,TBLID)
+		Dev = 0
+		for j,k in pairs(arg) do
+
+		if type(k) == "string" then
+			local CT = CreateCText(FP,k)
+
+			f_Memcpy(FP,_Add(TBLPtr,Dev),_TMem(Arr(CT[3],0),"X","X",1),CT[2])
+			
+			Dev=Dev+CT[2]
+
+		elseif type(k)=="table" and k[4]=="V" then
+
+			if k["fwc"] == true then
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_IToDecX)
+				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
+				Dev=Dev+(4*12)
+			elseif k["hex"] == true then
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_ItoHex)
+				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoHexVArr,0),3*4)
+				Dev=Dev+(3*4)
+			else
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_IToDec)
+				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArr,0),4*4)
+				Dev=Dev+(4*4)
+			end
+
+
+		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+			CDoActions(FP,{TBwrite(_Add(TBLPtr,Dev),SetTo,V(k))})
+			Dev=Dev+(1)
+		end
+
+
+	end
+	end
 	function DisplayPrint(TargetPlayers,arg,FixTextPreset,SoundRepeat) -- ext text ver
 		if FixTextPreset == 3 or FixTextPreset == 1 then
 		local TPArr = {}
