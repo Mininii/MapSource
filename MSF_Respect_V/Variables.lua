@@ -28,6 +28,11 @@
 		SMFactorAtk = 15 -- 파벳베이스 : 1/2 데미지로 설정할것
 		RMBaseAtk = 90
 		RMFactorAtk = 40
+		
+		SMSkillBaseAtk = 150
+		SMSkillFactorAtk = 20
+		RMSkillBaseAtk = 350
+		RMSkillFactorAtk = 70
 	else
 		NMBaseAtk=5 -- 파벳베이스 : 1/2 데미지로 설정할것
 		NMFactorAtk=3 -- 파벳베이스 : 1/2 데미지로 설정할것
@@ -115,6 +120,15 @@
 	LCP = CreateVar(FP)
 	HLine, ChatSize, ChatOff, HCheck = CreateVars(4,FP) 
 	GS = CreateCcode()
+	SMPtr = CreateVarArr(5, FP)
+	RMPtr = CreateVarArr(5, FP)
+	SMRebirthT = CreateVarArr(5,FP)
+	RMRebirthT = CreateVarArr(5,FP)
+	SMRebirthAct = CreateVarArr(5,FP)
+	RMRebirthAct = CreateVarArr(5,FP)
+	SMRebirthT2 = CreateCcodeArr(5)
+	RMRebirthT2 = CreateCcodeArr(5)
+
 
 	CurHealUpgrade = CreateVarArr(5, FP)
 	HealUpgrade = CreateVarArr(5, FP)

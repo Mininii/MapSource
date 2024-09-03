@@ -219,6 +219,14 @@
 		SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
+		SetWeaponsDatX(119, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk,DmgFactor=SMSkillFactorAtk,Splash={10,20,30}})
+		SetWeaponsDatX(120, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMSkillBaseAtk,DmgFactor=RMSkillFactorAtk})
+		
+
+
+
+
+
 	else
 		SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=1500,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,Shield = 1000,SuppCost=1,MinCost=0,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로

@@ -184,6 +184,7 @@ for y = 0, 3 do
 	CTrigger(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {TCreateUnitWithProperties(1, MID, 16+y, MPID,{energy = 100})}, {preserved})
 end
 
+
 CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)})
 f_Read(FP,_Add(Nextptrs,10),CPos)
 Convert_CPosXY()
@@ -204,8 +205,35 @@ Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
 Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, _Mul(MPID, 65536));
 Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, MHP);
 })
+
+CIf(FP,{TTOR({
+	CV(MID,10),
+	CV(MID,MarID[1]),
+	CV(MID,MarID[2]),
+	CV(MID,MarID[3]),
+	CV(MID,MarID[4]),
+	CV(MID,MarID[5]),
+})})
+for i = 0, 4 do
+	CIf(FP,{CV(MPID,i)})
+		CIf(FP,{CV(MID,10)})
+			CMov(FP,SMPtr[i+1],Nextptrs)
+		CIfEnd()
+		CIf(FP,{CV(MID,MarID[i+1])})
+			CMov(FP,RMPtr[i+1],Nextptrs)
+		CIfEnd()
+	CIfEnd()
+end
+
+CIfEnd()
+
+
+
+
 CIfEnd()
 CIfEnd()
+
+
 SetCallEnd()
 
 CallTombTrig =SetCallForward()

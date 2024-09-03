@@ -892,17 +892,19 @@ DoActions(FP,{
 		DoActionsX(FP,{SetCVar(FP,CurRebirthUp[i+1][2],SetTo,0)})
 
 
-		for j = 0, 7 do
+		for j = 0, 5 do
 			TriggerX(FP,{MemoryX(HealUpPtrArr[i+1],Exactly,2^(j+(8*HealUpMaskRetArr[i+1])),2^(j+(8*HealUpMaskRetArr[i+1])))},{SetCVar(FP,CurHealUpgrade[i+1][2],SetTo,2^j,2^j)},{preserved})
 		end
-		for j = 0, 7 do
+		for j = 0, 5 do
 			TriggerX(FP,{MemoryX(RebirthUpPtrArr[i+1],Exactly,2^(j+(8*RebirthUpMaskRetArr[i+1])),2^(j+(8*RebirthUpMaskRetArr[i+1])))},{SetCVar(FP,CurRebirthUp[i+1][2],SetTo,2^j,2^j)},{preserved})
 		end
-
+		TriggerX(FP,{MemoryX(InvUpPtrArr[i+1],Exactly,2^(0+(8*InvUpMaskRetArr[i+1])),2^(0+(8*InvUpMaskRetArr[i+1])))},{SetCVar(FP,CurInvUp[i+1][2],SetTo,2^0,2^0)},{preserved})
+	
 
 		CIf(FP,{TTCVar(FP,CurHealUpgrade[i+1][2],NotSame,HealUpgrade[i+1])})
 			CIfX(FP,{Accumulate(i,AtLeast,300000,Ore)},{SetResources(i,Subtract,300000,Ore)})
 				CMov(FP,HealUpgrade[i+1],CurHealUpgrade[i+1])
+				DisplayPrint(i, {"\x07。\x18˙\x0F+\x1C˚ \x07자동 \x0F회복 \x07업그레이드\x04가 완료되었습니다. \x1C현재 업글 횟수 \x04: \x07",HealUpgrade[i+1]," \x1C。\x0F+\x18.\x07˚"})
 			CElseX()
 				CDoActions(FP,{TSetMemoryX(HealUpPtrArr[i+1],SetTo,_Mul(HealUpgrade[i+1],(256^HealUpMaskRetArr[i+1])),255*(256^HealUpMaskRetArr[i+1])),
 				SetCp(i),DisplayText(StrDesign("\x04잔액이 부족합니다."),4),SetCp(FP)})
@@ -914,12 +916,16 @@ DoActions(FP,{
 		CIf(FP,{TTCVar(FP,CurRebirthUp[i+1][2],NotSame,RebirthUp[i+1])})
 			CIfX(FP,{Accumulate(i,AtLeast,200000,Ore)},{SetResources(i,Subtract,200000,Ore)})
 				CMov(FP,RebirthUp[i+1],CurRebirthUp[i+1])
+				DisplayPrint(i, {"\x07。\x18˙\x0F+\x1C˚ \x19부활의 가호 \x07업그레이드\x04가 완료되었습니다. \x1C현재 업글 횟수 \x04: \x07",RebirthUp[i+1]," \x1C。\x0F+\x18.\x07˚"})
 			CElseX()
 				CDoActions(FP,{TSetMemoryX(RebirthUpPtrArr[i+1],SetTo,_Mul(RebirthUp[i+1],(256^RebirthUpMaskRetArr[i+1])),255*(256^RebirthUpMaskRetArr[i+1])),
 				SetCp(i),DisplayText(StrDesign("\x04잔액이 부족합니다."),4),SetCp(FP)})
 				CMov(FP,CurRebirthUp[i+1],RebirthUp[i+1])
 			CIfXEnd()
 		CIfEnd()
+		TriggerX(FP,{CV(RebirthUp[i+1],1,AtLeast)},{SubV(SMRebirthT[i+1], 0x1D)},{preserved})
+		TriggerX(FP,{CV(RebirthUp[i+1],2,AtLeast)},{SubV(RMRebirthT[i+1], 0x1D)},{preserved})
+		TriggerX(FP,{CV(RebirthUp[i+1],3,AtLeast)},{SubV(SMRebirthT[i+1], 0x1D),SubV(RMRebirthT[i+1], 0x1D)},{preserved})
 
 		
 		CIf(FP,{TTCVar(FP,CurInvUp[i+1][2],NotSame,InvUp[i+1])})
@@ -931,6 +937,52 @@ DoActions(FP,{
 				CMov(FP,CurInvUp[i+1],InvUp[i+1])
 			CIfXEnd()
 		CIfEnd()
+		local InvUpT = CreateCcode()
+		CIfX(FP,CV(InvUp[i+1],1,AtLeast),{SubCD(InvUpT,1)})
+		
+		TriggerX(FP,{CD(SMRebirthT2[i+1],1,AtLeast)},{SetInvincibility(Enable, 10, i, 64)},{preserved})
+		TriggerX(FP,{CD(RMRebirthT2[i+1],1,AtLeast)},{SetInvincibility(Enable, MarID[i+1], i, 64)},{preserved})
+		TriggerX(FP,{CD(SMRebirthT2[i+1],0),CD(InvUpT,24,AtLeast)},{SetInvincibility(Enable, 10, i, 64)},{preserved})
+		TriggerX(FP,{CD(RMRebirthT2[i+1],0),CD(InvUpT,24,AtLeast)},{SetInvincibility(Enable, MarID[i+1], i, 64)},{preserved})
+		TriggerX(FP,{CD(SMRebirthT2[i+1],0),CD(InvUpT,23,AtMost)},{SetInvincibility(Disable, 10, i, 64)},{preserved})
+		TriggerX(FP,{CD(RMRebirthT2[i+1],0),CD(InvUpT,23,AtMost)},{SetInvincibility(Disable, MarID[i+1], i, 64)},{preserved})
+
+		TriggerX(FP, {CD(InvUpT,24,AtLeast)}, {
+			SetInvincibility(Enable, 32, i, 64),
+			SetInvincibility(Enable, 20, i, 64)
+		}, {preserved})
+		TriggerX(FP, {CD(InvUpT,23,AtMost)}, {
+			SetInvincibility(Disable, 32, i, 64),
+			SetInvincibility(Disable, 20, i, 64)}, {preserved})
+		TriggerX(i,{CD(InvUpT,0)},{SetCD(InvUpT,40)},{preserved})
+		CElseX()
+		
+		TriggerX(FP,{CD(SMRebirthT2[i+1],1,AtLeast)},{SetInvincibility(Enable, 10, i, 64)},{preserved})
+		TriggerX(FP,{CD(RMRebirthT2[i+1],1,AtLeast)},{SetInvincibility(Enable, MarID[i+1], i, 64)},{preserved})
+		TriggerX(FP,{CD(SMRebirthT2[i+1],0)},{SetInvincibility(Disable, 10, i, 64)},{preserved})
+		TriggerX(FP,{CD(RMRebirthT2[i+1],0)},{SetInvincibility(Disable, MarID[i+1], i, 64)},{preserved})
+		CIfXEnd()
+
+		local HealUpgradeT = CreateCcode()
+		CIf(FP,CV(HealUpgrade[i+1],1,AtLeast),{})
+		for j = 1, 5 do
+			TriggerX(FP, {CV(HealUpgrade[i+1],j)}, {SubCD(HealUpgradeT, j)}, {preserved})
+		end
+		TriggerX(FP,{CD(HealUpgradeT,0)},{SetCD(HealUpgradeT,50),
+		ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+		ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+		ModifyUnitShields(All,"Men",i,"Anywhere",100),
+		ModifyUnitShields(All,"Buildings",i,"Anywhere",100),},{preserved})
+		CIfEnd()
+
+
+
+
+
+
+
+
+
 
 		end
 		UnitButton(i,82,nil,{SetCp(i),
@@ -1000,10 +1052,6 @@ DoActions(FP,{
 		CTrigger(FP, {}, {SetV(PPosX[i+1],CPosX)}, {preserved})
 		CIfEnd()
 
-		--
-		--
-		--
-		--
 		local MCT = {
 		{NMCr[i+1],32,1500*256},
 		{HMCr[i+1],20,3000*256},
@@ -1021,11 +1069,115 @@ DoActions(FP,{
 		
 		
 		if Limit == 1 then
+			DisplayPrintEr(i, {"RebirthUp : ",RebirthUp[i+1],"   SMRebirthT : ",SMRebirthT[i+1],"   RMRebirthT : ",RMRebirthT[i+1],"   "})
 			CIf(FP,CD(TestMode,1))
 			CIfEnd()
 			--TriggerX(FP,{CD(TestMode,1)},{SetInvincibility(Enable, "Buildings", FP, 64)},{preserved})--SetV(CurEXP,0x7FFFFFFF)
 			--TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x58D2B0+15+(i*46),SetTo,255),SetMemoryB(0x58D2B0+7+(i*46),SetTo,255),SetMemoryB(0x58D2B0+(i*46),SetTo,255)})--SetV(CurEXP,0x7FFFFFFF)
 		end
+		
+		DoActionsX(FP, {
+			SubCD(SMRebirthT2[i+1], 0x1D),
+			SubCD(RMRebirthT2[i+1], 0x1D),
+		})
+		
+		local SMSkillT = CreateCcode()
+		CIfX(FP,{CV(SMPtr[i+1],1,AtLeast),CV(SMPtr[i+1],19025+(1699*84),AtMost)},{SubCD(SMSkillT,1)})
+			CIf(FP,{CD(SMSkillT,0)},{SetCD(SMSkillT,20),KillUnit(91, i)})
+			f_Read(FP,_Add(SMPtr[i+1],10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+			for j = 1,24 do
+				CSPlot(CSMakeStar(4, 135, 64, 45, j+1, 1), i, 91, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j)}, {}, 1)
+				CSPlot(CSMakeStar(4, 135, 64, 45, j+1, 1), i, 84, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j)}, {KillUnit(84, i)}, 1)
+			end
+			DoActions(FP, {Order(91, i, 64, Patrol, 64)})
+			CIfEnd()
+			--
+		
+			CIf(FP,{TMemoryX(_Add(SMPtr[i+1],19), Exactly,0,0xFF00),},{})
+				CIf(FP,{CV(RebirthUp[i+1],1,AtLeast),CV(SMRebirthT[i+1],0),TMemoryX(_Add(SMPtr[i+1],40),AtLeast,150*16777216,0xFF000000)},{SetV(SMRebirthT[i+1],5*60*1000)})
+					f_Read(FP,_Add(SMPtr[i+1],10),CPos)
+					CDoActions(FP, {
+						TSetMemoryX(_Add(SMPtr[i+1],40),SetTo,0*16777216,0xFF000000),
+						SetV(SMRebirthAct[i+1],CPos),
+					})
+					TriggerX(FP,{CV(RebirthUp[i+1],1,AtLeast),CV(RebirthUp[i+1],2,AtMost)},{
+						SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),
+						DisplayText(StrDesign("\x08사망\x04한 \x18S\x04pecial \x18M\x04arine 이 \x19부활\x04의 \x19가호\x04를 받아 \x07다시 태어났습니다. \x1B(재사용 대기시간 : 5분)"),4),
+						SetCp(FP),},{preserved})
+					TriggerX(FP,{CV(RebirthUp[i+1],3)},{
+						SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),
+						DisplayText(StrDesign("\x08사망\x04한 \x18S\x04pecial \x18M\x04arine 이 \x19부활\x04의 \x19가호\x04를 받아 \x07다시 태어났습니다. \x1B(재사용 대기시간 : 2분 30초)"),4),
+						SetCp(FP),},{preserved})
+					CMov(FP,SMPtr[i+1],0)
+				CIfEnd()
+			CIfEnd()
+		CElseX({KillUnit(91, i)})
+		CIfXEnd()
+		
+		local RMSkillT = CreateCcode()
+		CIfX(FP,{CV(RMPtr[i+1],1,AtLeast),CV(RMPtr[i+1],19025+(1699*84),AtMost)},{SubCD(RMSkillT,1)})
+		CIf(FP,{CD(RMSkillT,0)},{SetCD(RMSkillT,20),KillUnit(92, i)})
+		f_Read(FP,_Add(RMPtr[i+1],10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+		for j = 1,9 do
+			CSPlot(CSMakeStar(4, 135, 128, 45, j, 0), i, 92, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+21, Exactly, j)}, {}, 1)
+			CSPlot(CSMakeStar(4, 135, 128, 45, j, 0), i, 80, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+21, Exactly, j)}, {KillUnit(80, i)}, 1)
+		end
+		DoActions(FP, {Order(92, i, 64, Patrol, 64)})
+		CIfEnd()
+
+			CIf(FP,{TMemoryX(_Add(RMPtr[i+1],19), Exactly,0,0xFF00),},{})
+				CIf(FP,{CV(RebirthUp[i+1],2,AtLeast),CV(RMRebirthT[i+1],0),TMemoryX(_Add(RMPtr[i+1],40),AtLeast,150*16777216,0xFF000000)},{SetV(RMRebirthT[i+1],5*60*1000)})
+					f_Read(FP,_Add(RMPtr[i+1],10),CPos)
+					CDoActions(FP, {
+						TSetMemoryX(_Add(RMPtr[i+1],40),SetTo,0*16777216,0xFF000000),
+						SetV(RMRebirthAct[i+1],CPos),
+					})
+					TriggerX(FP,{CV(RebirthUp[i+1],2,AtLeast),CV(RebirthUp[i+1],2,AtMost)},{
+						SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),
+						DisplayText(StrDesign("\x08사망\x04한 \x18S\x04pecial \x18M\x04arine 이 \x19부활\x04의 \x19가호\x04를 받아 \x07다시 태어났습니다. \x1B(재사용 대기시간 : 5분)"),4),
+						SetCp(FP),},{preserved})
+					TriggerX(FP,{CV(RebirthUp[i+1],3)},{
+						SetCp(i),PlayWAV("staredit\\wav\\revive.ogg"),
+						DisplayText(StrDesign("\x08사망\x04한 \x18S\x04pecial \x18M\x04arine 이 \x19부활\x04의 \x19가호\x04를 받아 \x07다시 태어났습니다. \x1B(재사용 대기시간 : 2분 30초)"),4),
+						SetCp(FP),},{preserved})
+						CMov(FP,RMPtr[i+1],0)
+				CIfEnd()
+			CIfEnd()
+		CElseX({KillUnit(92, i)})
+		CIfXEnd()
+		DoActions(FP,{KillUnit(91, P12),KillUnit(92, P12)})
+		CIf(FP,{Memory(0x628438, AtLeast, 1),CV(SMRebirthAct[i+1],1,AtLeast)})
+		local RPosX,RPosY=Convert_CPosXY(SMRebirthAct[i+1])
+			CMov(FP,MPosX,RPosX)
+			CMov(FP,MPosY,RPosY)
+			CallTriggerX(FP, Call_MarCr,{Memory(0x628438, AtLeast, 1)}, {
+				SetV(MID,10),
+				SetV(MPID,i),SetCD(SMRebirthT2[i+1],30*1000)
+			})
+		CMov(FP,SMRebirthAct[i+1],0)
+		CIfEnd()
+		CIf(FP,{Memory(0x628438, AtLeast, 1),CV(RMRebirthAct[i+1],1,AtLeast)})
+			local RPosX,RPosY=Convert_CPosXY(RMRebirthAct[i+1])
+			CMov(FP,MPosX,RPosX)
+			CMov(FP,MPosY,RPosY)
+			CallTriggerX(FP, Call_MarCr,{Memory(0x628438, AtLeast, 1)}, {
+				SetV(MID,MarID[i+1]),
+				SetV(MPID,i),SetCD(RMRebirthT2[i+1],30*1000)
+			})
+		CMov(FP,RMRebirthAct[i+1],0)
+		CIfEnd()
+		
+		
+
+		
+
+		
+
+
 
 		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140),CD(WanCT[i+1],0)},{SetCD(WanCT[i+1],480),SetCp(i),DisplayText(MacroWarn1, 4),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav"),PlayWAV("sound\\Bullet\\TNsFir00.wav")})
 		TriggerX(FP, {ElapsedTime(AtLeast, 10),Deaths(i,AtLeast,1,140),CD(WanCT[i+1],0)},{SetCD(BanCode2[i+1],1)})
