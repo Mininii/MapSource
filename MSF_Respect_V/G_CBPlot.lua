@@ -378,6 +378,12 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			Simple_SetLocX(FP,20,RBX,RBY,RBX,RBY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			CDoActions(FP, {TOrder(RUID, RPID, 1, Attack, 21);})
+			CElseIfX_AddRepeatType(140,"Patrol_Gun")
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			Simple_SetLocX(FP,20,RBX,RBY,RBX,RBY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
 
 			CElseIfX_AddRepeatType(217,"Walls")
 			CDoActions(FP, {

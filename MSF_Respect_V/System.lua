@@ -10,10 +10,11 @@
 	iTbl4 = GetiTblId(FP,1397,S1) --DMG
 	iTbl5 = GetiTblId(FP,764,S1) --DMG
 	iTbl9 = GetiTblId(FP,1299,S1) --실명
+	iTbl10 = GetiTblId(FP,831,S1) --패러사이트
 	Str1, Str1a, Str1s = SaveiStrArrX(FP,t01)
 	Str3, Str3a, Str3s = SaveiStrArrX(FP,t03)
 	t04 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ>ㅅ<)つ \x1C。\x0F+\x18.\x07˚"--일반
-	t05 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つXㅅ<)つ \x1C。\x0F+\x18.\x07˚"--디텍터
+	--t05 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つXㅅ<)つ \x1C。\x0F+\x18.\x07˚"--디텍터
 	t06 = "\x07。\x18˙\x0F+\x1C˚\x19 R\x04espect \x17V! \x19(つ3ㅅ3)つ \x1C。\x0F+\x18.\x07˚"--패로사이트
 	--iTbl7 = GetiTblId(FP,1319,S1) --DMG
 	--iTbl8 = GetiTblId(FP,831,S1) --DMG
@@ -26,7 +27,7 @@
 	T1366 = "\x07。\x18˙\x0F+\x1C˚\x1F \x10망\x04이 \x08레이저\x16빔 \x19(つ\x08X\x19ㅅ<)つ \x1C。\x0F+\x18.\x07˚\x02"
 	TBLData = {
 		{1319,t04},
-		{831,t05},
+		--{831,t05},
 		{290,T290},
 		{426,T426},
 		{1365,T1365},
@@ -297,6 +298,7 @@ CMov(FP, 0x6509B0, FP)
 		CS__InputVA(FP,iTbl3,0,Str1,Str1s,nil,0,Str1s)
 		CS__InputVA(FP,iTbl5,0,Str3,Str3s,nil,0,Str3s)
 		CIfXEnd()
+		CS__InputVA(FP,iTbl10,0,Str1,Str1s,nil,0,Str1s)
 		CIfXEnd()
 		
 		
@@ -396,19 +398,28 @@ CMov(FP, 0x6509B0, FP)
 	CIfEnd()
 	CSub(FP,0x6509B0,30)
 	
-	--WhiteList = def_sIndex()
 	LauncherUnit = def_sIndex()
 	NJumpX(FP,LauncherUnit,DeathsX(CurrentPlayer,Exactly,119,0,0xFF))
 	TimerUnit = def_sIndex()
 	NJumpX(FP,TimerUnit,{Cond_EXCC(2, AtLeast, 1)}) -- 2 = Timer 4 = Option
+	if DLC_Project == 1 then
+		WhiteList = def_sIndex()
+		for j, i in pairs(MarID) do
+			NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+		end
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,32,0,0xFF)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,20,0,0xFF)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,10,0,0xFF)})
 
-	--for j, i in pairs(MarID) do
-	--	NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
-	--end
-	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,32,0,0xFF)})
-	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,20,0,0xFF)})
-	--NJumpX(FP,WhiteList,{CD(EVFCcode,1),DeathsX(CurrentPlayer,Exactly,10,0,0xFF)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,91,0,0xFF)},{SetMemory(0x6509B0, Add, 55-25),SetDeathsX(CurrentPlayer, SetTo, 0x100, 0, 0x100),SetMemory(0x6509B0, Add, 2),SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),SetMemory(0x6509B0, Subtract, 57-25)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,90,0,0xFF)},{SetMemory(0x6509B0, Add, 55-25),SetDeathsX(CurrentPlayer, SetTo, 0x100, 0, 0x100),SetMemory(0x6509B0, Add, 2),SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),SetMemory(0x6509B0, Subtract, 57-25)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,121,0,0xFF)},{SetMemory(0x6509B0, Add, 55-25),SetDeathsX(CurrentPlayer, SetTo, 0x100, 0, 0x100),SetMemory(0x6509B0, Add, 2),SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),SetMemory(0x6509B0, Subtract, 57-25)})
+		NJumpX(FP,WhiteList,{DeathsX(CurrentPlayer,Exactly,92,0,0xFF)},{SetMemory(0x6509B0, Add, 55-25),SetDeathsX(CurrentPlayer, SetTo, 0x100, 0, 0x100),SetMemory(0x6509B0, Add, 2),SetDeathsX(CurrentPlayer, SetTo, 0, 0, 0xFF),SetMemory(0x6509B0, Subtract, 57-25)})
+	end
 
+	
+	
+	
 	
 	
 	
@@ -416,9 +427,68 @@ CMov(FP, 0x6509B0, FP)
 	--NJumpXEnd(FP, MRCheck)
 	EXCC_BreakCalc({Cond_EXCC(0, Exactly, 0)}, {SetMemory(0x6509B0,Subtract,16),SetDeathsX(CurrentPlayer,SetTo,1*65536,0,0xFF0000)})--Lock On이 없을 경우
 	EXCC_ClearCalc()
+	if DLC_Project == 1 then
+		NJumpXEnd(FP, WhiteList)
+		CSub(FP,0x6509B0,6)--19
+
+		for i = 0, 4 do
+			CIf(FP,{DeathsX(CurrentPlayer,Exactly,i,0,0xFF)})
+			TriggerX(FP,{Memory(0x582294+(4*i),AtLeast,1600);},{
+				SetMemory(0x6509B0, Add, 2),
+				SetDeaths(CurrentPlayer,SetTo,0,0),
+				SetDeathsX(CurrentPlayer,SetTo,0,1,0xFF00),
+				SetMemory(0x6509B0, Subtract, 2),
+			},{preserved})
+			for j = 1, 5 do
+				CIf(FP,{CV(HealUpgrade[i+1],j)})
+
+				CAdd(FP,0x6509B0,6)--25
+				CIf(FP,{DeathsX(CurrentPlayer, Exactly, 32, 0, 0xFF)})
+				CSub(FP,0x6509B0,23)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (3000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (3000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, (3000+1)*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 3000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,23)
+				CIfEnd()
+				
+				CIf(FP,{DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF)})
+				CSub(FP,0x6509B0,23)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (6000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (6000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, 6000*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 6000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,22)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (3000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (3000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, (3000+1)*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 3000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,1)
+				CIfEnd()
+				CIf(FP,{DeathsX(CurrentPlayer, Exactly, 10, 0, 0xFF)})
+				CSub(FP,0x6509B0,23)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (15000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (15000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, 15000*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 15000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,22)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (15000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (15000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, (15000+1)*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 15000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,1)
+				CIfEnd()
+				CIf(FP,{DeathsX(CurrentPlayer, Exactly, MarID[i+1], 0, 0xFF)})
+				CSub(FP,0x6509B0,23)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (20000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (20000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, 20000*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 20000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,22)
+				TriggerX(FP, {Deaths(CurrentPlayer, AtMost, (20000-1)*256, 0)}, {SetDeaths(CurrentPlayer, Add, (20000/AutoHealDiv)*j*256, 0)},{preserved})
+				TriggerX(FP, {Deaths(CurrentPlayer, AtLeast, (20000+1)*256, 0)}, {SetDeaths(CurrentPlayer, SetTo, 20000*256, 0)},{preserved})
+				CAdd(FP,0x6509B0,1)
+				CIfEnd()
+				CSub(FP,0x6509B0,6)--19
+				CIfEnd()
+			end
+			CIfEnd()
+		end
+		
+
+	end
+	--
 
 
-	--NJumpXEnd(FP, WhiteList)
+
 	--CSub(FP,0x6509B0,6)
 	--for i = 0, 4 do
 	--	TriggerX(FP, {Deaths(i, AtLeast, 1, 74),DeathsX(CurrentPlayer, Exactly, i, 0, 0xFF)}, {
@@ -782,8 +852,8 @@ end
 		EXCC_End()
 	
 	SETimer = CreateCcode()
-	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,100,SETimer)},{preserved})
-	DoActionsX(FP,{SetCDeaths(FP,Subtract,1,SETimer)})
+	TriggerX(FP,{CDeaths(FP,Exactly,0,SETimer)},{SetCDeaths(FP,SetTo,0,SELimit),SetCDeaths(FP,SetTo,5000,SETimer)},{preserved})
+	CDoActions(FP,{TSetCDeaths(FP,Subtract,CurSpeed,SETimer)})
 	CMov(FP,GTime,_Div(_Mul(_ReadF(0x57F23C),42),1000))
 	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
 
@@ -1107,7 +1177,7 @@ TriggerX(FP, {Deaths(P8, AtLeast, 3, 200),Deaths(P8, AtMost, 0, 189)}, {--양방
 	MoveUnit(All, "Men", Force1, 28, 29),
 	MoveUnit(All, "Men", Force1, 27, 30),
 },{preserved})
-CIfOnce(FP, {Deaths(P8, AtLeast, 1, 189)})
+CIfOnce(FP, {Deaths(P8, AtLeast, 1, 189)},{SetV(SpeedVar,4),RemoveUnitAt(All, 96, 41, AllPlayers),})
 f_GunForceSend(189, FP, 1024+(1088*65536), 1, nil, nil, 1)--화홀강제입력
 CFor(FP, 0, 900, 1)
 local NX,NY = CreateVars(2,FP)

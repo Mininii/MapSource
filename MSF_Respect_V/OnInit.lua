@@ -217,15 +217,15 @@
 		end
 		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
 		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
-		SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
-		SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={10,20,30}})
+		SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2,Splash={3,5,7}})--파벳 베이스 : 투사체를 두개로
+		SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={20,40,60}})
 		SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(8,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost+HMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
 		SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
-		SetWeaponsDatX(119, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk,DmgFactor=SMSkillFactorAtk})
+		SetWeaponsDatX(119, {TargetFlag = 0x020	 + 1 + 2 + 0x10,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk,DmgFactor=SMSkillFactorAtk,Splash={3,3,3}})
 		SetWeaponsDatX(120, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMSkillBaseAtk,DmgFactor=RMSkillFactorAtk})
-		SetWeaponsDatX(121, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk2,DmgFactor=SMSkillFactorAtk2,Splash={5,10,15}})
-		SetWeaponsDatX(122, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk3,DmgFactor=SMSkillFactorAtk3,Splash={10,20,30}})
+		SetWeaponsDatX(121, {TargetFlag = 0x020 + 1 + 2 + 0x10,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk2,DmgFactor=SMSkillFactorAtk2,Splash={5,10,15}})
+		SetWeaponsDatX(122, {TargetFlag = 0x020 + 1 + 2 + 0x10,DamageType=3,RangeMax = 7*32,DmgBase = SMSkillBaseAtk3,DmgFactor=SMSkillFactorAtk3,Splash={10,20,30}})
 		
 
 
@@ -311,7 +311,7 @@
 		CIf(FP,{LocalPlayerID(i)})
 		DisplayPrintTbl(1391,{"z\x02\x07。\x18˙\x0F+\x1C˚\x19 \x07자동 \x0F회복 \x04업그레이드 (\x1F",HealCost[i+1]," Ore\x04) \x11(\x07",HealUpgrade[i+1],"\x04/\x1C5\x11) \x04(\x03Z\x04) \x1C。\x0F+\x18.\x07˚\n\x07업그레이드 단계\x04마다 \x0F회복\x1F속도\x04가 점점 빨라집니다."})
 		DisplayPrintTbl(1390,{"x\x02\x07。\x18˙\x0F+\x1C˚\x19 부활의 가호 \x04업그레이드 (\x1F",RebirthCost[i+1]," Ore\x04) \x11(\x07",RebirthUp[i+1],"\x04/\x1C3\x11) \x04(\x03X\x04) \x1C。\x0F+\x18.\x07˚\n\x041회 : \x18S\x04pecial \x18M\x04arine \x19부활 적용\n\x042회 : \x19R\x04espect \x19M\x04arine \x19부활 적용\n\x043회 : \x07쿨타임\x04이 \x1F5분에서 3분으로 단축\x04됨"})
-		DisplayPrintTbl(1387,{"q\x02\x07。\x18˙\x0F+\x1C˚\x19 \x18S\x04pecial \x18M\x04arine \x1F특수 \x04업그레이드 (\x1F",SMSkillCost[i+1]," Ore\x04) \x11(\x07",SMUp[i+1],"\x04/\x1C24\x11) \x04(\x03Q\x04)\x1C。\x0F+\x18.\x07˚\x14\x14\x14\x14"})
+		DisplayPrintTbl(1387,{"q\x02\x07。\x18˙\x0F+\x1C˚\x19 \x18S\x04pecial \x18M\x04arine \x1F특수 \x04업그레이드 (\x1F",SMSkillCost[i+1]," Ore\x04) \x11(\x07",SMUp[i+1],"\x04/\x1C24\x11) \x04(\x03Q\x04)\x1C。\x0F+\x18.\x07˚"})
 		DisplayPrintTbl(1388,{"w\x02\x07。\x18˙\x0F+\x1C˚\x19 \x19R\x04espect \x19M\x04arine \x1F특수 \x04업그레이드 (\x1F",RMSkillCost[i+1]," Ore\x04) \x11(\x07",RMUp[i+1],"\x04/\x1C9\x11) \x04(\x03W\x04) \x1C。\x0F+\x18.\x07˚"})
 		--DisplayPrintTbl(1389,"c\x02\x07。\x18˙\x0F+\x1C˚\x1A 무적의 가호 \x04업그레이드 (\x1F1500000 Ore\x04) \x11(MAX 1) \x04(\x03C\x04) \x1C。\x0F+\x18.\x07˚\n\x16일정한 주기\x04마다 \x1A무적상태\x04가 적용됩니다. ")
 		CIfEnd()
@@ -323,7 +323,8 @@
 	LimitX = CreateCcode()
 	LimitT = CreateCcodeArr(7)
 	LimitC = CreateCcode()
-	TriggerX(FP, {}, {Simple_SetLoc(0, 320,992-(64), 320,992-(64)),CreateUnit(1, 145, 11, FP)})
+	TriggerX(FP, {}, {Simple_SetLoc(0, 320,992-(64), 320,992-(64)),CreateUnit(1, 145, 11, FP),
+	CreateUnit(1, 120, 42, P6),GiveUnits(All, 120, P6, 42, P9)})
 	for i = 0, 4 do
 		DoActions(FP, {
 			SetMemoryB(0x58D088+(46*i)+0,SetTo,255),
@@ -426,7 +427,7 @@ end
 		
 	T_YY = 2024
 	T_MM = 09
-	T_DD = 05
+	T_DD = 06
 	T_HH = 00
 	GlobalTime = os.time{year=T_YY, month=T_MM, day=T_DD, hour=T_HH }
 	if Limit == 1 then
@@ -688,18 +689,33 @@ CbyteConvert(FP,VArr(HVA3,0),GetStrArr(0,"\x0D\x0D!H"))
 	-- P8 128
 
 	DoActions2(AllPlayers, PatchArrPrsv)
-	DoActions2(FP, {
-		SetPlayerColor(P6, SetTo, 255);
-		SetPlayerColor(P7, SetTo, 42);
-		SetPlayerColor(P8, SetTo, 128);
-		SetMinimapColor(P6, SetTo, 255),
-		SetMinimapColor(P7, SetTo, 42),
-		SetMinimapColor(P8, SetTo, 128),
-		ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
-		ModifyUnitHitPoints(All, "Any unit", Force1, "Anywhere", 100),
-		ModifyUnitHitPoints(All, "Any unit", Force2, "Anywhere", 100),
-		ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
-	},1)
+	if DLC_Project==1 then
+		DoActions2(FP, {
+			SetPlayerColor(P6, SetTo, 255);
+			SetPlayerColor(P7, SetTo, 42);
+			SetPlayerColor(P8, SetTo, 109);
+			SetMinimapColor(P6, SetTo, 255),
+			SetMinimapColor(P7, SetTo, 42),
+			SetMinimapColor(P8, SetTo, 109),
+			ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
+			ModifyUnitHitPoints(All, "Any unit", Force1, "Anywhere", 100),
+			ModifyUnitHitPoints(All, "Any unit", Force2, "Anywhere", 100),
+			ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
+		},1)
+	else
+		DoActions2(FP, {
+			SetPlayerColor(P6, SetTo, 255);
+			SetPlayerColor(P7, SetTo, 42);
+			SetPlayerColor(P8, SetTo, 128);
+			SetMinimapColor(P6, SetTo, 255),
+			SetMinimapColor(P7, SetTo, 42),
+			SetMinimapColor(P8, SetTo, 128),
+			ModifyUnitEnergy(All, "Any unit", AllPlayers, "Anywhere", 100),
+			ModifyUnitHitPoints(All, "Any unit", Force1, "Anywhere", 100),
+			ModifyUnitHitPoints(All, "Any unit", Force2, "Anywhere", 100),
+			ModifyUnitShields(All, "Any unit", AllPlayers, "Anywhere", 100)
+		},1)
+	end
 	
 	DoActions(FP, {Simple_SetLoc(0, 1344, 7888, 1344, 7888),
 	CreateUnit(1, 133, 1, P7),	CreateUnit(1, 132, 1, P7),	CreateUnit(1, 131, 1, P7),

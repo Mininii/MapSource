@@ -72,6 +72,7 @@
         for i = 0, 4 do
             CElseIfX(HumanCheck(i,1),{SetCVar(FP,CurrentOP[2],SetTo,i),SetMemoryB(0x57F27C + (i * 228) + 62,SetTo,1),SetMemoryB(0x57F27C + (i * 228) + 63,SetTo,1)})
 			TriggerX(FP, {CD(GS,0)}, {GiveUnits(All, 96, AllPlayers, 64, i),},{preserved})
+			TriggerX(FP, {CD(GS,1)}, {GiveUnits(All, 96, AllPlayers, 41, i),},{preserved})
             if Limit == 1 then
                 f_Read(FP,0x6284E8+(0x30*i),"X",Cunit2)
             end
@@ -85,6 +86,9 @@
 	RemoveUnitAt(1,62,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Add,1);SetCVar(FP,TestVar[2],Add,1);},{preserved})
 	TriggerX(FP,{Command(Force1,AtLeast,1,63);},{ModifyUnitEnergy(1,63,Force1,64,0);
 	RemoveUnitAt(1,63,"Anywhere",Force1);SetCVar(FP,SpeedVar[2],Subtract,1);SetCVar(FP,TestVar[2],Subtract,1);},{preserved})
+	for i= 0, 3 do
+		TriggerX(FP,{Bring(Force1, Exactly, 1, 96, 43+i)},{SetV(SpeedVar,4+(i*2))},{preserved})
+	end
 	-- P6 255
 	-- P7 42
 	-- P8 128
@@ -95,6 +99,7 @@
 	--		TSetResources(Force1, SetTo, TestVar, Gas)
 	--	})
 	--end
+
 	CIf(FP,{TTCVar(FP,CurrentSpeed[2],NotSame,SpeedVar)}) -- 배속조정 트리거
 	TriggerX(FP,{CVar(FP,SpeedVar[2],AtMost,0)},{SetCVar(FP,SpeedVar[2],SetTo,1)},{preserved})
 	TriggerX(FP,{CVar(FP,SpeedVar[2],AtLeast,12)},{SetCVar(FP,SpeedVar[2],SetTo,11)},{preserved})
@@ -106,7 +111,7 @@
 		},{
 			RotatePlayer({
 			DisplayTextX(StrDesignX("\x0F게임 \x10속도\x04를 \x10- "..XSpeed[i].."\x04로 \x0F변경\x04하였습니다."), 0)},HumanPlayers,FP);
-			SetMemory(0x5124F0,SetTo,SpeedV[i]);},{preserved})
+			SetMemory(0x5124F0,SetTo,SpeedV[i]);SetV(CurSpeed,SpeedV[i])},{preserved})
 	end
 	CIfEnd()
 
@@ -399,18 +404,34 @@
 			TriggerX(FP, {LocalPlayerID(i)}, {SetCp(i),PlayWAV("staredit\\wav\\CTEnd.ogg")}, {preserved})
 		end
 		CMov(FP,CurEPD,SelEPD)
-		TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
-		TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
+		if DLC_Project == 1 then
+
+			TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. "), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린, 스킬 공격력 \x081.5배\x04, \x17Fever Power \x04활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용되며 잠시동안 \x08공격속도\x04가 \x07매우 빨라집니다."), 4)}, HumanPlayers, FP)}, {preserved})
+	
+		else
+
+			TriggerX(FP, {CV(SelUID,199)}, {RotatePlayer({DisplayTextX(StrDesignX("\x08H\x04D \x08S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x07★★★ \x04-").."\n"..StrDesignX("\x04어느정도 어렵지만 입문용 난이도로 나쁘지 않습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,198)}, {RotatePlayer({DisplayTextX(StrDesignX("\x16M\x04X \x16S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x08★★★★★★★★★ \x04-").."\n"..StrDesignX("\x08조심하십시오.. 매우 어렵습니다.").."\n"..StrDesignX("\x03특징 : \x0ES\x04pecial \x0EM\x04arine, \x17R\x04espect \x17M\x04arine 을 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,197)}, {RotatePlayer({DisplayTextX(StrDesignX("\x10S\x04C \x10S\x04tyle").."\n"..StrDesignX("\x04- \x03위험도 \x04: \x11??? \x04-").."\n"..StrDesignX("\x11정의할 수 없는, 정리하지 못한 난이도입니다. ").."\n"..StrDesignX("\x03특징 : \x1BH\x04ero \x1BM\x04arine 만 사용할 수 있습니다."), 4)}, HumanPlayers, FP)}, {preserved})
+			TriggerX(FP, {CV(SelUID,145)}, {RotatePlayer({DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode").."\n"..StrDesignX("\x04- \x03활성화 가능 옵션 \x04-").."\n"..StrDesignX("\x07속시원한 빠른 플레이\x04를 원할 경우 사용할 수 있습니다. ").."\n"..StrDesignX("\x03특징 : \x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4)}, HumanPlayers, FP)}, {preserved})
+	
+		end
 		CIfEnd()
 	CIfEnd()
 	CMov(FP,0x6509B0,FP)
 
 	
+if DLC_Project == 1 then
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용되며 잠시동안 \x08공격속도\x04가 \x07매우 빨라집니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
+else
+	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
+end
 
-	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 11)}, {SetCD(EVFCcode,1),RemoveUnit(145, AllPlayers),RotatePlayer({DisplayTextX("\n\n\n\n\n\n\n\n\n",4),DisplayTextX(StrDesignX("\x0FE\x04VF \x0FM\x04ode\x04가 활성화되었습니다.").."\n"..StrDesignX("\x1B마린 공격력 \x081.5배\x04, \x17Fever Power \x04활성화, \x07무적 벙커 활성화").."\n"..StrDesignX("\x17Fever Power \x04사용 중에는 모든 마린의 체력, 쉴드가 100%로 고정되고, 환전률 \x072배\x04가 적용됩니다."), 4),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg"),PlayWAVX("staredit\\wav\\ADEnd.ogg")}, HumanPlayers, FP)})
 
+	
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 8)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,1)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 12)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,2)})
 	Trigger2X(FP, {Bring(AllPlayers, AtLeast, 1, 96, 9)}, {SetCD(GST,1),RemoveUnit(96, AllPlayers),SetCD(GMode,3)})
@@ -451,6 +472,7 @@
 		SetMemoryB(0x57F27C + (3 * 228) + 74,SetTo,0),
 		SetMemoryB(0x57F27C + (4 * 228) + 74,SetTo,0)
 	})
+	CDoActions(FP, {TCreateUnit(1, 96, 40, CurrentOP)})
 	for i = 0, 4 do
 		f_TempRepeat({HumanCheck(i, 1)}, 96, 1, "BanUnit", i, {2896,112})
 	end
@@ -1057,17 +1079,17 @@ DoActions(FP,{
 		TriggerX(FP,{CD(RMRebirthT2[i+1],0)},{SetInvincibility(Disable, MarID[i+1], i, 64)},{preserved})
 		CIfXEnd()
 
-		local HealUpgradeT = CreateCcode()
-		CIf(FP,CV(HealUpgrade[i+1],1,AtLeast),{})
-		for j = 1, 5 do
-			TriggerX(FP, {CV(HealUpgrade[i+1],j)}, {SubCD(HealUpgradeT, j)}, {preserved})
-		end
-		TriggerX(FP,{CD(HealUpgradeT,0)},{SetCD(HealUpgradeT,50),
-		ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
-		ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
-		ModifyUnitShields(All,"Men",i,"Anywhere",100),
-		ModifyUnitShields(All,"Buildings",i,"Anywhere",100),},{preserved})
-		CIfEnd()
+		--local HealUpgradeT = CreateCcode()
+		--CIf(FP,CV(HealUpgrade[i+1],1,AtLeast),{})
+		--for j = 1, 5 do
+		--	TriggerX(FP, {CV(HealUpgrade[i+1],j)}, {SubCD(HealUpgradeT, j)}, {preserved})
+		--end
+		--TriggerX(FP,{CD(HealUpgradeT,0)},{SetCD(HealUpgradeT,75),
+		--ModifyUnitHitPoints(All,"Men",i,"Anywhere",100),
+		--ModifyUnitHitPoints(All,"Buildings",i,"Anywhere",100),
+		--ModifyUnitShields(All,"Men",i,"Anywhere",100),
+		--ModifyUnitShields(All,"Buildings",i,"Anywhere",100),},{preserved})
+		--CIfEnd()
 
 
 
@@ -1179,8 +1201,8 @@ DoActions(FP,{
 		CIfX(FP,{CV(SMPtr[i+1],1,AtLeast),CV(SMPtr[i+1],19025+(1699*84),AtMost)},{SubCD(SMSkillT,1)})
 		CTrigger(FP, {TMemoryX(_Add(SMPtr[i+1],69),AtLeast,1*256,0xFF00)}, {SubCD(SMSkillT,1)}, 1)--스팀쓸경우 스킬 시전속도 증가
 			local SMSkill = CreateCcode()
-			TriggerX(FP,{CD(SMSkill,1)},{SetCD(SMSkillT,20),KillUnit(91, i),KillUnit(90, i),KillUnit(121, i)},{preserved})
-			CIf(FP,{CD(SMSkillT,0)},{SetCD(SMSkillT,20),KillUnit(91, i),KillUnit(90, i),KillUnit(121, i)})
+			TriggerX(FP,{CD(SMSkill,1)},{SetCD(SMSkillT,20),RemoveUnit(91, i),RemoveUnit(90, i),RemoveUnit(121, i)},{preserved})
+			CIf(FP,{CD(SMSkillT,0)},{SetCD(SMSkillT,20),RemoveUnit(91, i),RemoveUnit(90, i),RemoveUnit(121, i),SetMemory(0x6C9EF8+(41*4), SetTo, 427)})
 			f_Read(FP,_Add(SMPtr[i+1],10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
@@ -1194,13 +1216,13 @@ DoActions(FP,{
 				if nc >= 9 then nc = 9 end
 				table.insert(ttt, nc.." "..hc.." "..(j-7).."\n")
 				CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 91, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j)}, {}, 1)
-				CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 47, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j)}, {KillUnit(47, i)}, 1)
+				--CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 47, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j)}, {KillUnit(47, i)}, 1)
 				
 				CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 90, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {}, 1)
-				CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 84, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {KillUnit(84, i)}, 1)
+				--CSPlot(CSMakeStar(4, 135, 128, 45, nc, hc), i, 84, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {KillUnit(84, i)}, 1)
 				if j >= 9 then
 					CSPlot(CSMakeStar(4, 135, 128, 45, j-7, 1), i, 121, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {}, 1)
-					CSPlot(CSMakeStar(4, 135, 128, 45, j-7, 1), i, 153, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {KillUnit(153, i)}, 1)
+					--CSPlot(CSMakeStar(4, 135, 128, 45, j-7, 1), i, 153, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+17, Exactly, j+8)}, {KillUnit(153, i)}, 1)
 				end
 
 			end
@@ -1208,11 +1230,11 @@ DoActions(FP,{
 			--PushErrorMsg(table.concat(ttt))
 			for j = 1,24 do
 			end
-			DoActions(FP, {Order(91, i, 64, Patrol, 64),Order(90, i, 64, Patrol, 64),Order(121, i, 64, Patrol, 64)})
+			DoActions(FP, {Order(91, i, 64, Patrol, 64),Order(90, i, 64, Patrol, 64),Order(121, i, 64, Patrol, 64),SetMemory(0x6C9EF8+(41*4), SetTo, 3413)})
 			CIfEnd()
 			--
 		
-			CIf(FP,{TMemoryX(_Add(SMPtr[i+1],19), Exactly,0,0xFF00),},{})
+			CIfX(FP,{TMemoryX(_Add(SMPtr[i+1],19), Exactly,0,0xFF00),},{})
 				CIf(FP,{CV(RebirthUp[i+1],1,AtLeast),CV(SMRebirthT[i+1],0),TMemoryX(_Add(SMPtr[i+1],40),AtLeast,150*16777216,0xFF000000)},{SetV(SMRebirthT[i+1],5*60*1000)})
 					f_Read(FP,_Add(SMPtr[i+1],10),CPos)
 					CDoActions(FP, {
@@ -1229,7 +1251,7 @@ DoActions(FP,{
 						SetCp(FP),},{preserved})
 				CIfEnd()
 				CMov(FP,SMPtr[i+1],0)
-			CIfEnd()
+			CElseX()
 			CTrigger(FP,{TMemory(_Add(SMPtr[i+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,SMSkill)},{
 				SetMemory(0x6509B0,SetTo,i);
 				DisplayText(StrDesign("\x18S\x04pecial \x18M\x04arine \x04의 Skill을 \x06Off \x04하였습니다."),4),
@@ -1246,6 +1268,7 @@ DoActions(FP,{
 				TSetMemory(_Add(SMPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 				TSetMemory(_Add(SMPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
 				},1)
+			CIfXEnd()
 		CDoActions(FP,{
 			TSetMemory(_Add(SMPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 			TSetMemory(_Add(SMPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
@@ -1260,19 +1283,19 @@ DoActions(FP,{
 		
 
 
-		TriggerX(FP,{CD(RMSkill,1)},{SetCD(RMSkillT,20),KillUnit(92, i)},{preserved})
-		CIf(FP,{CD(RMSkillT,0)},{SetCD(RMSkillT,20),KillUnit(92, i)})
+		TriggerX(FP,{CD(RMSkill,1)},{SetCD(RMSkillT,20),RemoveUnit(92, i)},{preserved})
+		CIf(FP,{CD(RMSkillT,0)},{SetCD(RMSkillT,20),RemoveUnit(92, i)})
 		f_Read(FP,_Add(RMPtr[i+1],10),CPos)
 		Convert_CPosXY()
 		Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 		for j = 1,9 do
 			CSPlot(CSMakeStar(4, 135, 128, 45, j, 0), i, 92, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+21, Exactly, j)}, {}, 1)
-			CSPlot(CSMakeStar(4, 135, 128, 45, j, 0), i, 70, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+21, Exactly, j)}, {KillUnit(70, i)}, 1)
+			--CSPlot(CSMakeStar(4, 135, 128, 45, j, 0), i, 70, 0, nil, 1, 32, FP, {MemoryB(0x58D2B0+(i*46)+21, Exactly, j)}, {KillUnit(70, i)}, 1)
 		end
 		DoActions(FP, {Order(92, i, 64, Patrol, 64)})
 		CIfEnd()
 
-			CIf(FP,{TMemoryX(_Add(RMPtr[i+1],19), Exactly,0,0xFF00),},{})
+			CIfX(FP,{TMemoryX(_Add(RMPtr[i+1],19), Exactly,0,0xFF00),},{})
 				CIf(FP,{CV(RebirthUp[i+1],2,AtLeast),CV(RMRebirthT[i+1],0),TMemoryX(_Add(RMPtr[i+1],40),AtLeast,150*16777216,0xFF000000)},{SetV(RMRebirthT[i+1],5*60*1000)})
 					f_Read(FP,_Add(RMPtr[i+1],10),CPos)
 					CDoActions(FP, {
@@ -1289,8 +1312,7 @@ DoActions(FP,{
 						SetCp(FP),},{preserved})
 				CIfEnd()
 				CMov(FP,RMPtr[i+1],0)
-			CIfEnd()
-			
+			CElseX()
 			CTrigger(FP,{TMemory(_Add(RMPtr[i+1],0x98/4),AtMost,227*65536),CDeaths(FP,Exactly,0,RMSkill)},{
 				SetMemory(0x6509B0,SetTo,i);
 				DisplayText(StrDesign("\x19R\x04espect \x18M\x04arine \x04의 Skill을 \x06Off \x04하였습니다."),4),
@@ -1307,6 +1329,8 @@ DoActions(FP,{
 				TSetMemory(_Add(RMPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 				TSetMemory(_Add(RMPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
 				},1)
+			CIfXEnd()
+			
 		CDoActions(FP,{
 			TSetMemory(_Add(RMPtr[i+1],0x98/4),SetTo,0 + 228*65536);
 			TSetMemory(_Add(RMPtr[i+1],0x9C/4),SetTo,228 + 228*65536);
@@ -1688,6 +1712,11 @@ end
 			LeaderBoardComputerPlayers(Disable);
 			SetCDeaths(FP,SetTo,600,LeaderBoardT);
 			ModifyUnitShields(All,"Men",Force2,"Anywhere",100);
+			Order(37, Force2, 64, Attack, 6),
+			Order(38, Force2, 64, Attack, 6),
+			Order(39, Force2, 64, Attack, 6),
+			Order(43, Force2, 64, Attack, 6),
+			Order(44, Force2, 64, Attack, 6),
 			PreserveTrigger();
 		},
 	}

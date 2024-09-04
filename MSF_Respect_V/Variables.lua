@@ -25,6 +25,7 @@
 
 	end
 	if DLC_Project == 1 then
+		AutoHealDiv = 100 -- 자동힐 나누기 계수
 		NMBaseAtk=40 -- 파벳베이스 : 1/2 데미지로 설정할것
 		NMFactorAtk=7 -- 파벳베이스 : 1/2 데미지로 설정할것
 		HMBaseAtk=100
@@ -83,6 +84,7 @@
 	end
 	--Vars
 	HongEnable = CreateCcode()
+	CurSpeed = CreateVar(FP)
 	SELimit = CreateCcode()
     ExRate = CreateVar2(FP, nil, nil, 20)
 	Nextptrs = CreateVar(FP)
@@ -109,7 +111,11 @@
 	VFlag256B = CreateVarArr(6,FP)
 	EVFCcode = CreateCcode()
 	CTMin = CreateVarArr(7, FP)
-	MarNumberLimit = CreateVar3(FP,1800)
+	if DLC_Project == 1 then
+		MarNumberLimit = CreateVar3(FP,900)
+	else
+		MarNumberLimit = CreateVar3(FP,1800)
+	end
 	PCheck = CreateCcode()
 	PExitFlag = CreateCcode()
 	SuppMax = CreateVar(FP)

@@ -175,6 +175,10 @@ CIf(FP, {Memory(0x628438, AtLeast, 1)},{
 f_Read(FP, 0x628438, nil, Nextptrs)
 f_Div(FP,CunitIndex,_Sub(Nextptrs,19025),_Mov(84))
 
+DoActions(FP, {
+	SetMemory(0x66EC48+(33*4), SetTo, 70),
+	
+})
 
 for y = 0, 3 do
 	if y == 0 then RS1 = Cleared RS2=Cleared end
@@ -184,6 +188,9 @@ for y = 0, 3 do
 	CTrigger(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {TCreateUnitWithProperties(1, MID, 16+y, MPID,{energy = 100})}, {preserved})
 end
 
+DoActions(FP, {
+	SetMemory(0x66EC48+(33*4), SetTo, 20),
+})
 
 CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)},{TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000)})
 f_Read(FP,_Add(Nextptrs,10),CPos)
