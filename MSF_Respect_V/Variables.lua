@@ -75,7 +75,7 @@
 	UnitHPArr = CreateFArr(1700, FP)
 	if DLC_Project == 1 then 
 		ExRateT = {
-			{20,22,24,26,28},{14,15,16,17,18},{12,13,14,15,16}
+			{20,22,24,27,30},{11,12,13,15,17},{8,9,10,12,14}
 		}
 	else
 		ExRateT = {
@@ -174,9 +174,9 @@
 	end
 
 	RebirthCost = {}
-	RebirthCostFactor = 300000
+	RebirthCostFactor = 500000
 	for i = 1, 5 do
-		table.insert(RebirthCost,CreateVar2(FP,nil,nil,300000))
+		table.insert(RebirthCost,CreateVar2(FP,nil,nil,500000))
 	end
 
 	SMSkillCost = {}

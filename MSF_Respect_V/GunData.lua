@@ -1874,14 +1874,14 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),CV(CreateUnitQueueNum,2000,AtLeast)}, {Rota
 	RotatePlayer({
 		Defeat()
 		},Force1,FP)})
-for i = 300,100,-50 do
+for i = 300,50,-50 do
 	Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, i, "Men", 64)}, {RotatePlayer({
 		DisplayTextX(string.rep("\n", 20),4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
 		DisplayTextX("\n",4);
 		DisplayTextX("\x13\x08마린이 "..i.."기 이하입니다.\n",4);
-		DisplayTextX("\x13\x08마린이 50기 이하일 경우 게임에서 패배합니다.",4);
+		DisplayTextX("\x13\x08마린이 5기 이하일 경우 게임에서 패배합니다.",4);
 		DisplayTextX("\n",4);
 		DisplayTextX("\x13\x03ＷＡＲＮＩＮＧ",4);
 		DisplayTextX("\x13\x04"..string.rep("―", 56),4);
@@ -1891,12 +1891,12 @@ for i = 300,100,-50 do
 		PlayWAVX("sound\\Bullet\\TNsFir00.wav"),
 		},HumanPlayers,FP)})
 end
-Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {RotatePlayer({
+Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 5, "Men", 64)}, {RotatePlayer({
 	DisplayTextX(string.rep("\n", 20),4);
 	DisplayTextX("\x13\x04"..string.rep("―", 56),4);
 	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
 	DisplayTextX("\n",4);
-	DisplayTextX("\x13\x08마린이 50기 이하입니다.\n",4);
+	DisplayTextX("\x13\x08마린이 5기 이하입니다.\n",4);
 	DisplayTextX("\x13\x08게임에서 패배하였습니다.",4);
 	DisplayTextX("\n",4);
 	DisplayTextX("\x13\x05ＧＡＭＥ　ＯＶＥＲ",4);
@@ -2339,8 +2339,10 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 50, "Men", 64)}, {Rot
 		CTrigger(FP,{Gun_Line(6,AtLeast,1)},{Gun_DoSuspend()},1)
 		if DLC_Project == 1 then
 			CIf(FP,{Gun_Line(7,AtLeast,360)},{Gun_SetLine(6,SetTo,1)})
+				CIfX(FP,{CD(GMode,3)})
 				Simple_SetLocX(FP, 0, Var_TempTable[2],Var_TempTable[3],Var_TempTable[2],Var_TempTable[3])
 				DoActions(FP, {Simple_CalcLoc(0, -32*7, -32*7, 32*7, 32*7),SetCp(6),RunAIScriptAt(JYD, 1),SetCp(7),RunAIScriptAt(JYD, 1),SetCp(FP)})
+				CIfXEnd()
 			CIfEnd()
 
 		else

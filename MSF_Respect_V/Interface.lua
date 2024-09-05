@@ -124,6 +124,7 @@
 		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,196)},AddCD(TestCode2,1) , {preserved})
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
+		DoActions(FP, {RemoveUnit("Men",Force2);})
 
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
@@ -150,9 +151,22 @@
 				},
 				actions = {
 					KillUnit("Men",Force2);
+					KillUnitAt(1, "Buildings", 64, Force2),
 					--KillUnit(143,Force2);
 					--KillUnit(144,Force2);
 					--KillUnit(146,Force2);
+					KillUnit(138,Force2);
+					KillUnit(136,Force2);
+					KillUnit(137,Force2);
+					KillUnit(139,Force2);
+					KillUnit(140,Force2);
+					KillUnit(141,Force2);
+					KillUnit(142,Force2);
+					KillUnit(143,Force2);
+					KillUnit(144,Force2);
+					KillUnit(146,Force2);
+					KillUnit(134,Force2);
+					
 					PreserveTrigger();
 				}
 				}

@@ -350,7 +350,7 @@ function CreateUnitQueue()
 			local RKillScore = CreateVar(FP)
 			local RKillScoreTotal = CreateVar(FP)
 			local RKillScoreP = CreateVar(FP)
-			local RKillScoreMin = CreateVar(FP)
+			RKillScoreMin = CreateVar(FP)
 			CMov(FP,RKillScore,0)
 			f_WreadX(FP, 0x663EB8, QueueUID, RKillScore)
 			for j,k in pairs(KillPointArr) do
@@ -361,7 +361,6 @@ function CreateUnitQueue()
 			CMov(FP,RKillScoreP,_Div(RKillScoreTotal,_Mov(1000)))
 			CMod(FP,RKillScoreTotal,1000)
 			CAdd(FP,RKillScoreMin,_Mul(_Mul(RKillScoreP,_Mov(10)),ExRate))
-			--DisplayPrintEr(MapPlayers, {"RKillScoreMin : ",RKillScoreMin})
 			CIfEnd()
 
 
@@ -381,6 +380,9 @@ function CreateUnitQueue()
 	NIfEnd()
 
 	NWhileEnd()
+	if TestStart == 1 then
+		DisplayPrintEr(MapPlayers, {"RKillScoreMin : ",RKillScoreMin})
+	end
 	
 	TriggerX(FP, {CV(count,QueueMaxUnit,AtMost),CV(CreateUnitQueueNum,0)}, {
 		SetInvincibility(Disable, 131, FP, 64),
