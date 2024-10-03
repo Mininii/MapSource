@@ -29,7 +29,7 @@ end
 VerText = "\x04Ver. 2.0"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(1)
+TestSet(2)
 X2_Mode = 1
 X2_Map= 0
 if X2_Mode==1 then

@@ -90,6 +90,15 @@ function onInit_EUD()
 	SetUnitsDatX(7,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(0,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(1,{Playerable = 2, Reqptr=5,SuppCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
+
+
+	
+	SetUnitsDatX(28,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--스탑버튼
+	SetUnitsDatX(27,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--홀드버튼
+	SetUnitsDatX(29,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--어택버튼
+
+
+
 	SetUnitsDatX(19,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(125,{HP=5000,Shield = BSh,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(109,{HP=500,MinCost=500,BuildTime=15,AdvFlag={0x8000,0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -140,7 +149,12 @@ function onInit_EUD()
 		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, (1344+32+(i*64))*2,160*2, (1344+32+(i*64))*2,160*2),CreateUnit(1, 107, 1, i)})
 
 		else
-		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),Simple_SetLoc(0, 1344+(i*64),160, 1344+(i*64),160),CreateUnit(1, 107, 1, i)})
+		TriggerX(FP, {HumanCheck(i, 1)}, {SetCVar(FP,SetPlayers[2],Add,1),
+		Simple_SetLoc(0, 1344+(i*64),160, 1344+(i*64),160),
+		CreateUnit(1, 107, 1, i),
+		Simple_SetLoc(0, 1344+(i*64),96, 1344+(i*64),96),
+		CreateUnit(1, 113, 1, i),
+	})
 
 		end
 		TriggerX(FP, {HumanCheck(i, 0)}, {RemoveUnit(111, i),RemoveUnit(125, i),RemoveUnit(122, i)})
@@ -286,6 +300,15 @@ end
 		CIfEnd()
 	end
 	
+	CIfEnd()
+	
+	CIf(FP,{CV(RepHeroIndex,113)}) -- 팩토리 포인터
+	for i = 0,6 do
+		CIf(FP,CVX(PlayerV,i,0xFF))
+		CMov(FP,FacPos[i+1],CI)
+		--DisplayPrint(HumanPlayers, {"배럭 등록 완료"})
+		CIfEnd()
+	end
 	CIfEnd()
 	CIf(FP,{TTOR(condbox)})
 	f_Read(FP,_Add(CI,10),CPos)

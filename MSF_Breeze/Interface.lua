@@ -270,15 +270,17 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
 
+
 		
-	for i = 0, 1699 do
-		TriggerX(FP,{ -- 테스트모드 무한스팀
-			DeathsX(EPDF(0x628298-0x150*i+(25*4)),Exactly,20,0,0xFF); -- EPD 35 Unused 0x8C
-		},
-		{
-			SetDeathsX(EPDF(0x628298-0x150*i+(69*4)),SetTo,255*256,0,0xFF00); -- \
-		},{preserved})
-		end
+	--for i = 0, 1699 do
+	--	TriggerX(FP,{ -- 테스트모드 무한스팀
+	--		DeathsX(EPDF(0x628298-0x150*i+(25*4)),Exactly,20,0,0xFF); -- EPD 35 Unused 0x8C
+	--	},
+	--	{
+	--		SetDeathsX(EPDF(0x628298-0x150*i+(69*4)),SetTo,255*256,0,0xFF00); -- \
+	--	},{preserved})
+	--end
+
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
 		CIfOnce(FP,Deaths(CurrentPlayer,AtLeast,1,208))
@@ -344,7 +346,22 @@ CIfX(FP,Never()) -- 상위플레이어 단락 시작
 				f_SaveCp()
 				CDoActions(FP,{TSetMemoryX(_Add(Cunit2,35),SetTo,_Mul(_Read(BackupCp),65536),0xFF000000)})
 				f_LoadCp()
-	
+				COrderID = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,19), COrderID, nil, 0xFF00, 01)
+				CrShift(FP, COrderID, 8)
+				CEPD5 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,5), CEPD5, nil, nil, 1)
+				CEPD23 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,23), CEPD23, nil, nil, 1)
+				CEPD4 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,4), CEPD4, nil, nil, 1)
+				CEPD6 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,6), CEPD6, nil, nil, 1)
+				CEPD22 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,22), CEPD22, nil, nil, 1)
+				CEPD62 = CreateVar(FP) 
+				f_Read(FP, _Add(Cunit2,62), CEPD62, nil, nil, 1)
+				
 			CIfEnd()
 		CIfEnd()
 	
@@ -472,9 +489,193 @@ for i = 1, 6 do -- 강퇴기능
 		CallTrigger(FP,OneClickUpgrade)
 		TriggerX(FP, {CD(UpMaster,1)}, {SetMemoryB(0x58D088 + (i * 46) + 19,SetTo,0)}, {preserved})
 		NIfEnd()
+
+
+		CIf(FP,{Command(i,AtLeast,1,28);},{
+			GiveUnits(All,28,i,"Anywhere",P12);
+			RemoveUnitAt(All,28,"Anywhere",P12);}) -- 멀티스탑
+
+			CFor(FP, 19025+25, 19025+25+(1700*84),84)
+			local CI = CForVariable()
+			CTrigger(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TTDeathsX(_Sub(CI,6), NotSame,5*256, 0,0xFF00),TTDeathsX(_Sub(CI,6), NotSame,152*256, 0,0xFF00),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+			TTOR({
+				_TDeathsX(CI,Exactly,0,0,0xFF),
+				_TDeathsX(CI,Exactly,20,0,0xFF)})},{TSetDeathsX(_Sub(CI,6),SetTo,1*256,0,0xFF00)},{preserved})
+			CForEnd()
+			
+				
+
+		CIfEnd()
+		
+		CIf(FP,{Command(i,AtLeast,1,27);},{
+			GiveUnits(All,27,i,"Anywhere",P12);
+			RemoveUnitAt(All,27,"Anywhere",P12);}) -- 멀티홀드
+			local TempPos = CreateVar(FP)
+			CFor(FP, 19025+25, 19025+25+(1700*84),84)
+			local CI = CForVariable()
+			CIf(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TTDeathsX(_Sub(CI,6), NotSame,5*256, 0,0xFF00),TTDeathsX(_Sub(CI,6), NotSame,152*256, 0,0xFF00),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+			TTOR({
+				_TDeathsX(CI,Exactly,0,0,0xFF),
+				_TDeathsX(CI,Exactly,20,0,0xFF)})})
+
+				f_Read(FP,_Sub(CI,15),TempPos)
+				CDoActions(FP,{
+					TSetDeaths(_Sub(CI,2),SetTo,0,0),
+					TSetDeathsX(_Sub(CI,6),SetTo,107*256,0,0xFF00),
+					TSetDeaths(_Sub(CI,19),SetTo,TempPos,0),
+					TSetDeaths(_Sub(CI,3),SetTo,TempPos,0),
+					TSetDeaths(_Sub(CI,21),SetTo,TempPos,0)})
+			CIfEnd()
+			CForEnd()
+		CIfEnd()
+
+		TriggerX(FP,{Command(i,AtLeast,1,29);},{
+			GiveUnits(All,29,i,"Anywhere",P12);
+			RemoveUnitAt(All,29,"Anywhere",P12);Order("Men", i, 64, Attack, 65+i)},{preserved}) -- 멀티어택
+		
+		CIf(FP,{CV(FacPos[i+1],19025,AtLeast),CV(FacPos[i+1],19025+(84*1699),AtMost)},{ModifyUnitHitPoints(All, 113, i, 64,100)})
+
+		CIf(FP,{TMemoryX(_Add(FacPos[i+1],69),AtLeast,1*256,0xFF00)},{TSetMemoryX(_Add(FacPos[i+1],69), SetTo, 0,0xFF00)}) -- 멀티스팀
+		
+		CFor(FP, 19025+25, 19025+25+(1700*84),84)
+		local CI = CForVariable()
+		CTrigger(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+		TTOR({
+			_TDeathsX(CI,Exactly,0,0,0xFF),
+			_TDeathsX(CI,Exactly,20,0,0xFF)})},{TSetMemoryX(_Add(CI,69-25), SetTo, 45*256, 0xFF00)},{preserved})
+		CForEnd()
+
+
+		DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 스팀팩이 발동되었습니다. \x07』"})
+		CIfEnd()
+
+		--CIf(FP,{TTMemoryX(_Add(FacPos[i+1],19), NotSame, FacOrderID[i+1],0xFF00)})
+		--f_Read(FP, _Add(FacPos[i+1],19), FacOrderID[i+1],nil,0xFF00,1)
+
+		--CIf(FP,{CVX(FacOrderID[i+1],107*0x100,0xFF00)}) -- 멀티홀드
+		--DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 홀드가 발동되었습니다. \x07』"})
+		--CIfEnd()
+		--CIf(FP,{CVX(FacOrderID[i+1],23*0x100,0xFF00)}) -- 멀티스탑. 스탑의경우 2인데 건물 명령은 낫띵 23으로 설정됨
+		--DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 스탑이 발동되었습니다. \x07』"})
+		--CIfEnd()
+
+		--CIfEnd()
+		CIf(FP,{TMemory(_Add(FacPos[i+1],62), AtLeast, 1)}) -- 랠리로 멀티커맨드
+			
+			f_Read(FP, _Add(FacPos[i+1],62), FacRally[i+1])
+			Convert_CPosXY(FacRally[i+1])
+			CDoActions(FP, {TSetMemory(_Add(FacPos[i+1],62), SetTo, 0)})
+			local TargetEPD = CreateVar(FP)
+			
+			CMov(FP,TargetEPD,0)
+			CFor(FP, 19025+10, 19025+10+(84*1700), 84)
+			local CI = CForVariable()
+				CTrigger(FP, {
+					TMemoryX(_Add(CI,9), AtLeast, 1*256,0xFF00),
+					TMemoryX(CI, AtLeast, _Sub(CPosX,9),0xFFFF),
+					TMemoryX(CI, AtMost, _Add(CPosX,9),0xFFFF),
+					TMemoryX(CI, AtLeast, _lShift(_Sub(CPosY,9), 16),0xFFFF0000),
+					TMemoryX(CI, AtMost, _lShift(_Add(CPosY,9), 16),0xFFFF0000),
+				}, {SetV(TargetEPD,_Sub(CI,10))},{preserved})
+			CForEnd()
+			
+			DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 커맨드가 발동되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"})
+				CIfX(FP,{CV(TargetEPD,1,AtLeast)})
+				
+				if TestStart == 1 then
+				DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 해당 좌표에 위치한 유닛을 찾았습니다. : ",TargetEPD," \x07』"})
+				end
+
+				
+
+
+				CIfX(FP, {TTOR({_TMemoryX(_Add(TargetEPD,25),Exactly,0,0xFF),_TMemoryX(_Add(TargetEPD,25),Exactly,20,0xFF)})})
+				if TestStart == 1 then
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 대상이 아군 마린입니다. 대상을 따라갑니다. \x07』"})
+				end
+
+				local TempPos = CreateVar(FP)
+				CFor(FP, 19025+25, 19025+25+(1700*84),84)
+				local CI = CForVariable()
+				CIf(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TTDeathsX(_Sub(CI,6), NotSame,5*256, 0,0xFF00),TTDeathsX(_Sub(CI,6), NotSame,152*256, 0,0xFF00),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+				TTOR({
+					_TDeathsX(CI,Exactly,0,0,0xFF),
+					_TDeathsX(CI,Exactly,20,0,0xFF)})})
+					f_Read(FP,_Sub(CI,15),TempPos)
+					CDoActions(FP,{
+						TSetDeaths(_Sub(CI,2),SetTo,_Add(_Mul(TargetEPD,4),0x58A364),0),
+						TSetDeathsX(_Sub(CI,6),SetTo,49*256,0,0xFF00),
+						TSetDeaths(_Sub(CI,19),SetTo,TempPos,0),
+						TSetDeaths(_Sub(CI,3),SetTo,TempPos,0),
+						TSetDeaths(_Sub(CI,21),SetTo,TempPos,0)
+					})
+
+				CIfEnd()
+				CForEnd()
+				--CElseIfX({TMemoryX(_Add(TargetEPD,19),Exactly,7,0xFF)}) -- 적유닛이다 공격!!
+				--if TestStart == 1 then
+				--	DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 대상이 적군입니다. 공격을 개시합니다. \x07』"})
+				--end
+			--	
+				--local TempPos = CreateVar(FP)
+				--CFor(FP, 19025+25, 19025+25+(1700*84),84)
+				--local CI = CForVariable()
+				--CIf(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TTDeathsX(_Sub(CI,6), NotSame,5*256, 0,0xFF00),TTDeathsX(_Sub(CI,6), NotSame,152*256, 0,0xFF00),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+				--TTOR({
+				--	_TDeathsX(CI,Exactly,0,0,0xFF),
+				--	_TDeathsX(CI,Exactly,20,0,0xFF)})})
+				--	f_Read(FP,_Sub(CI,15),TempPos)
+				--CDoActions(FP, {
+				--	TSetDeathsX(_Sub(CI,6),SetTo,10*256,0,0xFF00),
+				--	TSetDeathsX(_Sub(CI,6),SetTo,1*65536,0,0xFF0000),
+				--	TSetDeaths(_Sub(CI,2),SetTo,_Add(_Mul(TargetEPD,4),0x58A364),0),
+				--	TSetDeathsX(_Sub(CI,4),SetTo,0,0,0xFF),
+				--	TSetDeathsX(_Sub(CI,4),SetTo,0,1,0xFF00),})
+				--CIfEnd()
+				--CForEnd()
+
+				
+
+				CElseX()
+				
+				if TestStart == 1 then
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 하지만 대상이 마린이 아니므로 일반 무브가 적용됩니다. \x07』"})
+				end
+	
+				Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+				DoActions(FP, {Order("Men", i, 64, Move, 1)})
+				CIfXEnd()
+
+
+
+	
+				CElseX()
+				if TestStart == 1 then
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 해당 좌표에 위치한 유닛을 찾을 수 없어 일반 무브가 적용됩니다. \x07』"})
+				end
+					Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+					DoActions(FP, {Order("Men", i, 64, Move, 1)})
+				CIfXEnd()
+		CIfEnd()
+			
+		CIfEnd()
 	
 
-		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
+		CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)},{ModifyUnitHitPoints(All, 111, i, 64, 100)})
+		
+		CIf(FP,{TMemoryX(_Add(BarPos[i+1],69),AtLeast,1*256,0xFF00)},{TSetMemoryX(_Add(BarPos[i+1],69), SetTo, 0,0xFF00)}) -- 멀티스팀
+		CFor(FP, 19025+25, 19025+25+(1700*84),84)
+		local CI = CForVariable()
+		CTrigger(FP,{TDeathsX(_Sub(CI,6), Exactly, i, 0,0xFF),TDeathsX(_Sub(CI,6), AtLeast,1*256, 0,0xFF00),
+		TTOR({
+			_TDeathsX(CI,Exactly,0,0,0xFF),
+			_TDeathsX(CI,Exactly,20,0,0xFF)})},{TSetMemoryX(_Add(CI,69-25), SetTo, 45*256, 0xFF00)},{preserved})
+		CForEnd()
+
+
+		DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 스팀팩이 발동되었습니다. \x07』"})
+		CIfEnd()
+
 
 		CIf(FP,{TTMemory(_Add(BarPos[i+1],62), NotSame, BarRally[i+1])})
 			f_Read(FP, _Add(BarPos[i+1],62), BarRally[i+1])
@@ -778,21 +979,21 @@ CWhileEnd()
 
 local ShieldOnOff = CreateCcode()
 
-TriggerX(FP, {CD(ShieldOnOff,0),Command(i,AtLeast,1,19);}, {SetCD(ShieldOnOff,1),GiveUnits(All, 19, i, 64, P12),RemoveUnit(19, P12),SetCp(i),DisplayText("\x07『 \x1C수정 보호막\x04 사용이 시작되었습니다. \x03(1초당 \x1F1200미네랄 \x03소모) \x07』",4),PlayWAV("staredit\\wav\\shield_use.ogg"),SetCp(FP)}, {preserved})
+TriggerX(FP, {CD(ShieldOnOff,0),Command(i,AtLeast,1,19);}, {SetCD(ShieldOnOff,1),GiveUnits(All, 19, i, 64, P12),RemoveUnit(19, P12),SetCp(i),DisplayText("\x07『 \x1C수정 보호막\x04 사용이 시작되었습니다. \x03(1초당 \x1F1200미네랄 \x03소모. \x1F미네랄\x04이 없을 경우 \x08적용안됨.\x03) \x07』",4),PlayWAV("staredit\\wav\\shield_use.ogg"),SetCp(FP)}, {preserved})
 TriggerX(FP, {CD(ShieldOnOff,1),Command(i,AtLeast,1,19);}, {SetCD(ShieldOnOff,0),GiveUnits(All, 19, i, 64, P12),RemoveUnit(19, P12),SetCp(i),DisplayText("\x07『 \x1C수정 보호막\x04 사용이 종료되었습니다. \x07』",4),PlayWAV("staredit\\wav\\GMode.ogg"),PlayWAV("staredit\\wav\\GMode.ogg"),SetCp(FP)}, {preserved})
-TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtLeast, 50000, Ore)}, {
+TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtLeast, 50, Ore)}, {
 	SetResources(i, Subtract, 50, Ore),
 	SubV(CTMin[i+1],50),
 	ModifyUnitShields(All,"Any unit",i,"Anywhere",100),
 	ModifyUnitShields(All,125,i,2,100)}, {preserved})
-TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtMost, 49999, Ore)}, {
-	SetCp(i),
-	PlayWAV("sound\\Misc\\PError.WAV");
-	PlayWAV("sound\\Misc\\PError.WAV");
-	DisplayText("\x07『 \x08잔액이 부족\x04하여 \x1C수정 보호막\x04 사용이 종료되었습니다. \x03(최소 \x1F5만 미네랄 \x03필요) \x07』",4);
-	SetCp(FP),
-	SetCD(ShieldOnOff,0),
-}, {preserved})
+--TriggerX(FP, {CD(ShieldOnOff,1),Accumulate(i, AtMost, 49999, Ore)}, {
+--	SetCp(i),
+--	PlayWAV("sound\\Misc\\PError.WAV");
+--	PlayWAV("sound\\Misc\\PError.WAV");
+--	DisplayText("\x07『 \x08잔액이 부족\x04하여 \x1C수정 보호막\x04 사용이 종료되었습니다. \x03(최소 \x1F5만 미네랄 \x03필요) \x07』",4);
+--	SetCp(FP),
+--	SetCD(ShieldOnOff,0),
+--}, {preserved})
 
 DoActions(i,{SetCp(i),SetAllianceStatus(Force1,Ally),--팀킬방지
 RunAIScript("Turn ON Shared Vision for Player 1");

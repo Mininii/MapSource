@@ -487,16 +487,14 @@ function CreateUnitQueue()
 				f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(TempUID, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+				CTrigger(FP, {}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 
 			CElseIfX(CVar(FP,TempType[2],Exactly,1))
 			
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(TempUID, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+			CTrigger(FP, {}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 			CDoActions(FP,{
 				TSetMemory(_Add(G_CA_Nextptrs,2), SetTo, _Div(_ReadF(_Add(TempUID,EPD(0x662350))),2)),
 			})
@@ -566,8 +564,7 @@ function CreateUnitQueue()
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(TempUID, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-				CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+				CTrigger(FP, {}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 			local RandVar = CreateVar(FP)
 			CMov(FP,RandVar,0)
 			for i = 0, 6 do
@@ -621,8 +618,7 @@ function CreateUnitQueue()
 			f_Read(FP,_Add(G_CA_Nextptrs,10),CPos)
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CTrigger(FP, {CD(UTAGECcode,0)}, {TOrder(TempUID, Force2, 1, Patrol, DefaultAttackLocV);}, {preserved})
-			CTrigger(FP, {CD(UTAGECcode,1,AtLeast)}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
+			CTrigger(FP, {}, {TOrder(TempUID, Force2, 1, Attack, DefaultAttackLocV);}, {preserved})
 			
 			CMov(FP,CunitIndex,_Div(_Sub(G_CA_Nextptrs,19025),_Mov(84)))
 			CDoActions(FP, {Set_EXCC2(DUnitCalc,CunitIndex,1,SetTo,1)})
@@ -653,6 +649,11 @@ function CreateUnitQueue()
 	
 FixText(FP, 1)
 DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," / \x08200,000 \x07』"})
+if TestStart == 1 then
+	DisplayPrint(Force1, {"COrderID : ",COrderID,"   CEPD5 : ",CEPD5,"   CEPD23 : ",CEPD23,"\nCEPD4 : ",CEPD4,"   CEPD6 : ",CEPD6,"   CEPD22 : ",CEPD22,"   CEPD62 : ",CEPD62})
+
+end
+	
 FixText(FP, 2)
 end
 
