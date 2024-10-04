@@ -12,4 +12,7 @@ function Vars()
 	HumanPlayers = {0,1,2,3,4,P9,P10,P11,P12}
 	MapPlayers = {0,1,2,3,4}
 	ObPlayers = {P9,P10,P11,P12}
+	UnitIDArr = CreateFArr(1700, FP)
+	UnitPosArr = CreateFArr(1700, FP)
+	PlayerIDArr = CreateFArr(1700, FP)
 end

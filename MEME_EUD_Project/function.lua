@@ -12,6 +12,286 @@ function TestSet(val)
 	end
 end
 
+PatchArr = {}
+PatchArr2 = {}
+PatchArrPrsv = {}
+
+function PatchInsert(Act)
+	table.insert(PatchArr,Act)
+end
+function PatchInsert2(Act)
+	table.insert(PatchArr2,Act)
+end
+function PatchInsertPrsv(Act)
+	table.insert(PatchArrPrsv,Act)
+end
+
+
+function SetUnitsDatX(UnitID,Property)
+	if type(UnitID) == "string" then
+		UnitID = ParseUnit(UnitID) -- 스트링으로 유닛이름 입력가능
+	end
+	if UnitID>=228 then PushErrorMsg("UnitID Index Overflow") end
+	if type(Property)~= "table" then
+		PushErrorMsg("Property Inputdata Error")
+	else
+		for j,k in pairs(Property) do
+			if j=="MinCost" then
+				PatchInsert(SetMemoryW(0x663888 + (UnitID *2),SetTo,k)) -- 미네랄
+			elseif j=="Playerable" then
+				local SType
+				if type(k)=="boolean" then
+					if k == true then
+						SType=1
+					else
+						SType=0
+					end
+				else
+					SType=k
+				end
+				if SType == 2 then -- 2 == Only Player
+					PatchInsert(SetMemoryB(0x57F27C + (0 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (1 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (2 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (3 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,1))
+					PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,0))
+					PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,0))
+					PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,0))
+				else
+					PatchInsert(SetMemoryB(0x57F27C + (0 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (1 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (2 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (3 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (4 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (5 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (6 * 228) + UnitID,SetTo,SType))
+					PatchInsert(SetMemoryB(0x57F27C + (7 * 228) + UnitID,SetTo,SType))
+				end
+				
+			elseif j=="Armor"  then
+				PatchInsert(SetMemoryB(0x65FEC8 + UnitID,SetTo,k)) -- 아머
+			elseif j=="GasCost"  then
+				PatchInsert(SetMemoryW(0x65FD00 + (UnitID *2),SetTo,k)) -- 가스
+			elseif j=="BuildTime"  then
+				PatchInsert(SetMemoryW(0x660428 + (UnitID *2),SetTo,k)) -- 생산속도
+			elseif j=="SuppCost"  then
+				PatchInsert(SetMemoryB(0x663CE8 + UnitID,SetTo,k*2)) -- 서플
+			elseif j=="HP"  then
+				PatchInsert(SetMemory(0x662350 + (UnitID*4),SetTo,k*256))
+			elseif j=="Shield"  then
+				if type(k)=="boolean" then
+					if k == true then
+						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
+					else
+						PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,0))
+						PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, 0))
+					end
+				else
+					PatchInsert(SetMemoryB(0x6647B0 + UnitID,SetTo,1))
+					PatchInsert(SetMemoryW(0x660E00 + (UnitID *2), SetTo, k))
+				end
+			elseif j=="BdDimX"  then
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k,0xFFFF)) -- 건설크기
+			elseif j=="BdDimY" then
+				PatchInsert(SetMemoryX(0x662860 + (UnitID*4),SetTo,k*65536,0xFFFF0000)) -- 건설크기
+			elseif j=="SizeL" then
+				PatchInsert(SetMemoryX(0x6617C8 + (UnitID*8),SetTo,(k),0xFFFF))
+			elseif j=="SizeU" then
+				PatchInsert(SetMemoryX(0x6617C8 + (UnitID*8),SetTo,(k*65536),0xFFFF0000))
+			elseif j=="SizeR" then
+				PatchInsert(SetMemoryX(0x6617CC + (UnitID*8),SetTo,(k),0xFFFF))
+			elseif j=="SizeD" then
+				PatchInsert(SetMemoryX(0x6617CC + (UnitID*8),SetTo,(k*65536),0xFFFF0000))
+			elseif j=="SuppProv" then
+				PatchInsert(SetMemoryB(0x6646C8+UnitID,SetTo,Property.SuppProv)) -- 서플공급량
+			elseif j=="AdvFlag" then
+				if type(k)~= "table" or #k~=2 then
+					PushErrorMsg("AdvFlag Inputdata Error")
+				end
+				PatchInsert(SetMemoryX(0x664080 + (UnitID*4),SetTo,k[1],k[2]))
+			elseif j=="DefType" then
+				PatchInsert(SetMemoryB(0x662180 + UnitID,SetTo,k))
+			elseif j=="DefUpType" then
+				PatchInsert(SetMemoryB(0x6635D0 + UnitID,SetTo,k))
+			elseif j=="StarEditFlag"  then
+				PatchInsert(SetMemoryW(0x661518+(UnitID*2),SetTo,k))
+
+			elseif j=="AirWeapon"  then
+				PatchInsert(SetMemoryB(0x6616E0+UnitID,SetTo,k))
+			elseif j=="GroundWeapon"  then
+				PatchInsert(SetMemoryB(0x6636B8+UnitID,SetTo,k))
+			elseif j=="SpaceProv"  then
+				PatchInsert(SetMemoryB(0x660988+(UnitID*1),SetTo,k))
+			elseif j=="SpaceReq"  then
+			PatchInsert(SetMemoryB(0x664410+(UnitID*1),SetTo,k))
+			elseif j=="RClickAct" then
+				PatchInsert(SetMemoryB(0x662098+UnitID,SetTo,k))--RClickAct
+			elseif j=="HumanInitAct" then
+				PatchInsert(SetMemoryB(0x662268+UnitID,SetTo,k))--HumanInitAct
+			elseif j=="ComputerInitAct" then
+				PatchInsert(SetMemoryB(0x662EA0+UnitID,SetTo,k))--ComputerInitAct
+			elseif j=="AttackOrder" then
+				PatchInsert(SetMemoryB(0x663320+UnitID,SetTo,k))--AttackOrder
+			elseif j=="AttackMoveOrder" then
+				PatchInsert(SetMemoryB(0x663A50+UnitID,SetTo,k))--AttackMoveOrder
+			elseif j=="IdleOrder" then
+				PatchInsert(SetMemoryB(0x664898+UnitID,SetTo,k))--IdleOrder
+			elseif j=="RdySnd" then
+				PatchInsert(SetMemoryW(0x661FC0+(UnitID*2),SetTo,k))
+			elseif j=="Class"  then
+				PatchInsert(SetMemoryB(0x663DD0+(UnitID),SetTo,k))
+			elseif j=="WhatSndInit" then
+				PatchInsert(SetMemoryW(0x662BF0+(UnitID*2),SetTo,k))
+			elseif j=="WhatSndEnd" then
+				PatchInsert(SetMemoryW(0x65FFB0+(UnitID*2),SetTo,k))
+			elseif j=="YesInit" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x663C10+(UnitID*2),SetTo,k))
+			elseif j=="YesEnd" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x661440+(UnitID*2),SetTo,k))
+			elseif j=="PissedInit" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x663B38+(UnitID*2),SetTo,k))
+			elseif j=="PissedEnd" then
+				if UnitID>=106 then PushErrorMsg("UnitID Index Overflow") end
+				PatchInsert(SetMemoryW(0x661EE8+(UnitID*2),SetTo,k))
+			elseif j=="Reqptr" then -- 지원되지 않음. 뎡디터에서 직접 고칠것
+				--PatchInsertPrsv(SetMemoryW(0x660A70+(UnitID*2), SetTo, k))
+			elseif j== "SeekRange" then
+				PatchInsert(SetMemoryB(0x662DB8+UnitID,SetTo,k)) -- SeekRange
+			elseif j== "Graphic" then
+				PatchInsert(SetMemoryB(0x6644F8+UnitID,SetTo,k)) -- Graphic
+			elseif j== "BuildScore" then
+				PatchInsert(SetMemoryW(0x663408+(UnitID *2),SetTo,k))--BuildScore
+			elseif j== "KillScore" then
+				PatchInsert(SetMemoryW(0x663EB8+(UnitID *2),SetTo,k))--KillScore
+			elseif j== "ComputerAI" then
+				PatchInsert(SetMemoryB(0x660178+(UnitID),SetTo,k))--ComputerAI
+			elseif j == "GroupFlag" then
+				PatchInsert(SetMemoryB(0x6637A0+(UnitID),SetTo,k))--Group
+			elseif j== "SightRange" then
+				PatchInsert(SetMemoryB(0x663238+(UnitID),SetTo,k))--SightRange
+				
+			else
+				
+				PushErrorMsg("Wrong Property Name Detected!! : "..j)
+			end
+			
+		end
+	end
+end
+
+function IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) -- {{1,"1.Wav",Length1},{2,"2.Wav",Length2},...,{N,"N.Wav",LengthN}}
+	STPopTrigArr(PlayerID)	
+	local Arr = CreateVarArr(3,PlayerID) -- Temp / ΔT / Delay 
+
+	f_Read(PlayerID,0x51CE8C,Arr[1])
+
+	CNeg(PlayerID,Arr[1])
+
+	f_Diff(PlayerID,Arr[2],Arr[1],nil,nil,nil,1)
+
+	CSub(PlayerID,Arr[3],Arr[2])
+
+	local Cond1, Act1, Cond2
+	if type(Input) == "number" then
+		Cond1 = Memory(Input,AtLeast,1)
+		Act1 = SetMemory(Input,SetTo,0)
+	elseif Input[4] == "V" then
+		Cond1 = NVar(Input,AtLeast,1)
+		Act1 = SetNVar(Input,SetTo,0)
+	else
+		Cond1 = CtrigX(Input[1],Input[2],Input[3],Input[4],AtLeast,1)
+		Act1 = SetCtrig1X(Input[1],Input[2],Input[3],Input[4],SetTo,0)
+	end
+
+	CIfX(PlayerID,{NVar(Arr[3],Exactly,0),Cond1})
+		for k, v in pairs(WAVData) do
+			if type(Input) == "number" then
+				Cond2 = Memory(Input,Exactly,v[1])
+			elseif Input[4] == "V" then
+				Cond2 = NVar(Input,Exactly,v[1])
+			else
+				Cond2 = CtrigX(Input[1],Input[2],Input[3],Input[4],Exactly,v[1])
+			end
+			if type(v[2]) == "table" then
+				local WAVs = CreateCcodeArr(12)
+					for j, k in pairs(TargetPlayer) do
+						local Pl = k
+						if Pl == P9 then Pl = 128
+						elseif Pl == P10 then Pl = 129
+						elseif Pl == P11 then Pl = 130
+						elseif Pl == P12 then Pl = 131 end
+						
+					for o,p in pairs(v[2]) do
+							Trigger {players = {PlayerID},
+								conditions = {
+									Label(0);
+									CD(WAVs[j],o-1);
+									Cond2;
+									LocalPlayerID(Pl);
+									DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+								},
+								actions = {
+									AddCD(WAVs[j], 1);
+									Act1;
+									SetCp(Pl);
+									PlayWAV(p);
+									PlayWAV(p);
+									SetCp(PlayerID);
+									SetNVar(Arr[3],Add,v[3]);
+								},
+								flag = {preserved}
+							}
+						end
+						TriggerX(PlayerID, {CD(WAVs[j],#v[2],AtLeast)}, {SetCD(WAVs[j], 0);},{preserved})
+					end
+
+			else
+				for j, k in pairs(TargetPlayer) do
+					local Pl = k
+					if Pl == P9 then Pl = 128
+					elseif Pl == P10 then Pl = 129
+					elseif Pl == P11 then Pl = 130
+					elseif Pl == P12 then Pl = 131 end
+					
+					Trigger {players = {PlayerID},
+						conditions = {
+							Label(0);
+							Cond2;
+							LocalPlayerID(Pl);
+							DeathsX(k,Exactly,0*16777216,12,0xFF000000);
+						},
+						actions = {
+							Act1;
+							SetCp(Pl);
+							PlayWAV(v[2]);
+							PlayWAV(v[2]);
+							SetCp(PlayerID);
+							SetNVar(Arr[3],Add,v[3]);
+						},
+						flag = {preserved}
+					}
+				end
+			end
+		end
+	CElseIfX({NVar(Arr[3],AtLeast,1),Cond1},Act1)
+		if AlertWav ~= nil then
+			Trigger {players = {PlayerID},
+				conditions = {
+					Label(0);
+				},
+				actions = {
+					CopyCpActionX({PlayWAVX(AlertWav)},TargetPlayer);
+				},
+				flag = {preserved}
+			}
+		end
+	CIfXEnd()
+	return Arr[2]
+end
 
 function Include_G_CB_Library(DefaultAttackLoc,StartIndex,Size_of_G_CB_Arr)
 	
@@ -56,6 +336,8 @@ G_CB_BackupX = CreateVar(FP)
 G_CB_BackupY = CreateVar(FP)
 G_CB_X = CreateVar(FP)
 G_CB_Y = CreateVar(FP)
+G_CB_XDis = CreateVar(FP)
+G_CB_YDis = CreateVar(FP)
 G_CB_Shapes = {}
 G_CB_ShapeIndexAlloc = 1
 G_CB_RotateV = CreateVar(FP)
@@ -130,6 +412,8 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, RLocV);}, {preserved})
                 
 			CElseIfX(CVar(FP,RType[2],Exactly,2))
+			CElseIfX_AddRepeatType(3,"KillUnit")
+			CDoActions(FP,{TKillUnit(RUID, RPID)})
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
@@ -229,7 +513,7 @@ SetCallEnd()
 function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
 	
 	if type(UnitID) == "string" then
-		UnitID = ParseUnitNameT[UnitID]
+		UnitID = ParseUnit(UnitID)
 	end
 
 	if Owner == nil then Owner = 0xFFFFFFFF end
@@ -405,6 +689,8 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,21*(0x20/4)),SetTo,G_CB_RTTV[2]),
 	TSetMemory(_Add(G_CB_LineTemp,22*(0x20/4)),SetTo,G_CB_RTTV[3]),
 	TSetMemory(_Add(G_CB_LineTemp,23*(0x20/4)),SetTo,G_CB_RTTV[4]),
+	TSetMemory(_Add(G_CB_LineTemp,24*(0x20/4)),SetTo,G_CB_XDis),
+	TSetMemory(_Add(G_CB_LineTemp,25*(0x20/4)),SetTo,G_CB_YDis),
 
 })
 CIfX(FP,{CVar(FP,G_CB_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CB_YPos[2],Exactly,0xFFFFFFFF)}) -- G_CB_X,Y에 저장된것 기준(미사용이나 내부코드로 보존)
@@ -483,11 +769,12 @@ function CA_Func1()
 	CIfEnd()
 	local CX = CreateVar(FP)
 	local CY = CreateVar(FP)
+	CA_MoveXY(G_CB_TempTable[25], G_CB_TempTable[26])
 	CAdd(FP,CX,V(CA[8]),G_CB_TempTable[8])
 	CAdd(FP,CY,V(CA[9]),G_CB_TempTable[9])
     
 	--CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CB_Launch)})
-	CIfX(FP,{CVar(FP,CX[2],AtMost,32*64),CVar(FP,CY[2],AtMost,32*256)})
+	CIfX(FP,{CVar(FP,CX[2],AtMost,32*128),CVar(FP,CY[2],AtMost,32*128)})
     Simple_SetLocX(FP,0,CX,CY,CX,CY)
 	CallTrigger(FP,Call_CA_Repeat,{SetCDeaths(FP,SetTo,1,G_CB_Launch)})
 	if Limit == 1 then
@@ -896,7 +1183,7 @@ function T_to_ByteBuffer(Table)
 			end
 			for i, j in pairs(Table) do
 				if type(j) == "string" then
-					ByteValue = ByteValue + ParseUnitNameT[j]*(256^ret)
+					ByteValue = ByteValue + ParseUnit(j)*(256^ret)
 				else
 				ByteValue = ByteValue + j*(256^ret)
 				end
@@ -1053,12 +1340,17 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 	local G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer({0,0,0,0})}}
 	local G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({0,0,0,0})}}
 	local G_CB_CenterXY = {{G_CB_XPos,0x80000000},{G_CB_YPos,0x80000000}} -- 로케이션 모드
+	local G_CB_CenterDis = {{G_CB_XDis,0},{G_CB_YDis,0}} -- 로케이션 모드
+
+	
+
+
 	if type(CenterXY) == "number" then
 		local Temp,EditorLocNum = ConvertLocation(CenterXY)
 		G_CB_CenterXY = {{G_CB_XPos,EditorLocNum+0x80000000},{G_CB_YPos,EditorLocNum+0x80000000}}
 	elseif type(CenterXY) == "string" then
 		local Temp,EditorLocNum = ConvertLocation(CenterXY)
-		G_CB_CenterXY = {{G_CB_XPos,EditorLocNum+0x80000000},{G_CB_YPos,EditorLocNum+0x80000000}}
+		G_CB_CenterXY = {{G_CB_XPos,Temp+2+0x80000000},{G_CB_YPos,Temp+2+0x80000000}}
 
 	elseif type(CenterXY)== "table" then
 		if #CenterXY ~= 2 then PushErrorMsg("CenterXY_TableError") else 
@@ -1141,6 +1433,11 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 				end
 				G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({retP,retP,retP,retP})}}
 			end
+		elseif j == "DistanceXY" then
+			if #k ~= 2 then PushErrorMsg("DistanceXY_TableError") else 
+				G_CB_CenterDis = {{G_CB_XDis,k[1]},{G_CB_YDis,k[2]}}
+			end
+			
 		elseif j == "RotateTable" then
 			if type(k) == "table" and k[4]~="V" then
 				for o, p in pairs(k) do
@@ -1179,6 +1476,8 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		AutoSetV(Act,G_CB_NQOpTable)
 		AutoSetV(Act,G_CB_RepeatType)
 		AutoSetV(Act,G_CB_CenterXY)
+		AutoSetV(Act,G_CB_CenterDis)
+		
 		AutoSetV(Act,G_CB_OwnerTable)
 		AutoSetV(Act,G_CB_Rotate)
 		CallTriggerX(FP,Write_SpawnSet,Condition,Act,PreserveFlag)
@@ -1197,6 +1496,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		TAutoSetV(Act,G_CB_NQOpTable)
 		TAutoSetV(Act,G_CB_RepeatType)
 		TAutoSetV(Act,G_CB_CenterXY)
+		TAutoSetV(Act,G_CB_CenterDis)
 		TAutoSetV(Act,G_CB_OwnerTable)
 		TAutoSetV(Act,G_CB_Rotate)
 		CDoActions(FP, Act,PreserveFlag)

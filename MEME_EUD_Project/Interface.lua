@@ -173,6 +173,11 @@ for i = 0, 4 do
 	CMov(FP,0x5822C4,1500*2)
 	CMov(FP,0x582294,count)
 	CAdd(FP,0x582294,count)
+	CIf(FP,{Bring(i, AtLeast, 1, "Men", "Money");})
+	for p = 15, 0, -1 do --환전트리거
+	TriggerX(FP, {Score(i,Kills,AtLeast,1000*2^p);}, {SetScore(i,Subtract,1000*2^p,Kills);SetResources(i,Add,250*2^p,Ore);}, {preserved})
+	end
+	CIfEnd()
 	CIfEnd()
 end
 

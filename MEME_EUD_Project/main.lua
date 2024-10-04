@@ -27,7 +27,7 @@ end
 math.randomseed(322,322)
 
 TestSet(2)
-FP = P1
+FP = P6
 SetForces({P1,P2,P3,P4,P5},{P7,P8},{P6},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1,"C:\\Temp")
@@ -47,7 +47,7 @@ Install_GetCLoc(FP,104,nilunit)
 Include_Conv_CPosXY(FP,{128*32,128*32})
 Install_BackupCP(FP)
 Include_CRandNum(FP)
-Include_G_CB_Library(6,0x600,128)
+Include_G_CB_Library(22,0x600,128)
 
 
 
@@ -61,8 +61,8 @@ for i = 0,7  do
 end
 MEME_ClassicTrig()
 CIfEnd()
-
---G_CB_TSetSpawn({}, {88}, {CSMakePolygon(6, 128, 0, PlotSizeCalc(6, 5), 0)},P8,51,1,{RepeatType=2}) -- 건작엔진 틀
+GunTrig()
+G_CB_TSetSpawn({}, {88}, {CSMakePolygon(6, 128, 0, PlotSizeCalc(6, 5), 0)},P8,"CD48",1,{RepeatType=2}) -- 건작엔진 틀
 
 
 
