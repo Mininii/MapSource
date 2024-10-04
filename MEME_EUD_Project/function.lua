@@ -176,6 +176,9 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		local CRLID = CreateVar(FP)
 
 		
+		NIfX(FP, {CV(Gun_TempSpawnSet1,33)})
+		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, RepeatType,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
+		NElseX()
 		
 		f_Read(FP,0x628438,G_CB_NextptrsP,G_CB_Nextptrs,0xFFFFFF)
 			TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
@@ -190,9 +193,12 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CMov(FP,RType,RepeatType)
 		CMov(FP,RPtr,G_CB_Nextptrs)
 		CMov(FP,RPtrP,G_CB_NextptrsP)
-		
 		CMov(FP,RLocV,DefaultAttackLocV)
 		CallTrigger(FP, Call_RepeatOption)
+		NIfXEnd()
+
+
+
 		NIfEnd()
 
 
@@ -984,6 +990,14 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 
 end
 
+function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag)
+	local x = {}
+	for j,k in pairs(G_CB_ShapeTable) do
+		table.insert(x,33)
+	end
+	G_CB_TSetSpawn(Condition,x,G_CB_ShapeTable,P6,CenterXY,PreserveFlag,{RepeatType=ScanEffID})
+	--P6, UID 33 고정
+end
 function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,CenterXY,PreserveFlag,G_CB_Property)
 	--LM == nil then LM = 255
 	if type(G_CB_CUTable) ~= "table" then
