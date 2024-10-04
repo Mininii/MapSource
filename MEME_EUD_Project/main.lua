@@ -56,11 +56,15 @@ CJumpEnd(AllPlayers,init_func)
 OnInit()
 Interface()
 CIf(AllPlayers,NTCond())
+for i = 0,7  do
+	DoActions(i,{SetMemory(0x6509B0, SetTo, i)}) -- CP 정상화
+end
 MEME_ClassicTrig()
---Waves()
 CIfEnd()
 
 --G_CB_TSetSpawn({}, {88}, {CSMakePolygon(6, 128, 0, PlotSizeCalc(6, 5), 0)},P8,51,1,{RepeatType=2}) -- 건작엔진 틀
+
+
 
 Create_G_CB_Arr()
 
