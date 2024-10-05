@@ -42,6 +42,7 @@ Trigger {
 	},
 	actions = {
 		ModifyUnitHangarCount(8, All, "Gantrithor (Carrier)", AllPlayers, "Anywhere");
+		ModifyUnitHangarCount(10, All, "Warbringer (Reaver)", AllPlayers, "Anywhere");
 		SetInvincibility(Enable, "Protoss Interceptor", AllPlayers, "Anywhere");
 		PreserveTrigger();
 	},
@@ -5133,19 +5134,6 @@ Trigger { -- ZCD
 	},
 }
 
-
-Trigger { -- ND2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Norad II (Crashed Battlecruiser)", "CD200");
-	},
-	actions = {
-		CreateUnit(30, "Warbringer (Reaver)", "CD200", P8);
-		CreateUnit(12, "Gantrithor (Carrier)", "CD80", P8);
-		Order("Gantrithor (Carrier)", P8, "CD80", Attack, "CD200");
-		Comment("ND2");
-	},
-}
 
 
 Trigger {
@@ -43614,155 +43602,6 @@ Trigger { -- HERO
 }
 
 
-Trigger {
-	players = {P7},
-	conditions = {
-		Always();
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P1, Subtract, 1, "Terran Marine");
-		SetDeaths(P2, Subtract, 1, "Terran Marine");
-		SetDeaths(P3, Subtract, 1, "Terran Marine");
-		SetDeaths(P4, Subtract, 1, "Terran Marine");
-		SetDeaths(P5, Subtract, 1, "Terran Marine");
-		SetDeaths(P1, Subtract, 1, "Jim Raynor (Marine)");
-		SetDeaths(P2, Subtract, 1, "Jim Raynor (Marine)");
-		SetDeaths(P3, Subtract, 1, "Jim Raynor (Marine)");
-		SetDeaths(P4, Subtract, 1, "Jim Raynor (Marine)");
-		SetDeaths(P5, Subtract, 1, "Jim Raynor (Marine)");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P1, AtLeast, 1, "Terran Marine");
-	},
-	actions = {
-		DisplayText("\x13\x081 Player \x04Marine \x06DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_9992.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P1, AtLeast, 1, "Jim Raynor (Marine)");
-	},
-	actions = {
-		DisplayText("\x13\x081 Player \x04Jim Raynor \x06DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_999.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P2, AtLeast, 1, "Terran Marine");
-	},
-	actions = {
-		DisplayText("\x13\x0E2 Player \x04Marine \x0EDIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_9992.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P2, AtLeast, 1, "Jim Raynor (Marine)");
-	},
-	actions = {
-		DisplayText("\x13\x0E2 Player \x04Jim Raynor \x0EDIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_999.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P3, AtLeast, 1, "Terran Marine");
-	},
-	actions = {
-		DisplayText("\x13\x0F3 Player \x04Marine \x0FDIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_9992.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P3, AtLeast, 1, "Jim Raynor (Marine)");
-	},
-	actions = {
-		DisplayText("\x13\x0F3 Player \x04Jim Raynor \x0FDIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_999.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P4, AtLeast, 1, "Terran Marine");
-	},
-	actions = {
-		DisplayText("\x13\x104 Player \x04Marine \x10DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_9992.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P4, AtLeast, 1, "Jim Raynor (Marine)");
-	},
-	actions = {
-		DisplayText("\x13\x104 Player \x04Jim Raynor \x10DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_999.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P5, AtLeast, 1, "Terran Marine");
-	},
-	actions = {
-		DisplayText("\x13\x115 Player \x04Marine \x11DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_9992.ogg");
-	},
-}
-
-
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P5, AtLeast, 1, "Jim Raynor (Marine)");
-	},
-	actions = {
-		DisplayText("\x13\x115 Player \x04Jim Raynor \x11DIE", 1);
-		PreserveTrigger();
-		PlayWAV("staredit\\wav\\_999.ogg");
-	},
-}
 
 
 Trigger {
@@ -43814,15 +43653,17 @@ Trigger {
 }
 
 
+
 Trigger {
-	players = {P1},
+	players = {Force1},
 	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Terran Firebat");
+		DeathsX(CurrentPlayer,AtLeast,1*16777216,12,0xFF000000);
 		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
 	},
 	actions = {
 		PreserveTrigger();
 		DisplayText("\x13\x07 BGM ON", 4);
+		SetDeathsX(CurrentPlayer,SetTo,0*16777216,12,0xFF000000);
 		SetDeaths(CurrentPlayer, SetTo, 0, "Terran Firebat");
 		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
 	},
@@ -43830,138 +43671,21 @@ Trigger {
 
 
 Trigger {
-	players = {P1},
+	players = {Force1},
 	conditions = {
-		Deaths(CurrentPlayer, Exactly, 0, "Terran Firebat");
+		DeathsX(CurrentPlayer,Exactly,0*16777216,12,0xFF000000);
 		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
 	},
 	actions = {
 		PreserveTrigger();
 		DisplayText("\x13\x08 BGM OFF", 4);
+		SetDeathsX(CurrentPlayer,SetTo,1*16777216,12,0xFF000000);
 		SetDeaths(CurrentPlayer, SetTo, 1, "Terran Firebat");
 		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
 	},
 }
 
 
-Trigger {
-	players = {P2},
-	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x07 BGM ON", 4);
-		SetDeaths(CurrentPlayer, SetTo, 0, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P2},
-	conditions = {
-		Deaths(CurrentPlayer, Exactly, 0, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x08 BGM OFF", 4);
-		SetDeaths(CurrentPlayer, SetTo, 1, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P3},
-	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x07 BGM ON", 4);
-		SetDeaths(CurrentPlayer, SetTo, 0, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P3},
-	conditions = {
-		Deaths(CurrentPlayer, Exactly, 0, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x08 BGM OFF", 4);
-		SetDeaths(CurrentPlayer, SetTo, 1, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P4},
-	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x07 BGM ON", 4);
-		SetDeaths(CurrentPlayer, SetTo, 0, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P4},
-	conditions = {
-		Deaths(CurrentPlayer, Exactly, 0, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x08 BGM OFF", 4);
-		SetDeaths(CurrentPlayer, SetTo, 1, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P5},
-	conditions = {
-		Deaths(CurrentPlayer, AtLeast, 1, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x07 BGM ON", 4);
-		SetDeaths(CurrentPlayer, SetTo, 0, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
-
-
-Trigger {
-	players = {P5},
-	conditions = {
-		Deaths(CurrentPlayer, Exactly, 0, "Terran Firebat");
-		Bring(CurrentPlayer, AtLeast, 1, "Terran Firebat", "Anywhere");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x08 BGM OFF", 4);
-		SetDeaths(CurrentPlayer, SetTo, 1, "Terran Firebat");
-		RemoveUnitAt(1, "Terran Firebat", "Anywhere", CurrentPlayer);
-	},
-}
 
 
 Trigger { -- H BGM

@@ -52,6 +52,13 @@ Include_G_CB_Library(22,0x600,128)
 
 
 CJumpEnd(AllPlayers,init_func)
+P1MCur = CreateVar(FP)
+P1MPrev = CreateVar(FP)
+P1MValue = CreateVar(FP)
+CRead(P1,V(P1MCur[2],FP),0x58A364) 
+CSub(P1,V(P1MValue[2],FP),V(P1MCur[2],FP),V(P1MPrev[2],FP)) -- V(8)에 추가된 마린 데스값을 저장함
+
+
 
 OnInit()
 Interface()
@@ -62,7 +69,7 @@ end
 MEME_ClassicTrig()
 CIfEnd()
 GunTrig()
-G_CB_TSetSpawn({}, {88}, {CSMakePolygon(6, 128, 0, PlotSizeCalc(6, 5), 0)},P8,"CD48",1,{RepeatType=2}) -- 건작엔진 틀
+--G_CB_TSetSpawn({}, {88}, {CSMakePolygon(6, 128, 0, PlotSizeCalc(6, 5), 0)},P8,"CD48",1,{RepeatType=2}) -- 건작엔진 틀
 
 
 
@@ -77,12 +84,14 @@ CJump(AllPlayers,init_func2)
 G_CBPlot()
 CJumpEnd(AllPlayers,init_func2)
 init_Setting()
-if Limit == 0 then
-	Enable_HideErrorMessage(FP)
-end
+--if Limit == 0 then
+--	Enable_HideErrorMessage(FP)
+--end
 
 
 
+
+CRead(P8,V(P1MPrev[2],FP),0x58A364)
 STRxOut(AllPlayers)
 
 EndCtrig()

@@ -178,7 +178,22 @@ for i = 0, 4 do
 	TriggerX(FP, {Score(i,Kills,AtLeast,1000*2^p);}, {SetScore(i,Subtract,1000*2^p,Kills);SetResources(i,Add,250*2^p,Ore);}, {preserved})
 	end
 	CIfEnd()
+	if i == 0 then
+		CIf(FP,{CV(P1MValue,1,AtLeast)},{SubV(P1MValue,1)})
+		DisplayPrint(HumanPlayers,{"\x12",PName(i)," \x04Marine \x06DIE"},nil,{"staredit\\wav\\_9992.ogg","staredit\\wav\\_9992.ogg"})
+	else
+		CIf(FP,{Deaths(i, AtLeast, 1, "Terran Marine");},{SetDeaths(i, Subtract, 1, "Terran Marine")})
+		DisplayPrint(HumanPlayers,{"\x12",PName(i)," \x04Marine \x06DIE"},nil,{"staredit\\wav\\_9992.ogg","staredit\\wav\\_9992.ogg"})
+		
+	end
 	CIfEnd()
+	CIf(FP,{Deaths(i, AtLeast, 1, "Jim Raynor (Marine)");},{SetDeaths(i, Subtract, 1, "Jim Raynor (Marine)")})
+	DisplayPrint(HumanPlayers,{"\x12",PName(i)," \x04Jim Raynor \x06DIE"},nil,{"staredit\\wav\\_999.ogg","staredit\\wav\\_999.ogg"})
+	CIfEnd()
+
+	CIfEnd()
+
+
 end
 
 

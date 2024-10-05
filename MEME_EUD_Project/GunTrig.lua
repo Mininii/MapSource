@@ -2,9 +2,18 @@ function GunTrig()
 
 	BGMType = CreateVar(FP)
 	Dt = IBGM_EPD(FP, {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}, BGMType, {
-		{1,"staredit\\wav\\_happy.ogg",19*1000},
+		{1,"staredit\\wav\\happy.ogg",19*1000},
+		{2,"staredit\\wav\\yodelsong.ogg",157*1000},
+		{3,"staredit\\wav\\_Hong.ogg",16*1000},
+		{4,"staredit\\wav\\Lethal_Icecream.ogg",24*1000},
+		{5,"staredit\\wav\\Bombyanggang.ogg",16*1000},
 	})
 	
+
+	CDoActions(FP, {TSetDeathsX(Force1, Subtract, Dt, 12,0xFFFFFF)})
+	if TestStart == 0 then
+		DoActionsX(FP,{SetV(BGMType,2)},1)
+	end
 	function CIf_GunTrig(PlayerID,GunID,LocID,TimerMax,BGMTypes)
 		local GunCcode = CreateCcode()
 		GunTrigGLoc = LocID
@@ -14,121 +23,213 @@ function GunTrig()
 		return GunCcode
 	end
 --P7Guns
-HacCD1 = CIf_GunTrig(P7, "Zerg Hatchery", "CD1",200,1);
+HacCD1 = CIf_GunTrig(P7, "Zerg Hatchery", "CD1",400,1);
+	CD1Sh = CSMakeStar(4, 180, 64, 45, PlotSizeCalc(4*2, 2), 0)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD1Sh,P8,GunTrigGLoc,1,{FNTable=2})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD1Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD1Sh,P8,GunTrigGLoc,1,{FNTable=2})
 CIfEnd()
 HacCD3 = CIf_GunTrig(P7, "Zerg Hatchery", "CD3",400,1);
-for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(2, 32, 90, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX"})
-end
-for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CSMakeLine(2, 32, 90, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX",RepeatType="KiilUnit"})
-end
-for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(2, 32, 90, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX"})
-end
+	CD3Sh = CSMakeLine(2, 32, 90, 5, 0)
+	for i = 0,4 do
+		G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD3Sh,P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX"})
+		G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD3Sh,P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX",RepeatType="KiilUnit"})
+		G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD3Sh,P8,GunTrigGLoc,1,{DistanceXY={0,(-32*2)+(32*i)},LMTable="MAX"})
+	end
 CIfEnd()
-HacCD4 = CIf_GunTrig(P7, "Zerg Hatchery", "CD4",200,1);
-G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeCircle(12, 72, 0, 13, 1),P8,GunTrigGLoc,1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,70,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(4, 24, 0, 13, 0),P8,GunTrigGLoc,1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CSMakeCircle(12, 72, 0, 13, 1),P8,GunTrigGLoc,1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CSMakeLine(4, 24, 0, 13, 0),P8,GunTrigGLoc,1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeCircle(12, 72, 0, 13, 1),P8,GunTrigGLoc,1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,270,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(4, 24, 0, 13, 0),P8,GunTrigGLoc,1)
+HacCD4 = CIf_GunTrig(P7, "Zerg Hatchery", "CD4",400,1);
+	CD4Sh_1 = CSMakeCircle(12, 72, 0, 13, 1)
+	CD4Sh_2 = CSMakeLine(4, 48, 0, 13, 0)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD4Sh_1,P8,GunTrigGLoc,1)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,70,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD4Sh_2,P8,GunTrigGLoc,1)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD4Sh_1,P8,GunTrigGLoc,1,{LMTable = "MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD4Sh_2,P8,GunTrigGLoc,1,{LMTable = "MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD4Sh_1,P8,GunTrigGLoc,1)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,270,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD4Sh_2,P8,GunTrigGLoc,1)
 CIfEnd()
 HacCD37 = CIf_GunTrig(P7, "Zerg Hatchery", "CD37",400,1);
+	CD37Sh = CSMakeLine(2, 32, 0, 5, 0)
+	for i = 0,4 do
+		G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD37Sh,P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX"})
+		G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD37Sh,P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX",RepeatType="KiilUnit"})
+		G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD37Sh,P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX"})
+	end
+CIfEnd()
+HacCD38 = CIf_GunTrig(P7, "Zerg Hatchery", "CD38",400,1);
+CD38Sh = CSMakeCircle(5, 96, 0, 6, 1)
+RandRotV = f_CRandNum(360)
+CMov(FP,G_CB_RotateV,RandRotV)
 for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(2, 32, 0, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX"})
-end
-for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CSMakeLine(2, 32, 0, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX",RepeatType="KiilUnit"})
-end
-for i = 0,4 do
-	G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)",},CSMakeLine(2, 32, 0, 5, 0),P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),0},LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD38Sh,P8,GunTrigGLoc,1,{DistanceXY={(32*2)-(32*i),(-32*2)+(32*i)},LMTable="MAX",RotateTable = "Main"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD38Sh,P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),(-32*2)+(32*i)},LMTable="MAX",RotateTable = "Main",RepeatType="KiilUnit"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*20),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD38Sh,P8,GunTrigGLoc,1,{DistanceXY={(-32*2)+(32*i),(-32*2)+(32*i)},LMTable="MAX",RotateTable = "Main"})
+
 end
 CIfEnd()
-HacCD38 = CIf_GunTrig(P7, "Zerg Hatchery", "CD38",200,1);
+HacCD39 = CIf_GunTrig(P7, "Zerg Hatchery", "CD39",400,1);
+CD39Sh = {28  ,{672, 1632},{704, 1632},{736, 1632},{768, 1632},{800, 1632},{832, 1632},{864, 1632},{896, 1632},{928, 1632},{960, 1632},{960, 1664},{960, 1696},{960, 1728},{960, 1760},{960, 1792},{960, 1824},{960, 1856},{960, 1888},{960, 1920},{960, 1952},{960, 1984},{928, 1792},{896, 1792},{864, 1792},{832, 1792},{800, 1792},{768, 1792},{736, 1792}}
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD39Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD39Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD39Sh,P8,{0,0},1,{LMTable="MAX"})
 CIfEnd()
-HacCD39 = CIf_GunTrig(P7, "Zerg Hatchery", "CD39",200,1);
+HacCD40 = CIf_GunTrig(P7, "Zerg Hatchery", "CD40",400,1);
+CD40Sh = {23  ,{1408, 1728},{1440, 1728},{1472, 1728},{1504, 1728},{1536, 1728},{1568, 1600},{1568, 1632},{1568, 1664},{1568, 1696},{1568, 1728},{1568, 1760},{1568, 1792},{1568, 1824},{1568, 1856},{1376, 1600},{1376, 1632},{1376, 1664},{1376, 1696},{1376, 1728},{1376, 1760},{1376, 1792},{1376, 1824},{1376, 1856}}
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD40Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD40Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD40Sh,P8,{0,0},1,{LMTable="MAX"})
 CIfEnd()
-HacCD40 = CIf_GunTrig(P7, "Zerg Hatchery", "CD40",200,1);
+HacCD41 = CIf_GunTrig(P7, "Zerg Hatchery", "CD41",400,1);
+Shape9081 = {4   ,{768, 2208},{1152, 2016},{1248, 2112},{864, 2304}}
+CD41Sh = CS_FillPathXY(Shape9081, 1, 64, 32, 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD41Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD41Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD41Sh,P8,{0,0},1,{LMTable="MAX"})
+
 CIfEnd()
-HacCD41 = CIf_GunTrig(P7, "Zerg Hatchery", "CD41",200,1);
-CIfEnd()
-HacCD42 = CIf_GunTrig(P7, "Zerg Hatchery", "CD42",200,1);
+HacCD42 = CIf_GunTrig(P7, "Zerg Hatchery", "CD42",400,1);
+CD42Sh = CSMakePolygon(6, 48, 0, PlotSizeCalc(6, 3), 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD42Sh,P8,GunTrigGLoc,1,{FNTable=2})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD42Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD42Sh,P8,GunTrigGLoc,1,{FNTable=2})
+
 CIfEnd()
 
 
-HacCD2 = CIf_GunTrig(P8, "Zerg Hatchery", "CD2");
+HacCD2 = CIf_GunTrig(P8, "Zerg Hatchery", "CD2",400,1);
+CD2Sh = CSMakePolygon(6, 48, 0, PlotSizeCalc(6, 2), 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD2Sh,P8,GunTrigGLoc,1,{FNTable=2})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD2Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD2Sh,P8,GunTrigGLoc,1,{FNTable=2})
 CIfEnd()
-HacCD5 = CIf_GunTrig(P8, "Zerg Hatchery", "CD5");
+HacCD5 = CIf_GunTrig(P8, "Zerg Hatchery", "CD5",400,1);
+Shape9081_1 = {4   ,{1472, 3552},{1568, 3648},{1408, 3744},{1312, 3648}}
+Shape9081_2 = {4   ,{1760, 3744},{1856, 3808},{1632, 3936},{1472, 3872}}
+Shape9081_1 = CS_FillPathXY(Shape9081_1, 1, 64, 32, 0)
+Shape9081_2 = CS_FillPathXY(Shape9081_2, 1, 64, 32, 0)
+CD5Sh = CS_OverlapX(Shape9081_1,Shape9081_2)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD5Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD5Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD5Sh,P8,{0,0},1,{LMTable="MAX"})
+
+
+
 CIfEnd()
-HacCD6 = CIf_GunTrig(P8, "Zerg Hatchery", "CD6");
+HacCD6 = CIf_GunTrig(P8, "Zerg Hatchery", "CD6",400,1);
+CD6Sh = CSMakeLine(1, 64, 0, 5, 1)
+for i = 0, 7 do
+	G_CB_TSetSpawn({CD(GunTrigGCcode,0+(i*10),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD6Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RotateTable = (i*360)/8})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD6Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RotateTable = (i*360)/8,RepeatType="KiilUnit"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,200+(i*10),AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD6Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RotateTable = (i*360)/8})
+end
 CIfEnd()
-HacCD49 = CIf_GunTrig(P7, "Zerg Hatchery", "CD49");
+HacCD49 = CIf_GunTrig(P7, "Zerg Hatchery", "CD49",400,1);
+CD49Sh = CSMakeStar(4, 180, 48, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD49Sh,P8,GunTrigGLoc,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD49Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD49Sh,P8,GunTrigGLoc,1)
+
+
 CIfEnd()
-HacCD50 = CIf_GunTrig(P7, "Zerg Hatchery", "CD50");
+HacCD50 = CIf_GunTrig(P7, "Zerg Hatchery", "CD50",400,1); -- 알랜 가디언 영웅
 CIfEnd()
-HacCD51 = CIf_GunTrig(P7, "Zerg Hatchery", "CD51");
+HacCD51 = CIf_GunTrig(P7, "Zerg Hatchery", "CD51",400,1); --워브 톰
 CIfEnd()
-HacCD52 = CIf_GunTrig(P7, "Zerg Hatchery", "CD52");
+HacCD52 = CIf_GunTrig(P7, "Zerg Hatchery", "CD52",400,1);
+CD52_Sh = CS_OverlapX(CS_MoveXY(CSMakeLine(2, 32, 45, 16, 0), 0, -182+23),CS_MoveXY(CSMakeLine(2, 32, 45+90, 16, 0), 0, 182-23))
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+
 CIfEnd()
-HacCD53 = CIf_GunTrig(P7, "Zerg Hatchery", "CD53");
+HacCD53 = CIf_GunTrig(P7, "Zerg Hatchery", "CD53",400,1);
+CIfEnd()	
+LairCD8 = CIf_GunTrig(P7, "Zerg Lair", "CD8",400,3);
+Shape9081 = {6   ,{1440, 2848},{1664, 2720},{1664, 2624},{1536, 2560},{1344, 2656},{1376, 2752}}
+CD8Sh = CS_FillPathXY(Shape9081, 1, 40, 40, 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD8Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD8Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD8Sh,P8,{0,0},1,{LMTable="MAX"})
+
+CIfEnd()
+LairCD12 = CIf_GunTrig(P7, "Zerg Lair", "CD12",400,3);
+CIfEnd()
+LairCD13 = CIf_GunTrig(P7, "Zerg Lair", "CD13",400,3);
+CIfEnd()
+LairCD14 = CIf_GunTrig(P7, "Zerg Lair", "CD14",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
+CIfEnd()
+LairCD15 = CIf_GunTrig(P7, "Zerg Lair", "CD15",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
+CIfEnd()
+LairCD18 = CIf_GunTrig(P7, "Zerg Lair", "CD18",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
+CIfEnd()
+LairCD19 = CIf_GunTrig(P7, "Zerg Lair", "CD19",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
+CIfEnd()
+LairCD7 = CIf_GunTrig(P8, "Zerg Lair", "CD7",400,3);
+CD7Sh_1 = CSMakeLine(4, 64, 45, 17, 1)
+CD7Sh_2 = CS_ConnectPath(CSMakePath({-182,-182},{182,-182},{182,182},{-182,182}),4,1)
+CD7Sh = CS_OverlapX(CD7Sh_1,CD7Sh_2)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD7Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD7Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD7Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+CIfEnd()
+LairCD9 = CIf_GunTrig(P8, "Zerg Lair", "CD9",400,3);
+CIfEnd()
+LairCD10 = CIf_GunTrig(P8, "Zerg Lair", "CD10",400,3);
+CIfEnd()
+LairCD11 = CIf_GunTrig(P8, "Zerg Lair", "CD11",400,3);
+CIfEnd()
+LairCD16 = CIf_GunTrig(P8, "Zerg Lair", "CD16",400,3);
+CIfEnd()
+LairCD17 = CIf_GunTrig(P8, "Zerg Lair", "CD17",400,3);
+CIfEnd()
+LairCD54 = CIf_GunTrig(P7, "Zerg Lair", "CD54",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
+CIfEnd()
+LairCD55 = CIf_GunTrig(P7, "Zerg Lair", "CD55",400,4); -- 마인. 리썰 배달 브금으로 변경.
+
+CD55Sh = CSMakeCircle(8,64,0,PlotSizeCalc(8, 3),0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Zerg Devourer"},CD55Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,40,AtLeast)},{"Vulture Spider Mine"},CD55Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+CIfEnd()
+
+
+HiveCD20 = CIf_GunTrig(P7, "Zerg Hive", "CD20",400,1);
+CIfEnd()
+HiveCD27 = CIf_GunTrig(P7, "Zerg Hive", "CD27",400,1);
+CIfEnd()
+HiveCD21 = CIf_GunTrig(P8, "Zerg Hive", "CD21",400,1);
+CIfEnd()
+HiveCD26 = CIf_GunTrig(P8, "Zerg Hive", "CD26",400,1);
 CIfEnd()
 
 
 
+NDCD200 = CIf_GunTrig(P7, "Norad II (Crashed Battlecruiser)", "CD200",400,5);
+-- ms // 0x1D
+G_CB_TScanEff({CD(NDCD200,0,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,340 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,670 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,1000 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
+
+G_CB_TSetSpawn({CD(NDCD200,4030 // 0x1D,AtLeast)}, {50}, {CSMakeCircle(8, 64, 0, PlotSizeCalc(8, 3), 0)}, P8, GunTrigGLoc, 1, {RepeatType=2,LMTable="MAX"})
 
 
+G_CB_TScanEff({CD(NDCD200,4030 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,4380 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,4610 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,5040 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
+
+G_CB_TSetSpawn({CD(NDCD200,6080 // 0x1D,AtLeast)}, {"Vulture Spider Mine"}, {CSMakeCircle(25, 256, 0, 26, 1)}, P8, GunTrigGLoc, 1, {RepeatType="RemoveTimer",LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,6080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,6400 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,6750 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(NDCD200,7080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
 
 
-LairCD8 = CIf_GunTrig(P7, "Zerg Lair", "CD8");
-CIfEnd()
-LairCD12 = CIf_GunTrig(P7, "Zerg Lair", "CD12");
-CIfEnd()
-LairCD13 = CIf_GunTrig(P7, "Zerg Lair", "CD13");
-CIfEnd()
-LairCD14 = CIf_GunTrig(P7, "Zerg Lair", "CD14");
-CIfEnd()
-LairCD15 = CIf_GunTrig(P7, "Zerg Lair", "CD15");
-CIfEnd()
-LairCD18 = CIf_GunTrig(P7, "Zerg Lair", "CD18");
-CIfEnd()
-LairCD19 = CIf_GunTrig(P7, "Zerg Lair", "CD19");
-CIfEnd()
-LairCD7 = CIf_GunTrig(P8, "Zerg Lair", "CD7");
-CIfEnd()
-LairCD9 = CIf_GunTrig(P8, "Zerg Lair", "CD9");
-CIfEnd()
-LairCD10 = CIf_GunTrig(P8, "Zerg Lair", "CD10");
-CIfEnd()
-LairCD11 = CIf_GunTrig(P8, "Zerg Lair", "CD11");
-CIfEnd()
-LairCD16 = CIf_GunTrig(P8, "Zerg Lair", "CD16");
-CIfEnd()
-LairCD17 = CIf_GunTrig(P8, "Zerg Lair", "CD17");
-CIfEnd()
-LairCD54 = CIf_GunTrig(P7, "Zerg Lair", "CD54");
-CIfEnd()
-LairCD55 = CIf_GunTrig(P7, "Zerg Lair", "CD55");
 CIfEnd()
 
-
-HiveCD20 = CIf_GunTrig(P7, "Zerg Hive", "CD20");
-CIfEnd()
-HiveCD20 = CIf_GunTrig(P7, "Zerg Hive", "CD20");
-CIfEnd()
-HiveCD27 = CIf_GunTrig(P7, "Zerg Hive", "CD27");
-CIfEnd()
-HiveCD27 = CIf_GunTrig(P7, "Zerg Hive", "CD27");
-CIfEnd()
-HiveCD21 = CIf_GunTrig(P8, "Zerg Hive", "CD21");
-CIfEnd()
-HiveCD21 = CIf_GunTrig(P8, "Zerg Hive", "CD21");
-CIfEnd()
-HiveCD26 = CIf_GunTrig(P8, "Zerg Hive", "CD26");
-CIfEnd()
-HiveCD26 = CIf_GunTrig(P8, "Zerg Hive", "CD26");
-CIfEnd()
 
 
 
@@ -137,582 +238,6 @@ CIfEnd()
 DoActions(FP,{KillUnit("Zerg Devourer", Force2)})
 --[[
 
-Trigger { -- H1
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD1");
-},
-actions = {
-	CreateUnit(25, "Hunter Killer (Hydralisk)", "CD1", P8);
-	CreateUnit(24, "Devouring One (Zergling)", "CD1", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD1", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD1", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD1", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD1", Patrol, "HZ");
-	Comment("H1");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD1");
-	Deaths(P6, AtLeast, 70, "Terran Factory");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD1", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD1");
-	Deaths(P6, AtLeast, 80, "Terran Factory");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD1", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD1", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD1", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD1", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD1", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD1", Patrol, "HZ");
-	Comment("H1");
-},
-}
-
-
-Trigger { -- H1.2
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD4");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD4", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD4", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD4", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD4", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD4", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD4", Patrol, "HZ");
-	Comment("H1.2");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD4");
-	Deaths(P6, AtLeast, 70, "Terran Flag Beacon");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD4", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.2
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD4");
-	Deaths(P6, AtLeast, 80, "Terran Flag Beacon");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD4", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD4", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD4", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD4", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD4", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD4", Patrol, "HZ");
-	Comment("H1.2");
-},
-}
-
-
-Trigger { -- H1.3
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD37");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD37", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD37", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD37", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD37", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD37", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD37", Patrol, "HZ");
-	Comment("H1.3");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD37");
-	Deaths(P6, AtLeast, 70, "Terran Supply Depot");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD37", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.3
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD37");
-	Deaths(P6, AtLeast, 80, "Terran Supply Depot");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD37", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD37", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD37", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD37", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD37", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD37", Patrol, "HZ");
-	Comment("H1.3");
-},
-}
-
-
-Trigger { -- H1.4
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD38");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD38", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD38", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD38", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD38", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD38", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD38", Patrol, "HZ");
-	Comment("H1.4");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD38");
-	Deaths(P6, AtLeast, 70, "Terran Nuclear Silo");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD38", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.4
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD38");
-	Deaths(P6, AtLeast, 80, "Terran Nuclear Silo");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD38", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD38", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD38", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD38", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD38", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD38", Patrol, "HZ");
-	Comment("H1.4");
-},
-}
-
-
-Trigger { -- H1.5
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD39");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD39", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD39", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD39", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD39", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD39", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD39", Patrol, "HZ");
-	Comment("H1.5");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD39");
-	Deaths(P6, AtLeast, 70, "Terran Control Tower");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD39", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.5
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD39");
-	Deaths(P6, AtLeast, 80, "Terran Control Tower");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD39", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD39", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD39", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD39", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD39", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD39", Patrol, "HZ");
-	Comment("H1.5");
-},
-}
-
-
-Trigger { -- H1.6
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD40");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD40", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD40", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD40", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD40", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD40", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD40", Patrol, "HZ");
-	Comment("H1.6");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD40");
-	Deaths(P6, AtLeast, 70, "Terran Battlecruiser");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD40", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.6
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD40");
-	Deaths(P6, AtLeast, 80, "Terran Battlecruiser");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD40", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD40", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD40", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD40", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD40", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD40", Patrol, "HZ");
-	Comment("H1.6");
-},
-}
-
-
-Trigger { -- H1.7
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD41");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD41", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD41", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD41", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD41", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD41", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD41", Patrol, "HZ");
-	Comment("H1.7");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD41");
-	Deaths(P6, AtLeast, 70, "Terran Science Vessel");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD41", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.7
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD41");
-	Deaths(P6, AtLeast, 80, "Terran Science Vessel");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD41", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD41", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD41", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD41", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD41", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD41", Patrol, "HZ");
-	Comment("H1.7");
-},
-}
-
-
-Trigger { -- H1.8
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD42");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD42", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD42", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD42", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD42", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD42", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD42", Patrol, "HZ");
-	Comment("H1.8");
-},
-}
-
-
-Trigger {
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD42");
-	Deaths(P6, AtLeast, 70, "Torrasque (Ultralisk)");
-},
-actions = {
-	CreateUnit(16, "Zerg Devourer", "CD42", P8);
-	KillUnit("Zerg Devourer", P8);
-},
-}
-
-
-Trigger { -- H1.8
-players = {P7},
-conditions = {
-	Bring(P7, Exactly, 0, "Zerg Hatchery", "CD42");
-	Deaths(P6, AtLeast, 80, "Torrasque (Ultralisk)");
-},
-actions = {
-	CreateUnit(16, "Hunter Killer (Hydralisk)", "CD42", P8);
-	CreateUnit(29, "Devouring One (Zergling)", "CD42", P8);
-	CreateUnit(20, "Kukulza (Mutalisk)", "CD42", P8);
-	Order("Kukulza (Mutalisk)", P8, "CD42", Attack, "HZ");
-	Order("Hunter Killer (Hydralisk)", P8, "CD42", Patrol, "HZ");
-	Order("Devouring One (Zergling)", P8, "CD42", Patrol, "HZ");
-	Comment("H1.8");
-},
-}
-
-
-
-
-Trigger { -- H2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD2");
-	},
-	actions = {
-		CreateUnit(25, "Hunter Killer (Hydralisk)", "CD2", P8);
-		CreateUnit(24, "Devouring One (Zergling)", "CD2", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD2", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD2", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD2", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD2", Patrol, "HZ");
-		Comment("H2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD2");
-		Deaths(P6, AtLeast, 70, "Terran Science Facility");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD2", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD2");
-		Deaths(P6, AtLeast, 80, "Terran Science Facility");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD2", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD2", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD2", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD2", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD2", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD2", Patrol, "HZ");
-		Comment("H2");
-	},
-}
-
-
-Trigger { -- H2.1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD5");
-	},
-	actions = {
-		CreateUnit(25, "Hunter Killer (Hydralisk)", "CD5", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD5", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD5", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD5", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD5", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD5", Patrol, "HZ");
-		Comment("H2.1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD5");
-		Deaths(P6, AtLeast, 70, "Terran Medic");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD5", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD5");
-		Deaths(P6, AtLeast, 80, "Terran Medic");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD5", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD5", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD5", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD5", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD5", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD5", Patrol, "HZ");
-		Comment("H2.1");
-	},
-}
-
-
-Trigger { -- H2.2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD6");
-	},
-	actions = {
-		CreateUnit(25, "Hunter Killer (Hydralisk)", "CD6", P8);
-		CreateUnit(24, "Devouring One (Zergling)", "CD6", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD6", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD6", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD6", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD6", Patrol, "HZ");
-		Comment("H2.2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD6");
-		Deaths(P6, AtLeast, 70, "Terran SCV");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD6", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD6");
-		Deaths(P6, AtLeast, 80, "Terran SCV");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD6", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD6", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD6", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD6", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD6", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD6", Patrol, "HZ");
-		Comment("H2.2");
-	},
-}
-
-
-Trigger { -- H2.3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD49");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD49", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD49", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD49", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD49", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD49", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD49", Patrol, "HZ");
-		Comment("H2.3");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD49");
-		Deaths(P6, AtLeast, 70, "Terran Siege Tank (Tank Mode)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD49", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD49");
-		Deaths(P6, AtLeast, 80, "Terran Siege Tank (Tank Mode)");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD49", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD49", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD49", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD49", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD49", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD49", Patrol, "HZ");
-		Comment("H2.3");
-	},
-}
 
 
 Trigger { -- H2.4
@@ -800,52 +325,6 @@ Trigger { -- H2.5
 }
 
 
-Trigger { -- H2.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD52");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD52", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD52", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD52", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD52", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD52", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD52", Patrol, "HZ");
-		Comment("H2.6");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD52");
-		Deaths(P6, AtLeast, 70, "Unused Terran Bldg type   1");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD52", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD52");
-		Deaths(P6, AtLeast, 80, "Unused Terran Bldg type   1");
-	},
-	actions = {
-		CreateUnit(16, "Hunter Killer (Hydralisk)", "CD52", P8);
-		CreateUnit(29, "Devouring One (Zergling)", "CD52", P8);
-		CreateUnit(20, "Kukulza (Mutalisk)", "CD52", P8);
-		Order("Kukulza (Mutalisk)", P8, "CD52", Attack, "HZ");
-		Order("Hunter Killer (Hydralisk)", P8, "CD52", Patrol, "HZ");
-		Order("Devouring One (Zergling)", P8, "CD52", Patrol, "HZ");
-		Comment("H2.6");
-	},
-}
 
 
 Trigger { -- H2.7
@@ -885,848 +364,6 @@ Trigger { -- H2.7
 	actions = {
 		CreateUnit(16, "Edmund Duke (Siege Mode)", "CD53", P8);
 		Comment("H2.7");
-	},
-}
-
-
-
-
-Trigger { -- L1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD8");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD8", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD8", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD8", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD8", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD8", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD8", Attack, "HZ");
-		Comment("L1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD8");
-		Deaths(P6, AtLeast, 90, "Tassadar (Templar)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD8", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD8");
-		Deaths(P6, AtLeast, 100, "Tassadar (Templar)");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD8", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD8", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD8", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD8", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD8", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD8", Attack, "HZ");
-		Comment("L1");
-	},
-}
-
-
-Trigger { -- L1.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD12");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD12", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD12", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD12", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD12", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD12", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD12", Attack, "HZ");
-		Comment("L1.1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD12");
-		Deaths(P6, AtLeast, 90, "Protoss Nexus");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD12", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD12");
-		Deaths(P6, AtLeast, 100, "Protoss Nexus");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD12", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD12", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD12", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD12", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD12", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD12", Attack, "HZ");
-		Comment("L1.1");
-	},
-}
-
-
-Trigger { -- L1.2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD13");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD13", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD13", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD13", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD13", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD13", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD13", Attack, "HZ");
-		Comment("L1.2");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD13");
-		Deaths(P6, AtLeast, 90, "Terran Vulture");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD13", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD13");
-		Deaths(P6, AtLeast, 100, "Terran Vulture");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD13", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD13", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD13", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD13", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD13", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD13", Attack, "HZ");
-		Comment("L1.2");
-	},
-}
-
-
-Trigger { -- L1.3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD14");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD14", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD14", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD14", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD14", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD14", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD14", Attack, "HZ");
-		Comment("L1.3");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD14");
-		Deaths(P6, AtLeast, 90, "Terran Ghost");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD14", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD14");
-		Deaths(P6, AtLeast, 100, "Terran Ghost");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD14", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD14", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD14", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD14", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD14", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD14", Attack, "HZ");
-		Comment("L1.3");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD14");
-		Deaths(P6, AtLeast, 140, "Terran Ghost");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD14", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.3.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD14");
-		Deaths(P6, AtLeast, 150, "Terran Ghost");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD14", P8);
-		CreateUnit(12, "Tom Kazansky (Wraith)", "CD14", P8);
-		Order("Tom Kazansky (Wraith)", P8, "CD14", Attack, "HZ");
-		Comment("L1.3.1");
-	},
-}
-
-
-Trigger { -- L1.4
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD15");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD15", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD15", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD15", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD15", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD15", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD15", Attack, "HZ");
-		Comment("L1.4");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD15");
-		Deaths(P6, AtLeast, 90, "Protoss Scarab");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD15", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.4
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD15");
-		Deaths(P6, AtLeast, 100, "Protoss Scarab");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD15", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD15", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD15", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD15", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD15", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD15", Attack, "HZ");
-		Comment("L1.4");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD15");
-		Deaths(P6, AtLeast, 140, "Protoss Scarab");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD15", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.6.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD15");
-		Deaths(P6, AtLeast, 150, "Protoss Scarab");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD15", P8);
-		CreateUnit(12, "Tom Kazansky (Wraith)", "CD15", P8);
-		Order("Tom Kazansky (Wraith)", P8, "CD15", Attack, "HZ");
-		Comment("L1.6.1");
-	},
-}
-
-
-Trigger { -- L1.5
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD18");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD18", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD18", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD18", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD18", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD18", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD18", Attack, "HZ");
-		Comment("L1.5");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD18");
-		Deaths(P6, AtLeast, 90, "Terran Beacon");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD18", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.5
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD18");
-		Deaths(P6, AtLeast, 100, "Terran Beacon");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD18", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD18", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD18", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD18", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD18", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD18", Attack, "HZ");
-		Comment("L1.5");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD18");
-		Deaths(P6, AtLeast, 140, "Terran Beacon");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD18", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.5.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD18");
-		Deaths(P6, AtLeast, 150, "Terran Beacon");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD18", P8);
-		CreateUnit(12, "Tom Kazansky (Wraith)", "CD18", P8);
-		Order("Tom Kazansky (Wraith)", P8, "CD18", Attack, "HZ");
-		Comment("L1.5.1");
-	},
-}
-
-
-Trigger { -- L1.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD19");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD19", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD19", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD19", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD19", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD19", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD19", Attack, "HZ");
-		Comment("L1.6");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD19");
-		Deaths(P6, AtLeast, 90, "Terran Armory");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD19", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD19");
-		Deaths(P6, AtLeast, 100, "Terran Armory");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD19", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD19", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD19", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD19", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD19", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD19", Attack, "HZ");
-		Comment("L1.6");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD19");
-		Deaths(P6, AtLeast, 140, "Terran Armory");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD19", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L1.6.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD19");
-		Deaths(P6, AtLeast, 150, "Terran Armory");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD19", P8);
-		CreateUnit(12, "Tom Kazansky (Wraith)", "CD19", P8);
-		Order("Tom Kazansky (Wraith)", P8, "CD19", Attack, "HZ");
-		Comment("L1.6.1");
-	},
-}
-
-
-
-
-Trigger { -- L2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD7");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD7", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD7", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD7", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD7", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD7", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD7", Attack, "HZ");
-		Comment("L2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD7");
-		Deaths(P6, AtLeast, 90, "Terran Marine");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD7", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD7");
-		Deaths(P6, AtLeast, 100, "Terran Marine");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD7", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD7", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD7", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD7", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD7", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD7", Attack, "HZ");
-		Comment("L2");
-	},
-}
-
-
-Trigger { -- L2.1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD9");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD9", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD9", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD9", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD9", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD9", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD9", Attack, "HZ");
-		Comment("L2.1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD9");
-		Deaths(P6, AtLeast, 90, "Protoss Scout");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD9", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD9");
-		Deaths(P6, AtLeast, 100, "Protoss Scout");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD9", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD9", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD9", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD9", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD9", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD9", Attack, "HZ");
-		Comment("L2.1");
-	},
-}
-
-
-Trigger { -- L2.2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD10");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD10", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD10", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD10", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD10", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD10", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD10", Attack, "HZ");
-		Comment("L2.2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD10");
-		Deaths(P6, AtLeast, 90, "Protoss Forge");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD10", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD10");
-		Deaths(P6, AtLeast, 100, "Protoss Forge");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD10", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD10", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD10", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD10", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD10", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD10", Attack, "HZ");
-		Comment("L2.2");
-	},
-}
-
-
-Trigger { -- L2.3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD11");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD11", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD11", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD11", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD11", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD11", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD11", Attack, "HZ");
-		Comment("L2.3");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD11");
-		Deaths(P6, AtLeast, 90, "Protoss Probe");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD11", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD11");
-		Deaths(P6, AtLeast, 100, "Protoss Probe");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD11", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD11", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD11", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD11", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD11", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD11", Attack, "HZ");
-		Comment("L2.3");
-	},
-}
-
-
-Trigger { -- L2.4
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD16");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD16", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD16", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD16", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD16", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD16", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD16", Attack, "HZ");
-		Comment("L2.4");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD16");
-		Deaths(P6, AtLeast, 90, "Psi Disrupter");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD16", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.4
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD16");
-		Deaths(P6, AtLeast, 100, "Psi Disrupter");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD16", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD16", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD16", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD16", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD16", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD16", Attack, "HZ");
-		Comment("L2.4");
-	},
-}
-
-
-Trigger { -- L2.5
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD17");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD17", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD17", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD17", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD17", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD17", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD17", Attack, "HZ");
-		Comment("L2.5");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD17");
-		Deaths(P6, AtLeast, 90, "Terran Marker");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD17", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.5
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD17");
-		Deaths(P6, AtLeast, 100, "Terran Marker");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD17", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD17", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD17", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD17", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD17", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD17", Attack, "HZ");
-		Comment("L2.5");
-	},
-}
-
-
-Trigger { -- L2.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD54");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD54", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD54", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD54", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD54", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD54", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD54", Attack, "HZ");
-		Comment("L2.6");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD54");
-		Deaths(P6, AtLeast, 90, "Vespene Tank (Terran Type 1)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD54", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.6
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD54");
-		Deaths(P6, AtLeast, 100, "Vespene Tank (Terran Type 1)");
-	},
-	actions = {
-		CreateUnit(20, "Hunter Killer (Hydralisk)", "CD54", P8);
-		CreateUnit(20, "Torrasque (Ultralisk)", "CD54", P8);
-		CreateUnit(16, "Kukulza (Guardian)", "CD54", P8);
-		Order("Hunter Killer (Hydralisk)", P8, "CD54", Patrol, "HZ");
-		Order("Torrasque (Ultralisk)", P8, "CD54", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD54", Attack, "HZ");
-		Comment("L2.6");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD54");
-		Deaths(P6, AtLeast, 140, "Vespene Tank (Terran Type 1)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD54", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.6.1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD54");
-		Deaths(P6, AtLeast, 150, "Vespene Tank (Terran Type 1)");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD54", P8);
-		CreateUnit(12, "Tom Kazansky (Wraith)", "CD54", P8);
-		Order("Tom Kazansky (Wraith)", P8, "CD54", Attack, "HZ");
-		Comment("L2.6.1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Lair", "CD55");
-		Deaths(P6, AtLeast, 90, "Vespene Tank (Terran Type 2)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD55", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- L2.7
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Lair", "CD55");
-		Deaths(P6, AtLeast, 100, "Vespene Tank (Terran Type 2)");
-	},
-	actions = {
-		CreateUnit(40, "Vulture Spider Mine", "CD55", P8);
-		Comment("L2.7");
 	},
 }
 

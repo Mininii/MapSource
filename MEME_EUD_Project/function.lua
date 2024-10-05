@@ -323,6 +323,7 @@ f_GunErrT = "\x07『 \x08ERROR \x04: G_CBPlot Not Found. \x07』"
 local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
+local Repeat_EffID = CreateVar(FP)
 G_CB_Nextptrs = CreateVar(FP)
 G_CB_NextptrsP = CreateVar(FP)
 local Repeat_TempV = CreateVar(FP)
@@ -338,6 +339,7 @@ G_CB_X = CreateVar(FP)
 G_CB_Y = CreateVar(FP)
 G_CB_XDis = CreateVar(FP)
 G_CB_YDis = CreateVar(FP)
+G_CB_Eff = CreateVar(FP)
 G_CB_Shapes = {}
 G_CB_ShapeIndexAlloc = 1
 G_CB_RotateV = CreateVar(FP)
@@ -414,6 +416,8 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CElseIfX(CVar(FP,RType[2],Exactly,2))
 			CElseIfX_AddRepeatType(3,"KillUnit")
 			CDoActions(FP,{TKillUnit(RUID, RPID)})
+			CElseIfX_AddRepeatType(5,"RemoveTimer")
+			CDoActions(FP,{TSetMemoryX(_Add(RPtr,68),SetTo,250,0xFFFF)})
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
@@ -461,9 +465,9 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		
 		NIfX(FP, {CV(Gun_TempSpawnSet1,33)})
-		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, RepeatType,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
+		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, Repeat_EffID,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
 		NElseX()
-		
+		NIf(FP,{Memory(0x628438,AtLeast,1)})
 		f_Read(FP,0x628438,G_CB_NextptrsP,G_CB_Nextptrs,0xFFFFFF)
 			TriggerX(FP,{CVar(FP,CreatePlayer[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,CreatePlayer[2],SetTo,7)},{preserved})
 			CTrigger(FP,{TTCVar(FP,RepeatType[2],NotSame,2)},{TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100})},1)
@@ -479,6 +483,7 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CMov(FP,RPtrP,G_CB_NextptrsP)
 		CMov(FP,RLocV,DefaultAttackLocV)
 		CallTrigger(FP, Call_RepeatOption)
+		NIfEnd()
 		NIfXEnd()
 
 
@@ -691,6 +696,8 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,23*(0x20/4)),SetTo,G_CB_RTTV[4]),
 	TSetMemory(_Add(G_CB_LineTemp,24*(0x20/4)),SetTo,G_CB_XDis),
 	TSetMemory(_Add(G_CB_LineTemp,25*(0x20/4)),SetTo,G_CB_YDis),
+	TSetMemory(_Add(G_CB_LineTemp,26*(0x20/4)),SetTo,G_CB_Eff),
+	
 
 })
 CIfX(FP,{CVar(FP,G_CB_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CB_YPos[2],Exactly,0xFFFFFFFF)}) -- G_CB_X,Y에 저장된것 기준(미사용이나 내부코드로 보존)
@@ -1097,6 +1104,7 @@ function G_CBPlot()
 	CMov(FP,V(CA[1]),G_CB_TempTable[13]) -- ShapeIndex
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
 	CMov(FP,V(CA[2]),G_CB_TempTable[4]) -- CurDelayTimer
+	CMov(FP,Repeat_EffID,G_CB_TempTable[27])--EFFID
 	--DisplayPrint(HumanPlayers, {
 	--	"   G_CB_TempTable[1] : ",G_CB_TempTable[1],--Line 0 = UnitID 1Byte
 	--	"   G_CB_TempTable[2] : ",G_CB_TempTable[2],--Line 1 = PrefuncID 1Byte
@@ -1277,12 +1285,14 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 
 end
 
-function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag)
+function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag,Property)
 	local x = {}
 	for j,k in pairs(G_CB_ShapeTable) do
 		table.insert(x,33)
 	end
-	G_CB_TSetSpawn(Condition,x,G_CB_ShapeTable,P6,CenterXY,PreserveFlag,{RepeatType=ScanEffID})
+	local PP = Property
+	PP["EffID"] = ScanEffID
+	G_CB_TSetSpawn(Condition,x,G_CB_ShapeTable,P6,CenterXY,PreserveFlag,PP)
 	--P6, UID 33 고정
 end
 function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,CenterXY,PreserveFlag,G_CB_Property)
@@ -1341,7 +1351,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 	local G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({0,0,0,0})}}
 	local G_CB_CenterXY = {{G_CB_XPos,0x80000000},{G_CB_YPos,0x80000000}} -- 로케이션 모드
 	local G_CB_CenterDis = {{G_CB_XDis,0},{G_CB_YDis,0}} -- 로케이션 모드
-
+	local G_CB_EffID = {{G_CB_Eff,0}}
 	
 
 
@@ -1370,6 +1380,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 			if k == "MAX" then
 				G_CB_LMTable = {{G_CB_LMTV,-1}}
 			elseif type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				G_CB_LMTable = {{G_CB_LMTV,T_to_ByteBuffer(k)}}
 			else
 				G_CB_LMTable = {{G_CB_LMTV,T_to_ByteBuffer({k,k,k,k})}}
@@ -1377,6 +1388,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		elseif j == "Delay" then
 			--_G[k]()
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				for o, p in pairs(k) do
 					G_CB_Delay[o] = {G_CB_DLTV[o],p}
 				end
@@ -1394,18 +1406,28 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 			
 		elseif j == "SizeTable" then
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				G_CB_SizeTable = {{G_CB_SZTV,T_to_ByteBuffer(k)}}
 			else
 				G_CB_SizeTable = {{G_CB_SZTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
+		elseif j == "EffID" then
+			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
+				G_CB_EffID = {{G_CB_Eff,k}}
+			else
+				G_CB_EffID = {{G_CB_Eff,k}}
+			end
 		elseif j == "FNTable" then
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer(k)}}
 			else
 				G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer({k,k,k,k})}}
 			end
 		elseif j == "NQOpTable" then
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer(k)}}
 			else
 				G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer({k,k,k,k})}}
@@ -1413,6 +1435,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		elseif j == "RepeatType" then
 
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				local RT = {}
 				for o,p in pairs(k) do
 					local retP
@@ -1440,6 +1463,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 			
 		elseif j == "RotateTable" then
 			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
 				for o, p in pairs(k) do
 					G_CB_Rotate[o] = {G_CB_RTTV[o],p}
 				end
@@ -1477,6 +1501,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		AutoSetV(Act,G_CB_RepeatType)
 		AutoSetV(Act,G_CB_CenterXY)
 		AutoSetV(Act,G_CB_CenterDis)
+		AutoSetV(Act,G_CB_EffID)
 		
 		AutoSetV(Act,G_CB_OwnerTable)
 		AutoSetV(Act,G_CB_Rotate)
@@ -1499,6 +1524,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		TAutoSetV(Act,G_CB_CenterDis)
 		TAutoSetV(Act,G_CB_OwnerTable)
 		TAutoSetV(Act,G_CB_Rotate)
+		TAutoSetV(Act,G_CB_EffID)
 		CDoActions(FP, Act,PreserveFlag)
 		CallTriggerX(FP,Write_SpawnSet,Condition,nil,PreserveFlag)
 
