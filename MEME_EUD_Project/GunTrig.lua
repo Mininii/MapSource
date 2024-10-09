@@ -7,6 +7,7 @@ function GunTrig()
 		{3,"staredit\\wav\\_Hong.ogg",16*1000},
 		{4,"staredit\\wav\\Lethal_Icecream.ogg",24*1000},
 		{5,"staredit\\wav\\Bombyanggang.ogg",16*1000},
+		{6,"staredit\\wav\\fakeqt.ogg",0*1000},
 	})
 	
 
@@ -15,10 +16,16 @@ function GunTrig()
 		DoActionsX(FP,{SetV(BGMType,2)},1)
 	end
 	function CIf_GunTrig(PlayerID,GunID,LocID,TimerMax,BGMTypes)
+		local BGMAct
+		if BGMTypes~=nil then
+			BGMAct = SetV(BGMType,BGMTypes)
+		else
+			BGMAct = nil
+		end
 		local GunCcode = CreateCcode()
 		GunTrigGLoc = LocID
 		GunTrigGCcode = GunCcode
-		TriggerX(FP, Bring(PlayerID, Exactly, 0, GunID, LocID), {SetCD(GunCcode,1),SetV(BGMType,BGMTypes)})--RotatePlayer({DisplayTextX("\x13GunID : "..GunID.."    LocID : "..LocID)}, HumanPlayers, FP)
+		TriggerX(FP, Bring(PlayerID, Exactly, 0, GunID, LocID), {SetCD(GunCcode,1),BGMAct})--RotatePlayer({DisplayTextX("\x13GunID : "..GunID.."    LocID : "..LocID)}, HumanPlayers, FP)
 		CIf(FP,{CD(GunCcode,1,AtLeast),CD(GunCcode,TimerMax,AtMost)},{AddCD(GunCcode,1)})
 		return GunCcode
 	end
@@ -133,19 +140,40 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Dev
 
 
 CIfEnd()
-HacCD50 = CIf_GunTrig(P7, "Zerg Hatchery", "CD50",400,1); -- 알랜 가디언 영웅
+HacCD50 = CIf_GunTrig(P7, "Zerg Hatchery", "CD50",400,1); -- 1. 알랜 가디언 영웅 2. 구이몬 톰
+CD50Sh = {16  ,{1408, 672},{1392, 704},{1376, 736},{1360, 768},{1344, 800},{1328, 832},{1312, 864},{1424, 704},{1440, 736},{1456, 768},{1472, 800},{1488, 832},{1504, 864},{1376, 800},{1408, 800},{1440, 800}}
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Alan Schezar (Goliath)","Kukulza (Guardian)"},CD50Sh,P8,{0,0},1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD50Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Gui Montag (Firebat)","Tom Kazansky (Wraith)"},CD50Sh,P8,{0,0},1)
+
+
 CIfEnd()
-HacCD51 = CIf_GunTrig(P7, "Zerg Hatchery", "CD51",400,1); --워브 톰
+HacCD51 = CIf_GunTrig(P7, "Zerg Hatchery", "CD51",400,1); --1. 워브 톰 2. 시즈탱크
+CD51Sh = CS_FillPathXY({3   ,{1920, 704},{2304, 704},{1920, 1088}}, 1, 48, 48, 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Warbringer (Reaver)","Tom Kazansky (Wraith)"},CD51Sh,P8,{0,0},1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD51Sh,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Edmund Duke (Siege Mode)"},CD51Sh,P8,{0,0},1,{LMTable="MAX"})
+
+
 CIfEnd()
 HacCD52 = CIf_GunTrig(P7, "Zerg Hatchery", "CD52",400,1);
-CD52_Sh = CS_OverlapX(CS_MoveXY(CSMakeLine(2, 32, 45, 16, 0), 0, -182+23),CS_MoveXY(CSMakeLine(2, 32, 45+90, 16, 0), 0, 182-23))
+CD52Sh = CS_OverlapX(CS_MoveXY(CSMakeLine(2, 32, 45, 16, 0), 0, -182+23),CS_MoveXY(CSMakeLine(2, 32, 45+90, 16, 0), 0, 182-23))
 
-G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD52Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Devouring One (Zergling)","Kukulza (Mutalisk)"},CD52Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
 
-CIfEnd()
-HacCD53 = CIf_GunTrig(P7, "Zerg Hatchery", "CD53",400,1);
+CIfEnd()	
+HacCD53 = CIf_GunTrig(P7, "Zerg Hatchery", "CD53",400,1); -- 1. 짐레벌쳐 사라 2. 시즈탱크
+CD53Sh_1 = CSMakeCircle(20, 3*32, 0, 21, 1)
+CD53Sh_2 = CSMakeCircle(30, 5*32, 0, 31, 1)
+CD53Sh_3 = CS_FillPathXY({4   ,{1792, 1280},{2048, 1152},{1952, 1088},{1728, 1184}}, 1, 32, 32, 0)
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Jim Raynor (Vulture)"},CD53Sh_1,P8,GunTrigGLoc,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Sarah Kerrigan (Ghost)"},CD53Sh_2,P8,GunTrigGLoc,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD53Sh_3,P8,{0,0},1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Edmund Duke (Siege Mode)"},CD53Sh_3,P8,{0,0},1)
+
 CIfEnd()	
 LairCD8 = CIf_GunTrig(P7, "Zerg Lair", "CD8",400,3);
 Shape9081 = {6   ,{1440, 2848},{1664, 2720},{1664, 2624},{1536, 2560},{1344, 2656},{1376, 2752}}
@@ -156,8 +184,17 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Tor
 
 CIfEnd()
 LairCD12 = CIf_GunTrig(P7, "Zerg Lair", "CD12",400,3);
+CD12Sh = CSMakeStar(6,135,64,0,CS_Level("Star",6,4),CS_Level("Star",6,3)) 
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD12Sh,P8,GunTrigGLoc,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD12Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD12Sh,P8,GunTrigGLoc,1) 
 CIfEnd()
 LairCD13 = CIf_GunTrig(P7, "Zerg Lair", "CD13",400,3);
+CD13Sh= CS_OverlapX(CS_MoveXY(CSMakePolygon(3, 16, 0, PlotSizeCalc(3, 5), PlotSizeCalc(3, 4)),0,  80),CS_MoveXY(CSMakePolygon(3, 16, 180, PlotSizeCalc(3, 5), PlotSizeCalc(3, 4)), 0, -80))
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD13Sh,P8,GunTrigGLoc,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD13Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD13Sh,P8,GunTrigGLoc,1) 
+
 CIfEnd()
 LairCD14 = CIf_GunTrig(P7, "Zerg Lair", "CD14",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
 CIfEnd()
@@ -176,8 +213,16 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD7Sh,P8,GunTri
 G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD7Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
 CIfEnd()
 LairCD9 = CIf_GunTrig(P8, "Zerg Lair", "CD9",400,3);
+CD9Sh = CS_FillPathHX2({4	,{-32*4, -32*4},{32*4, -32*4},{32*4, 32*4},{-32*4, 32*4}},1,48,32,1,0,26.57,5)
+G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD9Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,140,AtLeast)},{"Zerg Devourer"},CD9Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,200,AtLeast)},{"Hunter Killer (Hydralisk)","Torrasque (Ultralisk)","Kukulza (Guardian)"},CD9Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+
 CIfEnd()
 LairCD10 = CIf_GunTrig(P8, "Zerg Lair", "CD10",400,3);
+
+
+
 CIfEnd()
 LairCD11 = CIf_GunTrig(P8, "Zerg Lair", "CD11",400,3);
 CIfEnd()
@@ -188,7 +233,6 @@ CIfEnd()
 LairCD54 = CIf_GunTrig(P7, "Zerg Lair", "CD54",400,3); -- 첫, 둘째젠 동일, 3젠 존재. 시즈탱크 톰
 CIfEnd()
 LairCD55 = CIf_GunTrig(P7, "Zerg Lair", "CD55",400,4); -- 마인. 리썰 배달 브금으로 변경.
-
 CD55Sh = CSMakeCircle(8,64,0,PlotSizeCalc(8, 3),0)
 G_CB_TSetSpawn({CD(GunTrigGCcode,0,AtLeast)},{"Zerg Devourer"},CD55Sh,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType="KiilUnit"})
 G_CB_TSetSpawn({CD(GunTrigGCcode,40,AtLeast)},{"Vulture Spider Mine"},CD55Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
@@ -208,29 +252,170 @@ CIfEnd()
 
 NDCD200 = CIf_GunTrig(P7, "Norad II (Crashed Battlecruiser)", "CD200",400,5);
 -- ms // 0x1D
-G_CB_TScanEff({CD(NDCD200,0,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,340 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,670 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,1000 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,0,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,340 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,670 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,1000 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
 
-G_CB_TSetSpawn({CD(NDCD200,4030 // 0x1D,AtLeast)}, {50}, {CSMakeCircle(8, 64, 0, PlotSizeCalc(8, 3), 0)}, P8, GunTrigGLoc, 1, {RepeatType=2,LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,4030 // 0x1D,AtLeast)}, {50}, {CSMakeCircle(8, 64, 0, PlotSizeCalc(8, 3), 0)}, P8, GunTrigGLoc, 1, {RepeatType=2,LMTable="MAX"})
 
 
-G_CB_TScanEff({CD(NDCD200,4030 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,4380 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,4610 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,5040 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,4030 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,4380 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,4610 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,5040 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
 
-G_CB_TSetSpawn({CD(NDCD200,6080 // 0x1D,AtLeast)}, {"Vulture Spider Mine"}, {CSMakeCircle(25, 256, 0, 26, 1)}, P8, GunTrigGLoc, 1, {RepeatType="RemoveTimer",LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,6080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,6400 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,6750 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
-G_CB_TScanEff({CD(NDCD200,7080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,6080 // 0x1D,AtLeast)}, {"Vulture Spider Mine"}, {CSMakeCircle(25, 256, 0, 26, 1)}, P8, GunTrigGLoc, 1, {RepeatType="RemoveTimer",LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,6080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 213, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,6400 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 332, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,6750 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 215, 1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,7080 // 0x1D,AtLeast)}, {CSMakeCircle(25, 256, 0, 26, 1)}, GunTrigGLoc, 334, 1,{LMTable="MAX"})
 
 
 CIfEnd()
 
 
+DGCD61 = CIf_GunTrig(P8, "Zerg Cerebrate Daggoth", "CD61",400,6);
+DoActions(FP, {SetDeathsX(Force1, SetTo, 0, 12,0xFFFFFF)},1)
+CD61Sh_1 = CS_RatioXY(CSMakeLine(2, 48, 45, 20, 0), 1, 0.5)
+CD61Sh_2 = CSMakeLine(2, 48, 0, 20, 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,2200 // 0x1D,AtLeast)}, {"Edmund Duke (Siege Mode)"}, CD61Sh_1, P6, "CD62", 1, {LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,3400 // 0x1D,AtLeast)}, {"Edmund Duke (Siege Mode)"}, CD61Sh_2, P6, "CD62", 1, {LMTable="MAX",DistanceXY={9*32,0}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,3400 // 0x1D,AtLeast)}, {"Edmund Duke (Siege Mode)"}, CD61Sh_2, P6, "CD62", 1, {LMTable="MAX",DistanceXY={-9*32,0}})
+
+CIfOnce(FP, CD(GunTrigGCcode,4300 // 0x1D,AtLeast))
+CFor(FP, 0, 100, 1)
+CIf(FP,{Bring(P6, AtLeast, 1, "Edmund Duke (Siege Mode)", 64)})
+DoActions(FP, {Simple_SetLoc(0, -32, -32, 32, 32),MoveLocation(1, "Edmund Duke (Siege Mode)", P6, 64),GiveUnits(1, "Edmund Duke (Siege Mode)", P6, 1, P9),RemoveUnit("Edmund Duke (Siege Mode)", P9),CreateUnit(1, 30, 1, P8)})
+CIfEnd()
+CForEnd()
+CIfEnd()
+
+
+CIfEnd()
+
+
+CRCDANY = CIf_GunTrig(P8, "Mature Crysalis", 64,45000 // 0x1D);
+
+CRCDT = CreateCcode()
+CRCDT2 = CreateCcode()
+DoActionsX(FP, {AddCD(CRCDT,1),AddCD(CRCDT2,1)})
+
+CRCDMode = CreateCcode()
+CIfOnce(FP)
+TriggerX(FP, {}, {SetSwitch("Switch 100", Random)})
+TriggerX(FP, {Switch("Switch 100", Cleared)}, {SetCD(CRCDMode,0)})
+TriggerX(FP, {Switch("Switch 100", Set)}, {SetCD(CRCDMode,1)})
+
+
+TriggerX(FP,{CD(CRCDMode,0)},{
+	RotatePlayer({DisplayTextX(string.rep("\x13\x08불길한 예감\x04이 든다... \x11우리 집\x04으로 도망쳐야 할 것 같다...\n", 6), 4);
+	PlayWAVX("staredit\\wav\\Jester.ogg");PlayWAVX("staredit\\wav\\Jester.ogg");}, HumanPlayers, FP);
+})
+TriggerX(FP,{CD(CRCDMode,1)},{
+	RotatePlayer({DisplayTextX(string.rep("\x13\x08불길한 예감\x04이 든다... \x11우리 집\x04에서 도망쳐야 할 것 같다...\n", 6), 4);
+	PlayWAVX("staredit\\wav\\Jester.ogg");PlayWAVX("staredit\\wav\\Jester.ogg");}, HumanPlayers, FP);
+})
+CIfEnd()
+
+
+
+JRot = CreateVar(FP)
+JRot2 = CreateVar(FP)
+CIf(FP,{CD(CRCDANY,40500 // 0x1D,AtMost)})
+--G_CB_TScanEff({CD(CRCDT,10,AtLeast)}, {CSMakeLine(1, 32, 90, 9, 0)}, {4032-(9*32),864}, 974, nil,{LMTable="MAX"})
+
+
+
+TriggerX(FP,{CD(CRCDANY,1 // 0x1D,AtLeast)},{AddV(JRot,3)},{preserved})
+TriggerX(FP,{CD(CRCDANY,5700 // 0x1D,AtLeast)},{AddV(JRot,3)},{preserved})
+TriggerX(FP,{CD(CRCDANY,10400 // 0x1D,AtLeast)},{AddV(JRot,4)},{preserved})
+TriggerX(FP,{CD(CRCDANY,15400 // 0x1D,AtLeast)},{AddV(JRot,6)},{preserved})
+TriggerX(FP,{CD(CRCDANY,20000 // 0x1D,AtLeast)},{AddV(JRot,7)},{preserved})
+TriggerX(FP,{CD(CRCDANY,24000 // 0x1D,AtLeast)},{AddV(JRot,9)},{preserved})
+TriggerX(FP,{CD(CRCDANY,27000 // 0x1D,AtLeast)},{AddV(JRot,15)},{preserved})
+for i = 0, 10 do
+	TriggerX(FP,{CD(CRCDANY,(30000+(i*1000)) // 0x1D,AtLeast)},{AddV(JRot,15)},{preserved})
+end
+CIfX(FP,{CD(CRCDMode,1)})
+CNeg(FP,JRot2,JRot)
+CElseX()
+CMov(FP,JRot2,JRot)
+CIfXEnd()
+CMov(FP,G_CB_RotateV,_Div(JRot2, 10))
+f_Lengthdir(FP, 9*32, G_CB_RotateV, G_CB_X, G_CB_Y)
+CAdd(FP,G_CB_X,4032-(9*32))
+CAdd(FP,G_CB_Y,864)
+G_CB_TScanEff({CD(CRCDT2,5,AtLeast)}, {CSMakeLine(1, 32, 90, 9, 0)}, {4032-(9*32),864}, 998, nil,{LMTable="MAX",RotateTable="Main"})
+NegRot = CreateVar(FP)
+CNeg(FP,NegRot,G_CB_RotateV)
+G_CB_TScanEff({CD(CRCDT2,5,AtLeast)}, {CSMakeLine(1, 64, 90, 4, 0)}, nil, 429, nil,{LMTable="MAX",RotateTable=NegRot})
+
+TriggerX(FP, {CD(CRCDT,10,AtLeast)}, {SetCD(CRCDT,0)},{preserved})
+TriggerX(FP, {CD(CRCDT2,5,AtLeast)}, {SetCD(CRCDT2,0)},{preserved})
+CIfEnd()
+
+CIf(FP,{CD(CRCDANY,40500 // 0x1D,AtLeast)})
+G_CB_TScanEff({CD(CRCDANY,40500 // 0x1D,AtLeast),CD(CRCDMode,0)}, {CSMakeCircle(6, 192, 0, PlotSizeCalc(6, 13), 0)}, {4032-(9*32),864}, 60, 1,{RepeatType=44})
+G_CB_TScanEff({CD(CRCDANY,40500 // 0x1D,AtLeast),CD(CRCDMode,1)}, {CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 7), 0)}, {448,3888}, 60, 1,{RepeatType=44})
+
+CMov(FP,0x6509B0,19025+25)
+CFor(FP, 19025+19, 19025+(1700*84)+19,84)
+CI=CForVariable()
+CIf(FP,{{
+	TTOR({DeathsX(CurrentPlayer, Exactly, 20, 0, 0xFF),DeathsX(CurrentPlayer, Exactly, 0, 0, 0xFF)}),
+	TDeathsX(_Add(CI,55-19), Exactly, 0x04000000, 0, 0x04000000),
+	TDeathsX(CI, AtLeast, 1*256, 0, 0xFF00)}})
+	f_SaveCp()
+	f_Read(FP,_Add(CI,6),RepHeroIndex,nil,0xFF,1)
+	f_Read(FP,CI,PlayerV,nil,0xFF,1)
+	f_LoadCp()
+	TriggerX(FP, {CV(PlayerV,0),CV(RepHeroIndex,0)}, {AddV(P1MValue,1)}, {preserved})
+	CDoActions(FP, {
+		TSetMemory(_Add(_Mul(RepHeroIndex,12),PlayerV),Add,1),
+		TSetDeathsX(_Add(CI,55-19), SetTo, 0, 0, 0x04000000),
+		TSetDeathsX(CI, SetTo, 0, 0, 0xFF00),})
+		
+
+
+CIfEnd()
+CAdd(FP,0x6509B0,84)
+CForEnd()
+CMov(FP,0x6509B0,FP)
+
+CIfEnd()
+
+
+
+
+
+
+
+
+
+
+
+--{4032-(9*32),864}
+
+
+
+
+
+
+
+CIfEnd()
+
+--
+--Trigger {
+--	players = {P8},
+--	conditions = {
+--		Command(P8, Excatly, 0, "Mature Crysalis");
+--	},
+--	actions = {
+--		--SetInvincibility(Disable, "Protoss Temple", P8, "Anywhere");
+--		--Order("Any unit", P8, "Anywhere", Patrol, "CD231");
+--	},
+--}
 
 
 
@@ -1409,11 +1594,16 @@ Trigger { -- HH3
 
 
 function GunPoint(Player,GunID,Text,Point)
-	TriggerX(FP,{Deaths(Player, AtLeast, 1, GunID);},{RotatePlayer({DisplayTextX(Text, 4)}, HumanPlayers, FP),SetScore(Force1, Add, Point, Kills),SetDeaths(Player,Subtract,1,GunID)},{preserved})
+	TriggerX(FP,{Deaths(Player, AtLeast, 1, GunID);},{
+		RotatePlayer({DisplayTextX(Text, 4)}, HumanPlayers, FP),SetScore(Force1, Add, Point, Kills),SetDeaths(Player,Subtract,1,GunID)},{preserved})
 end
 
 function HPoint(UnitID,Text,Point)
-	TriggerX(FP,{Deaths(P7, AtLeast, 1, UnitID);},{DisplayText(Text, 4);SetScore(CurrentPlayer, Add, Point, Kills);PlayWAV("staredit\\wav\\cut.ogg");PlayWAV("staredit\\wav\\cut.ogg");},{preserved})
+	TriggerX(FP,{Deaths(P7, AtLeast, 1, UnitID);},{
+		RotatePlayer({DisplayTextX(Text, 4);PlayWAVX("staredit\\wav\\cut.ogg");PlayWAVX("staredit\\wav\\cut.ogg");}, HumanPlayers, FP);
+		SetScore(Force1, Add, Point, Kills);
+		SetDeaths(P7, Subtract, 1, UnitID)
+	},{preserved})
 end
 
 

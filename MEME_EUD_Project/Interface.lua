@@ -191,6 +191,13 @@ for i = 0, 4 do
 	DisplayPrint(HumanPlayers,{"\x12",PName(i)," \x04Jim Raynor \x06DIE"},nil,{"staredit\\wav\\_999.ogg","staredit\\wav\\_999.ogg"})
 	CIfEnd()
 
+	for j = 1, 251, 5 do
+		TriggerX(FP,{MemoryB(0x58D2B0+(46*i)+0, AtLeast, j),MemoryB(0x58D2B0+(46*i)+0, AtMost, j+3)},{SetMemoryB(0x58D2B0+(46*i)+0, SetTo, j+4),SetMemoryB(0x58D2B0+(46*i)+15, SetTo, j+4)})
+	end
+	if TestStart==1 then
+		DoActions(FP, {SetResources(i, Add, 99999999, Ore)}, 1)
+	end
+
 	CIfEnd()
 
 

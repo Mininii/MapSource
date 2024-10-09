@@ -86,7 +86,24 @@ Trigger { -- BBX
 	},
 	actions = {
 		SetInvincibility(Enable, "Terran Medic", CurrentPlayer, "Anywhere");
+		RunAIScript("Turn ON Shared Vision for Player 1");
+		RunAIScript("Turn ON Shared Vision for Player 2");
+		RunAIScript("Turn ON Shared Vision for Player 3");
+		RunAIScript("Turn ON Shared Vision for Player 4");
+		RunAIScript("Turn ON Shared Vision for Player 5");
 		RunAIScript("Turn ON Shared Vision for Player 6");
+		SetAllianceStatus(Force1, Ally);
+		SetAllianceStatus(P6, Ally);
+		PreserveTrigger();
+		Comment("BBX");
+	},
+}
+Trigger { -- 
+	players = {P6},
+	conditions = {
+		Always();
+	},
+	actions = {
 		RunAIScript("Turn ON Shared Vision for Player 1");
 		RunAIScript("Turn ON Shared Vision for Player 2");
 		RunAIScript("Turn ON Shared Vision for Player 3");
@@ -94,7 +111,6 @@ Trigger { -- BBX
 		RunAIScript("Turn ON Shared Vision for Player 5");
 		SetAllianceStatus(Force1, Ally);
 		PreserveTrigger();
-		Comment("BBX");
 	},
 }
 
@@ -5059,18 +5075,6 @@ Trigger { -- B
 }
 
 
-Trigger { -- ZCDD
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Cerebrate Daggoth", "CD61");
-	},
-	actions = {
-		PreserveTrigger();
-		Comment("ZCDD");
-	},
-}
-
-
 Trigger { -- XELD
 	players = {P8},
 	conditions = {
@@ -5122,17 +5126,6 @@ Trigger { -- XELD
 	},
 }
 
-
-Trigger { -- ZCD
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Cerebrate Daggoth", "CD61");
-	},
-	actions = {
-		CreateUnit(30, "Vulture Spider Mine", "CD62", P8);
-		Comment("ZCD");
-	},
-}
 
 
 
@@ -44201,17 +44194,6 @@ else
 	}
 	
 end
-Trigger {
-	players = {Force1},
-	conditions = {
-		Deaths(P8, AtLeast, 1, "Mature Crysalis");
-	},
-	actions = {
-		PreserveTrigger();
-		DisplayText("\x13\x04 Protoss Temple \x07the release of invincibility", 4);
-	},
-}
-
 
 Trigger {
 	players = {P7},
@@ -44591,17 +44573,6 @@ Trigger {
 }
 
 
-Trigger {
-	players = {P8},
-	conditions = {
-		Command(P8, Exactly, 0, "Mature Crysalis");
-	},
-	actions = {
-		SetInvincibility(Disable, "Protoss Temple", P8, "Anywhere");
-		Order("Any unit", P8, "Anywhere", Patrol, "CD231");
-	},
-}
-
 
 Trigger {
 	players = {P8},
@@ -44614,7 +44585,7 @@ Trigger {
 		Command(P8, Exactly, 0, "Ion Cannon");
 	},
 	actions = {
-		SetInvincibility(Disable, "Mature Crysalis", P8, "Anywhere");
+		--SetInvincibility(Disable, "Mature Crysalis", P8, "Anywhere");
 	},
 }
 
@@ -46220,16 +46191,6 @@ Trigger { -- ICD2
 	},
 }
 
-
-Trigger {
-	players = {Force2},
-	conditions = {
-		Always();
-	},
-	actions = {
-		Order("Zerg Broodling", AllPlayers, "Anywhere", Attack, "Anywhere");
-	},
-}
 
 
 Trigger {

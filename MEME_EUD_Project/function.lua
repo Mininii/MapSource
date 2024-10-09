@@ -466,6 +466,11 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		
 		NIfX(FP, {CV(Gun_TempSpawnSet1,33)})
 		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, Repeat_EffID,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
+		CIf(FP,CV(RepeatType,44))-- 44번 RepeatType 특수패턴
+			Simple_CalcLocX(FP, 0, -192, -192, 192, 192)
+			DoActions(FP, {SetInvincibility(Enable, "Men", Force1, 1)})
+			Simple_CalcLocX(FP, 0, 192, 192, -192, -192)
+		CIfEnd()
 		NElseX()
 		NIf(FP,{Memory(0x628438,AtLeast,1)})
 		f_Read(FP,0x628438,G_CB_NextptrsP,G_CB_Nextptrs,0xFFFFFF)
@@ -1291,6 +1296,7 @@ function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag
 		table.insert(x,33)
 	end
 	local PP = Property
+	if PP == nil then PP={} end
 	PP["EffID"] = ScanEffID
 	G_CB_TSetSpawn(Condition,x,G_CB_ShapeTable,P6,CenterXY,PreserveFlag,PP)
 	--P6, UID 33 고정
@@ -1349,22 +1355,22 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 	local G_CB_FNTable = {{G_CB_FNTV,T_to_ByteBuffer({0,0,0,0})}}
 	local G_CB_NQOpTable = {{G_CB_NQOption,T_to_ByteBuffer({0,0,0,0})}}
 	local G_CB_RepeatType = {{G_CB_RPTV,T_to_ByteBuffer({0,0,0,0})}}
-	local G_CB_CenterXY = {{G_CB_XPos,0x80000000},{G_CB_YPos,0x80000000}} -- 로케이션 모드
-	local G_CB_CenterDis = {{G_CB_XDis,0},{G_CB_YDis,0}} -- 로케이션 모드
+	local G_CB_CenterXY = {{G_CB_XPos,0xFFFFFFFF},{G_CB_YPos,0xFFFFFFFF}} 
+	local G_CB_CenterDis = {{G_CB_XDis,0},{G_CB_YDis,0}}
 	local G_CB_EffID = {{G_CB_Eff,0}}
 	
 
 
 	if type(CenterXY) == "number" then
 		local Temp,EditorLocNum = ConvertLocation(CenterXY)
-		G_CB_CenterXY = {{G_CB_XPos,EditorLocNum+0x80000000},{G_CB_YPos,EditorLocNum+0x80000000}}
+		G_CB_CenterXY = {{G_CB_XPos,EditorLocNum+0x80000000},{G_CB_YPos,EditorLocNum+0x80000000}} -- 로케이션 모드
 	elseif type(CenterXY) == "string" then
 		local Temp,EditorLocNum = ConvertLocation(CenterXY)
-		G_CB_CenterXY = {{G_CB_XPos,Temp+2+0x80000000},{G_CB_YPos,Temp+2+0x80000000}}
+		G_CB_CenterXY = {{G_CB_XPos,Temp+2+0x80000000},{G_CB_YPos,Temp+2+0x80000000}} -- 로케이션 모드
 
 	elseif type(CenterXY)== "table" then
 		if #CenterXY ~= 2 then PushErrorMsg("CenterXY_TableError") else 
-			G_CB_CenterXY = {{G_CB_XPos,CenterXY[1]},{G_CB_YPos,CenterXY[2]}}
+			G_CB_CenterXY = {{G_CB_XPos,CenterXY[1]},{G_CB_YPos,CenterXY[2]}} -- 좌표 모드
 		end
 	end 
 	local G_CB_OwnerTable = {{G_CB_CPTV,T_to_ByteBuffer({FP,FP,FP,FP})}}
@@ -1462,11 +1468,14 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 			end
 			
 		elseif j == "RotateTable" then
-			if type(k) == "table" and k[4]~="V" then
+			if type(k) == "table" and k[4]=="V" then
 				G_CBPlotTOption = 1
-				for o, p in pairs(k) do
-					G_CB_Rotate[o] = {G_CB_RTTV[o],p}
-				end
+				G_CB_Rotate = {
+					{G_CB_RTTV[1],k},
+					{G_CB_RTTV[2],k},
+					{G_CB_RTTV[3],k},
+					{G_CB_RTTV[4],k},
+				}
 			elseif type(k) == "string" and k=="Main" then
 				G_CB_Rotate = {
 					{G_CB_RTTV[1],0xFFFFFFFF},
@@ -1614,11 +1623,11 @@ SetCall(FP)
         end
         CDoActions(FP, TActArr)
         if TestStart == 1 then
-        DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)})
+        --DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)})
         end
         CIfEnd()
         if TestStart == 1 then
-        DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
+        --DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT,4)},HumanPlayers,FP)})
         end
         CElseX()
             DoActions(FP,{RotatePlayer({DisplayTextX(f_GunErrT,4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP)})
@@ -1673,7 +1682,7 @@ SetCall(FP)
             end
             CDoActions(FP, TActArr)
             if TestStart == 1 then
-            DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)})
+            --DoActions(FP,{RotatePlayer({DisplayTextX(f_GunFuncT2,4)},HumanPlayers,FP)})
             end
             CIfEnd()
         CIfXEnd()
