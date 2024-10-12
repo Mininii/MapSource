@@ -195,7 +195,7 @@ for i = 0, 4 do
 		TriggerX(FP,{MemoryB(0x58D2B0+(46*i)+0, AtLeast, j),MemoryB(0x58D2B0+(46*i)+0, AtMost, j+3)},{SetMemoryB(0x58D2B0+(46*i)+0, SetTo, j+4),SetMemoryB(0x58D2B0+(46*i)+15, SetTo, j+4)})
 	end
 	if TestStart==1 then
-		DoActions(FP, {SetResources(i, Add, 99999999, Ore)}, 1)
+		DoActions(FP, {SetResources(i, Add, 99999999, Ore),SetInvincibility(Enable, "Buildings", Force2, 64)}, 1)
 	end
 
 	CIfEnd()
@@ -212,7 +212,8 @@ MacroWarn = "\x13\x04\n\x0D\x0D\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04
 BanCode2 = CreateCcodeArr(5)
 WarnCT = CreateVarArr(5, FP)
 for i = 0, 3 do
-	CIf(FP,HumanCheck(i,1),SubV(WarnCT[i+1],1))
+	CIf(FP,HumanCheck(i,1),{SubV(WarnCT[i+1],1),SetInvincibility(Enable, "Devouring One (Zergling)", i, "GiveRe")})
+	
 	--if Limit == 1 then
 	--	local APM1,APM2,APM3 = CreateVars(3, FP) 
 	--	CIf(FP,Memory(DtoA(i, 135), AtLeast, 1))
@@ -306,7 +307,7 @@ if Limit == 1 then
 			}
 			}
 		TestUPtr = CreateVar(FP)
-		--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,65), CurrentOP)},{preserved}) -- CreateMarine
+		CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{TCreateUnit(12, 20, _Add(CurrentOP,ParseLocation("P1L")), CurrentOP)},{preserved}) -- CreateMarine
 		--CTrigger(FP,{Deaths(CurrentPlayer,AtLeast,1,199)},{SetV(TestUPtr,Cunit2)},{preserved})
 		--CIf(FP,{CVar(FP,TestUPtr[2],AtLeast,1),CVar(FP,TestUPtr[2],AtMost,0x7FFFFFFF)})
 		--	CDoActions(FP,{TSetMemoryX(_Add(CurrentOP,EPD(0x57f120)),SetTo,_Div(_Read(_Add(TestUPtr,19)),256),0xFF)})
@@ -354,7 +355,6 @@ if Limit == 1 then
 			end
 
 
-	
 
 
 
