@@ -67,6 +67,27 @@
 		RMtoSMCost = 2000
 	end
 
+	if X4_Mode == 1 then
+		AutoHealDiv = AutoHealDiv / 2
+		NMBaseAtk= NMBaseAtk * 2
+		NMFactorAtk= NMFactorAtk * 2
+		HMBaseAtk= HMBaseAtk * 2
+		HMFactorAtk= HMFactorAtk * 2
+		SMBaseAtk = SMBaseAtk * 2
+		SMFactorAtk = SMFactorAtk * 2
+		RMBaseAtk = RMBaseAtk * 2
+		RMFactorAtk = RMFactorAtk * 2
+		
+		SMSkillBaseAtk = SMSkillBaseAtk * 2
+		SMSkillFactorAtk = SMSkillFactorAtk * 2
+		SMSkillBaseAtk2 = SMSkillBaseAtk2 * 2
+		SMSkillFactorAtk2 = SMSkillFactorAtk2 * 2
+		SMSkillBaseAtk3 = SMSkillBaseAtk3 * 2
+		SMSkillFactorAtk3 = SMSkillFactorAtk3 * 2
+		RMSkillBaseAtk = RMSkillBaseAtk * 2
+		RMSkillFactorAtk = RMSkillFactorAtk * 2
+
+	end
 
 	--Arr
 	UnitIDArr = CreateFArr(1700, FP)

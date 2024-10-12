@@ -427,6 +427,18 @@ TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1,AtLeast)},
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,500,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1000,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,QueueMaxSize,AtLeast)},{RotatePlayer({Defeat()}, Force1, FP)},{preserved})
+
+if X4_Mode == 1 then
+	CIf(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)})
+	CFor(FP,0,1700,1)
+	local NX,NY = CreateVars(2,FP)
+	CMov(FP,NX,f_CRandNum(2048-64, 32))
+	CMov(FP,NY,f_CRandNum(2048-64, 32))
+	Simple_SetLocX(FP, 0, NX,NY,NX,NY)
+	DoActions(FP, {MoveUnit(1, "Men", Force2, 39, 1),Order("Men", Force2, 1, Attack, 6)})
+	CForEnd()
+	CIfEnd()
+end
 Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
 	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
 	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
@@ -434,6 +446,8 @@ Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
 	PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
 	},HumanPlayers,FP),SetV(CreateUnitQueuePenaltyT,0),AddV(CreateUnitQueuePenaltyAct,1),},{preserved})
+
+
 DisplayPrint(HumanPlayers,{"\x07『 \x04CreateUnit\x07Queue \x04: ",CreateUnitQueueNum," || \x08P\x04enalty \x08T\x04imer : \x08",CreateUnitQueuePenaltyT," \x04/ \x034800 \x07』"})
 TriggerX(FP,{LocalPlayerID(128);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(128),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})
 TriggerX(FP,{LocalPlayerID(129);Memory(0x68C144,AtLeast,1);},{SetMemory(0x68C144,SetTo,2);SetCp(129),DisplayText("\x07『 \x03관전 상태\x04에서도 \x11플레이어\x04에게 \x07채팅을 보낼 수 있습니다. \x07』", 4),SetCp(FP)},{preserved})

@@ -198,7 +198,7 @@
 	SetUnitsDatX(44, {BuildTime=15})
 
 
-	if TestStart == 1 then--배속조정기능 테스트모드 한정
+	if TestStart == 1 then--배속조정기능 테스트모드 한정w
 		SetUnitsDatX(63,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 		SetUnitsDatX(62,{Playerable = 2, Reqptr=5,SuppCost=0,MinCost=0,GasCost=0,BuildTime=1})--배속 조정 유닛
 	end
@@ -208,7 +208,11 @@
 	SetUnitsDatX(20,{Playerable = 2, Reqptr=5,SuppCost=1})--플레이어만 사용가능, 요구조건을 무조건?으로
 	SetUnitsDatX(5,{Playerable = 2, Reqptr=5,MinCost=0,GasCost=0})--플레이어만 사용가능, 요구조건을 무조건?으로
 	if DLC_Project == 1 then
-		SetUnitsDatX(125,{Playerable = 2, HP=45000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		if X4_Mode == 1 then
+			SetUnitsDatX(125,{Playerable = 2, HP=167772,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		else
+			SetUnitsDatX(125,{Playerable = 2, HP=45000,MinCost=2000,BuildTime=15,Reqptr=271,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
+		end
 		SetUnitsDatX(32,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=3000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000},SeekRange=6})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(20,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=17,HP=6000,Shield = 3000,SuppCost=1,MinCost=0,AdvFlag={0x4000,0x4000},SeekRange=7})--플레이어만 사용가능, 요구조건을 무조건?으로
 		SetUnitsDatX(10,{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=15000,Shield = 15000,MinCost=0,SuppCost=1,AdvFlag={0x4000,0x4000}})--플레이어만 사용가능, 요구조건을 무조건?으로
@@ -216,7 +220,11 @@
 			SetUnitsDatX(MarID[i+1],{SizeL = 8, SizeU = 7, SizeR = 4, SizeD = 11,Class=94,HP=20000,Shield=20000,SuppCost=1,MinCost=0,AdvFlag={0x4000+0x8000,0x4000+0x8000}})--플레이어만 사용가능, 요구조건을 무조건?으로
 		end
 		SetWeaponsDatX(0, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 6*32,DmgBase = NMBaseAtk,DmgFactor=NMFactorAtk,ObjectNum = 2})--파벳 베이스 : 투사체를 두개로
-		SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
+		if X4_Mode == 1 then
+			SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk,Splash={5,10,15}})
+		else
+			SetWeaponsDatX(1, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = HMBaseAtk,DmgFactor=HMFactorAtk})
+		end
 		SetWeaponsDatX(2, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = SMBaseAtk,DmgFactor=SMFactorAtk,ObjectNum = 2,Splash={3,5,7}})--파벳 베이스 : 투사체를 두개로
 		SetWeaponsDatX(3, {TargetFlag = 0x020 + 1 + 2,DamageType=3,RangeMax = 7*32,DmgBase = RMBaseAtk,DmgFactor=RMFactorAtk,Splash={20,40,60}})
 		SetUnitsDatX(82,{Playerable = 2, Reqptr=5,SuppCost=1,MinCost=NMCost,GasCost=0,BuildTime=1})--바로뽑기. 리스펙트처럼 노말일경우 스마, 하드일경우 영마두개
