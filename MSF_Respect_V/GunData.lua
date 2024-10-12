@@ -924,6 +924,9 @@ end
 
 	CIfEnd()
 	KimrhegbArr = {"Division","Zero","Kazansky","Artanis","Danimoth","Lin","Raszagal","Envy","Lizzet","Merry","Rose","Norad II","Era","Nina","Sera","Sorang","Sena","Sen"}
+	KimrhegbArr_1 = {"Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose","Rose"}
+	KimrhegbArr_2 = {"Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division","Division"}
+	KimrhegbArr_3 = {"Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero","Zero"}
 	
 	KimrhegbArr2 = {{P_3, 4},{P_3, 4},{P_3, 5},{S_3, 3},{S_3, 3},{S_3, 3},{P_4, 4},{P_4, 4},{P_4, 4},{P_6, 3},{P_6, 3},{P_6, 3},{S_5, 2},{S_5, 2},{S_5, 2},{P_5, 3},{P_5, 3},{P_5, 3}}
 	KimrhegbArr3 = {{S_7, 0},{S_7, 0},{S_7, 0},{P_4, 1},{P_4, 1},{P_4, 1},{S_6, 0},{S_6, 0},{S_6, 0},{S_5, 0},{S_5, 0},{S_5, 0},{P_3, 1},{P_3, 1},{P_3, 1},{S_4, 0},{S_4, 0},{S_4, 0},}
@@ -933,17 +936,30 @@ end
 			CIfOnce(FP, {Gun_Line(7,AtLeast,(j-1)*12)},{SetV(CreateUnitQueuePenaltyLock,1)})
 			f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
 			f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
-			G_CB_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
-			G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
-			DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(1, 94, 1, P6)})
+			if X4_Mode == 1 then
+				G_CB_SetSpawn({CD(GMode,1)}, {KimrhegbArr_1[j]}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,2)}, {KimrhegbArr_2[j]}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,3)}, {KimrhegbArr_3[j]}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+			else
+				G_CB_SetSpawn({CD(GMode,1)}, {k}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", 203, nil, nil, P6,1)
+				G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {k}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", 203, nil, nil, P6,1)
+			end
+			if X4_Mode == 1 then
+				DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792)})
+			else
+				DoActions(FP, {Simple_SetLoc(0, 288,3792,288,3792),CreateUnit(1, 94, 1, P6)})
+			end
 			CIfEnd()
 			end
 			CIf(FP,{Gun_Line(7,AtLeast,640)},{Gun_DoSuspend(),SetCD(CocoonCcode,1),SetCp(P6),RunAIScriptAt(JYD, 64),SetCp(FP),SetV(CreateUnitQueuePenaltyLock,0)})
+			
+			if X4_Mode ~= 1 then
 			for j,k in pairs(KimrhegbArr) do
 				f_SHRead(FP, ArrX(OverMePosX,j-1), G_CB_X)
 				f_SHRead(FP, ArrX(OverMePosY,j-1), G_CB_Y)
 				G_CB_SetSpawn({CD(GMode,1)}, {94}, KimrhegbArr3[j][1],KimrhegbArr3[j][2], "MAX", nil, nil, nil, P6,1)
 				G_CB_SetSpawn({CD(GMode,2,AtLeast)}, {94}, KimrhegbArr2[j][1],KimrhegbArr2[j][2], "MAX", nil, nil, nil, P6,1)
+			end
 			end
 			CIfEnd()
 	CIfEnd()
@@ -1837,6 +1853,9 @@ end
 	---------------------------------------건작보스 패턴 영역-------------------------------------------------
 	
 	gMAXCcodeArr= CreateCcodeArr(10)
+
+	if X4_Mode ~= 1 then
+
 for i = 500, 1500, 500 do
 	Trigger2X(FP, {CD(gMAXCcodeArr[1],1),CV(CreateUnitQueueNum,i,AtLeast)}, {RotatePlayer({
 		DisplayTextX(string.rep("\n", 20),4);
@@ -1910,7 +1929,7 @@ Trigger2X(FP, {CD(gMAXCcodeArr[1],1),Bring(Force1, AtMost, 5, "Men", 64)}, {Rota
 	RotatePlayer({
 		Defeat()
 		},Force1,FP)})
-
+	end
 
 
 	--RepeatType : "gMAX1"

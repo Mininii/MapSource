@@ -80,9 +80,16 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 		Convert_CPosXY()
 		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
 		CIfX(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,203)})
-        CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{Simple_SetLoc(200, 1888, 2928, 1888, 2928),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
-        CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{Simple_SetLoc(200, 96, 4112, 96, 4112),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
-        CTrigger(FP,{CVar(FP,RType[2],Exactly,202)},{Simple_SetLoc(200, 1024, 7568, 1024, 7568),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+		if X4_Mode == 1 then
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,202)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+		else
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{Simple_SetLoc(200, 1888, 2928, 1888, 2928),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{Simple_SetLoc(200, 96, 4112, 96, 4112),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,202)},{Simple_SetLoc(200, 1024, 7568, 1024, 7568),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+		end
+
         CTrigger(FP,{CVar(FP,RType[2],Exactly,203)},{Simple_SetLoc(200, 288,3792,288,3792),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
 
 		CElseX()
@@ -206,7 +213,6 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),
 				TSetMemory(_Add(RPtr,13),SetTo,SpeedRet),
 				TSetMemoryX(_Add(RPtr,18),SetTo,SpeedRet,0xFFFF),
-				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
 				SetDeaths(_Add(RPtr,23),SetTo,0,0),
 				SetDeathsX(_Add(RPtr,19),SetTo,14*256,0,0xFF00),
 				TSetDeaths(_Add(RPtr,4),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
@@ -217,9 +223,25 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CIf(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,202)})--fCGive후 타이머 어택
 			f_CGive(FP, RPtr, nil, P9, RPID)
 			
+			if X4_Mode ==1 then
+				CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+				TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
+				TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+				--TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+				Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 3);--f_CGive 해제후 공격
+				Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 3);
+				Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
+			})
+			else
+				
 			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
 			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
 			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+			TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
 			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 3);--f_CGive 해제후 공격
 			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 480);
 			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
@@ -228,12 +250,14 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
 			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
 		})
+			end
 			CIfEnd()
 			CIf(FP,{CV(RType,203)},{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000)})
 			f_CGive(FP, RPtr, nil, P9, RPID)
 			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
 			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
 			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+			TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
 			Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 4);--f_CGive 해제후 정야독
 			Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 999999);
 			Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
@@ -383,7 +407,11 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			Simple_SetLocX(FP,20,RBX,RBY,RBX,RBY,{Simple_CalcLoc(0,-4,-4,4,4)})
-			CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
+			if X4_Mode ==1 then
+				CDoActions(FP, {TOrder(RUID, RPID, 1, Attack, 21);})
+			else
+				CDoActions(FP, {TOrder(RUID, RPID, 1, Patrol, 21);})
+			end
 
 			CElseIfX_AddRepeatType(217,"Walls")
 			CDoActions(FP, {
@@ -405,6 +433,10 @@ Call_Repeat = SetCallForward()
 SetCall(FP)
 DefaultAttackLocV = CreateVar(FP)
 CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
+	if X4_Mode == 1 then
+	CIfX(FP,{TTNVar(Gun_TempSpawnSet1,NotSame,94,0xFF)})
+	CFor(FP,0,5,1)
+	end
 	CMov(FP,DefaultAttackLocV,DefaultAttackLoc)
 		QueueX = CreateVar(FP)
 		QueueY = CreateVar(FP)
@@ -520,7 +552,15 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CIfEnd()
 
 	CSub(FP,Spawn_TempW,1)
+	if X4_Mode == 1 then
+		CForEnd()
+		CElseX()
+		CMov(FP,Spawn_TempW,0)
+		CIfXEnd()
+	end
 CWhileEnd()
+
+
 CMov(FP,RepeatType,0)
 SetCallEnd()
 function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
