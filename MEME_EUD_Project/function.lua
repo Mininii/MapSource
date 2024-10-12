@@ -340,6 +340,10 @@ G_CB_Y = CreateVar(FP)
 G_CB_XDis = CreateVar(FP)
 G_CB_YDis = CreateVar(FP)
 G_CB_Eff = CreateVar(FP)
+G_CB_ColorMem = CreateVar(FP)
+G_CB_Color = CreateVar(FP)
+G_CB_ColorMask = CreateVar(FP)
+
 G_CB_Shapes = {}
 G_CB_ShapeIndexAlloc = 1
 G_CB_RotateV = CreateVar(FP)
@@ -420,6 +424,15 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CElseIfX_AddRepeatType(5,"RemoveTimer")
 			CDoActions(FP,{TSetMemoryX(_Add(RPtr,68),SetTo,250,0xFFFF)})
 			CElseIfX_AddRepeatType(6,"Nothing")
+			CElseIfX_AddRepeatType(7,"Patrol_Center")
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			Simple_SetLocX(FP,130,G_CB_BackupX,G_CB_BackupY,G_CB_BackupX,G_CB_BackupY,{Simple_CalcLoc(130,-4,-4,4,4)})
+			CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, 131);
+			TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),}, {preserved})
+			
+
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
@@ -439,6 +452,8 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		QueueX = CreateVar(FP)
 		QueueY = CreateVar(FP)
 		CIf(FP,{CDeaths(FP,Exactly,0,CA_Repeat_Check)})
+
+
 		CIfX(FP,{CVar(FP,TRepeatX[2],AtMost,0x7FFFFFFF-5)})
 
 			Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
@@ -449,8 +464,13 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		Simple_SetLocX(FP,0,G_CB_X,G_CB_Y,G_CB_X,G_CB_Y)
 		CMov(FP,QueueX,G_CB_X)
 		CMov(FP,QueueY,G_CB_Y)
+		CElseIfX(CVar(FP,TRepeatY[2],Exactly,0x32223222))
+		TGetLocCenter(TRepeatX, G_CB_X, G_CB_Y)
+		Simple_SetLocX(FP,0,G_CB_X,G_CB_Y,G_CB_X,G_CB_Y)
 
 		CIfXEnd()
+
+		
 		CIfEnd()
 
 
@@ -467,7 +487,21 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 
 		
 		NIfX(FP, {CV(Gun_TempSpawnSet1,33)})
+		SendEff = CreateVarArr(4, FP)
+		CIf(FP,{CV(SendEff[2],0x7FFFFFFF,AtMost)})
+		f_Read(FP,SendEff[1],SendEff[4])
+		CDoActions(FP,{
+			TSetMemoryX(SendEff[1],SetTo,SendEff[2],SendEff[3]); --컬러
+		})
+		CIfEnd()
 		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, Repeat_EffID,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
+		
+		CIf(FP,{CV(SendEff[2],0x7FFFFFFF,AtMost)})
+		f_Read(FP,SendEff[1],SendEff[4])
+		CDoActions(FP,{
+			TSetMemoryX(SendEff[1],SetTo,SendEff[4],SendEff[3]); --컬러 복구
+		})
+		CIfEnd()
 		CIf(FP,CV(RepeatType,44))-- 44번 RepeatType 특수패턴
 			Simple_CalcLocX(FP, 0, -192, -192, 192, 192)
 			DoActions(FP, {SetInvincibility(Enable, "Men", Force1, 1)})
@@ -509,6 +543,9 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Simple_SetLocX(FP,0,TRepeatX,TRepeatY,TRepeatX,TRepeatY)
 			CElseIfX(CVar(FP,TRepeatX[2],AtLeast,0x80000000-5))
 				Simple_SetLocX(FP,0,G_CB_X,G_CB_Y,G_CB_X,G_CB_Y)
+			CElseIfX(CVar(FP,TRepeatY[2],Exactly,0x32223222))
+				TGetLocCenter(TRepeatX, G_CB_X, G_CB_Y)
+				Simple_SetLocX(FP,0,G_CB_X,G_CB_Y,G_CB_X,G_CB_Y)
 			CElseX()
 				Simple_SetLocX(FP,0,3712,288,3712,288)
 			CIfXEnd()
@@ -535,7 +572,10 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
 
 	if Owner == nil then Owner = 0xFFFFFFFF end
 	if NQOp == nil then NQOp = 0 end
-	if Type == nil then Type = 0 end
+	if Type == nil then Type = 0 
+	elseif type(Type) == "string" then
+		Type = RTypeKey[Type]
+	end
 	local SetX = 0 
 	local SetY = 0
 	if type(CenterXY) == "table" then
@@ -548,6 +588,11 @@ function f_TempRepeat(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
 	elseif CenterXY == "CG" then
 		SetX = 0x80000000
 		SetY = 0x80000000
+	elseif type(CenterXY) == "number" or  type(CenterXY) == "string" then -- Location Mode
+		local Temp,EditorLocNum = ConvertLocation(CenterXY)
+		SetX = Temp+1 -- LocationID
+		SetY = 0x32223222 -- LocationMode Flag
+	
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
@@ -579,6 +624,12 @@ function f_TempRepeatX(Condition,UnitID,Number,Type,Owner,CenterXY,Flags,NQOp)
 	elseif CenterXY == "CG" then
 		SetX = 0x80000000
 		SetY = 0x80000000
+	elseif type(CenterXY) == "number" or  type(CenterXY) == "string" then -- Location Mode
+		local Temp,EditorLocNum = ConvertLocation(CenterXY)
+		SetX = Temp+2 -- LocationID
+		SetY = 0x32223222 -- LocationMode Flag
+	
+
 	else
 		PushErrorMsg("TRepeat_CenterXY_Error")
 	end
@@ -709,6 +760,12 @@ CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,24*(0x20/4)),SetTo,G_CB_XDis),
 	TSetMemory(_Add(G_CB_LineTemp,25*(0x20/4)),SetTo,G_CB_YDis),
 	TSetMemory(_Add(G_CB_LineTemp,26*(0x20/4)),SetTo,G_CB_Eff),
+	TSetMemory(_Add(G_CB_LineTemp,27*(0x20/4)),SetTo,G_CB_ColorMem),
+	TSetMemory(_Add(G_CB_LineTemp,28*(0x20/4)),SetTo,G_CB_Color),
+	TSetMemory(_Add(G_CB_LineTemp,29*(0x20/4)),SetTo,G_CB_ColorMask),
+	
+
+
 	
 
 })
@@ -1117,6 +1174,12 @@ function G_CBPlot()
 	CMov(FP,V(CA[3]),G_CB_TempTable[17]) -- SetDelayTimer
 	CMov(FP,V(CA[2]),G_CB_TempTable[4]) -- CurDelayTimer
 	CMov(FP,Repeat_EffID,G_CB_TempTable[27])--EFFID
+	CMov(FP,SendEff[1],G_CB_TempTable[28])--EFFID
+	CMov(FP,SendEff[2],G_CB_TempTable[29])--EFFID
+	CMov(FP,SendEff[3],G_CB_TempTable[30])--EFFID
+	
+	
+	
 	--DisplayPrint(HumanPlayers, {
 	--	"   G_CB_TempTable[1] : ",G_CB_TempTable[1],--Line 0 = UnitID 1Byte
 	--	"   G_CB_TempTable[2] : ",G_CB_TempTable[2],--Line 1 = PrefuncID 1Byte
@@ -1297,7 +1360,7 @@ function G_CB_SetSpawnX(Condition,G_CB_CUTable,G_CB_ShapeTable,G_CB_LMTable,G_CB
 
 end
 
-function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag,Property)
+function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag,Property,Color)
 	local x = {}
 	for j,k in pairs(G_CB_ShapeTable) do
 		table.insert(x,33)
@@ -1305,6 +1368,30 @@ function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag
 	local PP = Property
 	if PP == nil then PP={} end
 	PP["EffID"] = ScanEffID
+
+	if Color ~= nil then
+		local ret2 = 0x669E28+EffType
+		local ret = bit32.band(ret2, 0xFFFFFFFF)%4
+		local Mask = 0
+		if ret == 0 then
+			Mask = 0xFF
+		elseif ret == 1 then
+			Mask = 0xFF00
+			Color = Color * 0x100
+		elseif ret == 2 then
+			Mask = 0xFF0000
+			Color = Color * 0x10000
+		elseif ret == 3 then
+			Mask = 0xFF000000
+			Color = Color * 0x1000000
+		end
+		ret2 = ret2 - ret
+		
+		PP["EffColorMem"] = EPDF(ret2)
+		PP["EffColor"] = Color
+		PP["EffColorMask"] = Mask
+	end
+
 	G_CB_TSetSpawn(Condition,x,G_CB_ShapeTable,P6,CenterXY,PreserveFlag,PP)
 	--P6, UID 33 고정
 end
@@ -1365,7 +1452,11 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 	local G_CB_CenterXY = {{G_CB_XPos,0xFFFFFFFF},{G_CB_YPos,0xFFFFFFFF}} 
 	local G_CB_CenterDis = {{G_CB_XDis,0},{G_CB_YDis,0}}
 	local G_CB_EffID = {{G_CB_Eff,0}}
+	local G_CB_EffColorMem = {{G_CB_ColorMem,0}}
+	local G_CB_EffColor = {{G_CB_Color,0xFFFFFFFF}}
+	local G_CB_EffColorMask = {{G_CB_ColorMask,0}}
 	
+		
 
 
 	if type(CenterXY) == "number" then
@@ -1431,6 +1522,36 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 			else
 				G_CB_EffID = {{G_CB_Eff,k}}
 			end
+		elseif j == "EffColorMem" then
+			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
+				G_CB_EffColorMem = {{G_CB_ColorMem,k}}
+			else
+				G_CB_EffColorMem = {{G_CB_ColorMem,k}}
+			end
+		elseif j == "EffColor" then
+			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
+				G_CB_EffColor = {{G_CB_Color,k}}
+			else
+				G_CB_EffColor = {{G_CB_Color,k}}
+			end
+		elseif j == "EffColorMask" then
+			if type(k) == "table" and k[4]~="V" then
+				G_CBPlotTOption = 1
+				G_CB_EffColorMask = {{G_CB_ColorMask,k}}
+			else
+				G_CB_EffColorMask = {{G_CB_ColorMask,k}}
+			end
+
+			
+			
+
+
+
+
+
+
 		elseif j == "FNTable" then
 			if type(k) == "table" and k[4]~="V" then
 				G_CBPlotTOption = 1
@@ -1518,7 +1639,12 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		AutoSetV(Act,G_CB_CenterXY)
 		AutoSetV(Act,G_CB_CenterDis)
 		AutoSetV(Act,G_CB_EffID)
+		AutoSetV(Act,G_CB_EffColorMem)
+		AutoSetV(Act,G_CB_EffColor)
+		AutoSetV(Act,G_CB_EffColorMask)
 		
+
+
 		AutoSetV(Act,G_CB_OwnerTable)
 		AutoSetV(Act,G_CB_Rotate)
 		CallTriggerX(FP,Write_SpawnSet,Condition,Act,PreserveFlag)
@@ -1541,6 +1667,9 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		TAutoSetV(Act,G_CB_OwnerTable)
 		TAutoSetV(Act,G_CB_Rotate)
 		TAutoSetV(Act,G_CB_EffID)
+		TAutoSetV(Act,G_CB_EffColorMem)
+		TAutoSetV(Act,G_CB_EffColor)
+		TAutoSetV(Act,G_CB_EffColorMask)
 		CDoActions(FP, Act,PreserveFlag)
 		CallTriggerX(FP,Write_SpawnSet,Condition,nil,PreserveFlag)
 
