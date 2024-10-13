@@ -847,64 +847,67 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,5180 // 0x1D,AtLeast)},{84,"Gantrithor (Carrier
 G_CB_TSetSpawn({CD(GunTrigGCcode,5550 // 0x1D,AtLeast)},{84,"Norad II (Battlecruiser)"},CD219Sh_7,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
 
 
-DoActions(FP,{KillUnit(84, P6)})
 
 
---[[
-
-Trigger { -- PD
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Ion Cannon", "CD219");
-		Deaths(P6, AtLeast, 50, "Zerg Defiler");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD50", P8);
-		CreateUnit(14, "", "CD50", P8);
-		Order("Danimoth (Arbiter)", P8, "CD50", Attack, "CD219");
-		Comment("PD");
-	},
-}
-
-
-Trigger { -- PD1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Ion Cannon", "CD219");
-		Deaths(P6, AtLeast, 50, "Zerg Scourge");
-	},
-	actions = {
-		CreateUnit(20, "", "CD51", P8);
-		CreateUnit(12, "Gantrithor (Carrier)", "CD51", P8);
-		Order("Gantrithor (Carrier)", P8, "CD51", Attack, "CD219");
-		Comment("PD1");
-	},
-}
-
-
-Trigger { -- PD2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Ion Cannon", "CD219");
-		Deaths(P6, AtLeast, 50, "Zerg Devourer");
-	},
-	actions = {
-		CreateUnit(14, "Warbringer (Reaver)", "CD53", P8);
-		CreateUnit(12, "Norad II (Battlecruiser)", "CD53", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD53", Attack, "CD219");
-		Comment("PD2");
-	},
-}
-]]
 
 
 CIfEnd()
 
-CD68 = CIf_GunTrig(P8, "Protoss Stargate", "CD68", 40000//0x1D, 0)
+CD68 = CIf_GunTrig(P8, "Protoss Stargate", "CD68", 40000//0x1D, 10)
+CD68Sh_1_1 = CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 2), PlotSizeCalc(6, 1))
+CD68Sh_1_2 = CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 3), PlotSizeCalc(6, 2))
+CD68Sh_1_3 = CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 4), PlotSizeCalc(6, 3))
+CD68Sh_2 = CS_SortA(CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 5), PlotSizeCalc(6, 4)), 0)
+CD68Sh_3 = CS_SortA(CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 5), PlotSizeCalc(6, 4)), 1)
+
+CD68Sh_2_1 = CS_SortA(CSMakeCircle(6, 107, 0, PlotSizeCalc(6, 3), PlotSizeCalc(6, 2)), 0)
+CD68Sh_4 = CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 4), 0)
+function Z2Eff1(Time)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(0//0x1D),AtLeast)}, {CD68Sh_1_1}, GunTrigGLoc, 334,1,{LMTable="MAX"},17)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(350//0x1D),AtLeast)}, {CD68Sh_1_2}, GunTrigGLoc, 334,1,{LMTable="MAX"},16)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(700//0x1D),AtLeast)}, {CD68Sh_1_3}, GunTrigGLoc, 334,1,{LMTable="MAX"},9)
+end
+function Z2Eff2(Time)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(0//0x1D),AtLeast)}, {CD68Sh_1_1}, GunTrigGLoc, 60,1,{LMTable="MAX"},17)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(350//0x1D),AtLeast)}, {CD68Sh_1_2}, GunTrigGLoc, 60,1,{LMTable="MAX"},16)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(700//0x1D),AtLeast)}, {CD68Sh_1_3}, GunTrigGLoc, 60,1,{LMTable="MAX"},9)
+end
+--PushErrorMsg(CD68Sh_3[1])
+function Z2Eff3(Time)
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+(0//0x1D),AtLeast)}, {CD68Sh_2}, GunTrigGLoc, 215,1,{LMTable=4})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time//0x1D)+(0//0x1D),AtLeast)},{"Hyperion (Battlecruiser)"},CD68Sh_2,{P8},GunTrigGLoc,1,{LMTable=4,RepeatType = "Patrol_Center"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*1)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*2)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*3)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*4)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*5)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*6)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+	G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+((460*7)//0x1D),AtLeast)}, {CD68Sh_3}, GunTrigGLoc, 215,1,{LMTable=4})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time//0x1D)+((460*7)//0x1D),AtLeast)},{"Hyperion (Battlecruiser)"},CD68Sh_3,{P8},GunTrigGLoc,1,{LMTable=4,RepeatType = "Patrol_Center"})
+end
+for i = 0, 7 do
+	Z2Eff1(930+(930*i))
+end
+for i = 0, 5 do
+	Z2Eff2(8430+(930*i))
+end
+Z2Eff3(930)
+Z2Eff3(4680)
+Z2Eff3(8430)
+
+G_CB_TScanEff({CD(GunTrigGCcode,(12180//0x1D)+(0//0x1D),AtLeast)}, {CD68Sh_2}, GunTrigGLoc, 215,1,{LMTable=4})
+G_CB_TScanEff({CD(GunTrigGCcode,(12180//0x1D)+((460*1)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,(12180//0x1D)+((460*2)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,(12180//0x1D)+((460*3)//0x1D),AtLeast)}, {CD68Sh_2_1}, GunTrigGLoc, 214,1,{LMTable="MAX"})
+
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,(14060//0x1D),AtLeast)},{"Mojo (Scout)",84},CD68Sh_1_3,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,(14530//0x1D),AtLeast)},{"Gantrithor (Carrier)",84},CD68Sh_1_2,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,(15000//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},CD68Sh_1_1,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,(15460//0x1D),AtLeast)},{"Hyperion (Battlecruiser)","Artanis (Scout)","Edmund Duke (Siege Mode)",84},CD68Sh_4,{P8,P8,P8,P6},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
 
 
 
-CIfEnd()
 --[[
 
 
@@ -1090,7 +1093,7 @@ CIfEnd()
 
 
 
-DoActions(FP,{KillUnit("Zerg Devourer", Force2)})
+DoActions(FP,{KillUnit("Zerg Devourer", Force2),KillUnit(84, Force2),KillUnit(84, P6)})
 --[[
 
 

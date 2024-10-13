@@ -1370,7 +1370,7 @@ function G_CB_TScanEff(Condition,G_CB_ShapeTable,CenterXY,ScanEffID,PreserveFlag
 	PP["EffID"] = ScanEffID
 
 	if Color ~= nil then
-		local ret2 = 0x669E28+EffType
+		local ret2 = 0x669E28+ScanEffID
 		local ret = bit32.band(ret2, 0xFFFFFFFF)%4
 		local Mask = 0
 		if ret == 0 then
