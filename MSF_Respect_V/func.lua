@@ -431,12 +431,20 @@ TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,QueueMaxSize
 if X4_Mode == 1 then
 	CIf(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)})
 	CFor(FP,0,1700,1)
+
 	local NX,NY = CreateVars(2,FP)
+	f_Lengthdir(FP, _Mod(_Rand(), 32*10), _Mod(_Rand(), 360), NX,NY)
+	Simple_SetLocX(FP, 0, NX,NY,NX,NY,{Simple_CalcLoc(0, 1024,1088,1024,1088)})
+	DoActions(FP, {
+		MoveUnit(1, 25, Force2, 39, 1),
+		MoveUnit(1, 30, Force2, 39, 1),})
+	
 	CMov(FP,NX,f_CRandNum(2048-64, 32))
 	CMov(FP,NY,f_CRandNum(2048-64, 32))
 	Simple_SetLocX(FP, 0, NX,NY,NX,NY)
-	DoActions(FP, {MoveUnit(1, "Men", Force2, 39, 1),Order("Men", Force2, 1, Attack, 6)})
+	DoActions(FP, {MoveUnit(1, "Men", Force2, 39, 1)})
 	CForEnd()
+	DoActions2(FP,{Simple_SetLoc(0, 0, 0, 2048, 2048),Order("Men", Force2, 1, Attack, 6)})
 	CIfEnd()
 end
 Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
