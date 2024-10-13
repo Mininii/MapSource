@@ -62,7 +62,7 @@ CSPlot(Shape5020,P5,20,0,{0,0},1,32,FP,{HumanCheck(P5, 1)})
 
 
 	CIfOnce(FP)
-	SizePatchArr = {48,53,54,55,56,62,11,8,12,21,28,29,70,82,81,86,88,50,25,80}
+	SizePatchArr = {48,53,54,55,56,62,11,8,12,21,28,29,70,82,81,86,88,50,25,80,87,98,30}
 	for j,k in pairs(SizePatchArr) do
 		SetUnitsDatX(k, {SizeL = 4,SizeU = 4,SizeR = 4,	SizeD = 4,})
 	end

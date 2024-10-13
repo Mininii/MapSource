@@ -12,6 +12,12 @@ function GunTrig()
 		{8,"staredit\\wav\\UnwelcomeSchool.ogg",53*1000},
 		{9,"staredit\\wav\\Damedane.ogg",35*1000},
 		{10,"staredit\\wav\\00.ogg",47*1000},
+		{11,"staredit\\wav\\_DDING1.ogg",82*1000},
+		{12,"staredit\\wav\\lolikami_cut.ogg",68*1000},
+		{13,"staredit\\wav\\Toka.ogg",16*1000},
+		{14,"staredit\\wav\\Nyancat.ogg",31*1000},
+		{15,"staredit\\wav\\nodap.ogg",55*1000},
+		
 		
 	})
 	
@@ -428,40 +434,6 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,9340 // 0x1D,AtLeast)},{"Norad II (Battlecruise
 
 
 
---CreateUnit(24, "Zeratul (Dark Templar)", "CD27", P8);
---CreateUnit(12, "Gui Montag (Firebat)", "CD27", P8);
---CreateUnit(20, "Mojo (Scout)", "CD27", P8);--
-
---CreateUnit(18, "Edmund Duke (Siege Mode)", "CD27", P8);
---CreateUnit(10, "Danimoth (Arbiter)", "CD27", P8);
---CreateUnit(12, "Mojo (Scout)", "CD27", P8);--
-
---CreateUnit(24, "Alan Schezar (Goliath)", "CD27", P8);
---CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD27", P8);
---CreateUnit(12, "Kukulza (Mutalisk)", "CD27", P8);--
-
---CreateUnit(24, "Edmund Duke (Siege Mode)", "CD27", P8);
---CreateUnit(12, "Fenix (Dragoon)", "CD27", P8);
---CreateUnit(2, "Norad II (Battlecruiser)", "CD27", P8);
---CreateUnit(12, "Hyperion (Battlecruiser)", "CD27", P8);--
-
---CreateUnit(24, "Zeratul (Dark Templar)", "CD26", P8);
---CreateUnit(12, "Gui Montag (Firebat)", "CD26", P8);
---CreateUnit(20, "Mojo (Scout)", "CD26", P8);--
-
---CreateUnit(18, "Edmund Duke (Siege Mode)", "CD26", P8);
---CreateUnit(10, "Danimoth (Arbiter)", "CD26", P8);
---CreateUnit(12, "Mojo (Scout)", "CD26", P8);--
-
---CreateUnit(24, "Alan Schezar (Goliath)", "CD26", P8);
---CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD26", P8);
---CreateUnit(12, "Kukulza (Mutalisk)", "CD26", P8);--
-
---CreateUnit(24, "Edmund Duke (Siege Mode)", "CD26", P8);
---CreateUnit(12, "Fenix (Dragoon)", "CD26", P8);
---CreateUnit(2, "Norad II (Battlecruiser)", "CD26", P8);
---CreateUnit(12, "Hyperion (Battlecruiser)", "CD26", P8);
-
 
 CIfEnd()
 
@@ -674,6 +646,8 @@ TriggerX(FP, {CD(CRCDT2,5,AtLeast)}, {SetCD(CRCDT2,0)},{preserved})
 CIfEnd()
 
 CIf(FP,{CD(CRCDANY,40500 // 0x1D,AtLeast)})
+
+
 G_CB_TScanEff({CD(CRCDANY,40500 // 0x1D,AtLeast),CD(CRCDMode,0)}, {CSMakeCircle(6, 192, 0, PlotSizeCalc(6, 13), 0)}, {4032-(9*32),864}, 60, 1,{RepeatType=44})
 G_CB_TScanEff({CD(CRCDANY,40500 // 0x1D,AtLeast),CD(CRCDMode,1)}, {CSMakeCircle(6, 64, 0, PlotSizeCalc(6, 7), 0)}, {448,3888}, 60, 1,{RepeatType=44})
 
@@ -823,28 +797,28 @@ CD219Sh_2_1 = CSMakeCircle(20, 128+64, 0, 21, 1)
 CD219Sh_2_2 = CSMakeCircle(20, 128+72, 0, 21, 1)
 CD219Sh_2_3 = CSMakeCircle(20, 128+84, 0, 21, 1)
 CD219Sh_2_4 = CSMakeCircle(20, 128+96, 0, 21, 1)
-G_CB_TSetSpawn({CD(GunTrigGCcode,0 // 0x1D,AtLeast)},{"Kukulza (Mutalisk)"},CD219Sh_1_1,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,370 // 0x1D,AtLeast)},{"Kukulza (Mutalisk)"},CD219Sh_1_2,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,740 // 0x1D,AtLeast)},{"Kukulza (Guardian)"},CD219Sh_1_3,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,1100 // 0x1D,AtLeast)},{"Kukulza (Guardian)"},CD219Sh_1_4,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,1480 // 0x1D,AtLeast)},{"Artanis (Scout)"},CD219Sh_2_1,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,1850 // 0x1D,AtLeast)},{"Artanis (Scout)"},CD219Sh_2_2,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,2220 // 0x1D,AtLeast)},{"Tom Kazansky (Wraith)"},CD219Sh_2_3,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,2590 // 0x1D,AtLeast)},{"Tom Kazansky (Wraith)"},CD219Sh_2_4,P8,GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,0 // 0x1D,AtLeast)},{"Kukulza (Mutalisk)"},CD219Sh_1_1,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,370 // 0x1D,AtLeast)},{"Kukulza (Mutalisk)"},CD219Sh_1_2,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,740 // 0x1D,AtLeast)},{"Kukulza (Guardian)"},CD219Sh_1_3,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,1100 // 0x1D,AtLeast)},{"Kukulza (Guardian)"},CD219Sh_1_4,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,1480 // 0x1D,AtLeast)},{"Artanis (Scout)"},CD219Sh_2_1,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,1850 // 0x1D,AtLeast)},{"Artanis (Scout)"},CD219Sh_2_2,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,2220 // 0x1D,AtLeast)},{"Tom Kazansky (Wraith)"},CD219Sh_2_3,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,2590 // 0x1D,AtLeast)},{"Tom Kazansky (Wraith)"},CD219Sh_2_4,P8,GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
 CD219Sh_3 = CSMakePolygon(6, 64, 90, PlotSizeCalc(6, 3), PlotSizeCalc(6, 2))
-G_CB_TSetSpawn({CD(GunTrigGCcode,2960 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD50",1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,3330 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD51",1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,3700 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD53",1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,4070 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CP1",1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,2960 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD50",1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,3330 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD51",1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,3700 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CD53",1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,4070 // 0x1D,AtLeast)},{84,"Danimoth (Arbiter)","Tassadar/Zeratul (Archon)"},CD219Sh_3,{P6,P8,P8},"CP1",1,{LMTable="MAX",Order={Patrol,"CD219"}})
 
 CD219Sh_4 = CS_RatioXY(CSMakePolygon(4, 96, 0, PlotSizeCalc(4, 5), PlotSizeCalc(4, 4)), 1, 0.5)
 CD219Sh_5 = CS_RatioXY(CSMakePolygon(4, 96, 0, PlotSizeCalc(4, 4), PlotSizeCalc(4, 3)), 1, 0.5)
 CD219Sh_6 = CS_RatioXY(CSMakePolygon(4, 96, 0, PlotSizeCalc(4, 3), PlotSizeCalc(4, 2)), 1, 0.5)
 CD219Sh_7 = CS_RatioXY(CSMakePolygon(4, 128, 0, PlotSizeCalc(4, 3), PlotSizeCalc(4, 2)), 1, 0.5)
-G_CB_TSetSpawn({CD(GunTrigGCcode,4440 // 0x1D,AtLeast)},{84,"Edmund Duke (Siege Mode)"},CD219Sh_4,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,4810 // 0x1D,AtLeast)},{84,"Warbringer (Reaver)"},CD219Sh_5,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,5180 // 0x1D,AtLeast)},{84,"Gantrithor (Carrier)"},CD219Sh_6,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
-G_CB_TSetSpawn({CD(GunTrigGCcode,5550 // 0x1D,AtLeast)},{84,"Norad II (Battlecruiser)"},CD219Sh_7,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,4440 // 0x1D,AtLeast)},{84,"Edmund Duke (Siege Mode)"},CD219Sh_4,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,4810 // 0x1D,AtLeast)},{84,"Warbringer (Reaver)"},CD219Sh_5,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,5180 // 0x1D,AtLeast)},{84,"Gantrithor (Carrier)"},CD219Sh_6,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,5550 // 0x1D,AtLeast)},{84,"Norad II (Battlecruiser)"},CD219Sh_7,{P6,P8},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD219"}})
 
 
 
@@ -907,173 +881,9 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,(15000//0x1D),AtLeast)},{"Norad II (Battlecruis
 G_CB_TSetSpawn({CD(GunTrigGCcode,(15460//0x1D),AtLeast)},{"Hyperion (Battlecruiser)","Artanis (Scout)","Edmund Duke (Siege Mode)",84},CD68Sh_4,{P8,P8,P8,P6},GunTrigGLoc,1,{LMTable="MAX",RepeatType = "Patrol_Center"})
 
 
-
---[[
-
-
-Trigger { -- SG
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P6, Add, 1, "Zerg Spawning Pool");
-		Comment("SG");
-	},
-}
-
-
-Trigger { -- SG1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P6, Add, 1, "Protoss Corsair");
-		Comment("SG1");
-	},
-}
-
-
-Trigger { -- SG2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P6, Add, 1, "Protoss Dragoon");
-		Comment("SG2");
-	},
-}
-
-
-Trigger { -- SG3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P6, Add, 1, "Protoss Carrier");
-		Comment("SG3");
-	},
-}
-
-
-Trigger { -- SG4
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-	},
-	actions = {
-		PreserveTrigger();
-		SetDeaths(P6, Add, 1, "Protoss Gateway");
-		Comment("SG4");
-	},
-}
-
-
-Trigger { -- ICD(M)
-	players = {Force2},
-	conditions = {
-		Deaths(P6, AtLeast, 1, "Protoss Gateway");
-		Deaths(P6, AtMost, 450, "Protoss Gateway");
-	},
-	actions = {
-		PreserveTrigger();
-		Order("Hyperion (Battlecruiser)", P8, "CD68", Move, "CD68");
-		Comment("ICD(M)");
-	},
-}
-
-
-Trigger { -- ICD(JYD)
-	players = {Force2},
-	conditions = {
-		Deaths(P6, AtLeast, 451, "Protoss Gateway");
-	},
-	actions = {
-		RunAIScriptAt("Set Unit Order To: Junk Yard Dog", "CD68");
-		Comment("ICD(JYD)");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-		Deaths(P6, AtLeast, 0, "Zerg Spawning Pool");
-	},
-	actions = {
-		CreateUnit(12, "Terran Dropship", "CD68", P8);
-		CreateUnit(1, "Protoss Observer", "CD69", P8);
-		CreateUnit(1, "Protoss Observer", "CD70", P8);
-		CreateUnit(1, "Protoss Observer", "CD71", P8);
-		CreateUnit(1, "Protoss Observer", "CD72", P8);
-		KillUnit("Terran Dropship", P8);
-		KillUnit("Protoss Observer", P8);
-	},
-}
-
-
-Trigger { -- SG
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-		Deaths(P6, AtLeast, 0, "Zerg Spawning Pool");
-	},
-	actions = {
-		CreateUnit(4, "Hyperion (Battlecruiser)", "CD69", P8);
-		CreateUnit(6, "Norad II (Battlecruiser)", "CD68", P8);
-		CreateUnit(6, "Norad II (Battlecruiser)", "CD70", P8);
-		CreateUnit(6, "Norad II (Battlecruiser)", "CD71", P8);
-		CreateUnit(6, "Norad II (Battlecruiser)", "CD72", P8);
-		Order("Hyperion (Battlecruiser)", P8, "CD69", Attack, "CD68");
-		Order("Norad II (Battlecruiser)", P8, "CD68", Attack, "CD68");
-		Order("Norad II (Battlecruiser)", P8, "CD70", Attack, "CD68");
-		Order("Norad II (Battlecruiser)", P8, "CD71", Attack, "CD68");
-		Order("Norad II (Battlecruiser)", P8, "CD72", Attack, "CD68");
-		Comment("SG");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Protoss Stargate", "CD68");
-		Deaths(P6, AtLeast, 7, "Zerg Spawning Pool");
-	},
-	actions = {
-		CreateUnit(12, "Terran Dropship", "CD68", P8);
-		CreateUnit(1, "Protoss Observer", "CD69", P8);
-		CreateUnit(1, "Protoss Observer", "CD70", P8);
-		CreateUnit(1, "Protoss Observer", "CD71", P8);
-		CreateUnit(1, "Protoss Observer", "CD72", P8);
-		KillUnit("Terran Dropship", P8);
-		KillUnit("Protoss Observer", P8);
-	},
-}
-
-
-]]
 CIfEnd()
 
---
---Trigger {
---	players = {P8},
---	conditions = {
---		Command(P8, Excatly, 0, "Mature Crysalis");
---	},
---	actions = {
---		--SetInvincibility(Disable, "Protoss Temple", P8, "Anywhere");
---		--Order("Any unit", P8, "Anywhere", Patrol, "CD231");
---	},
---}
+
 
 ICD2 = CIf_GunTrig(P7, "Infested Command Center", "ICD2",1001,9);
 
@@ -1092,1176 +902,304 @@ TriggerX(FP,{CD(GunTrigGCcode,1001,AtLeast)},{GiveUnits(All, "Mojo (Scout)", P6,
 CIfEnd()
 
 
+CD218Sh_1 = CS_OverlapX(
+	CSMakeLine(1, 64, -30, 3, 0),
+	CSMakeLine(1, 64, -15, 3, 0),
+	CSMakeLine(1, 64, 0, 3, 0),
+	CSMakeLine(1, 64, 15, 3, 0),
+	CSMakeLine(1, 64, 30, 3, 0)
+)
+CD218Sh_2 = CSMakeCircle(6, 240, 0, 7, 1)
 
-DoActions(FP,{KillUnit("Zerg Devourer", Force2),KillUnit(84, Force2),KillUnit(84, P6)})
+function DDINGEff(Loc1,Loc2)
+	G_CB_TScanEff({CD(GunTrigGCcode,(460//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 434,1,{LMTable="MAX",RotateTable = 45})
+	G_CB_TScanEff({CD(GunTrigGCcode,(460//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 434,1,{LMTable="MAX",RotateTable = 45})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(1400//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 433,1,{LMTable="MAX",RotateTable = 45+90})
+	G_CB_TScanEff({CD(GunTrigGCcode,(1400//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 433,1,{LMTable="MAX",RotateTable = 45+90})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(2340//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 432,1,{LMTable="MAX",RotateTable = 45+180})
+	G_CB_TScanEff({CD(GunTrigGCcode,(2340//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 432,1,{LMTable="MAX",RotateTable = 45+180})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(3280//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 431,1,{LMTable="MAX",RotateTable = 45+270})
+	G_CB_TScanEff({CD(GunTrigGCcode,(3280//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 431,1,{LMTable="MAX",RotateTable = 45+270})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(4210//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 430,1,{LMTable="MAX",RotateTable = 45+180})
+	G_CB_TScanEff({CD(GunTrigGCcode,(4210//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 430,1,{LMTable="MAX",RotateTable = 45+180})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(5150//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 430,1,{LMTable="MAX",RotateTable = 45+90})
+	G_CB_TScanEff({CD(GunTrigGCcode,(5150//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 430,1,{LMTable="MAX",RotateTable = 45+90})
+	
+	G_CB_TScanEff({CD(GunTrigGCcode,(6090//0x1D),AtLeast)}, {CD218Sh_1}, Loc1, 430,1,{LMTable="MAX",RotateTable = 45+0})
+	G_CB_TScanEff({CD(GunTrigGCcode,(6090//0x1D),AtLeast)}, {CD218Sh_1}, Loc2, 430,1,{LMTable="MAX",RotateTable = 45+0})
+	
+	end
+function DDINGEff2(Time,Loc1,Loc2)
+	for i = 0,15 do
+		G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+i,AtLeast)}, {CD218Sh_2}, Loc1, 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},10)
+		G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+i,AtLeast)}, {CD218Sh_2}, Loc2, 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},10)
+	end
+end
+CD218Sh_3 = CSMakeStar(5,135,128,180,CS_Level("Star",5,3),0)
+function DDINGSpanwnSet(Time,Loc1,Loc2,UnitTable)
+	DDINGEff2(Time-940,Loc1,Loc2)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time) // 0x1D,AtLeast)},{UnitTable[1]},CD218Sh_3,P8,Loc1,1,{LMTable="MAX",Order={Patrol,Loc2}})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time) // 0x1D,AtLeast)},{UnitTable[2]},CD218Sh_3,P8,Loc1,1,{LMTable="MAX",Order={Attack,Loc2}})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time) // 0x1D,AtLeast)},{UnitTable[3]},CD218Sh_3,P8,Loc2,1,{LMTable="MAX",Order={Patrol,Loc1}})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time) // 0x1D,AtLeast)},{UnitTable[4]},CD218Sh_3,P8,Loc2,1,{LMTable="MAX",Order={Attack,Loc1}})
+end
+
+CD218 = CIf_GunTrig(P8, "Power Generator", "CD218",(26250//0x1D)+1,11);
+
+DDINGEff("CD218","CD217")
+
+DDINGSpanwnSet(7500,"CD218","CD217",{"Fenix (Dragoon)","Mojo (Scout)","Tassadar (Templar)","Danimoth (Arbiter)"})
+DDINGSpanwnSet(11250,"CD218","CD217",{"Zeratul (Dark Templar)","Gantrithor (Carrier)","Gui Montag (Firebat)","Hyperion (Battlecruiser)"})
+DDINGSpanwnSet(15000,"CD218","CD217",{"Jim Raynor (Vulture)","Artanis (Scout)","Aldaris (Templar)","Raszagal (Dark Templar)"})
+DDINGSpanwnSet(18750,"CD218","CD217",{"Fenix (Dragoon)","Mojo (Scout)","Tassadar (Templar)","Danimoth (Arbiter)"})
+DDINGSpanwnSet(22500,"CD218","CD217",{"Zeratul (Dark Templar)","Gantrithor (Carrier)","Gui Montag (Firebat)","Hyperion (Battlecruiser)"})
+DDINGSpanwnSet(26250,"CD218","CD217",{"Jim Raynor (Vulture)","Artanis (Scout)","Aldaris (Templar)","Raszagal (Dark Templar)"})
+
+
+
+
+CIfEnd()
+CD216 = CIf_GunTrig(P8, "Power Generator", "CD216",(26250//0x1D)+1,11);
+
+DDINGEff("CD216","CD215")
+DDINGSpanwnSet(7500,"CD216","CD215",{"Jim Raynor (Vulture)","Artanis (Scout)","Aldaris (Templar)","Raszagal (Dark Templar)"})
+DDINGSpanwnSet(11250,"CD216","CD215",{"Fenix (Dragoon)","Mojo (Scout)","Tassadar (Templar)","Danimoth (Arbiter)"})
+DDINGSpanwnSet(15000,"CD216","CD215",{"Zeratul (Dark Templar)","Gantrithor (Carrier)","Gui Montag (Firebat)","Hyperion (Battlecruiser)"})
+DDINGSpanwnSet(18750,"CD216","CD215",{"Jim Raynor (Vulture)","Artanis (Scout)","Aldaris (Templar)","Raszagal (Dark Templar)"})
+DDINGSpanwnSet(22500,"CD216","CD215",{"Fenix (Dragoon)","Mojo (Scout)","Tassadar (Templar)","Danimoth (Arbiter)"})
+DDINGSpanwnSet(26250,"CD216","CD215",{"Zeratul (Dark Templar)","Gantrithor (Carrier)","Gui Montag (Firebat)","Hyperion (Battlecruiser)"})
+
+CIfEnd()
+
+CD205 = CIf_GunTrig(P8, "Psi Disrupter", "CD205",30000//0x1D,12);
+Req_Rot = CreateVar(FP)
+
+G_CB_TScanEff({CD(CD205,1,AtLeast),CD(CD205,14540//0x1D,AtMost)}, {CSMakeLine(4, 128, 0, 5, 1)}, "CD205", 391, nil,{LMTable="MAX",RotateTable=Req_Rot})
+CAdd(FP,Req_Rot,3)
+
+for i = 0,31 do
+	TriggerX(FP,{CD(CD205,(10180//0x1D)+((i*130)//0x1D),AtLeast)},{SetMemory(0x657A9C,Subtract,1)})
+	
+end
+
+Trigger2X(FP, {CD(CD205,(14360//0x1D),AtLeast)}, {RotatePlayer({CenterView("CD205")}, HumanPlayers, FP)})
+TriggerX(FP,{CD(CD205,(14360//0x1D),AtLeast)},{SetMemory(0x657A9C,SetTo,31)})
+TriggerX(FP,{CD(CD205,(14720//0x1D),AtLeast)},{SetMemory(0x657A9C,SetTo,15)})
+TriggerX(FP,{CD(CD205,(15270//0x1D),AtLeast)},{SetMemory(0x657A9C,SetTo,31)})
+Req_Eff = CSMakeCircle(6, 64, 0, PlotSizeCalc(6,5), 0)
+G_CB_TScanEff({CD(GunTrigGCcode,(14360//0x1D),AtLeast)}, {Req_Eff}, GunTrigGLoc, 334,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,(14720//0x1D),AtLeast)}, {Req_Eff}, GunTrigGLoc, 215,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,(15270//0x1D),AtLeast)}, {Req_Eff}, GunTrigGLoc, 60,1,{LMTable="MAX"})
+
+
+
+
+I1a = CS_OverlapX(CS_MoveXY(CSMakeLine(2,40,0,10,0),-10,0),CS_MoveXY(CSMakeLine(2,40,0,10,0),10,0))
+I1b = CS_MoveXY(CSMakeLine(2,20,90,13,0),0,-220)
+I1c = CS_MoveXY(CSMakeLine(2,20,90,13,0),0,200)
+
+I2a = CS_OverlapX(CS_MoveXY(CSMakeLine(2,40,0,10,0),-50,0),CS_MoveXY(CSMakeLine(2,40,0,10,0),50,0))
+I2b = CS_MoveXY(CSMakeLine(2,25,90,13,0),0,-220)
+I2c = CS_MoveXY(CSMakeLine(2,25,90,13,0),0,200)
+
+I3a = CS_OverlapX(CS_MoveXY(CSMakeLine(2,40,0,10,0),-90,0),CSMakeLine(2,40,0,10,0),CS_MoveXY(CSMakeLine(2,40,0,10,0),90,0))
+I3b = CS_MoveXY(CSMakeLine(2,30,90,13,0),0,-220)
+I3c = CS_MoveXY(CSMakeLine(2,30,90,13,0),0,200)
+
+I4a = CS_MoveXY(CSMakeLine(2,40,0,10,0),0,0)
+I4b = CS_MoveXY(CSMakeLine(2,20,90,7,0),0,-220)
+I4c = CS_MoveXY(CSMakeLine(2,20,90,7,0),0,200)
+I4 = CS_MoveXY(CS_OverlapX(I4a,I4b,I4c),-220,0)
+I4A = CS_MoveXY(CS_OverlapX(CSMakeLine(1,30,15,15,1),CSMakeLine(1,30,-15,15,0)),50,200)
+
+
+
+
+Req_RD = CS_CropXY(CSMakeCircle(6, 64, 0, PlotSizeCalc(6,5), 0), {0,2048}, {0,2048})--오른쪽아래
+Req_LU = CS_CropXY(CSMakeCircle(6, 64, 0, PlotSizeCalc(6,5), 0), {-2048,0}, {-2048,0})--왼쪽위
+Req_RU = CS_CropXY(CSMakeCircle(6, 64, 0, PlotSizeCalc(6,5), 0), {-2048,0}, {0,2048})--오른쪽위
+Req_LD = CS_CropXY(CSMakeCircle(6, 64, 0, PlotSizeCalc(6,5), 0), {0,2048}, {-2048,0})--왼쪽아래
+--CD201
+--CD202
+--CD203
+--CD204
+--오른쪽위
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*0))//0x1D),AtLeast)},{"Sarah Kerrigan (Ghost)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD203"}})
+--왼쪽위
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*1))//0x1D),AtLeast)},{"Alan Schezar (Goliath)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD204"}})
+--아래
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*2))//0x1D),AtLeast)},{"Tom Kazansky (Wraith)",84},Req_RD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD201"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*2))//0x1D),AtLeast)},{"Tom Kazansky (Wraith)",84},Req_LD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD202"}})
+--위
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*3))//0x1D),AtLeast)},{"Hyperion (Battlecruiser)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD204"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*3))//0x1D),AtLeast)},{"Hyperion (Battlecruiser)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD203"}})
+--오른
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*4))//0x1D),AtLeast)},{"Jim Raynor (Vulture)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD203"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*4))//0x1D),AtLeast)},{"Tom Kazansky (Wraith)",84},Req_RD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD201"}})
+--왼
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*5))//0x1D),AtLeast)},{"Alan Schezar (Goliath)",84},Req_LD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD202"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*5))//0x1D),AtLeast)},{"Hyperion (Battlecruiser)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD204"}})
+--오른
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*6))//0x1D),AtLeast)},{"Edmund Duke (Siege Tank)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD203"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*6))//0x1D),AtLeast)},{"Tom Kazansky (Wraith)",84},Req_RD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD201"}})
+--위
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*7))//0x1D),AtLeast)},{"Sarah Kerrigan (Ghost)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD203"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*7))//0x1D),AtLeast)},{"Hyperion (Battlecruiser)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD204"}})
+
+--1
+CNA1 = CS_OverlapX(I1a,I1b,I1c) -- 1
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*8))//0x1D),AtLeast)},{"Kukulza (Mutalisk)",84},CNA1,{P8,P6},"CD201",1,{LMTable="MAX",Order={Attack,"CD205"}})
+
+--2
+CNA2 = CS_OverlapX(I2a,I2b,I2c) -- 2
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*9))//0x1D),AtLeast)},{"Kukulza (Mutalisk)",84},CNA2,{P8,P6},"CD202",1,{LMTable="MAX",Order={Attack,"CD205"}})
+
+--3
+CNA3 = CS_OverlapX(I3a,I3b,I3c) -- 3
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*10))//0x1D),AtLeast)},{"Kukulza (Mutalisk)",84},CNA3,{P8,P6},"CD203",1,{LMTable="MAX",Order={Attack,"CD205"}})
+
+--4
+CNA4 = CS_MoveXY(CS_OverlapX(I4A,I4),100,0) -- 4
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*11))//0x1D),AtLeast)},{"Kukulza (Mutalisk)",84},CNA4,{P8,P6},"CD204",1,{LMTable="MAX",Order={Attack,"CD205"}})
+
+--ㅈㅅ
+w_sh = {23  ,{1920, 3680},{1984, 3680},{2048, 3680},{2112, 3680},{2176, 3680},{2240, 3680},{2304, 3680},{2368, 3680},{2144, 3712},{2112, 3744},{2080, 3776},{2048, 3808},{2016, 3840},{1984, 3872},{1952, 3904},{1920, 3936},{2176, 3744},{2208, 3776},{2240, 3808},{2272, 3840},{2304, 3872},{2336, 3904},{2368, 3936}}
+t_sh = {19  ,{2144, 3712},{2112, 3744},{2080, 3776},{2048, 3808},{2016, 3840},{1984, 3872},{1952, 3904},{1920, 3936},{1888, 3968},{1856, 4000},{2176, 3744},{2208, 3776},{2240, 3808},{2272, 3840},{2304, 3872},{2336, 3904},{2368, 3936},{2400, 3968},{2432, 4000}}
+w_sh = CS_MoveXY(CS_RatioXY(CS_MoveXY(w_sh,-2160,-3856), 0.5, 1), -32*7, 0)
+t_sh = CS_MoveXY(CS_RatioXY(CS_MoveXY(t_sh,-2160,-3856), 0.5, 1), 32*7, 0)
+wt_sh = CS_SortX(CS_OverlapX(w_sh,t_sh), 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*12))//0x1D),AtLeast)},{"Kukulza (Guardian)"},w_sh,{P8},GunTrigGLoc,1,{Order={Attack,"CD203"},LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*12))//0x1D),AtLeast)},{84},w_sh,{P6},GunTrigGLoc,1,{Order={Attack,"CD203"},LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*14))//0x1D),AtLeast)},{"Kukulza (Guardian)"},t_sh,{P8},GunTrigGLoc,1,{Order={Attack,"CD203"},LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*14))//0x1D),AtLeast)},{84},t_sh,{P6},GunTrigGLoc,1,{Order={Attack,"CD203"},LMTable="MAX"})
+
+--오른쪽에서 왼쪽으로(2)
+RL = CS_SortX(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(4*2, 4),0), 1)
+LR = CS_SortX(CSMakeStar(4, 180, 64, 0, PlotSizeCalc(4*2, 4),0), 0)
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*16))//0x1D),AtLeast)},{"Tom Kazansky (Wraith)"},RL,{P8},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*16))//0x1D),AtLeast)},{84},RL,{P6},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+--왼쪽에서 오른쪽으로(2)
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*18))//0x1D),AtLeast)},{"Hyperion (Battlecruiser)"},LR,{P8},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*18))//0x1D),AtLeast)},{84},LR,{P6},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+--오른쪽에서 왼쪽으로(2)
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*20))//0x1D),AtLeast)},{"Artanis (Scout)"},RL,{P8},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*20))//0x1D),AtLeast)},{84},RL,{P6},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+--왼쪽에서 오른쪽으로(2)
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*22))//0x1D),AtLeast)},{"Mojo (Scout)"},LR,{P8},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*22))//0x1D),AtLeast)},{84},LR,{P6},GunTrigGLoc,1,{Order={Attack,"CD205"}})
+--위
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*24))//0x1D),AtLeast)},{"Raszagal (Dark Templar)",84},Req_RU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD203"}})
+--G_CB_TSetSpawn({CD(GunTrigGCcode,(14060//0x1D),AtLeast)},{"Raszagal (Dark Templar)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD204"}})
+
+--오른아래
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*26))//0x1D),AtLeast)},{"Aldaris (Templar)",84},Req_RD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD201"}})
+--
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*28))//0x1D),AtLeast)},{"Zeratul (Dark Templar)",84},Req_LU,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD204"}})
+--
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*30))//0x1D),AtLeast)},{"Edmund Duke (Siege Tank)",84},Req_LD,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Patrol,"CD202"}})
+--하트
+HCCC = CSMakeGraphT({12,12},"HyperCycloidC",0,0,4.1,4.1,25) 
+HCC0 = CS_Rotate(HCCC,180)
+HCC = CS_RemoveStack(HCC0,15,0) -------하트
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*32))//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},HCC,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD205"}})
+
+CIfEnd()
+
+
+CD63 = CIf_GunTrig(P8, "Xel'Naga Temple", "CD63",20000//0x1D,13);
+
+CD63ShT = {}
+for i = 1, 6 do
+	CD63ShT[i] = CSMakeStar(4, 180, 64, 0, PlotSizeCalc(4*2, i),PlotSizeCalc(4*2, i-1))
+	G_CB_TScanEff({CD(GunTrigGCcode,((0+(150*(i-1)))//0x1D),AtLeast)}, {CD63ShT[i]}, GunTrigGLoc, 4,1,{LMTable="MAX"})
+
+end
+CD63Sh_2 = CSMakeStar(4, 180, 64, 0, PlotSizeCalc(4*2, 6),0)
+G_CB_TScanEff({CD(GunTrigGCcode,((0+(150*(7-1)))//0x1D),AtLeast)}, {CD63Sh_2}, GunTrigGLoc, 918,1,{LMTable="MAX"})
+CD63Sh_3_1 = CSMakePolygon(4, 48, 0, PlotSizeCalc(4, 6), PlotSizeCalc(4, 5))
+CD63Sh_3_2 = CSMakePolygon(5, 48, 0, PlotSizeCalc(5, 6), PlotSizeCalc(5, 5))
+CD63Sh_3_3 = CSMakePolygon(6, 48, 0, PlotSizeCalc(6, 6), PlotSizeCalc(6, 5))
+CD63Sh_3_4 = CSMakePolygon(7, 48, 0, PlotSizeCalc(7, 6), PlotSizeCalc(7, 5))
+CD63Sh_4_1 = CSMakePolygon(4, 48, 0, PlotSizeCalc(4, 6-3), PlotSizeCalc(4, 5-3))
+CD63Sh_4_2 = CSMakePolygon(5, 48, 0, PlotSizeCalc(5, 6-3), PlotSizeCalc(5, 5-3))
+CD63Sh_4_3 = CSMakePolygon(6, 48, 0, PlotSizeCalc(6, 6-3), PlotSizeCalc(6, 5-3))
+CD63Sh_4_4 = CSMakePolygon(7, 48, 0, PlotSizeCalc(7, 6-3), PlotSizeCalc(7, 5-3))
+CD63LT = {
+	"CD18","CD19","CD17","CD54"
+}
+for i = 0, 3 do
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(1420+(950*i))//0x1D,AtLeast)},{84,"Kukulza (Mutalisk)"},CD63Sh_3_1,{P6,P8},GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(5230+(950*i))//0x1D,AtLeast)},{84,"Kukulza (Guardian)"},CD63Sh_3_2,{P6,P8},GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(9040+(950*i))//0x1D,AtLeast)},{84,"Kukulza (Mutalisk)"},CD63Sh_3_3,{P6,P8},GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(12850+(950*i))//0x1D,AtLeast)},{84,"Kukulza (Guardian)"},CD63Sh_3_4,{P6,P8},GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(1900+(950*i))//0x1D,AtLeast)},{84,"Hyperion (Battlecruiser)"},CD63Sh_4_1,{P6,P8},CD63LT[i+1],1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(5710+(950*i))//0x1D,AtLeast)},{84,"Danimoth (Arbiter)"},CD63Sh_4_2,{P6,P8},CD63LT[i+1],1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(9520+(950*i))//0x1D,AtLeast)},{84,"Gantrithor (Carrier)"},CD63Sh_4_3,{P6,P8},CD63LT[i+1],1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(13330+(950*i))//0x1D,AtLeast)},{84,"Edmund Duke (Siege Mode)"},CD63Sh_4_4,{P6,P8},CD63LT[i+1],1,{LMTable="MAX"})
+	
+end
+CIfEnd()
+
+CD76 = CIf_GunTrig(P8, "Zerg Cerebrate", "CD76",35000//0x1D,14);
+
+function Cos_FuncY(X) return math.sin(X) end
+WaveShapeA = CSMakeGraphX({8,8},"Cos_FuncY",0,0,1,nil,15) -- y= math.cos(x)
+CD76_Sh = CS_RatioXY(CS_MoveXY(WaveShapeA, -47, 0), 3, 3)
+--845
+G_CB_TScanEff({CD(GunTrigGCcode,((420+(845*(1-1)))//0x1D),AtLeast)}, {CD76_Sh}, GunTrigGLoc, 58,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,((420+(845*(2-1)))//0x1D),AtLeast)}, {CD76_Sh}, GunTrigGLoc, 60,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,((420+(845*(3-1)))//0x1D),AtLeast)}, {CD76_Sh}, GunTrigGLoc, 332,1,{LMTable="MAX"})
+G_CB_TScanEff({CD(GunTrigGCcode,((420+(845*(4-1)))//0x1D),AtLeast)}, {CD76_Sh}, GunTrigGLoc, 318,1,{LMTable="MAX"})
+
+for i = 0, 3 do
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(3800+(845*i))//0x1D,AtLeast)},{"Hunter Killer (Hydralisk)","Kukulza (Mutalisk)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(7180+(845*i))//0x1D,AtLeast)},{"Torrasque (Ultralisk)","Kukulza (Guardian)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(10560+(845*i))//0x1D,AtLeast)},{"Hunter Killer (Hydralisk)","Kukulza (Mutalisk)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(13940+(845*i))//0x1D,AtLeast)},{"Torrasque (Ultralisk)","Kukulza (Guardian)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(17320+(845*i))//0x1D,AtLeast)},{"Hyperion (Battlecruiser)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(20700+(845*i))//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(24080+(845*i))//0x1D,AtLeast)},{"Hyperion (Battlecruiser)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+	G_CB_TSetSpawn({CD(GunTrigGCcode,(27460+(845*i))//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD76_Sh,P8,GunTrigGLoc,1,{LMTable="MAX"})
+end
+
+
+CIfEnd()
+
+ICDC = CIf_GunTrig(P8, "Ion Cannon", "ICD",35000//0x1D,15);
+ICDC_Sh1 = CSMakeCircle(99, 1024, 0, 100, 1)
+ICDC_Sh2 = CSMakeCircle(49, 1024+512, 0, 50, 1)
+G_CB_TScanEff({CD(GunTrigGCcode,0,AtLeast)}, {ICDC_Sh1}, "HZ", 391,1)
+G_CB_TSetSpawn({CD(GunTrigGCcode,1840//0x1D,AtLeast)},{"Kukulza (Guardian)"},ICDC_Sh1,P8,"HZ",1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,1840//0x1D,AtLeast)},{"Norad II (Battlecruiser)"},ICDC_Sh2,P8,"HZ",1,{LMTable="MAX"})
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,9230//0x1D,AtLeast)},{"Kukulza (Guardian)"},ICDC_Sh1,P8,"HZ",1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,9230//0x1D,AtLeast)},{"Norad II (Battlecruiser)"},ICDC_Sh2,P8,"HZ",1,{LMTable="MAX"})
+
+G_CB_TSetSpawn({CD(GunTrigGCcode,18460//0x1D,AtLeast)},{"Kukulza (Guardian)"},ICDC_Sh1,P8,"HZ",1,{LMTable="MAX"})
+G_CB_TSetSpawn({CD(GunTrigGCcode,18460//0x1D,AtLeast)},{"Norad II (Battlecruiser)"},ICDC_Sh2,P8,"HZ",1,{LMTable="MAX"})
+for i = 0,15 do
+	G_CB_TScanEff({CD(GunTrigGCcode,(24000//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},10)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,25840//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
+end
+
+TriggerX(FP,{CD(GunTrigGCcode,0,AtLeast)},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8");}, Force1, FP)})
+TriggerX(FP,{CD(GunTrigGCcode,25840//0x1D,AtLeast)},{RotatePlayer({RunAIScript("Turn OFF Shared Vision for Player 8");}, Force1, FP)})
+
+
+
+CIfEnd()
 --[[
-
-
-
-Trigger { -- H2.4
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD50");
-	},
-	actions = {
-		CreateUnit(18, "Alan Schezar (Goliath)", "CD50", P8);
-		CreateUnit(14, "Kukulza (Guardian)", "CD50", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD50", Patrol, "HZ");
-		Order("Kukulza (Guardian)", P8, "CD50", Patrol, "HZ");
-		Comment("H2.4");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD50");
-		Deaths(P6, AtLeast, 70, "Terran Siege Tank (Siege Mode)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD50", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.4
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD50");
-		Deaths(P6, AtLeast, 80, "Terran Siege Tank (Siege Mode)");
-	},
-	actions = {
-		CreateUnit(16, "Gui Montag (Firebat)", "CD50", P8);
-		CreateUnit(20, "Tom Kazansky (Wraith)", "CD50", P8);
-		Order("Gui Montag (Firebat)", P8, "CD50", Patrol, "HZ");
-		Order("Tom Kazansky (Wraith)", P8, "CD50", Patrol, "HZ");
-		Comment("H2.4");
-	},
-}
-
-
-Trigger { -- H2.5
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD51");
-	},
-	actions = {
-		CreateUnit(8, "Warbringer (Reaver)", "CD51", P8);
-		CreateUnit(14, "Tom Kazansky (Wraith)", "CD51", P8);
-		Order("Warbringer (Reaver)", P8, "CD51", Patrol, "HZ");
-		Order("Tom Kazansky (Wraith)", P8, "CD51", Patrol, "HZ");
-		Comment("H2.5");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD51");
-		Deaths(P6, AtLeast, 70, "Infested Terran");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD51", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.5
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD51");
-		Deaths(P6, AtLeast, 80, "Infested Terran");
-	},
-	actions = {
-		CreateUnit(20, "Edmund Duke (Siege Mode)", "CD51", P8);
-		Comment("H2.5");
-	},
-}
-
-
-
-
-Trigger { -- H2.7
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD53");
-	},
-	actions = {
-		CreateUnit(16, "Jim Raynor (Vulture)", "CD53", P8);
-		CreateUnit(26, "Sarah Kerrigan (Ghost)", "CD53", P8);
-		Order("Jim Raynor (Vulture)", P8, "CD53", Patrol, "HZ");
-		Order("Sarah Kerrigan (Ghost)", P8, "CD53", Patrol, "HZ");
-		Comment("H2.7");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hatchery", "CD53");
-		Deaths(P6, AtLeast, 70, "Unused Terran Bldg type   2");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD53", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- H2.7
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hatchery", "CD53");
-		Deaths(P6, AtLeast, 80, "Unused Terran Bldg type   2");
-	},
-	actions = {
-		CreateUnit(16, "Edmund Duke (Siege Mode)", "CD53", P8);
-		Comment("H2.7");
-	},
-}
-
-
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 40, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 50, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD20", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD20", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD20", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD20", Patrol, "CD21");
-		Order("Gui Montag (Firebat)", P8, "CD20", Patrol, "CD21");
-		Order("Mojo (Scout)", P8, "CD20", Attack, "CD21");
-		Comment("HH");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 140, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 150, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD20", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD20", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD20", P8);
-		Order("Danimoth (Arbiter)", P8, "CD20", Attack, "CD21");
-		Order("Mojo (Scout)", P8, "CD20", Attack, "CD21");
-		Comment("HH");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 290, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 300, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD20", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD20", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD20", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD20", Patrol, "CD21");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD20", Patrol, "CD21");
-		Order("Kukulza (Mutalisk)", P8, "CD20", Attack, "CD21");
-		Comment("HH");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 440, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 450, "Terran Academy");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD20", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD20", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD20", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD20", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD20", Attack, "CD21");
-		Order("Fenix (Dragoon)", P8, "CD20", Patrol, "CD21");
-		Order("Hyperion (Battlecruiser)", P8, "CD20", Attack, "CD21");
-		Comment("HH");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 40, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 50, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(24, "Fenix (Zealot)", "CD21", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD21", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD21", P8);
-		Order("Fenix (Zealot)", P8, "CD21", Patrol, "CD20");
-		Order("Gui Montag (Firebat)", P8, "CD21", Patrol, "CD20");
-		Order("Mojo (Scout)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 140, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 150, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD21", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD21", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD21", P8);
-		Order("Danimoth (Arbiter)", P8, "CD21", Attack, "CD20");
-		Order("Mojo (Scout)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 290, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 300, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD21", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD21", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD21", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD21", Patrol, "CD20");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD21", Patrol, "CD20");
-		Order("Kukulza (Mutalisk)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 440, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 450, "Hunter Killer (Hydralisk)");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD21", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD21", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD21", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD21", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD21", Attack, "CD20");
-		Order("Fenix (Dragoon)", P8, "CD21", Patrol, "CD20");
-		Order("Hyperion (Battlecruiser)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 40, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 50, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD27", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD27", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD27", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD27", Patrol, "CD26");
-		Order("Gui Montag (Firebat)", P8, "CD27", Patrol, "CD26");
-		Order("Mojo (Scout)", P8, "CD27", Attack, "CD26");
-		Comment("HH2");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 140, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 150, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD27", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD27", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD27", P8);
-		Order("Danimoth (Arbiter)", P8, "CD27", Attack, "CD26");
-		Order("Mojo (Scout)", P8, "CD27", Attack, "CD26");
-		Comment("HH2");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 290, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 300, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD27", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD27", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD27", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD27", Patrol, "CD26");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD27", Patrol, "CD26");
-		Order("Kukulza (Mutalisk)", P8, "CD27", Attack, "CD26");
-		Comment("HH2");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 440, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH2
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 450, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD27", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD27", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD27", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD27", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD27", Attack, "CD26");
-		Order("Fenix (Dragoon)", P8, "CD27", Patrol, "CD26");
-		Order("Hyperion (Battlecruiser)", P8, "CD27", Attack, "CD26");
-		Comment("HH2");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 40, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 50, "Terran Valkyrie");
-	},
-	actions = {
-		CreateUnit(24, "Fenix (Zealot)", "CD26", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD26", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD26", P8);
-		Order("Fenix (Zealot)", P8, "CD26", Patrol, "CD27");
-		Order("Gui Montag (Firebat)", P8, "CD26", Patrol, "CD27");
-		Order("Mojo (Scout)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 140, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 150, "Terran Valkyrie");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD26", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD26", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD26", P8);
-		Order("Danimoth (Arbiter)", P8, "CD26", Attack, "CD27");
-		Order("Mojo (Scout)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 290, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 300, "Terran Valkyrie");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD26", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD26", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD26", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD26", Patrol, "CD27");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD26", Patrol, "CD27");
-		Order("Kukulza (Mutalisk)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-Trigger {
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 440, "Terran Civilian");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P7},
-	conditions = {
-		Bring(P7, Exactly, 0, "Zerg Hive", "CD27");
-		Deaths(P6, AtLeast, 450, "Terran Valkyrie");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD26", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD26", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD26", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD26", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD26", Attack, "CD27");
-		Order("Fenix (Dragoon)", P8, "CD26", Patrol, "CD27");
-		Order("Hyperion (Battlecruiser)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 40, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 50, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD20", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD20", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD20", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD20", Patrol, "CD21");
-		Order("Gui Montag (Firebat)", P8, "CD20", Patrol, "CD21");
-		Order("Mojo (Scout)", P8, "CD20", Attack, "CD21");
-		Comment("8HH");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 140, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 150, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD20", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD20", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD20", P8);
-		Order("Danimoth (Arbiter)", P8, "CD20", Attack, "CD21");
-		Order("Mojo (Scout)", P8, "CD20", Attack, "CD21");
-		Comment("8HH");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 290, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 300, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD20", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD20", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD20", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD20", Patrol, "CD21");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD20", Patrol, "CD21");
-		Order("Kukulza (Mutalisk)", P8, "CD20", Attack, "CD21");
-		Comment("8HH");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 440, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD20");
-		Deaths(P6, AtLeast, 450, "Terran Barracks");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD20", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD20", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD20", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD20", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD20", Attack, "CD21");
-		Order("Fenix (Dragoon)", P8, "CD20", Patrol, "CD21");
-		Order("Hyperion (Battlecruiser)", P8, "CD20", Attack, "CD21");
-		Comment("8HH");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 40, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 50, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD21", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD21", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD21", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD21", Patrol, "CD20");
-		Order("Gui Montag (Firebat)", P8, "CD21", Patrol, "CD20");
-		Order("Mojo (Scout)", P8, "CD21", Attack, "CD20");
-		Comment("8HH1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 140, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 150, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD21", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD21", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD21", P8);
-		Order("Danimoth (Arbiter)", P8, "CD21", Attack, "CD20");
-		Order("Mojo (Scout)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 290, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 300, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD21", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD21", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD21", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD21", Patrol, "CD20");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD21", Patrol, "CD20");
-		Order("Kukulza (Mutalisk)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 440, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD20", P8);
-		CreateUnit(16, "Zerg Devourer", "CD21", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH1
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD21");
-		Deaths(P6, AtLeast, 450, "Terran Starport");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD21", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD21", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD21", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD21", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD21", Attack, "CD20");
-		Order("Fenix (Dragoon)", P8, "CD21", Patrol, "CD20");
-		Order("Hyperion (Battlecruiser)", P8, "CD21", Attack, "CD20");
-		Comment("HH1");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 40, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 50, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD27", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD27", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD27", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD27", Patrol, "CD26");
-		Order("Gui Montag (Firebat)", P8, "CD27", Patrol, "CD26");
-		Order("Mojo (Scout)", P8, "CD27", Attack, "CD26");
-		Comment("8HH");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 140, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 150, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD27", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD27", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD27", P8);
-		Order("Danimoth (Arbiter)", P8, "CD27", Attack, "CD26");
-		Order("Mojo (Scout)", P8, "CD27", Attack, "CD26");
-		Comment("8HH2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 290, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 300, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD27", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD27", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD27", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD27", Patrol, "CD26");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD27", Patrol, "CD26");
-		Order("Kukulza (Mutalisk)", P8, "CD27", Attack, "CD26");
-		Comment("8HH2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 440, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH2
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 450, "Terran Refinery");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD27", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD27", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD27", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD27", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD27", Attack, "CD26");
-		Order("Fenix (Dragoon)", P8, "CD27", Patrol, "CD26");
-		Order("Hyperion (Battlecruiser)", P8, "CD27", Attack, "CD26");
-		Comment("8HH2");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 40, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- 8HH3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 50, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(24, "Zeratul (Dark Templar)", "CD26", P8);
-		CreateUnit(12, "Gui Montag (Firebat)", "CD26", P8);
-		CreateUnit(20, "Mojo (Scout)", "CD26", P8);
-		Order("Zeratul (Dark Templar)", P8, "CD26", Patrol, "CD27");
-		Order("Gui Montag (Firebat)", P8, "CD26", Patrol, "CD27");
-		Order("Mojo (Scout)", P8, "CD21", Attack, "CD20");
-		Comment("8HH3");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 140, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 150, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(18, "Edmund Duke (Siege Mode)", "CD26", P8);
-		CreateUnit(10, "Danimoth (Arbiter)", "CD26", P8);
-		CreateUnit(12, "Mojo (Scout)", "CD26", P8);
-		Order("Danimoth (Arbiter)", P8, "CD26", Attack, "CD27");
-		Order("Mojo (Scout)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 290, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 300, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(24, "Alan Schezar (Goliath)", "CD26", P8);
-		CreateUnit(12, "Tassadar/Zeratul (Archon)", "CD26", P8);
-		CreateUnit(12, "Kukulza (Mutalisk)", "CD26", P8);
-		Order("Alan Schezar (Goliath)", P8, "CD26", Patrol, "CD27");
-		Order("Tassadar/Zeratul (Archon)", P8, "CD26", Patrol, "CD27");
-		Order("Kukulza (Mutalisk)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-Trigger {
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 440, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(16, "Zerg Devourer", "CD26", P8);
-		CreateUnit(16, "Zerg Devourer", "CD27", P8);
-		KillUnit("Zerg Devourer", P8);
-	},
-}
-
-
-Trigger { -- HH3
-	players = {P8},
-	conditions = {
-		Bring(P8, Exactly, 0, "Zerg Hive", "CD26");
-		Deaths(P6, AtLeast, 450, "Terran Dropship");
-	},
-	actions = {
-		CreateUnit(24, "Edmund Duke (Siege Mode)", "CD26", P8);
-		CreateUnit(12, "Fenix (Dragoon)", "CD26", P8);
-		CreateUnit(2, "Norad II (Battlecruiser)", "CD26", P8);
-		CreateUnit(12, "Hyperion (Battlecruiser)", "CD26", P8);
-		Order("Norad II (Battlecruiser)", P8, "CD26", Attack, "CD27");
-		Order("Fenix (Dragoon)", P8, "CD26", Patrol, "CD27");
-		Order("Hyperion (Battlecruiser)", P8, "CD26", Attack, "CD27");
-		Comment("HH3");
-	},
-}
-
-
-
-
-
-
-
 
 
 ]]
 
+
+DoActions(FP,{KillUnit("Zerg Devourer", Force2),KillUnit("Zerg Devourer", P6),KillUnit(84, Force2),KillUnit(84, P6)})
 
 
 

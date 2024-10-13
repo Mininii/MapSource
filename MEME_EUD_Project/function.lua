@@ -324,6 +324,11 @@ local Gun_TempSpawnSet1 = CreateVar(FP)
 local Spawn_TempW = CreateVar(FP)
 local RepeatType = CreateVar(FP)
 local Repeat_EffID = CreateVar(FP)
+local Repeat_OrderX = CreateVar(FP)
+local Repeat_OrderY = CreateVar(FP)
+local Repeat_OrderType = CreateVar(FP)
+
+
 G_CB_Nextptrs = CreateVar(FP)
 G_CB_NextptrsP = CreateVar(FP)
 local Repeat_TempV = CreateVar(FP)
@@ -415,8 +420,8 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				f_Read(FP,_Add(RPtr,10),CPos)
 				Convert_CPosXY()
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
-				CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, RLocV);
-				TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),}, {preserved})
+				CTrigger(FP, {CV(Repeat_OrderType,0)}, {TOrder(RUID, RPID, 1, Attack, RLocV);}, {preserved})
+				CDoActions(FP,{TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),})
                 
 			CElseIfX(CVar(FP,RType[2],Exactly,2))
 			CElseIfX_AddRepeatType(3,"KillUnit")
@@ -429,13 +434,25 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Convert_CPosXY()
 			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			Simple_SetLocX(FP,130,G_CB_BackupX,G_CB_BackupY,G_CB_BackupX,G_CB_BackupY,{Simple_CalcLoc(130,-4,-4,4,4)})
-			CTrigger(FP, {}, {TOrder(RUID, RPID, 1, Attack, 131);
-			TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),}, {preserved})
-			
-
+			CTrigger(FP, {CV(Repeat_OrderType,0)}, {TOrder(RUID, RPID, 1, Attack, 131);}, {preserved})
+			CDoActions(FP,{TSetMemoryX(_Add(RPtr,8),SetTo,127*65536,0xFF0000),})
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))
 			CIfXEnd()
+
+			CIf(FP,{CV(Repeat_OrderType,1,AtLeast)})
+			f_Read(FP,_Add(RPtr,10),CPos)
+			Convert_CPosXY()
+			Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+			Simple_SetLocX(FP,130,Repeat_OrderX,Repeat_OrderY,Repeat_OrderX,Repeat_OrderY,{Simple_CalcLoc(130,-4,-4,4,4)})
+			CTrigger(FP, {CV(Repeat_OrderType,1)}, {TOrder(RUID,RPID,1,Attack,131)}, {preserved})
+			CTrigger(FP, {CV(Repeat_OrderType,2)}, {TOrder(RUID,RPID,1,Patrol,131)}, {preserved})
+			CTrigger(FP, {CV(Repeat_OrderType,3)}, {TOrder(RUID,RPID,1,Move,131)}, {preserved})
+
+			CIfEnd()
+			
+
+
 			--Simple_SetLocX(FP,0,G_CB_BackupX,G_CB_BackupY,G_CB_BackupX,G_CB_BackupY,{Simple_CalcLoc(0,-4,-4,4,4)})
 			--CDoActions(FP,{TOrder(RUID,RPID,72,Attack,1)})
 			
@@ -497,7 +514,6 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 		CTrigger(FP,{},{TSetMemoryX(0x666458, SetTo, Repeat_EffID,0xFFFF),TCreateUnitWithProperties(1,Gun_TempSpawnSet1,1,CreatePlayer,{energy = 100}),TKillUnit(Gun_TempSpawnSet1, CreatePlayer),SetMemoryX(0x666458, SetTo, 546,0xFFFF)},1)
 		
 		CIf(FP,{CV(SendEff[2],0x7FFFFFFF,AtMost)})
-		f_Read(FP,SendEff[1],SendEff[4])
 		CDoActions(FP,{
 			TSetMemoryX(SendEff[1],SetTo,SendEff[4],SendEff[3]); --컬러 복구
 		})
@@ -668,6 +684,9 @@ local G_CB_SZTV = CreateVar(FP)
 local G_CB_RTTV = CreateVarArr(4,FP)
 local G_CB_XPos = CreateVar(FP)
 local G_CB_YPos = CreateVar(FP)
+local G_CB_OrderXPos = CreateVar(FP)
+local G_CB_OrderYPos = CreateVar(FP)
+local G_CB_OrderAct = CreateVar(FP)
 local G_CB_NQOption =CreateVar(FP)
 local SL_TempV = Create_VTable(4)
 local SL_Ret = CreateVar(FP)
@@ -769,6 +788,40 @@ CDoActions(FP,{
 	
 
 })
+
+
+CIf(FP,{CV(G_CB_OrderAct,1,AtLeast)})--OrderAct 인자가 있을 경우(RepeatType의 기본 오더를 모두 무시)
+
+CDoActions(FP,{
+	TSetMemory(_Add(G_CB_LineTemp,32*(0x20/4)),SetTo,G_CB_OrderAct),
+})
+CIfX(FP,{CVar(FP,G_CB_OrderXPos[2],AtMost,0x80000000-1),CVar(FP,G_CB_OrderYPos[2],AtMost,0x80000000-1)}) -- 좌표가 정해져 있을 경우
+CDoActions(FP,{
+	TSetMemory(_Add(G_CB_LineTemp,30*(0x20/4)),SetTo,G_CB_OrderXPos),
+	TSetMemory(_Add(G_CB_LineTemp,31*(0x20/4)),SetTo,G_CB_OrderYPos)
+})
+CElseIfX({CVar(FP,G_CB_OrderXPos[2],AtLeast,0x80000000),CVar(FP,G_CB_OrderXPos[2],AtLeast,0x80000000)}) -- 로케이션 중심 모드
+
+CSub(FP,G_CB_OrderXPos,0x80000001)
+CSub(FP,G_CB_OrderYPos,0x80000001)
+local G_CB_OrderXPosCalc = CreateVar(FP)
+local G_CB_OrderYPosCalc = CreateVar(FP)
+TGetLocCenter(G_CB_OrderXPos, G_CB_OrderXPosCalc, G_CB_OrderYPosCalc)
+CDoActions(FP,{
+	TSetMemory(_Add(G_CB_LineTemp,30*(0x20/4)),SetTo,G_CB_OrderXPosCalc),
+	TSetMemory(_Add(G_CB_LineTemp,31*(0x20/4)),SetTo,G_CB_OrderYPosCalc)
+})
+
+
+CElseX() -- 아무것도 정해져있지 않을 경우 위 설정을 무시한다.
+CDoActions(FP,{
+	TSetMemory(_Add(G_CB_LineTemp,30*(0x20/4)),SetTo,0),
+	TSetMemory(_Add(G_CB_LineTemp,31*(0x20/4)),SetTo,0),
+	TSetMemory(_Add(G_CB_LineTemp,32*(0x20/4)),SetTo,0),
+})
+CIfXEnd()
+CIfEnd()
+
 CIfX(FP,{CVar(FP,G_CB_XPos[2],Exactly,0xFFFFFFFF),CVar(FP,G_CB_YPos[2],Exactly,0xFFFFFFFF)}) -- G_CB_X,Y에 저장된것 기준(미사용이나 내부코드로 보존)
 CDoActions(FP,{
 	TSetMemory(_Add(G_CB_LineTemp,7*(0x20/4)),SetTo,G_CB_X),
@@ -1177,6 +1230,9 @@ function G_CBPlot()
 	CMov(FP,SendEff[1],G_CB_TempTable[28])--EFFID
 	CMov(FP,SendEff[2],G_CB_TempTable[29])--EFFID
 	CMov(FP,SendEff[3],G_CB_TempTable[30])--EFFID
+	CMov(FP,Repeat_OrderX,G_CB_TempTable[31])--OrderX
+	CMov(FP,Repeat_OrderY,G_CB_TempTable[32])--OrderY
+	CMov(FP,Repeat_OrderType,G_CB_TempTable[33])--OrderType
 	
 	
 	
@@ -1455,6 +1511,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 	local G_CB_EffColorMem = {{G_CB_ColorMem,0}}
 	local G_CB_EffColor = {{G_CB_Color,0xFFFFFFFF}}
 	local G_CB_EffColorMask = {{G_CB_ColorMask,0}}
+	local G_CB_OrderXY = {{G_CB_OrderXPos,0xFFFFFFFF},{G_CB_OrderYPos,0xFFFFFFFF},{G_CB_OrderAct,0}} 
 	
 		
 
@@ -1546,7 +1603,21 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 
 			
 			
+		elseif j == "Order" then
+			local OrderNum=0
+			if type(k) ~= "table" then PushErrorMsg("OrderTable_TypeError") end
+			if #k==3 then--{OrderType,X,Y}
+			
+				if k[1]==Attack then OrderNum = 1 elseif k[1]==Patrol then OrderNum = 2 elseif k[1]==Move then OrderNum=3 else PushErrorMsg("OrderTable_TypeError") end
+				G_CB_OrderXY = {{G_CB_OrderXPos,k[2]},{G_CB_OrderYPos,k[3]},{G_CB_OrderAct,OrderNum}} 
 
+			elseif #k==2 then--{OrderType,LocationId}
+				local Temp,EditorLocNum = ConvertLocation(k[2])
+				if k[1]==Attack then OrderNum = 1 elseif k[1]==Patrol then OrderNum = 2 elseif k[1]==Move then OrderNum=3 else PushErrorMsg("OrderTable_TypeError") end
+				G_CB_OrderXY = {{G_CB_OrderXPos,Temp+2+0x80000000},{G_CB_OrderYPos,Temp+2+0x80000000},{G_CB_OrderAct,OrderNum}} 
+
+			else PushErrorMsg("OrderTable_Error")
+			end
 
 
 
@@ -1642,6 +1713,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		AutoSetV(Act,G_CB_EffColorMem)
 		AutoSetV(Act,G_CB_EffColor)
 		AutoSetV(Act,G_CB_EffColorMask)
+		AutoSetV(Act,G_CB_OrderXY)
 		
 
 
@@ -1669,6 +1741,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 		TAutoSetV(Act,G_CB_EffID)
 		TAutoSetV(Act,G_CB_EffColorMem)
 		TAutoSetV(Act,G_CB_EffColor)
+		TAutoSetV(Act,G_CB_OrderXY)
 		TAutoSetV(Act,G_CB_EffColorMask)
 		CDoActions(FP, Act,PreserveFlag)
 		CallTriggerX(FP,Write_SpawnSet,Condition,nil,PreserveFlag)
