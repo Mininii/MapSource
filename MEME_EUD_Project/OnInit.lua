@@ -134,6 +134,7 @@ CSPlot(Shape5020,P5,20,0,{0,0},1,32,FP,{HumanCheck(P5, 1)})
 		SetMinimapColor(P6, SetTo, 154),
 		SetMinimapColor(P7, SetTo, 255),
 		SetMinimapColor(P8, SetTo, 128),
+		ModifyUnitHangarCount(2, All, "Gantrithor (Carrier)", AllPlayers, "Anywhere");
 	})
 
 	CIfEnd()

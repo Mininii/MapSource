@@ -416,6 +416,13 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			end
 			CElseIfX({CVar(FP,RType[2],AtLeast,TypeNumL),CVar(FP,RType[2],AtMost,TypeNumR)})
 		end
+
+		CIf(FP,{CV(RUID,82)}) -- 캐리어 인터셉터 1기만 충전
+		f_Read(FP,_Add(RPtr,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
+		CDoActions(FP,{TModifyUnitHangarCount(1, 1, 82, RPID, 1)})
+		CIfEnd()
 			CIfX(FP,CVar(FP,RType[2],Exactly,0))
 				f_Read(FP,_Add(RPtr,10),CPos)
 				Convert_CPosXY()
@@ -1690,6 +1697,7 @@ function G_CB_TSetSpawn(Condition,G_CB_CUTable,G_CB_ShapeTable,OwnerTable,Center
 					{G_CB_RTTV[4],k},
 				}
 			end
+		else PushErrorMsg("Wrong Property Name : "..j)
 		end
 	end
 	end

@@ -940,7 +940,7 @@ function DDINGEff2(Time,Loc1,Loc2)
 		G_CB_TScanEff({CD(GunTrigGCcode,(Time//0x1D)+i,AtLeast)}, {CD218Sh_2}, Loc2, 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},10)
 	end
 end
-CD218Sh_3 = CSMakeStar(5,135,128,180,CS_Level("Star",5,3),0)
+CD218Sh_3 = CSMakeStar(5,135,128,180,CS_Level("Star",5,2),0)
 function DDINGSpanwnSet(Time,Loc1,Loc2,UnitTable)
 	DDINGEff2(Time-940,Loc1,Loc2)
 	G_CB_TSetSpawn({CD(GunTrigGCcode,(Time) // 0x1D,AtLeast)},{UnitTable[1]},CD218Sh_3,P8,Loc1,1,{LMTable="MAX",Order={Patrol,Loc2}})
@@ -959,6 +959,7 @@ DDINGSpanwnSet(15000,"CD218","CD217",{"Jim Raynor (Vulture)","Artanis (Scout)","
 DDINGSpanwnSet(18750,"CD218","CD217",{"Fenix (Dragoon)","Mojo (Scout)","Tassadar (Templar)","Danimoth (Arbiter)"})
 DDINGSpanwnSet(22500,"CD218","CD217",{"Zeratul (Dark Templar)","Gantrithor (Carrier)","Gui Montag (Firebat)","Hyperion (Battlecruiser)"})
 DDINGSpanwnSet(26250,"CD218","CD217",{"Jim Raynor (Vulture)","Artanis (Scout)","Aldaris (Templar)","Raszagal (Dark Templar)"})
+
 
 
 
@@ -1106,7 +1107,9 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*30))//0x1D),AtLeast)},{"Edmund Duk
 HCCC = CSMakeGraphT({12,12},"HyperCycloidC",0,0,4.1,4.1,25) 
 HCC0 = CS_Rotate(HCCC,180)
 HCC = CS_RemoveStack(HCC0,15,0) -------하트
-G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*32))//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},HCC,{P8,P6},GunTrigGLoc,1,{LMTable="MAX",Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*32))//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},HCC,{P8,P6},GunTrigGLoc,1,{SizeTable = 50,LMTable="MAX",Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*33))//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},HCC,{P8,P6},GunTrigGLoc,1,{SizeTable = 100,LMTable="MAX",Order={Attack,"CD205"}})
+G_CB_TSetSpawn({CD(GunTrigGCcode,((16000+(362*34))//0x1D),AtLeast)},{"Norad II (Battlecruiser)",84},HCC,{P8,P6},GunTrigGLoc,1,{SizeTable = 150,LMTable="MAX",Order={Attack,"CD205"}})
 
 CIfEnd()
 

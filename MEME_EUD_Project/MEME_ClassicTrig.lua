@@ -41,8 +41,8 @@ Trigger {
 		Always();
 	},
 	actions = {
-		ModifyUnitHangarCount(8, All, "Gantrithor (Carrier)", AllPlayers, "Anywhere");
-		ModifyUnitHangarCount(10, All, "Warbringer (Reaver)", AllPlayers, "Anywhere");
+		--ModifyUnitHangarCount(8, All, "Gantrithor (Carrier)", AllPlayers, "Anywhere");
+		--ModifyUnitHangarCount(10, All, "Warbringer (Reaver)", AllPlayers, "Anywhere");
 		SetInvincibility(Enable, "Protoss Interceptor", AllPlayers, "Anywhere");
 		PreserveTrigger();
 	},
@@ -31809,21 +31809,15 @@ Trigger {
 		Always();
 	},
 	actions = {
-		KillUnitAt(All, "Men", "Anywhere", P12);
-		KillUnitAt(All, "Terran Barracks", "Anywhere", P12);
-		KillUnitAt(All, "Terran SCV", "Anywhere", P12);
-		KillUnitAt(All, "Terran Supply Depot", "Anywhere", P12);
-		KillUnitAt(All, "Terran Comsat Station", "Anywhere", P12);
-		KillUnitAt(All, "Terran Command Center", "Anywhere", P12);
-		KillUnitAt(All, "Terran Academy", "Anywhere", P12);
-		KillUnitAt(All, "Terran Covert Ops", "Anywhere", P12);
-		KillUnitAt(All, "Terran Engineering Bay", "Anywhere", P12);
-		KillUnitAt(All, "Terran Science Facility", "Anywhere", P12);
-		KillUnitAt(All, "Terran Missile Turret", "Anywhere", P12);
-		KillUnitAt(All, "Terran Bunker", "Anywhere", P12);
-		KillUnitAt(All, "Zerg Beacon", "Anywhere", P12);
-		KillUnitAt(All, "Protoss Beacon", "Anywhere", P12);
-		KillUnitAt(All, "Terran Beacon", "Anywhere", P12);
+		KillUnit("Men", P12);
+		KillUnit("Terran Barracks", P12);
+		KillUnit("Terran Comsat Station", P12);
+		KillUnit("Terran Engineering Bay", P12);
+		KillUnit("Terran Missile Turret", P12);
+		KillUnit("Terran Bunker", P12);
+		KillUnit("Zerg Beacon", P12);
+		KillUnit("Protoss Beacon", P12);
+		KillUnit("Terran Beacon", P12);
 		PreserveTrigger();
 	},
 }

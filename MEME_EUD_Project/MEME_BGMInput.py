@@ -2,6 +2,7 @@ from eudplib import *
 import math
 
 #Laptop : 'C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\MapSource\\MEME_EUD_Project\\'
+#Desktop : 'C:\\Users\\USER\\Documents\\MapSource\\MEME_EUD_Project'
 
 def Exec_OggFile():
 	#BGM
