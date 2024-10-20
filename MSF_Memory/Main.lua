@@ -22,14 +22,14 @@ end
 dofile(Curdir.."MapSource\\MSF_Memory\\MemoryInit.lua")
 dofile(Curdir.."MapSource\\MSF_Memory\\BGMArr.lua")
 sindexAlloc = 0x501
-Limit = 1
-RedMode = 0
+Limit = 0
+RedMode = 1
 FP = P6
 TestStartToBYD = 0
 if RedMode == 0 then
-	VerText = "\x04Ver. 3.99"
+	VerText = "\x04Ver. 4.0"
 else
-	VerText = "\x04Ver. 3.99R"
+	VerText = "\x04Ver. 4.0R"
 end
 
 
@@ -83,12 +83,12 @@ ObPlayers = {P9,P10,P11,P12}
 Ex1= {25,27,29,31,33}--노말 일반모드
 Ex2= {23,26,29,32,35}--하드 일반모드
 Ex3= {27,30,33,36,39} -- 퓨쳐 일반모드
-Ex2_1= {25,40,55,60,75}--퓨어모드 환전률
-Ex4= {20,32,45,60,75} -- 비욘드
-Ex5= {27,40,55,70,85} -- 이론치
+Ex2_1= {23,26,29,32,35}--퓨어모드 환전률
+Ex4= {23,26,29,32,35} -- 비욘드
+Ex5= {27,30,33,36,39} -- 이론치
 UpCostTable = {500000,300000,400000}
 
-AtkFactorArr = {30,15,20}
+AtkFactorArr = {30*5,15*5,20*5}
 _0D = string.rep("\x0D",200)
 _0D_1000B = string.rep("\x0D",1000)
 UnivToString = "\x0D\x0D\x0D\x0D\x0D\x0DUniv".._0D_1000B
@@ -608,6 +608,7 @@ BYD = {Switch("Switch 201",Set),Switch("Switch 204",Set)}
 NBYD = {Switch("Switch 204",Cleared)}
 FTRBYD = {Switch("Switch 201",Set)}
 Include_CtrigPlib(360,"Switch 100") -- 주기 : 360 = 360도 / Switch 100을 랜덤스위치로 사용 / f_Memcpy(Readcpy) 포함
+Include_64BitLibrary("Switch 100")
 HeroPointArr = {}
 function CreateHeroPointArr(Index,Point,Name,Name2) --  영작 유닛 설정 함수
 	local Text = "\x0D\x0D\x0D\x0D\x13\x1D† \x04기억의 "..Name2.." "..Name.." \x04를 처치하였습니다. \x1F+ "..Point.." \x1CＰｔｓ \x1D†\x0D\x0D\x0D\x0D\x14\x14\x14\x14\x14\x14\x14\x14"
@@ -1778,7 +1779,10 @@ Trigger {
 },
 }
 B3_P = CreateVar(FP)
-Overflow_HP_SystemX(FP,B3_H,B3_K,B3_K2,B3_P)
+B3_KW = CreateWar(FP)
+Bit64_HP_SystemX(FP,B3_H,B3_KW,B3_P)
+
+--Overflow_HP_SystemX(FP,B3_H,B3_K,B3_K2,B3_P)
 CIfX(P6,Command(P6,AtLeast,1,74))
 
 
@@ -1792,35 +1796,12 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 			Simple_CalcLoc(23,-8,8,-8,8),
 			Order(49,P6,64,Move,24)
 		})
-		Trigger {
-			players = {FP},
-			conditions = {
-				Label(0);
-				Bring(P6,AtLeast,1,49,24);
-				FTR;
-			},
-			actions = {
-				KillUnitAt(1,49,24,P6);
-				RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP);
-				SetCVar(P6,B3_K[2],Add,1000000);
-				PreserveTrigger();
-			}
-		}
-		Trigger {
-			players = {FP},
-			conditions = {
-				Label(0);
-				Bring(P6,AtLeast,1,49,24);
-				BYD;
-			},
-			actions = {
-				KillUnitAt(1,49,24,P6);
-				RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP);
-				SetCVar(P6,B3_K[2],Add,30000000);
-				SetCDeaths(P6,Subtract,3,DarkReGen);
-				PreserveTrigger();
-			}
-		}
+		CIf(FP,{Bring(P6,AtLeast,1,49,24);FTR},{RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP),KillUnitAt(1,49,24,P6);})
+		f_LAdd(FP,B3_KW,B3_KW,tostring(1000000*256))
+		CIfEnd()
+		CIf(FP,{Bring(P6,AtLeast,1,49,24);BYD},{RotatePlayer({PlayWAVX("staredit\\wav\\Gun_Penalty.ogg")},HumanPlayers,FP),KillUnitAt(1,49,24,P6);SetCDeaths(P6,Subtract,3,DarkReGen);})
+		f_LAdd(FP,B3_KW,B3_KW,tostring(30000000*256))
+		CIfEnd()
 	CIfEnd()
 	ScanP = CreateVar(FP)
 	-- 다크보스스킬 스캔약화
@@ -1868,6 +1849,17 @@ CIfX(P6,Command(P6,AtLeast,1,74))
 		CIfEnd()
 		CAdd(FP,0x6509B0,84)
 	CWhileEnd()
+	
+	local TestV = CreateVar(FP)
+	local TestW = CreateWar(FP)
+	f_Read(FP, B3_H, TestV)
+	f_LAdd(FP, TestW, B3_KW, {TestV,0})
+	f_LDiv(FP, TestW, TestW, "256")
+	FixText(FP,1)
+	DisplayPrint({P1,P2,P3,P4,P5}, {"\x10【 \x11T\x04enebris\x10 】\x08 : ",TestW})
+	FixText(FP,2)
+
+
 	CMov(FP,0x6509B0,FP)
 CElseX()
 DoActions(FP,{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 6")},MapPlayers,FP),RemoveUnit(214,AllPlayers),RemoveUnit(214,8),RemoveUnit(214,9),RemoveUnit(214,10),RemoveUnit(214,11)})
@@ -3483,92 +3475,86 @@ CIfOnce(P6,{Switch("Switch 215",Set)}) -- onPluginStart
 			table.insert(Table,SetCVar("X",VVTable[i][1][2],SetTo,VVTable[i][2]))
 		end
 	end
-initHDTable = {}
-initFTRTable = {}
-initBYDTable = {}
+	function Init_WarSet(Table,WWTable)
+		for i = 1, #WWTable do
+			table.insert(Table,SetCWar("X",WWTable[i][1][2],SetTo,WWTable[i][2]))
+		end
+	end
+	initHDTable = {}
+	initFTRTable = {}
+	initBYDTable = {}
+	initHDTable2 = {}
+	initFTRTable2 = {}
+	initBYDTable2 = {}
 	Init_VarSet(initHDTable,{{B6_Dif,1},{B6_Dif2,1},{B6_Dif3,30},{ShP,1600},{B2_K,100000000},{B3_K,80000000},{B4_K,80000000},{B5_K,50000000}})
 	Init_VarSet(initFTRTable,{{B6_Dif,2},{B6_Dif2,2},{B6_Dif3,60},{ShP,3200},{B2_K,150000000},{B3_K,120000000},{B4_K,120000000},{B5_K,60000000}})
 	Init_VarSet(initBYDTable,{{B6_Dif,3},{B6_Dif2,5},{B6_Dif3,120},{B2_K,200000000},{B3_K,150000000},{B4_K,150000000},{B5_K,80000000}})
+	Init_WarSet(initHDTable2,{{B3_KW,tostring(80000000*256)}})
+	Init_WarSet(initFTRTable2,{{B3_KW,tostring(120000000*256)}})
+	Init_WarSet(initBYDTable2,{{B3_KW,tostring(150000000*256)}})
 	TriggerX(FP,HD,initHDTable)
 	TriggerX(FP,FTR,initFTRTable)
 	TriggerX(FP,BYD,initBYDTable)
+	TriggerX(FP,HD,initHDTable2)
+	TriggerX(FP,FTR,initFTRTable2)
+	TriggerX(FP,BYD,initBYDTable2)
+	DoActions(FP,{SetMemoryX(0x660440, SetTo, 1,0xFF);}) -- 루미마린 생산속도 개빠르게 변경
 	BYDPatchArr={}
 	for i = 1, 5 do
 		table.insert(BYDPatchArr,SetMemoryW(0x660E00+(MarID[i]*2),SetTo,1000))
 		table.insert(BYDPatchArr,SetMemoryB(0x6647B0+MarID[i],SetTo,1))
 	end
 
-	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtLeast,2);},{ -- 퓨어모드 선택시 2인이상 공격력조절
+	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);},{ -- 퓨어모드 선택시 공격력조절
 	SetMemoryW(0x656EB0 + (0*2), SetTo, 200);
 	SetMemoryW(0x657678 + (0*2), SetTo, 14);
 	SetMemoryW(0x656EB0 + (1*2), SetTo, 1000);
 	SetMemoryW(0x657678 + (1*2), SetTo, 30);
-	SetMemoryW(0x657678 + (87*2), SetTo, 20);
-	SetMemoryW(0x657678 + (88*2), SetTo, 20);
-	SetMemoryW(0x657678 + (89*2), SetTo, 20);
-	SetMemoryW(0x657678 + (90*2), SetTo, 20);
-	SetMemoryW(0x657678 + (91*2), SetTo, 20);
-	SetMemoryW(0x657678 + (123*2), SetTo, 20);
-	SetMemoryW(0x657678 + (124*2), SetTo, 20);
-	SetMemoryW(0x657678 + (125*2), SetTo, 20);
-	SetMemoryW(0x657678 + (126*2), SetTo, 20);
-	SetMemoryW(0x657678 + (127*2), SetTo, 20);
+	SetMemoryW(0x657678 + (87*2), SetTo, 75);
+	SetMemoryW(0x657678 + (88*2), SetTo, 75);
+	SetMemoryW(0x657678 + (89*2), SetTo, 75);
+	SetMemoryW(0x657678 + (90*2), SetTo, 75);
+	SetMemoryW(0x657678 + (91*2), SetTo, 75);
+	SetMemoryW(0x657678 + (123*2), SetTo, 75);
+	SetMemoryW(0x657678 + (124*2), SetTo, 75);
+	SetMemoryW(0x657678 + (125*2), SetTo, 75);
+	SetMemoryW(0x657678 + (126*2), SetTo, 75);
+	SetMemoryW(0x657678 + (127*2), SetTo, 75);
 	SetCVar(FP,PerAttackFactor[2],SetTo,100),
 })
-	TriggerX(FP,{CDeaths(P6,AtLeast,2,GMode);CVar(P6,SetPlayers[2],AtMost,1);},{ -- 퓨어모드 선택시 1인 공격력조절
-	SetMemoryW(0x656EB0 + (0*2), SetTo, 300);
-	SetMemoryW(0x657678 + (0*2), SetTo, 21);
-	SetMemoryW(0x656EB0 + (1*2), SetTo, 1500);
-	SetMemoryW(0x657678 + (1*2), SetTo, 45);
-	SetMemoryW(0x657678 + (87*2), SetTo, 40);
-	SetMemoryW(0x657678 + (88*2), SetTo, 40);
-	SetMemoryW(0x657678 + (89*2), SetTo, 40);
-	SetMemoryW(0x657678 + (90*2), SetTo, 40);
-	SetMemoryW(0x657678 + (91*2), SetTo, 40);
-	SetMemoryW(0x657678 + (123*2), SetTo, 40);
-	SetMemoryW(0x657678 + (124*2), SetTo, 40);
-	SetMemoryW(0x657678 + (125*2), SetTo, 40);
-	SetMemoryW(0x657678 + (126*2), SetTo, 40);
-	SetMemoryW(0x657678 + (127*2), SetTo, 40);
-	SetCVar(FP,PerAttackFactor[2],SetTo,200),
-})
 	TriggerX(FP,{BYD,CDeaths(FP,AtMost,0,Theorist)},{
+		SetMemoryW(0x657678 + (87*2), SetTo, 75);
+		SetMemoryW(0x657678 + (88*2), SetTo, 75);
+		SetMemoryW(0x657678 + (89*2), SetTo, 75);
+		SetMemoryW(0x657678 + (90*2), SetTo, 75);
+		SetMemoryW(0x657678 + (91*2), SetTo, 75);
+		SetMemoryW(0x657678 + (123*2), SetTo, 75);
+		SetMemoryW(0x657678 + (124*2), SetTo, 75);
+		SetMemoryW(0x657678 + (125*2), SetTo, 75);
+		SetMemoryW(0x657678 + (126*2), SetTo, 75);
+		SetMemoryW(0x657678 + (127*2), SetTo, 75);
 	SetMemory(0x6C9FA8, SetTo, 1132);-- 파리 이동속도 너프
 	SetMemory(0x6CA018, SetTo, 1401);BYDPatchArr;-- 파리 이동속도 너프
 })
 	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist)},{
---		SetMemoryX(0x656554, SetTo, 2*256,0xFF00); -- 마린 투사체수 2로 변경하여 공격력을 두배로 올림
-		--SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
-		--SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
-		--SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
-		--SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
-		--SetMemoryB(0x656FB8+120, SetTo, 150); -- 핵배틀 공격속도 10배로 느려지도록 너프
-		SetMemoryX(0x660440, SetTo, 1,0xFF); -- 루미마린 생산속도 개빠르게 변경
 		
-		SetMemoryW(0x657678 + (87*2), SetTo, 40);
-		SetMemoryW(0x657678 + (88*2), SetTo, 40);
-		SetMemoryW(0x657678 + (89*2), SetTo, 40);
-		SetMemoryW(0x657678 + (90*2), SetTo, 40);
-		SetMemoryW(0x657678 + (91*2), SetTo, 40);
-		SetMemoryW(0x657678 + (123*2), SetTo, 40);
-		SetMemoryW(0x657678 + (124*2), SetTo, 40);
-		SetMemoryW(0x657678 + (125*2), SetTo, 40);
-		SetMemoryW(0x657678 + (126*2), SetTo, 40);
-		SetMemoryW(0x657678 + (127*2), SetTo, 40);
+		SetMemoryX(0x656FB0, SetTo, 7500,0xFFFF); -- Enigma 딜 7500으로 감소
+		SetMemoryX(0x663DE4, SetTo, 164*65536,0xFF0000); -- Enigma 계급을 딜에 맞게 변경
+		SetMemoryX(0x65651C, SetTo, 1*65536,0xFF0000); -- 프로브보스 딜 40%로 감소(투사체수 변경)
+		SetMemoryX(0x663E10, SetTo, 163,0xFF); -- 프로브보스 계급을 딜에 맞게 변경
+		SetMemoryB(0x656FB8+120, SetTo, 150); -- 핵배틀 공격속도 10배로 느려지도록 너프
+
+		SetMemoryW(0x657678 + (87*2), SetTo, 128);
+		SetMemoryW(0x657678 + (88*2), SetTo, 128);
+		SetMemoryW(0x657678 + (89*2), SetTo, 128);
+		SetMemoryW(0x657678 + (90*2), SetTo, 128);
+		SetMemoryW(0x657678 + (91*2), SetTo, 128);
+		SetMemoryW(0x657678 + (123*2), SetTo, 75);
+		SetMemoryW(0x657678 + (124*2), SetTo, 75);
+		SetMemoryW(0x657678 + (125*2), SetTo, 75);
+		SetMemoryW(0x657678 + (126*2), SetTo, 75);
+		SetMemoryW(0x657678 + (127*2), SetTo, 75);
 		SetCVar(FP,PerAttackFactor[2],SetTo,200),
-	})
-	TriggerX(FP,{CDeaths(FP,AtLeast,1,Theorist),CVar(P6,SetPlayers[2],AtMost,1)},{
-		SetMemoryW(0x657678 + (87*2), SetTo, 60);
-		SetMemoryW(0x657678 + (88*2), SetTo, 60);
-		SetMemoryW(0x657678 + (89*2), SetTo, 60);
-		SetMemoryW(0x657678 + (90*2), SetTo, 60);
-		SetMemoryW(0x657678 + (91*2), SetTo, 60);
-		SetMemoryW(0x657678 + (123*2), SetTo, 60);
-		SetMemoryW(0x657678 + (124*2), SetTo, 60);
-		SetMemoryW(0x657678 + (125*2), SetTo, 60);
-		SetMemoryW(0x657678 + (126*2), SetTo, 60);
-		SetMemoryW(0x657678 + (127*2), SetTo, 60);
-		SetCVar(FP,PerAttackFactor[2],SetTo,400)
 	})
 		
 
@@ -3611,8 +3597,6 @@ initBYDTable = {}
 		table.insert(EVPatchT,SetMemoryW(0x656888+(2*(i+87)), SetTo, 2)) -- 안쪽
 		table.insert(EVPatchT,SetMemoryW(0x6570C8+(2*(i+87)), SetTo, 5)) -- 중앙
 		table.insert(EVPatchT,SetMemoryW(0x657780+(2*(i+87)), SetTo, 10)) -- 바깥
-		table.insert(EVPatchT,SetMemoryW(0x656EB0+(2*(i+87)), SetTo, 0))--루미마린 기본공격
-		table.insert(EVPatchT,SetMemoryW(0x657678+(2*(i+87)), SetTo, 60))--루미마린 증가량
 		table.insert(EVPatchT2,SetMemoryB(0x6566F8+(87+i), SetTo, 3)) -- 스플형
 		table.insert(EVPatchT2,SetMemory(0x656CA8+(4*(i+87)), SetTo, 150)) -- 그래픽
 		table.insert(EVPatchT2,SetMemoryW(0x656888+(2*(i+87)), SetTo, 2)) -- 안쪽
@@ -6979,25 +6963,7 @@ CIf(P6,Switch("Switch 203",Set))
 			PreserveTrigger();
 		},
 	}
-	CIfX(P6,Command(P6,AtLeast,1, "【 Tenebris 】"))
-		
-		f_Memcpy(P6,0x64160C,_TMem(Arr(BStr01[3],0),"X","X",1),BStr01[2])
-		CIf(P6,{CVar(FP,B3_H[2],AtLeast,1)})
-			CMov(P6,B3_HV,_Add(_Div(_ReadF(B3_H),_Mov(256)),B3_K))
-			CMov(P6,B3_HV2,B3_K2)
-
-			TriggerX(FP,{CVar(FP,B3_K[2],AtLeast,1000000000)},{SetCVar(FP,B3_HV2[2],Add,1)},{preserved})
-			
-
-			ItoDec(P6,B3_HV,VArr(B3_HT,0),0,0x08,0,9)
-			ItoDec(P6,B3_HV2,VArr(B3_HT2,0),1,0x08,0)
-			f_Movcpy(P6,0x64160C+BStr01[2],VArr(B3_HT2,0),4*4)
-			f_Movcpy(P6,0x64160C+BStr01[2]+(4*4),VArr(B3_HT,0),4*4)
-		CIfEnd()
-	CElseX()
-		CMov(P6,0x64160C,0)
-		
-	CIfXEnd()
+	
 	for i = 3, 0, -1 do
 		Trigger {
 			players = {P6},
@@ -9591,6 +9557,7 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	players = {P6},
 		conditions = {
 			Label(0);
+			CD(EVMode,0);
 			CDeaths(P6,AtLeast,2,Difficulty);
 		},
 		actions = {
@@ -9602,11 +9569,22 @@ CIf(AllPlayers,Switch("Switch 203",Cleared)) -- 인트로
 	players = {P6},
 		conditions = {
 			Label(0);
+			CD(EVMode,0);
 			CDeaths(P6,AtLeast,3,Difficulty);
 			CDeaths(P6,AtLeast,2,GMode);
 		},
 		actions = {
 			SetMemory(0x582144+(i*4),SetTo,4);
+		},
+	}
+	Trigger { -- 체력표시하는곳, 캔낫기회 표시하는곳
+	players = {P6},
+		conditions = {
+			Label(0);
+			CDeaths(P6,AtLeast,1,EVMode);
+		},
+		actions = {
+			SetMemory(0x582144+(i*4),SetTo,0);
 		},
 	}
 	
@@ -9978,8 +9956,7 @@ CreateUnitLineSafeGun(P6,{Always()},3,4,32,Radius,Angle,Points,0,P8,{1,102})
 CreateUnitLineSafeGun(P6,{Always()},3,4,32,Radius,Angle,Points,0,P8,{1,84})
 CIfEnd()
 CIfOnce(P6,CDeaths(P6,AtLeast,1,TimerisDEAD))
-
-
+--[[
 Trigger {
 	players = {P6},
 	conditions = {
@@ -9996,6 +9973,8 @@ Trigger {
 		SetMemoryX(0x657760, SetTo, (65)*65536,0xFFFF0000);
 		}
 }
+]]
+
 
 Points = 3
 SizeofPolygon = 1
@@ -10739,7 +10718,7 @@ players = {P6},
 		PreserveTrigger();
 	},
 }
-CIf(FP,NBYD)
+CIf(FP,{NBYD,CD(EVMode,0)})
 
 CanText = "\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x14\n\x14\n\x13\x04맵상의 유닛이 \x08１５００\x04기 이상 있습니다.\n\x13\x04\x07５초\x04간 \x08１５００\x04마리 이상 \x10지속\x04될 경우 \x08캔낫\x04으로 간주됩니다.\n\x14\n\x13\x04！！！　\x08ＷＡＲＮＩＮＧ\x04　！！！\n\x13\x04――――――――――――――――――――――――――――――――――――――――――――――――――――――"
 Trigger { -- 캔낫 경고
@@ -10864,7 +10843,7 @@ DoActions(FP,{
 		ModifyUnitEnergy(All,MarID[5],P12,64,0);
 		KillUnitAt(All,"Factories","Anywhere",P12);
 		KillUnit(179,P12);})
-CIf(FP,BYD)
+CIf(FP,{BYD,CD(EVMode,0)})
 
 Trigger { -- 캔낫시 모든 저그유닛 삭제, 경고1회부여, 정야독
 	players = {P6},
@@ -15600,12 +15579,14 @@ for i = 1, 6 do
 				CD(BYDBGMCount[i],j-1),
 				CD(BYDBossClear,0)
 			},{
+				SetCp(i-1);
 				PlayWAV(k); 
 				PlayWAV(k); 
 				AddCD(BYDBGMCount[i],1),
-				SetDeathsX(i-1,Add,1000,440,0xFFFFFF);},{preserved})
+				SetCp(FP);
+				SetDeathsX(i-1,Add,2000,440,0xFFFFFF);},{preserved})
 		end
-	TriggerX(FP,{HumanCheck(i-1,1),CD(BYDBGMCount[i],#BYDBGMArr)},{SetCD(BYDBGMCount[i],0)},{preserved})
+	TriggerX(FP,{HumanCheck(i-1,1),CD(BYDBGMCount[i],#BYDBGMArr,AtLeast)},{SetCD(BYDBGMCount[i],0)},{preserved})
 	else
 		for j,k in pairs(BYDBGMArr) do
 			TriggerX(FP,{
@@ -15619,9 +15600,9 @@ for i = 1, 6 do
 					PlayWAVX(k)
 				},ObPlayers,FP);
 				AddCD(BYDBGMCount[i],1),
-				SetMemory(0x58F494,Add,1000);},{preserved})
+				SetMemory(0x58F494,Add,2000);},{preserved})
 		end
-	TriggerX(FP,{HumanCheck(i-1,1),CD(BYDBGMCount[i],#BYDBGMArr)},{SetCD(BYDBGMCount[i],0)},{preserved})
+	TriggerX(FP,{HumanCheck(i-1,1),CD(BYDBGMCount[i],#BYDBGMArr,AtLeast)},{SetCD(BYDBGMCount[i],0)},{preserved})
 	end
 end
 
@@ -17596,7 +17577,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 	conditions = {
 		Label(0);
 		CDeaths(P6,Exactly,0,GMode);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
 	},
 	actions = {
 		PlayWAV("staredit\\wav\\shield_unlock.ogg");
@@ -17612,7 +17593,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 		CDeaths(P6,Exactly,0,GMode);
 		CDeaths(i,AtLeast,1,ShieldUnlock);
 		CDeaths(P6,AtMost,2,Difficulty);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
 		Memory(0x58F4B0+(4*i),AtMost,0);
 	},
 	actions = {
@@ -17636,7 +17617,7 @@ Trigger { -- 공업완료시 수정보호막 활성화
 		CDeaths(P6,Exactly,0,GMode);
 		CDeaths(i,AtLeast,1,ShieldUnlock);
 		CDeaths(P6,Exactly,3,Difficulty);
-		MemoryB(0x58D2B0+(46*i)+7,AtLeast,250);
+		MemoryB(0x58D2B0+(46*i)+7,AtLeast,255);
 		Memory(0x58F4B0+(4*i),AtMost,0);
 	},
 	actions = {
@@ -18024,62 +18005,62 @@ end
 NJumpEnd(Force1,0x13)
 
 for i=0, 4 do
-	Trigger {
-		players = {i},
-		conditions = {
-			MemoryB(0x58D2B0+(46*i)+7,Exactly,100);
-		},
-		actions = {
-			SetMemoryB(0x58D088+(46*i)+8,SetTo,1);
-			SetMemoryB(0x58D088+(46*i)+7,SetTo,0);
-		}
-	}
+--	Trigger {
+--		players = {i},
+--		conditions = {
+--			MemoryB(0x58D2B0+(46*i)+7,Exactly,100);
+--		},
+--		actions = {
+--			SetMemoryB(0x58D088+(46*i)+8,SetTo,1);
+--			SetMemoryB(0x58D088+(46*i)+7,SetTo,0);
+--		}
+--	}
 	for j = 0, 2 do
-	Trigger {
-		players = {i},
-		conditions = {
-			Label(0);
-			CDeaths(FP,Exactly,j,GMode);
-			Accumulate(i,AtMost,UpCostTable[j+1]-1,Ore);
-			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
-			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
-			MemoryB(0x58D088+(46*i)+9,AtMost,249);
-		},
-		actions = {
-			
-			DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
-			SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0);
-			PreserveTrigger();
-		}
-	}
-	Trigger {
-		players = {i},
-		conditions = {
-			Label(0);
-			CDeaths(FP,Exactly,j,GMode);
-			Accumulate(i,AtLeast,UpCostTable[j+1],Ore);
-			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
-			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
-			MemoryB(0x58D088+(46*i)+9,AtMost,249);
-		},
-		actions = {
-			
-			SetResources(i,Subtract,UpCostTable[j+1],Ore);
-			SetMemoryB(0x58D2B0+(46*i)+7,SetTo,250);
-			SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
-		}
-	}
-	TriggerX(FP,{CDeaths(FP,AtMost,1,GMode);},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{preserved})
+--	Trigger {
+--		players = {i},
+--		conditions = {
+--			Label(0);
+--			CDeaths(FP,Exactly,j,GMode);
+--			Accumulate(i,AtMost,UpCostTable[j+1]-1,Ore);
+--			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
+--			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
+--			--MemoryB(0x58D088+(46*i)+9,AtMost,249);
+--		},
+--		actions = {
+--			
+--			DisplayText("\x07『 \x04잔액이 부족합니다. \x07』",4);
+--			SetMemoryB(0x58D2B0+(46*i)+8,SetTo,0);
+--			PreserveTrigger();
+--		}
+--	}
+--	Trigger {
+--		players = {i},
+--		conditions = {
+--			Label(0);
+--			CDeaths(FP,Exactly,j,GMode);
+--			Accumulate(i,AtLeast,UpCostTable[j+1],Ore);
+--			MemoryB(0x58D2B0+(46*i)+8,Exactly,1);
+--			MemoryB(0x58D2B0+(46*i)+7,AtMost,249);
+--			--MemoryB(0x58D088+(46*i)+9,AtMost,249);
+--		},
+--		actions = {
+--			
+--			SetResources(i,Subtract,UpCostTable[j+1],Ore);
+--			SetMemoryB(0x58D2B0+(46*i)+7,SetTo,250);
+--			--SetMemoryB(0x58D088+(46*i)+9,SetTo,100);
+--		}
+--	}
+	--TriggerX(FP,{CDeaths(FP,AtMost,1,GMode);},{SetMemoryB(0x58D088+(46*i)+9,SetTo,0);},{preserved})
 	end
 	DoActionsX(FP,{SetCVar(FP,CurPerAttack[i+1][2],SetTo,0)})
 	DoActionsX(FP,{SetCVar(FP,CurPerArmor[i+1][2],SetTo,0)})
 	
-	for j = 0, 7 do
-		TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{preserved})
-	end
-	for j = 0, 7 do
-		TriggerX(FP,{MemoryX(PAPtrArr[i+1],Exactly,2^(j+(8*PAMaskRetArr[i+1])),2^(j+(8*PAMaskRetArr[i+1])))},{SetCVar(FP,CurPerArmor[i+1][2],SetTo,2^j,2^j)},{preserved})
-	end
+	--for j = 0, 7 do
+	--	TriggerX(FP,{MemoryX(PUPtrArr[i+1],Exactly,2^(j+(8*PUMaskRetArr[i+1])),2^(j+(8*PUMaskRetArr[i+1])))},{SetCVar(FP,CurPerAttack[i+1][2],SetTo,2^j,2^j)},{preserved})
+	--end
+	--for j = 0, 7 do
+	--	TriggerX(FP,{MemoryX(PAPtrArr[i+1],Exactly,2^(j+(8*PAMaskRetArr[i+1])),2^(j+(8*PAMaskRetArr[i+1])))},{SetCVar(FP,CurPerArmor[i+1][2],SetTo,2^j,2^j)},{preserved})
+	--end
 end
 
 for i=0, 4 do
@@ -18119,7 +18100,7 @@ Trigger {
 	actions = {
 		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
 		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
-		SetMemoryB(0x58D088+(46*i)+6,SetTo,50);
+		SetMemoryB(0x58D088+(46*i)+6,SetTo,0);
 		SetMemoryB(0x58D2B0+(46*i)+6,SetTo,0);
 	}
 }
@@ -18133,10 +18114,27 @@ Trigger {
 	actions = {
 		DisplayText("\x12\x07『 \x08HP\x04 업그레이드가 완료되어 \x0F버튼\x04을 \x02비활성화 \x04하였습니다. \x07』",4);
 		SetMemoryB(0x58D088+(46*i)+0,SetTo,0);
-		SetMemoryB(0x58D088+(46*i)+6,SetTo,50);
+		SetMemoryB(0x58D088+(46*i)+6,SetTo,0);
 		SetMemoryB(0x58D2B0+(46*i)+6,SetTo,0);
 	}
 }
+
+local CheckAtkUp = CreateVar(FP)
+for j = 1, 251, 5 do
+	TriggerX(i,{MemoryB(0x58D2B0+(46*i)+7, AtLeast, j),MemoryB(0x58D2B0+(46*i)+7, AtMost, j+3)},{SetMemoryB(0x58D2B0+(46*i)+7, SetTo, j+4),SetV(CheckAtkUp,j+4)})--공업 5업씩
+end
+
+--EV모드,하드이하 퓨어모드, 이론치 공격력 2배 적용(비욘드 일반 적용X)
+CIf(FP,{TTOR({TTAND({CDeaths(P6,AtLeast,2,GMode);CDeaths(P6,AtMost,2,Difficulty);}),CDeaths(P6,AtLeast,1,Theorist),CDeaths(P6,Exactly,1,EVMode)});HumanCheck(i,1),CV(CheckAtkUp,1,AtLeast)})--EVMode 루미마린 공2배 연동 옵션
+local DmgRet = CreateVar(FP)
+f_Wread(FP, 0x657678 + ((87+i)*2), DmgRet)
+--0x656EB0 + (87*2) -- 기본공격력
+--0x657678 + (87*2) -- 업글당공격력
+f_Wwrite(FP,0x656EB0 + ((87+i)*2),SetTo,_Mul(DmgRet,CheckAtkUp))
+CMov(FP,CheckAtkUp,0)
+CMov(FP,0x6509B0,FP)
+CIfEnd()
+
 end
 
 PerCostVA = CreateVArr(6,FP)
@@ -18244,40 +18242,10 @@ Trigger { -- 소환 마린
 CIf(j,Bring(j,AtLeast,1,12,64))
 
 Trigger { -- 소환 루미너스 마린
-players = {j},
-conditions = {
-	NBYD;
-	Deaths(j,AtMost,35,125);
-	Bring(j,AtLeast,1,12,64);
-},
-actions = {
-	SetResources(j,Add,45000,Ore);
-	RemoveUnitAt(1,12,"Anywhere",j);
-	DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0436기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
-	PreserveTrigger();
-},
-}
-Trigger { -- 소환 루미너스 마린
-players = {j},
-conditions = {
-  BYD;
-  Deaths(j,AtMost,11,125);
-  Bring(j,AtLeast,1,12,64);
-},
-actions = {
-  SetResources(j,Add,45000,Ore);
-  RemoveUnitAt(1,12,"Anywhere",j);
-  DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x0412기 조합) 자원 반환 + \x1F45000 O r e \x07』",4);
-  PreserveTrigger();
-},
-}
-Trigger { -- 소환 루미너스 마린
 	players = {j},
 	conditions = {
 		Label(0);
 		NBYD;
-		CDeaths(P6,Exactly,0,EVMode);
-		Deaths(CurrentPlayer,AtLeast,36,125);
 		Bring(j,AtLeast,1,12,64);
 	},
 	actions = {
@@ -18294,7 +18262,6 @@ Trigger { -- 소환 루미너스 마린
 		Label(0);
 		BYD;
 		CDeaths(FP,AtMost,0,Theorist);
-		Deaths(CurrentPlayer,AtLeast,12,125);
 		Bring(j,AtLeast,1,12,64);
 		Bring(j,AtMost,95,MarID[j+1],64);
 	},
@@ -18313,7 +18280,6 @@ Trigger { -- 소환 루미너스 마린
 		BYD;
 		CDeaths(P6,Exactly,1,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
-		Deaths(CurrentPlayer,AtLeast,12,125);
 		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtLeast,90000,Ore);
 	},
@@ -18335,7 +18301,6 @@ Trigger { -- 소환 루미너스 마린
 		BYD;
 		CDeaths(P6,Exactly,0,BYDBossStart2);
 		CDeaths(FP,AtLeast,1,Theorist);
-		Deaths(CurrentPlayer,AtLeast,12,125);
 		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtLeast,90000,Ore);
 	},
@@ -18355,7 +18320,6 @@ Trigger { -- 소환 루미너스 마린
 		Label(0);
 		BYD;
 		CDeaths(FP,AtLeast,1,Theorist);
-		Deaths(CurrentPlayer,AtLeast,12,125);
 		Bring(j,AtLeast,1,12,64);
 		Accumulate(j,AtMost,89999,Ore);
 	},
@@ -18381,44 +18345,6 @@ Trigger { -- 소환 루미너스 마린
 		SetResources(j,Add,45000,Ore);
 		RemoveUnitAt(1,12,"Anywhere",j);
 		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19최대 보유 가능수\x04가 초과되었습니다. \x1B(최대 96기까지 보유 가능) \x04자원 반환 + \x1F45000 O r e \x07』",4);
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- 소환 루미너스 마린
-	players = {j},
-	conditions = {
-		Label(0);
-		NBYD;
-		CDeaths(P6,Exactly,1,EVMode);
-		Deaths(CurrentPlayer,AtLeast,36,125);
-		Bring(j,AtLeast,1,12,64);
-		Accumulate(j,AtLeast,25000,Ore);
-	},
-	actions = {
-		RemoveUnitAt(1,12,"Anywhere",j);
-		SetResources(j,Subtract,25000,Ore);
-		DisplayText("\x07『 \x1F광물\x04을 소모하여 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine 을 \x19소환\x04하였습니다. - \x1F70000 O r e \x07』",4);
-		CreateUnitWithProperties(1,MarID[j+1],204+j,j,{energy = 100});
-		SetCDeaths(FP,Add,1,MarCreate);
-		PreserveTrigger();
-	},
-}
-
-Trigger { -- 소환 루미너스 마린
-	players = {j},
-	conditions = {
-		Label(0);
-		NBYD;
-		CDeaths(P6,Exactly,1,EVMode);
-		Deaths(CurrentPlayer,AtLeast,36,125);
-		Bring(j,AtLeast,1,12,64);
-		Accumulate(j,AtMost,24999,Ore);
-	},
-	actions = {
-		SetResources(j,Add,24999,Ore);
-		RemoveUnitAt(1,12,"Anywhere",j);
-		DisplayText("\x07『 "..Color[j+1].."L\x04uminous "..Color[j+1].."M\x04arine \x19빠른 소환\x04 조건이 맞지 않습니다. (조건 - 추가 미네랄 \x1F25000 \x04보유) 자원 반환 + \x1F45000 O r e \x07』",4);
 		PreserveTrigger();
 	},
 }

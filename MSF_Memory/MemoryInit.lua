@@ -31,7 +31,7 @@ function HeroSpawnSetForBYD(Player,Level,UnitID1,UnitID2,Sw1,Sw2,BYDOutPut)
 	TriggerX(Player, {DeathsX(CurrentPlayer,AtLeast,(Level+2)*65536,0,0xFF0000),DeathsX(CurrentPlayer,AtMost,(Level+3)*65536,0,0xFF0000),Switch("Switch 1",Sw1Status2)}, {SetCVar(Player,BYDOutPut,SetTo,UnitID2)}, {preserved})
 end
 
-function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag)
+function DisplayCTextToAll(Player,conditions,Actions,Text,RotateActions,RotatePlayers,Flag) 
 	if type(Text) == "string" then
 		FlagT = {}
 		if Flag == 1 then

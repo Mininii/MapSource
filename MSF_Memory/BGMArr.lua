@@ -13,7 +13,7 @@ for i = 1, 148 do
     end
 end
 
-for i = 1, 148 do
+for i = 1, 109 do
     if i <= 9 then
         table.insert(BYDBGMArr,"staredit\\wav\\BYD00"..i..".ogg")
     elseif i >= 10 and i<= 99 then
