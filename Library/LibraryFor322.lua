@@ -480,6 +480,32 @@ function Overflow_HP_SystemX(Player,Cunit_HPV,HP_K,HP_K2,HP_P)
         CTrigger(Player,{TMemoryX(_Add(Cunit_HPV,17),Exactly,0,0xFF00)},{SetCVar(Player,Cunit_HPV[2],SetTo,0)},1)
     CIfEnd()
 end
+function Bit64_HP_SystemX(Player,Cunit_HPV,HP_W,HP_P) --HP_W * 256
+	if HP_W[4]~= "W" then PushErrorMsg("Need_64Bit_HP_Variable") end
+	local Check_DmgV = CreateVar(FP)
+	local DmgDest = CreateVar(FP)
+	local HPCheck = CreateVar(FP)
+
+    CIf(Player,CVar(Player,Cunit_HPV[2],AtLeast,1))
+    	CDoActions(Player,{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
+        CIf(Player,{TMemory(Cunit_HPV,AtMost,(8000000*256)-256),TTNWar(HP_W,AtLeast,"1")})
+		f_Read(FP, Cunit_HPV, Check_DmgV)
+		CMov(FP,DmgDest,_Sub(_Mov(8000000*256),Check_DmgV))
+		CIfX(FP,{TTNWar(HP_W, AtLeast, {DmgDest,0})})
+		CTrigger(FP,{},{TSetMemory(Cunit_HPV,SetTo,8000000*256)},1)
+		CElseX()
+		CTrigger(FP,{},{TSetMemory(Cunit_HPV,Add,_Cast(0,HP_W))},1)
+		CIfXEnd()
+		f_LSub(FP, HP_W, HP_W, {DmgDest,0})
+		CAdd(FP,HPCheck,DmgDest)
+        CIfEnd()
+
+		TriggerX(FP,{CV(HPCheck,4000000*256,AtLeast)},{SubV(HPCheck,4000000*256),AddV(HP_P,1)},{preserved})
+		
+        CTrigger(Player,{TMemoryX(_Add(Cunit_HPV,17),Exactly,0,0xFF00)},{SetCVar(Player,Cunit_HPV[2],SetTo,0)},1)
+    CIfEnd()
+end
+
 
 
 function AddCD(Code,Value)
