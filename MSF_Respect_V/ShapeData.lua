@@ -153,6 +153,11 @@ CenNM1 = CS_SortY(CS_CropXY(CenOverlap, {0,2048}, {0,4096}, {0,0}, {0,1}), 1)
 CenNM2 = CS_SortY(CS_CropXY(CenOverlap, {0,2048}, {4096,8192}, {0,0}, {0,0}),0)
 CenCross = CSMakeLine(4, 64, 0, 1024, 0)
 CenCross2 = CSMakeLine(4, 32, 45, 1024, 0)
+
+CenCross3 = CS_OverlapX(CSMakeLine(4, 128, 0, 1024, 0),CSMakeLine(4, 64, 45, 1024, 0))
+
+
+
 	function MakeLevelShape(Type,Points,LvMin,LvMax)
 		local X = {}
 		for i = LvMin, LvMax do

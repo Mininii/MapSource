@@ -36,6 +36,7 @@
 		{26,"staredit\\wav\\BGM_Summer2017.ogg",50*1000},
 		{27,"staredit\\wav\\BGM_SpaceofSoul.ogg",76*1000},
 		{28,"staredit\\wav\\BGM_OP_DLC.ogg",127*1000},
+		{29,"staredit\\wav\\BGM_OP_DLC2.ogg",125*1000},
 		
 	})
 	
@@ -124,7 +125,7 @@
 		TriggerX(FP, {Deaths(CurrentPlayer,AtLeast,1,196)},AddCD(TestCode2,1) , {preserved})
 		TriggerX(FP,{ElapsedTime(20, AtMost),Switch("Switch 253",Set),Deaths(CurrentPlayer,AtLeast,1,199)},{SetCD(TestMode,1),SetSwitch("Switch 254",Set),SetMemory(0x657A9C,SetTo,31),SetDeaths(CurrentPlayer, SetTo, 0, 199)})
 		CIf(FP,CD(TestMode,1)) -- 테스트 트리거
-		DoActions(FP, {RemoveUnit("Men",Force2);})
+		--DoActions(FP, {RemoveUnit("Men",Force2);})
 
 		
 		CMov(FP,0x6509B0,CurrentOP)--상위플레이어 단락
@@ -151,21 +152,21 @@
 				},
 				actions = {
 					KillUnit("Men",Force2);
-					KillUnitAt(1, "Buildings", 64, Force2),
+					--KillUnitAt(1, "Buildings", 64, Force2),
 					--KillUnit(143,Force2);
 					--KillUnit(144,Force2);
 					--KillUnit(146,Force2);
-					KillUnit(138,Force2);
-					KillUnit(136,Force2);
-					KillUnit(137,Force2);
-					KillUnit(139,Force2);
-					KillUnit(140,Force2);
-					KillUnit(141,Force2);
-					KillUnit(142,Force2);
-					KillUnit(143,Force2);
-					KillUnit(144,Force2);
-					KillUnit(146,Force2);
-					KillUnit(134,Force2);
+					--KillUnit(138,Force2);
+					--KillUnit(136,Force2);
+					--KillUnit(137,Force2);
+					--KillUnit(139,Force2);
+					--KillUnit(140,Force2);
+					--KillUnit(141,Force2);
+					--KillUnit(142,Force2);
+					--KillUnit(143,Force2);
+					--KillUnit(144,Force2);
+					--KillUnit(146,Force2);
+					--KillUnit(134,Force2);
 					
 					PreserveTrigger();
 				}
@@ -486,6 +487,18 @@ end
 		SetMemoryB(0x57F27C + (3 * 228) + 74,SetTo,0),
 		SetMemoryB(0x57F27C + (4 * 228) + 74,SetTo,0)
 	})
+	  
+
+	if DLC_Project == 1 then
+		TriggerX(FP, (CD(GMode,3)), {SetV(BGMType,29),
+		SetPlayerColor(P6, SetTo, 188);
+		SetPlayerColor(P7, SetTo, 160);
+		SetPlayerColor(P8, SetTo, 173);
+		SetMinimapColor(P6, SetTo, 188),
+		SetMinimapColor(P7, SetTo, 160),
+		SetMinimapColor(P8, SetTo, 173),})
+		
+	end
 	CDoActions(FP, {TCreateUnit(1, 96, 40, CurrentOP)})
 	for i = 0, 4 do
 		f_TempRepeat({HumanCheck(i, 1)}, 96, 1, "BanUnit", i, {2896,112})
@@ -864,8 +877,13 @@ DoActions(FP,{
 
 
 		for j,k in pairs(KillPointArr) do
-			TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
-		end
+			if DLC_Project == 1 then
+				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1]),CD(GMode,2,AtMost)}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
+				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1]),CD(GMode,3)}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2]/3, Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(math.floor(k[2]//3)).." \x03Ｐｔｓ"), 4)},{preserved})
+			else
+				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
+			end
+					end
 		Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,150000,Kills)},{preserved})

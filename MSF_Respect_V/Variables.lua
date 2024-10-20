@@ -154,6 +154,7 @@
 	OverMePosX = CreateArr(20, FP)
 	OverMePosY = CreateArr(20, FP)
 	GTime = CreateVar(FP)
+	LTime = CreateVar(FP)
 	WinCcode = CreateCcode()
 	WinCcode2 = CreateCcode()
 	HStr2 = SaveiStrArrX(FP,MakeiStrVoid(54*11)) 
@@ -361,7 +362,6 @@
 
 
 
-
 	
 	SetUnitAbility(102,22,5,222222,false,30,1990,false,1,224,7,500000,"Division",25000)
 	SetUnitAbility(23,12,5,444444,false,37,3500,false,1,224,7,400000,"DeathsX",35000)
@@ -379,8 +379,8 @@
 
 
 	SetUnitAbility(124,91,1,120000,30000,15,1800,false,1,32*5,5,110000,"Turret",15000) --
-	SetUnitAbility(11,117,4,77777,65535,15,1111,false,1,32*5,5,nil,"Prom",0) --
-	SetUnitAbility(69,118,4,77777,65535,15,1111,false,1,32*5,5,nil,"Aari",0) --
+	SetUnitAbility(11,117,4,77777,65535,15,1111,false,1,32*5,9,nil,"Prom",0) --
+	SetUnitAbility(69,118,4,77777,65535,15,1111,false,1,32*5,9,nil,"Aari",0) --
 
 --
 

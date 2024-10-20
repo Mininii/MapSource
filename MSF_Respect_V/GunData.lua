@@ -38,6 +38,16 @@ function Include_GunData(Size,LineNum)
 		f_SaveCp()
 		CIf(FP,{CD(f_GunForceOption,0)})
 		f_Read(FP,_Sub(BackupCp,15),CPos)
+		if DLC_Project == 1 then
+			Convert_CPosXY()
+			f_TempRepeatX({CD(GMode,3)}, 94, 1, nil, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 62, 10, 187, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 57, 10, 187, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 64, 10, 187, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 70, 10, 187, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 12, 10, 187, P8, {1024,LTime})
+			f_TempRepeatX({CD(GMode,3)}, 8, 10, 187, P8, {1024,LTime})
+		end
 		f_Read(FP,BackupCp,GunID,"X",0xFF,1)
 		f_Read(FP,_Sub(BackupCp,6),GunPlayer,"X",0xFF)
 		CIfEnd()
@@ -658,6 +668,7 @@ end
 			CMov(FP,G_CB_Y,CPosY)
 			CenT = {7,60,70,57,62,64}
 			CenT2 = {60,70,57,62,64,7}
+			CenT3 = {102,27,68,102,27,68}
 			for j,k in pairs(CenT) do
 				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross"}, "MAX", 129, nil, nil, P7,1)
 			end
@@ -665,6 +676,10 @@ end
 				for j,k in pairs(CenT2) do
 				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross2"}, "MAX", 129, nil, nil, P8,1)
 				end
+				for j,k in pairs(CenT3) do
+				G_CB_SetSpawn({GNm(j)}, {k}, {"ACAS"}, {"CenCross3"}, "MAX", 129, nil, nil, P8,1)
+				end
+				
 			end
 			CIfEnd()
 		CIfEnd()
@@ -714,7 +729,22 @@ end
 	GeneCUT3 = {28,84,8,62,57,102,"Zero","LENA"}
 	
 	
+	GeneCUTG1 = {53,17,78,79,95,2,52,23}
+	GeneCUTG2 = {54,19,75,81,93,3,65,68}
+	GeneCUTG3 = {51,77,76,83,5,34,66,67}
 	
+	
+	
+	
+	
+
+
+
+
+
+	
+	
+
 
 
 
@@ -726,10 +756,12 @@ end
 				G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1R", "MAX", 200, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,2),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1P", "MAX", 200, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1PS", "MAX", 200, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG1[j]}, "ACAS", "GeneN1", "MAX", nil, nil, {0,0}, P6,1)
 			else
 				G_CB_SetSpawn({CD(GMode,1),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN1", "MAX", 200, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,2),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene1", "MAX", 200, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene1S", "MAX", 200, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(1),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG1[j]}, "ACAS", "Gene1S", "MAX", nil, nil, {0,0}, P6,1)
 			end
 		end
 		for j,k in pairs(GeneCUT2) do
@@ -737,10 +769,12 @@ end
 				G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2R", "MAX", 201, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,2),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2P", "MAX", 201, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2PS", "MAX", 201, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG2[j]}, "ACAS", "GeneN2", "MAX", nil, nil, {0,0}, P6,1)
 			else
 				G_CB_SetSpawn({CD(GMode,1),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN2", "MAX", 201, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,2),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene2", "MAX", 201, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene2S", "MAX", 201, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(2),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG2[j]}, "ACAS", "Gene2S", "MAX", nil, nil, {0,0}, P6,1)
 			end
 		end
 		for j,k in pairs(GeneCUT3) do
@@ -755,13 +789,16 @@ end
 
 			if k == 102 or k == "Zero" then
 				G_CB_SetSpawn({CD(GMode,2),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3", "MAX", 202, nil, {0,0}, P6,1)
-				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3S", "MAX", 202, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene3S", "MAX", 202, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG3[j]}, "ACAS", "Gene3S", "MAX", nil, nil, {0,0}, P6,1)
 			elseif j == 8 then
 				G_CB_SetSpawn({CD(GMode,2),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3P", "MAX", 202, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "GeneN3PS", "MAX", 202, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG3[j]}, "ACAS", "GeneN3PS", "MAX", nil, nil, {0,0}, P6,1)
 			else
 				G_CB_SetSpawn({CD(GMode,2),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene3", "MAX", 202, nil, {0,0}, P6,1)
 				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {k}, "ACAS", "Gene3S", "MAX", 202, nil, {0,0}, P6,1)
+				G_CB_SetSpawn({CD(GMode,3),GNm(3),Gun_Line(7,AtLeast,240*(j-1))}, {GeneCUTG3[j]}, "ACAS", "Gene3S", "MAX", nil, nil, {0,0}, P6,1)
 			end
 		end
 	else
@@ -1098,10 +1135,8 @@ end
 		CAdd(FP,TotalM,_Mul(MarNum4[i+1],20))
 	end
 	CIf(FP,{CD(GMode,3)})
-	CAdd(FP,TotalM,_Mul(MarNum3,60))
-	for i = 0, 4 do
-		CAdd(FP,TotalM,_Mul(MarNum4[i+1],60))
-	end
+	
+	CMov(FP,TotalM,_Mul(_Mod(GTime,60),8))--무조건 시간기믹만 적용
 	CIfEnd()
 
 
@@ -1304,6 +1339,10 @@ end
 			TSetMemoryX(_Add(Nextptrs,18),SetTo,4500,0xFFFF),}, {preserved})
 			G_CB_TSetSpawn({GNm(1)}, {94}, {L1084}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={0,0}})
 			G_CB_TSetSpawn({GNm(2)}, {94}, {L2084}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={0,0}})
+			if DLC_Project == 1 then
+				G_CB_TSetSpawn({GNm(1),CD(GMode,3)}, {30}, {L1084}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={0,0}})
+				G_CB_TSetSpawn({GNm(2),CD(GMode,3)}, {30}, {L2084}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={0,0}})
+			end
 			Trigger2X(FP, {}, {RotatePlayer({PlayWAVX("staredit\\wav\\BossWin.ogg"),PlayWAVX("staredit\\wav\\BossWin.ogg"),PlayWAVX("staredit\\wav\\BossWin.ogg"),PlayWAVX("staredit\\wav\\BossWin.ogg"),}, HumanPlayers, FP)},{preserved})
 
 
@@ -1470,18 +1509,35 @@ end
 			CIfEnd()
 			CForEnd()
 		CIfEnd()
-		
-		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 0),Bring(P8, AtMost, 0, 74, 26)}, {Gun_SetLine(8, SetTo, 1),Gun_SetLine(7,SetTo,0)})
-			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Kazansky","Schezar"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
-			G_CB_TSetSpawn({CD(GMode,1)}, {"Kazansky","Schezar"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
-		CIfEnd()
-		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 1)}, {Gun_SetLine(8, SetTo, 2),Gun_SetLine(7,SetTo,0)})
-			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Artanis","Fenix Z"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
-			G_CB_TSetSpawn({CD(GMode,1)}, {"Artanis","Fenix Z"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
-		CIfEnd()
-		CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 2)}, {KillUnit(217, Force2),Gun_DoSuspend(),Gun_SetLine(7,SetTo,0)})
-			G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
-		CIfEnd()
+		if DLC_Project == 1 then
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 0),Bring(P8, AtMost, 0, 74, 26)}, {Gun_SetLine(8, SetTo, 1),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,3)}, {"Merry","Shirley House"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,2)}, {"Kazansky","Schezar"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,1)}, {"Kazansky","Schezar"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 1)}, {Gun_SetLine(8, SetTo, 2),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,3)}, {"Lizzet","Freyja"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,2)}, {"Artanis","Fenix Z"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,1)}, {"Artanis","Fenix Z"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 2)}, {KillUnit(217, Force2),Gun_DoSuspend(),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,2)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,3)}, {13,"Identity"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+	--
+		else
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 0),Bring(P8, AtMost, 0, 74, 26)}, {Gun_SetLine(8, SetTo, 1),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Kazansky","Schezar"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,1)}, {"Kazansky","Schezar"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 1)}, {Gun_SetLine(8, SetTo, 2),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {"Artanis","Fenix Z"},CellMShapeSC,nil,{OwnerTable=P6,CenterXY={0,0}})
+				G_CB_TSetSpawn({CD(GMode,1)}, {"Artanis","Fenix Z"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+			CIfOnce(FP, {Gun_Line(7, AtLeast, 240),Gun_Line(8, Exactly, 2)}, {KillUnit(217, Force2),Gun_DoSuspend(),Gun_SetLine(7,SetTo,0)})
+				G_CB_TSetSpawn({CD(GMode,2,AtLeast)}, {13,"Identity"},CellMShape,nil,{OwnerTable=P6,CenterXY={0,0}})
+			CIfEnd()
+		end
 --
 	CIfEnd()
 	CIf_GCase(256,1)--강제입력된 콜
@@ -1507,6 +1563,7 @@ end
 		ObEff1(1760,400)
 	CIfEnd()
 	CIf(FP,(CD(GMode,3)))
+
 		f_Lengthdir(FP, _Sub(_Mov(3800/8),_Div(Var_TempTable[9],8)), _Mul(Var_TempTable[8],2), CPosX, CPosY)
 		f_Div(FP,CPosY,2)
 		Simple_SetLocX(FP, 199, _Add(CPosX,Var_TempTable[2]), _Add(CPosY,Var_TempTable[3]), _Add(CPosX,Var_TempTable[2]), _Add(CPosY,Var_TempTable[3]), Simple_CalcLoc(199, -4, -4, 4, 4))
@@ -1515,7 +1572,12 @@ end
 		f_Div(FP,CPosY,2)
 		Simple_SetLocX(FP, 199, _Add(CPosX,Var_TempTable[2]), _Add(CPosY,Var_TempTable[3]), _Add(CPosX,Var_TempTable[2]), _Add(CPosY,Var_TempTable[3]), Simple_CalcLoc(199, -4, -4, 4, 4))
 		DoActions(FP,{CreateUnit(1, 94, 200, P6)})
-		CIfEnd()
+		if DLC_Project == 1 then
+			ObEff1(1024,7568)
+		end
+
+
+	CIfEnd()
 
 
 		--GNm(숫자)
@@ -1537,14 +1599,14 @@ end
 				G_CB_TSetSpawn({}, {94}, {WarpZ}, nil, {OwnerTable=P6,LMTable=WarpZ[1]/40,SizeTable={40},CenterXY={1760,400}})
 
 				function WaveGM2(GNum,ACUTable,GCUTable)
-					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, {CallStarS}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={256,400}})
-					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, {CallStarS}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1760,400}})
-					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, {CallStarSFL}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={256,400}})
-					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, {CallStarSFL}, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1760,400}})
+					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, CallStarS, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={256,400}})
+					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, CallStarS, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1760,400}})
+					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, CallStarSFL, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={256,400}})
+					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, CallStarSFL, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1760,400}})
 				end
 				function WaveGM3(GNum,ACUTable,GCUTable)
 					G_CB_TSetSpawn({GNm(GNum)}, ACUTable, CallStarL, nil, {OwnerTable=P6,LMTable="MAX"})
-					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, {CallStarLFL}, nil, {OwnerTable=P6,LMTable="MAX"})
+					G_CB_TSetSpawn({GNm(GNum)}, GCUTable, CallStarLFL, nil, {OwnerTable=P6,LMTable="MAX"})
 				end
 				WaveGM2(1,{43},{37,38})
 				WaveGM2(2,{44},{39,46})
@@ -1608,6 +1670,44 @@ end
 				WaveGM3(19,{"Zero"},{"Destroy"})
 				WaveGM3(20,{"EL FAIL"},{"DIEIN"})
 				WaveGM3(21,{"LENA"},{"EL CLEAR"})
+
+
+				if DLC_Project == 1 then
+				function WaveGM4(GNum,CUTable1,CUTable2,CUTable3,CUTable4)
+					G_CB_TSetSpawn({GNm(GNum)}, CUTable1, RBLine, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1024,7568}})
+					G_CB_TSetSpawn({GNm(GNum)}, CUTable2, RBFill, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1024,7568}})
+					G_CB_TSetSpawn({GNm(GNum)}, CUTable3, RBC, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1024,7568}})
+					G_CB_TSetSpawn({GNm(GNum)}, CUTable4, CallStarL, nil, {OwnerTable=P6,LMTable="MAX",CenterXY={1024,7568}})
+					
+				end
+				G_CB_TSetSpawn({}, {94}, {WarpZ}, nil, {OwnerTable=P6,LMTable=WarpZ[1]/40,CenterXY={1024,7568}})
+				WaveGM4(1,{38},{41},{43},{37,38})
+				WaveGM4(2,{53},{54},{44},{39,46})
+				WaveGM4(3,{46},{48},{55},{54,53})
+				WaveGM4(4,{104},{50},{56},{48,51})
+				WaveGM4(5,{78},{77},{88},{104,51})
+				WaveGM4(6,{17},{19},{21},{50,51})
+				WaveGM4(7,{25},{81},{28},{17,19})
+				WaveGM4(8,{79},{83},{86},{77,78})
+				WaveGM4(9,{98},{95},{84},{75,76})
+				WaveGM4(10,{5},{93},{98},{81})
+				WaveGM4(11,{2},{34},{58},{83})
+				WaveGM4(12,{3},{65},{80},{93})
+				WaveGM4(13,{52},{66},{29},{34})
+				WaveGM4(14,{70},{7},{7},{65})
+				WaveGM4(15,{57},{40},{60},{40})
+				WaveGM4(16,{62},{87},{70},{87})
+				WaveGM4(17,{60},{64},{62},{74})
+				WaveGM4(18,{"Division"},{"DeathsX"},{7},{65})
+				WaveGM4(19,{"Zero"},{"Destroy"},{60},{40})
+				WaveGM4(20,{"EL FAIL"},{"DIEIN"},{70},{87})
+				WaveGM4(21,{"LENA"},{"EL CLEAR"},{62},{74})
+				--RBLine
+				--RBFill
+				--RBC
+			end
+
+
 			CIfEnd()
 		CIfEnd()
 	CIfEnd()
@@ -1617,11 +1717,14 @@ end
 	function PSIGunUID(GenNum,CUT)
 		if DLC_Project == 1 then
 			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,1)}, {CUT[1]}, {PSILHD1}, 1, {OwnerTable=P6,RepeatType={"Patrol_Gun"}})
-			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,2,AtLeast)}, {CUT[1]}, {PSILSC1}, 1, {OwnerTable=P6,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,2)}, {CUT[1]}, {PSILSC1}, 1, {OwnerTable=P6,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,3)}, {CUT[1]}, {PSILSC1}, 1, {OwnerTable=P6,RepeatType=187})
 			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,1)}, {CUT[2]}, {PSICHD1}, 1, {OwnerTable=P7,RepeatType={"Patrol_Gun"}})
-			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,2,AtLeast)}, {CUT[2]}, {PSICSC1}, 1, {OwnerTable=P7,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,2)}, {CUT[2]}, {PSICSC1}, 1, {OwnerTable=P7,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+120),CD(GMode,3)}, {CUT[2]}, {PSICSC1}, 1, {OwnerTable=P7,RepeatType=187})
 			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,1)}, {CUT[3]}, {PSISHD1}, 1, {OwnerTable=P8,RepeatType={"Patrol_Gun"}})
-			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,2,AtLeast)}, {CUT[3]}, {PSISSC1}, 1, {OwnerTable=P8,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,2)}, {CUT[3]}, {PSISSC1}, 1, {OwnerTable=P8,RepeatType={"Patrol_Gun"}})
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+240),CD(GMode,3)}, {CUT[3]}, {PSISSC1}, 1, {OwnerTable=P8,RepeatType=187})
 		else
 			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,1)}, {CUT[1]}, {PSILHD1}, 1, {OwnerTable=P6,RepeatType={"Attack_Gun"}})
 			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(GenNum*360)+0),CD(GMode,2,AtLeast)}, {CUT[1]}, {PSILSC1}, 1, {OwnerTable=P6,RepeatType={"Attack_Gun"}})
@@ -1674,25 +1777,34 @@ end
 	
 	
 	CIf_GCase(175)
-	function LDSetSpawn(SNm,CUTable)
+	function LDSetSpawn(SNm,CUTable,CUTable_DLC)
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(SNm*480)),CD(GMode,1)}, CUTable, LDH, 1, {OwnerTable={P7,P8},LMTable="MAX"})
 		G_CB_TSetSpawn({Gun_Line(7,AtLeast,(SNm*480)),CD(GMode,2,AtLeast)}, CUTable, LD, 1, {OwnerTable={P7,P8},LMTable="MAX"})
+		if DLC_Project == 1 then
+			G_CB_TSetSpawn({Gun_Line(7,AtLeast,(SNm*480)),CD(GMode,3)}, CUTable_DLC, LDH, 1, {OwnerTable={P7,P8},LMTable="MAX"})
+		end
 	end
-	LDSetSpawn(0,{"Lizzet","Yona"})
-	LDSetSpawn(1,{"Rose","Sui"})
-	LDSetSpawn(2,{"Era","Jisoo"})
-	LDSetSpawn(3,{"Sera","Freyja"})
-	LDSetSpawn(4,{"Sena","Sadol"})
+	LDSetSpawn(0,{"Lizzet","Yona"},{102})
+	LDSetSpawn(1,{"Rose","Sui"},{23})
+	LDSetSpawn(2,{"Era","Jisoo"},{27})
+	LDSetSpawn(3,{"Sera","Freyja"},{68})
+	LDSetSpawn(4,{"Sena","Sadol"},{30})
+	
+	
+	
+	
+	
+
 
 	CTrigger(FP,{Gun_Line(7,AtLeast,480*4)},{Gun_DoSuspend()},1)
 	CIfEnd()
 
 	CIf_GCase(147)
-	LDSetSpawn(0,{"Merry","Rophe"})
-	LDSetSpawn(1,{"Norad II","Shirley House"})
-	LDSetSpawn(2,{"Nina","Yuri"})
-	LDSetSpawn(3,{"Sorang","Kamilia"})
-	LDSetSpawn(4,{"Sen","Gaya"})
+	LDSetSpawn(0,{"Merry","Rophe"},{102})
+	LDSetSpawn(1,{"Norad II","Shirley House"},{23})
+	LDSetSpawn(2,{"Nina","Yuri"},{27})
+	LDSetSpawn(3,{"Sorang","Kamilia"},{68})
+	LDSetSpawn(4,{"Sen","Gaya"},{30})
 	CTrigger(FP,{Gun_Line(7,AtLeast,480*4)},{Gun_DoSuspend()},1)
 	CIfEnd()
 	

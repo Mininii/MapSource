@@ -80,10 +80,13 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 		Convert_CPosXY()
 		Simple_SetLocX(FP,71,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(71,-4,-4,4,4)})
 		CIfX(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,203)})
-		if X4_Mode == 1 then
-			CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
-			CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
-			CTrigger(FP,{CVar(FP,RType[2],Exactly,202)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+		if DLC_Project == 1 then
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,200),CD(GMode,2,AtMost)},{Simple_SetLoc(200, 1888, 2928, 1888, 2928),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,201),CD(GMode,2,AtMost)},{Simple_SetLoc(200, 96, 4112, 96, 4112),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,202),CD(GMode,2,AtMost)},{Simple_SetLoc(200, 1024, 7568, 1024, 7568),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,200),CD(GMode,3)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,201),CD(GMode,3)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
+			CTrigger(FP,{CVar(FP,RType[2],Exactly,202),CD(GMode,3)},{TMoveUnit(1,RUID,RPID,72,1)},{preserved})
 		else
 			CTrigger(FP,{CVar(FP,RType[2],Exactly,200)},{Simple_SetLoc(200, 1888, 2928, 1888, 2928),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
 			CTrigger(FP,{CVar(FP,RType[2],Exactly,201)},{Simple_SetLoc(200, 96, 4112, 96, 4112),TMoveUnit(1,RUID,RPID,72,201)},{preserved})
@@ -221,10 +224,26 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				TSetDeaths(_Add(RPtr,22),SetTo,_Add(QueueOX,_Mul(QueueOY,65536)),0),
 			})
 			CIf(FP,{CVar(FP,RType[2],AtLeast,200),CVar(FP,RType[2],AtMost,202)})--fCGive후 타이머 어택
-			f_CGive(FP, RPtr, nil, P9, RPID)
 			
-			if X4_Mode ==1 then
-				CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+			if DLC_Project ==1 then
+				CIf(FP,{CD(GMode,2,AtMost)})
+					f_CGive(FP, RPtr, nil, P9, RPID)
+				CIfEnd()
+				CTrigger(FP,{CD(GMode,2,AtMost)},{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+				TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
+				TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
+				TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
+				Set_EXCC2(UnivCunit, CunitIndex, 5, SetTo, 3);--f_CGive 해제후 공격
+				Set_EXCC2(UnivCunit, CunitIndex, 2, SetTo, 480);
+				Set_EXCC2(UnivCunit, CunitIndex, 8, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
+				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);}
+			,{preserved})
+
+
+				CTrigger(FP,{CD(GMode,3)},{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
 				TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
 				TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
 				--TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
@@ -234,11 +253,10 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 				Set_EXCC2(UnivCunit, CunitIndex, 9, SetTo, 0);
 				Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
 				Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
-				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
-			})
+				Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);},{preserved})
 			else
 				
-			CDoActions(FP, {TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
+			CDoActions(FP,{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000),
 			TSetMemoryX(_Add(RPtr,9),SetTo,0,0xFF0000),
 			TSetMemoryX(_Add(RPtr,72),SetTo,0xFF*256,0xFF00),
 			TSetMemoryX(_Add(RPtr,55),SetTo,0xA00000,0xA00000),
@@ -249,7 +267,7 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			Set_EXCC2(UnivCunit, CunitIndex, 10, SetTo, 0);
 			Set_EXCC2(UnivCunit, CunitIndex, 11, SetTo, 0);
 			Set_EXCC2(UnivCunit, CunitIndex, 12, SetTo, 0);
-		})
+		 })
 			end
 			CIfEnd()
 			CIf(FP,{CV(RType,203)},{TSetMemoryX(_Add(RPtr,55),SetTo,0x4000000,0x4000000)})
@@ -417,6 +435,8 @@ CIf(FP,{TMemoryX(_Add(RPtr,40),AtLeast,150*16777216,0xFF000000)})
 			CDoActions(FP, {
 				Set_EXCC2(DUnitCalc, CunitIndex, 1, SetTo, 1);
 			})
+			CElseIfX_AddRepeatType(218,"MAXHP")
+			CDoActions(FP,{TSetMemory(_Add(RPtr,2), SetTo, 8380000*256)})
 			CElseIfX(CVar(FP,RType[2],Exactly,2))
 			CElseX()
 				DoActions(FP,RotatePlayer({DisplayTextX("\x07『 \x08ERROR : \x04잘못된 RepeatType이 입력되었습니다! 스크린샷으로 제작자에게 제보해주세요!\x07 』",4),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav"),PlayWAVX("sound\\Misc\\Buzz.wav")},HumanPlayers,FP))

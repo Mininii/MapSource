@@ -322,8 +322,10 @@ function CreateUnitQueue()
 		TSetMemory(_Add(QueueUID,EPDF(0x662860)) ,SetTo,1+65536),
 	})
 		TriggerX(FP,{CVar(FP,QueuePID[2],Exactly,0xFFFFFFFF)},{SetCVar(FP,QueuePID[2],SetTo,7)},{preserved})
+		TriggerX(FP,{CV(QueueType,129),CV(QueueUID,68)},{SetMemoryX(0x664080 + (68*4),SetTo,4,4),SetMemoryB(0x663150 + (68),SetTo,12)},{preserved})
 		CTrigger(FP,{TTCVar(FP,QueueType[2],NotSame,2)},{TCreateUnitWithProperties(1,QueueUID,1,QueuePID,{energy = 100})},1,LocIndex)
         CTrigger(FP,{CVar(FP,QueueType[2],Exactly,2)},{TCreateUnitWithProperties(1,QueueUID,1,QueuePID,{energy = 100, burrowed = true})},1,LocIndex+1)
+		TriggerX(FP,{CV(QueueType,129),CV(QueueUID,68)},{SetMemoryX(0x664080 + (68*4),SetTo,0,4),SetMemoryB(0x663150 + (68),SetTo,4)},{preserved})
 	DoActions(FP, {
 		SetMemoryB(0x6644F8+4,SetTo,76),
 		SetMemoryB(0x6644F8+6,SetTo,83),
@@ -354,7 +356,8 @@ function CreateUnitQueue()
 			CMov(FP,RKillScore,0)
 			f_WreadX(FP, 0x663EB8, QueueUID, RKillScore)
 			for j,k in pairs(KillPointArr) do
-				TriggerX(FP, CV(QueueUID,k[1]),AddV(RKillScore,k[2]), {preserved})
+				TriggerX(FP, {CV(QueueUID,k[1]),CD(GMode,2,AtMost)},AddV(RKillScore,k[2]), {preserved})
+				TriggerX(FP, {CV(QueueUID,k[1]),CD(GMode,3)},AddV(RKillScore,k[2]/3), {preserved})
 			end	
 			CAdd(FP,RKillScoreTotal,RKillScore)
 			CIf(FP,{CV(RKillScoreTotal,1000,AtLeast)})
@@ -428,24 +431,24 @@ TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,500,AtLeast)
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,1000,AtLeast)},{AddV(CreateUnitQueuePenaltyT,10)},{preserved})
 TriggerX(FP,{CV(CreateUnitQueuePenaltyLock,0),CV(CreateUnitQueueNum,QueueMaxSize,AtLeast)},{RotatePlayer({Defeat()}, Force1, FP)},{preserved})
 
-if X4_Mode == 1 then
-	CIf(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)})
-	CFor(FP,0,1700,1)
+if DLC_Project == 1 then
+--	CIf(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast),CD(GMode,3)})
+--	CFor(FP,0,1700,1)--
 
-	local NX,NY = CreateVars(2,FP)
-	f_Lengthdir(FP, _Mod(_Rand(), 32*10), _Mod(_Rand(), 360), NX,NY)
-	Simple_SetLocX(FP, 0, NX,NY,NX,NY,{Simple_CalcLoc(0, 1024,1088,1024,1088)})
-	DoActions(FP, {
-		MoveUnit(1, 25, Force2, 39, 1),
-		MoveUnit(1, 30, Force2, 39, 1),})
-	
-	CMov(FP,NX,f_CRandNum(2048-64, 32))
-	CMov(FP,NY,f_CRandNum(2048-64, 32))
-	Simple_SetLocX(FP, 0, NX,NY,NX,NY)
-	DoActions(FP, {MoveUnit(1, "Men", Force2, 39, 1)})
-	CForEnd()
-	DoActions2(FP,{Simple_SetLoc(0, 0, 0, 2048, 2048),Order("Men", Force2, 1, Attack, 6)})
-	CIfEnd()
+--	local NX,NY = CreateVars(2,FP)
+--	f_Lengthdir(FP, _Mod(_Rand(), 32*10), _Mod(_Rand(), 360), NX,NY)
+--	Simple_SetLocX(FP, 0, NX,NY,NX,NY,{Simple_CalcLoc(0, 1024,1088,1024,1088)})
+--	DoActions(FP, {
+--		MoveUnit(1, 25, Force2, 39, 1),
+--		MoveUnit(1, 30, Force2, 39, 1),})
+--	
+--	CMov(FP,NX,f_CRandNum(2048-64, 32))
+--	CMov(FP,NY,f_CRandNum(2048-64, 32))
+--	Simple_SetLocX(FP, 0, NX,NY,NX,NY)
+--	DoActions(FP, {MoveUnit(1, "Men", Force2, 39, 1)})
+--	CForEnd()
+--	DoActions2(FP,{Simple_SetLoc(0, 0, 0, 2048, 2048),Order("Men", Force2, 1, Attack, 6)})
+--	CIfEnd()
 end
 Trigger2X(FP,{CV(CreateUnitQueuePenaltyT,4800,AtLeast)},{RotatePlayer({
 	PlayWAVX("sound\\Bullet\\TNsHit00.wav"),

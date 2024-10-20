@@ -543,7 +543,13 @@ CMov(FP, 0x6509B0, FP)
 			CDoActions(FP, {TOrder(UIDV, PIDV, 1, Attack, 201)})
 		CIfEnd()
 		CIf(FP, {Cond_EXCC(5, Exactly, 3)})--타이머 타입 번호(f_CGive 해제 후 기지공격)
+		if DLC_Project == 1 then
+			CIf(FP,{CD(GMode,2,AtMost)})
 			f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+			CIfEnd()
+		else
+			f_CGive(FP, _Sub(BackupCp,25), nil, P6, PIDV)
+		end
 			local NPosX, NPosY = CreateVars(2, FP)
 			GetLocCenter(5, NPosX, NPosY)
 			SpeedRet = CreateVar(FP)
@@ -681,12 +687,27 @@ CMov(FP, 0x6509B0, FP)
 	
 for i = 0, 4 do
 	CIf(FP,{DeathsX(CurrentPlayer, Exactly, i, 0, 0xFF)},{SetMemory(0x6509B0, Add, 6),})
+	if DLC_Project == 1 then
+		f_SaveCp()
+		f_Read(FP, BackupCp, HeroIndex, nil, 0xFF, 1)
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		CMov(FP,G_CB_X,CPosX)
+		CMov(FP,G_CB_Y,CPosY)
+		f_LoadCp()
+	end
 		
 
 		CIf(FP,{DeathsX(CurrentPlayer, Exactly, 32, 0, 0xFF)},{SetScore(i, Add, 1, Custom)})
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
 		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
+		if DLC_Project == 1 then
+		f_TempRepeat({CD(GMode,3)}, 88, 2, 2, P8)
+		f_TempRepeat({CD(GMode,3)}, 21, 2, 2, P8)
+		end
+		
+
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 마린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
@@ -702,6 +723,14 @@ for i = 0, 4 do
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
 		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
+		if DLC_Project == 1 then
+			f_TempRepeat({CD(GMode,3)}, 88, 1, 2, P8)
+			f_TempRepeat({CD(GMode,3)}, 21, 1, 2, P8)
+			f_TempRepeat({CD(GMode,3)}, 79, 1, 2, P8)
+			f_TempRepeat({CD(GMode,3)}, 95, 1, 2, P8)
+		end
+		
+
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1B영\x04웅 \x1B마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
@@ -716,6 +745,13 @@ for i = 0, 4 do
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
 		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
+		if DLC_Project == 1 then
+		f_TempRepeat({CD(GMode,3)}, 89, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 61, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 63, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 67, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 71, 1, 218, P8)
+		end
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x1F스\x04페셜 \x1F마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
@@ -730,6 +766,17 @@ for i = 0, 4 do
 		f_SaveCp()
 		TriggerX(FP,{CD(SELimit,4,AtMost)}, {AddCD(SELimit,1),RotatePlayer({PlayWAVX("staredit\\wav\\Marinedead.ogg"),PlayWAVX("staredit\\wav\\Marinedead.ogg")},HumanPlayers, FP)},{preserved})
 		CIf(FP,{CD(gMAXCcodeArr[2], 0)})
+		if DLC_Project == 1 then
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		--218
+		f_TempRepeat({CD(GMode,3)}, 89, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 61, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 63, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 67, 1, 218, P8)
+		f_TempRepeat({CD(GMode,3)}, 71, 1, 218, P8)
+		end
+
 		CIfX(FP, {Deaths(i, Exactly, 2, 217)})
 		DisplayPrint(HumanPlayers,{"\x12"..StrD[1]..string.char(ColorCode[i+1]).."名取さな \x04의 \x17리\x04스펙트"..string.char(ColorCode[i+1]).." 마\x04린이 \x08폭사\x04당했어...",StrD[2]})
 		CElseX()
@@ -800,7 +847,7 @@ end
 	CIf(FP,{Cond_EXCC(1,Exactly,1)},SetV(HPT,0)) -- 영작유닛인식
 
 	f_SaveCp()
-	f_Read(FP, BackupCp, HeroIndex, nil, nil, 1)
+	f_Read(FP, BackupCp, HeroIndex, nil, 0xFF, 1)
 	CIf(FP,{CV(HeroIndex,217)})--벽 터진위치에 마인생성
 	f_Read(FP, _Sub(BackupCp,15), CPos)
 	Convert_CPosXY()
@@ -830,6 +877,101 @@ end
 	CIfEnd()
 	f_LoadCp()
 	CIfEnd()
+	if DLC_Project == 1 then
+	CIf(FP,{CD(GMode,3)})
+		f_SaveCp()
+		f_Read(FP, BackupCp, HeroIndex, nil, 0xFF, 1)
+		f_Read(FP, _Sub(BackupCp,15), CPos)
+		Convert_CPosXY()
+		CMov(FP,G_CB_X,CPosX)
+		CMov(FP,G_CB_Y,CPosY)
+		--CenterXY = nil = G_CB_XY
+		
+
+		local GunTable = {CV(HeroIndex,42)}
+		function OtherGunSet(GunID,CUTable,CenterXY)
+			for j,k in pairs(CUTable) do
+				f_TempRepeat({CV(HeroIndex,GunID)}, k[1], k[2], nil, P8, CenterXY)
+			end
+			table.insert(GunTable,CV(HeroIndex,GunID))
+		end
+
+		OtherGunSet(143,{{55,10},{53,10},{54,10},{46,10},{56,10},{104,10},{51,10},{48,10}})
+		OtherGunSet(144,{{55,10},{53,10},{54,10},{46,10},{56,10},{104,10},{51,10},{48,10}})
+		OtherGunSet(146,{{55,10},{53,10},{54,10},{46,10},{56,10},{104,10},{51,10},{48,10}})
+		OtherGunSet(149,{{11,30},{69,30}})
+		OtherGunSet(188,{{11,30},{69,30}})
+		f_TempRepeat({CV(HeroIndex,149)}, 11, 30, 187, P8)
+		f_TempRepeat({CV(HeroIndex,149)}, 69, 30, 187, P8)
+		f_TempRepeat({CV(HeroIndex,188)}, 11, 30, 187, P8)
+		f_TempRepeat({CV(HeroIndex,188)}, 69, 30, 187, P8)
+
+
+		
+
+		OtherGunSet(134,{
+			{40,30},
+			{62,30},
+		})
+		OtherGunSet(112,{
+			{2,30},
+			{7,30},
+		})
+		OtherGunSet(123,{
+			{5,30},
+			{12,30},
+		})
+		OtherGunSet(109,{
+			{60,30},
+			{87,30},
+		})
+		
+		OtherGunSet(135,{
+			{53,30},
+		})
+		OtherGunSet(140,{
+			{48,30},
+		})
+		OtherGunSet(137,{
+			{56,30},
+		})
+		OtherGunSet(141,{
+			{55,30},
+		})
+		OtherGunSet(135,{
+			{53,30},
+		})
+		OtherGunSet(142,{
+			{54,30},
+		})
+		OtherGunSet(136,{
+			{46,30},
+			{50,30},
+		})
+
+		OtherGunSet(139,{
+			{53,30},
+			{54,30},
+		})
+		OtherGunSet(138,{
+			{104,30},
+			{51,30},
+			{45,10},
+		})
+
+
+		CIf(FP,{TTOR(GunTable)}) -- 잡건작 오버로드포함 터질시 날파리 생성
+		f_TempRepeatX({}, 94, 1, nil, P8, {1024,LTime})
+		f_TempRepeatX({}, 62, 1, 187, P8, {1024,LTime})
+		f_TempRepeatX({}, 57, 1, 187, P8, {1024,LTime})
+		f_TempRepeatX({}, 64, 1, 187, P8, {1024,LTime})
+		f_TempRepeatX({}, 70, 1, 187, P8, {1024,LTime})
+		f_TempRepeatX({}, 12, 1, 187, P8, {1024,LTime})
+		f_TempRepeatX({}, 8, 1, 187, P8, {1024,LTime})
+		CIfEnd()
+		f_LoadCp()
+	CIfEnd()
+	end
 
 
 
@@ -856,6 +998,13 @@ end
 	CDoActions(FP,{TSetCDeaths(FP,Subtract,CurSpeed,SETimer)})
 	CMov(FP,GTime,_Div(_Mul(_ReadF(0x57F23C),42),1000))
 	CMov(FP,G_CB_RotateV,_Mul(_Mod(GTime,60),6))
+	local MinMod = CreateVar(FP)
+	CMov(FP,MinMod,_Mod(_Div(MinMod,60),2))
+	CIfX(FP,CV(MinMod,0))
+	CMov(FP,LTime,_Mul(_Mod(GTime,60),136),15)
+	CElseX()
+	CSub(FP,LTime,_Mov(8192),_Add(_Mul(_Mod(GTime,60),136),15))
+	CIfXEnd()
 
 
 	CIf(FP,{CD(GMode,2,AtLeast),Deaths(P8, AtMost, 0, 189)})--콜은 MX난이도이상만 나옴, 워프게이트 깔때까지
@@ -885,6 +1034,10 @@ end
 	f_TempRepeat({}, 94, 1, nil, P6, {288,3792})
 	f_TempRepeat({}, 11, 25, 187, P7, {288,3792})
 	f_TempRepeat({}, 69, 25, 187, P8, {288,3792})
+	if DLC_Project == 1 then
+		f_TempRepeat({CD(GMode,3)}, 11, 25, 187, P7, {288,3792})
+		f_TempRepeat({CD(GMode,3)}, 69, 25, 187, P8, {288,3792})
+	end
 	CIfEnd()
 
 	
