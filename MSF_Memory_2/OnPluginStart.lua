@@ -276,16 +276,16 @@ BossUIDP = {87,74,5,2,64,12,82}
 		
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (MarWep[i]*2),SetTo,MarAtk)) -- 기본공격력
 		table.insert(PatchArr,SetMemoryW(0x657678 + (MarWep[i]*2),SetTo,MarAtkFactor)) -- 추가공격력
-		if RedMode == 1 then
-			PatchInsert(SetMemoryB(0x6566F8+MarWep[i],SetTo,3)) -- 스플타입(일방형)
-			PatchInsert(SetMemoryW(0x656888+(MarWep[i]*2),SetTo,20)) --스플 안
-			PatchInsert(SetMemoryW(0x6570C8+(MarWep[i]*2),SetTo,20)) --스플 중
-			PatchInsert(SetMemoryW(0x657780+(MarWep[i]*2),SetTo,20)) --스플 밖
-			PatchInsert(SetMemoryB(0x6566F8+123,SetTo,3)) -- 스플타입(일방형)
-			PatchInsert(SetMemoryW(0x656888+(123*2),SetTo,20)) --스플 안
-			PatchInsert(SetMemoryW(0x6570C8+(123*2),SetTo,20)) --스플 중
-			PatchInsert(SetMemoryW(0x657780+(123*2),SetTo,20)) --스플 밖
-		end
+		--if RedMode == 1 then
+		--	PatchInsert(SetMemoryB(0x6566F8+MarWep[i],SetTo,3)) -- 스플타입(일방형)
+		--	PatchInsert(SetMemoryW(0x656888+(MarWep[i]*2),SetTo,20)) --스플 안
+		--	PatchInsert(SetMemoryW(0x6570C8+(MarWep[i]*2),SetTo,20)) --스플 중
+		--	PatchInsert(SetMemoryW(0x657780+(MarWep[i]*2),SetTo,20)) --스플 밖
+		--	PatchInsert(SetMemoryB(0x6566F8+123,SetTo,3)) -- 스플타입(일방형)
+		--	PatchInsert(SetMemoryW(0x656888+(123*2),SetTo,20)) --스플 안
+		--	PatchInsert(SetMemoryW(0x6570C8+(123*2),SetTo,20)) --스플 중
+		--	PatchInsert(SetMemoryW(0x657780+(123*2),SetTo,20)) --스플 밖
+		--end
 
 
 		table.insert(PatchArr,SetMemoryW(0x656EB0 + (123*2),SetTo,MarAtk2)) -- 기본공격력

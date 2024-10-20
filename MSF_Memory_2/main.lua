@@ -38,24 +38,24 @@ end
 --tttt = "a"
 --PushErrorMsg(""..string.byte(ttt, 1, 1).." "..string.byte(ttt, 2, 2).." "..string.byte(ttt, 3, 3).." "..string.byte(tttt, 1, 1))
 TestSet(0)
-	EVFFlag = 1
+	EVFFlag = 0
 	AxiomSet = 0
 	EternalTestMode = 0
-	GBossTestMode = 1
+	GBossTestMode = 0
 	AtkSpeedMode = 0
 if Limit == 1 then
 	EVFFlag = 1
-	AtkSpeedMode = 0
+	AtkSpeedMode = 1
 	CheatEnableFlag = 1
 	TheoristTestMode = 0
 	GBossTestMode = 1
 	EEggTestNum = 0
 	AxiomSet = 0
 else
-	CheatEnableFlag = 1
-	EVFFlag = 1
+	CheatEnableFlag = 0
+	EVFFlag = 0
 end
-RedMode = 0
+RedMode = 1
 if RedMode == 1 then
 	VerText = "\x04Ver. 0.ZHR"
 else
@@ -72,6 +72,8 @@ SetFixedPlayer(FP)
 Enable_HumanCheck()
 Trigger2(FP,{HumanCheck(0,0),HumanCheck(1,0),HumanCheck(2,0),HumanCheck(3,0)},{RotatePlayer({Defeat()},{P5,P6,P7,P8},FP)})
 StartCtrig(1,FP,nil,1,"C:\\Temp")
+STRxIn(AllPlayers)
+
 DP_Start_init(FP,nil,0x4000, 0x6000)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
@@ -120,6 +122,7 @@ CIfEnd()
 NoAirCollisionX(FP)
 --Enable_HideErrorMessage(FP)
 init_Setting()
+STRxOut(AllPlayers)
 EndCtrig()
 LabelUseCheck()
 ErrorCheck()

@@ -396,13 +396,13 @@ TriggerX(FP,{Command(FP,AtMost,0,190)},{SetCVar(FP,SpeedVar[2],SetTo,4)})
 
 
 local Ax3Jump = def_sIndex()
+if AxiomSet == 0 then
+	NJumpX(FP, Ax3Jump, {Always()})
+end
 NJumpX(FP, Ax3Jump, {Command(P7, AtMost, 0, 189)})
 NJumpX(FP, Ax3Jump, {CD(AxiomFailCcode[3],1)})
 NJumpX(FP, Ax3Jump, {CD(Theorist,0)})
 NJumpX(FP, Ax3Jump, {CD(AxiomCcode[3],1)})
-if AxiomSet == 0 then
-	NJumpX(FP, Ax3Jump, {Always()})
-end
 local Ax3 = CreateCcode()
 for i = 0,3 do
 	Trigger2X(FP,{Bring(P7,AtLeast,1,60,32+i)},{SetCD(Ax3, 1)})

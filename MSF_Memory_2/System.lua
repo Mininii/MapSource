@@ -250,15 +250,15 @@ HPRegenTable = {64}
 		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,150*16777216,0,0xFF000000)})
 			CDoActions(FP,{
 				SetMemory(0x6509B0,Subtract,17),
-				SetDeaths(CurrentPlayer,SetTo,0,0),
+				SetDeaths(CurrentPlayer,SetTo,0,0),--23
 				SetMemory(0x6509B0,Subtract,4),
-				SetDeathsX(CurrentPlayer,SetTo,6*256,0,0xFF00),
+				SetDeathsX(CurrentPlayer,SetTo,6*256,0,0xFF00),--19
 				SetMemory(0x6509B0,Subtract,15),
-				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),--4
 				SetMemory(0x6509B0,Add,2),
-				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),--6
 				SetMemory(0x6509B0,Add,16),
-				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),
+				TSetDeaths(CurrentPlayer,SetTo,EXCC_TempVarArr[1],0),--22
 			})
 		CIfEnd()
 	CElseIfX({DeathsX(CurrentPlayer,Exactly,94,0,0xFF)},{SetMemory(0x6509B0,Subtract,23),SetDeaths(CurrentPlayer,Subtract,256,0)})
@@ -1537,4 +1537,6 @@ NJumpEnd(FP,HeroJump)
 CIfEnd()
 CForEnd()
 CIfEnd()
+Trigger2(FP,{Command(P7,AtLeast,100,42)},{KillUnitAt(1, 42, 64, P7)},{preserved})
+Trigger2(FP,{Command(FP,AtLeast,100,42)},{KillUnitAt(1, 42, 64, FP)},{preserved})
 end
