@@ -877,13 +877,8 @@ DoActions(FP,{
 
 
 		for j,k in pairs(KillPointArr) do
-			if DLC_Project == 1 then
-				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1]),CD(GMode,2,AtMost)}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
-				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1]),CD(GMode,3)}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2]/3, Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(math.floor(k[2]//3)).." \x03Ｐｔｓ"), 4)},{preserved})
-			else
-				TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
-			end
-					end
+			TriggerX(i, {Deaths(P8, AtMost, 0, 189),Kills(i, AtLeast, 1, k[1])}, {SetKills(i, Subtract, 1, k[1]),SetScore(i, Add, k[2], Kills),PlayWAV("staredit\\wav\\Herokill.ogg"),DisplayText(StrDesignX(k[3].."\x07개인 처치 보상 \x04: \x1F＋ "..N_to_EmN(k[2]).." \x03Ｐｔｓ"), 4)},{preserved})
+		end
 		Trigger2X(i,{Kills(i,AtLeast,1,176)},{SetKills(i,Subtract,1,176),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,177)},{SetKills(i,Subtract,1,177),SetScore(i,Add,150000,Kills)},{preserved})
 		Trigger2X(i,{Kills(i,AtLeast,1,178)},{SetKills(i,Subtract,1,178),SetScore(i,Add,150000,Kills)},{preserved})

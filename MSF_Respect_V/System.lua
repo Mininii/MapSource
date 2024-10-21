@@ -585,7 +585,14 @@ CMov(FP, 0x6509B0, FP)
 			})
 		CIfXEnd()
 
-
+		if DLC_Project == 1 then
+			CIf(FP,{CD(GMode,3)})--DLC SC 에너미스톰 유닛 이동속도 파리급으로 상향
+			CDoActions(FP, {
+				TSetMemory(_Sub(BackupCp,25-13),SetTo,8000),
+				TSetMemoryX(_Sub(BackupCp,25-18),SetTo,2000,0xFFFF),TSetMemoryX(_Add(SubUnitPtr,8),SetTo,(127*65536),0xFF0000)
+			})
+			CIfEnd()
+		end
 		CDoActions(FP, {
 		TSetMemoryX(_Add(BackupCp,55-25),SetTo,0,0x4000000),
 		TSetMemoryX(_Add(BackupCp,72-25),SetTo,0*256,0xFF00),

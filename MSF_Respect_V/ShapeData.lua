@@ -429,6 +429,7 @@ CenCross3 = CS_OverlapX(CSMakeLine(4, 128, 0, 1024, 0),CSMakeLine(4, 64, 45, 102
 	RBLineHD = CSMakeStar(4, 135, 64*2, 45, PlotSizeCalc(4*2, 3), PlotSizeCalc(4*2, 2))
 	RBFill = CSMakeStar(4, 135, 192, 45, PlotSizeCalc(4*2, 2), 0)
 	RBFillHD = CSMakeStar(4, 135, 384, 45, PlotSizeCalc(4*2, 1), 0)
+	RBFillX = CSMakeStar(4, 135, 64, 45, PlotSizeCalc(4*2, 6), 0)
 	RBC = CSMakeLine(64, 384, 0, 64+1, 0)
 	RBCHD = CSMakeLine(24, 384, 0, 24+1, 0)
 	

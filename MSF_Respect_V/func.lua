@@ -356,8 +356,7 @@ function CreateUnitQueue()
 			CMov(FP,RKillScore,0)
 			f_WreadX(FP, 0x663EB8, QueueUID, RKillScore)
 			for j,k in pairs(KillPointArr) do
-				TriggerX(FP, {CV(QueueUID,k[1]),CD(GMode,2,AtMost)},AddV(RKillScore,k[2]), {preserved})
-				TriggerX(FP, {CV(QueueUID,k[1]),CD(GMode,3)},AddV(RKillScore,k[2]/3), {preserved})
+				TriggerX(FP, {CV(QueueUID,k[1])},AddV(RKillScore,k[2]), {preserved})
 			end	
 			CAdd(FP,RKillScoreTotal,RKillScore)
 			CIf(FP,{CV(RKillScoreTotal,1000,AtLeast)})

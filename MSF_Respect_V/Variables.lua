@@ -96,7 +96,7 @@
 	UnitHPArr = CreateFArr(1700, FP)
 	if DLC_Project == 1 then 
 		ExRateT = {
-			{20,22,24,27,30},{11,12,13,15,17},{8,9,10,12,14}
+			{20,22,24,27,30},{11,12,13,15,17},{9,10,11,13,14}
 		}
 	else
 		ExRateT = {
@@ -133,7 +133,7 @@
 	EVFCcode = CreateCcode()
 	CTMin = CreateVarArr(7, FP)
 	if DLC_Project == 1 then
-		MarNumberLimit = CreateVar3(FP,900)
+		MarNumberLimit = CreateVar3(FP,1800)
 	else
 		MarNumberLimit = CreateVar3(FP,1800)
 	end
@@ -368,8 +368,11 @@
 	SetUnitAbility(27,70,5,500000,false,30,2100,{30,30,30},1,64,5,500000,"Zero",50000)
 	SetUnitAbility(68,70,5,777777,65535,30,2100,{30,30,30},1,64,4,777777,"Destroy",60000)
 	SetUnitAbility(30,27,5,37,false,75,3737,{15,30,45},1,384,12,96666,"Identity",5000)
-
-
+	
+	
+	
+	
+	
 	
 	SetUnitAbility(89,90,5,3950000,65535,15,2999,false,1,32*9,9,1500000,"EL FAIL",800000)
 	SetUnitAbility(61,111,5,5550000,65535,18,3999,false,1,32*1,1,1900000,"DIEIN",1000000)
