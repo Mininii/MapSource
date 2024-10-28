@@ -820,25 +820,6 @@ end
 
 
 
-function print_utf8_A(DB, string)
-	local ret = {}
-	
-	if type(string) == "string" then
-		local str = string
-		local n = 1
-		if #str % 4 >= 1 then
-			for i = 1, #str % 4 do str = '\x0d'..str end
-		end
-		local t = StrToMem(str)
-		while n <= #t do
-			ret[#ret+1] = SetCtrig1X(FP,DB[2],(((n-1)//4)+(math.floor(((n-1)//4)/602))*2)*4,0, SetTo, _dw(t, n))
-			n = n + 4
-		end
-	elseif type(string) == "number" then
-		PushErrorMsg("print_utf8_InputError")
-	end
-	return ret
-end
 
 
 	
