@@ -6,7 +6,7 @@ import math
 
 def Exec_OggFile():
 	#BGM
-	BGMArr = ["yodelsong.ogg","happy.ogg","_Hong.ogg","Lethal_Icecream.ogg","Bombyanggang.ogg","fakeqt.ogg","MaraTangFuru.ogg","UnwelcomeSchool.ogg","__CIPI1.ogg","Damedane.ogg","00.ogg","_DDING1.ogg","lolikami_cut.ogg","Toka.ogg","Nyancat.ogg","nodap.ogg"]
+	BGMArr = ["yodelsong.ogg","happy.ogg","_Hong.ogg","Lethal_Icecream.ogg","Bombyanggang.ogg","fakeqt.ogg","MaraTangFuru.ogg","UnwelcomeSchool.ogg","__CIPI1.ogg","Damedane.ogg","00.ogg","_DDING1.ogg","lolikami_cut.ogg","Toka.ogg","Nyancat.ogg","nodap.ogg","bling.ogg"]
 	for i in BGMArr:
 		MPQAddFile('staredit\\wav\\'+i, open('C:/euddraft0.9.2.0/MEME_EUD_BGM/'+i, 'rb').read())
 	#SE

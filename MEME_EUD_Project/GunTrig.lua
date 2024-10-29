@@ -17,6 +17,8 @@ function GunTrig()
 		{13,"staredit\\wav\\Toka.ogg",16*1000},
 		{14,"staredit\\wav\\Nyancat.ogg",31*1000},
 		{15,"staredit\\wav\\nodap.ogg",55*1000},
+		{16,"staredit\\wav\\bling.ogg",55*1000},
+		
 		
 		
 	})
@@ -1173,7 +1175,7 @@ end
 
 CIfEnd()
 
-ICDC = CIf_GunTrig(P8, "Ion Cannon", "ICD",35000//0x1D,15);
+ICDC = CIf_GunTrig(P8, "Ion Cannon", "ICD",(55380+5000)//0x1D,15);
 ICDC_Sh1 = CSMakeCircle(99, 1024, 0, 100, 1)
 ICDC_Sh2 = CSMakeCircle(49, 1024+512, 0, 50, 1)
 G_CB_TScanEff({CD(GunTrigGCcode,0,AtLeast)}, {ICDC_Sh1}, "HZ", 391,1)
@@ -1188,16 +1190,3723 @@ G_CB_TSetSpawn({CD(GunTrigGCcode,18460//0x1D,AtLeast)},{"Norad II (Battlecruiser
 for i = 0,15 do
 	G_CB_TScanEff({CD(GunTrigGCcode,(24000//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},10)
 	G_CB_TSetSpawn({CD(GunTrigGCcode,25840//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
+	G_CB_TScanEff({CD(GunTrigGCcode,(31380//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},15)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,33230//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
+	G_CB_TScanEff({CD(GunTrigGCcode,(38760//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},0)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,40610//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
+	G_CB_TScanEff({CD(GunTrigGCcode,(46150//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},13)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,48000//0x1D,AtLeast)},{"Edmund Duke (Siege Mode)"},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
+	G_CB_TScanEff({CD(GunTrigGCcode,(51690//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},16)
+	G_CB_TScanEff({CD(GunTrigGCcode,(52610//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},16)
+	G_CB_TScanEff({CD(GunTrigGCcode,(53530//0x1D)+i,AtLeast)}, {CD218Sh_2}, "HZ", 391,1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)},17)
+	G_CB_TSetSpawn({CD(GunTrigGCcode,55380//0x1D,AtLeast)},{30},CD218Sh_2,P8,"HZ",1,{LMTable="MAX",RotateTable = i*16,SizeTable=100-(i*6)})
 end
-
 TriggerX(FP,{CD(GunTrigGCcode,0,AtLeast)},{RotatePlayer({RunAIScript("Turn ON Shared Vision for Player 8");}, Force1, FP)})
 TriggerX(FP,{CD(GunTrigGCcode,25840//0x1D,AtLeast)},{RotatePlayer({RunAIScript("Turn OFF Shared Vision for Player 8");}, Force1, FP)})
 
 
 
 CIfEnd()
+CD48 = CIf_GunTrig(P8, "Zerg Overmind (With Shell)", "CD48",90000//0x1D,16);
+
+CD48Sh_1 = CS_FillPathXY({4   ,{1056, 928},{608, 1184},{192, 928},{608, 704}}, 1, 64, 32, 0)
+CD48Sh_2 = CS_FillPathXY({4   ,{1056, 928},{608, 1184},{192, 928},{608, 704}}, 1, 96, 64, 0)
+
+
+CIfEnd()
 --[[
 
+Trigger { -- ZO(WS)D
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Covert Ops");
+		Comment("ZO(WS)D");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Physics Lab");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Command Center");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Missile Turret");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Comsat Station");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Terran Engineering Bay");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Zerg Hydralisk Den");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger { -- ZO(WS)D1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+	},
+	actions = {
+		PreserveTrigger();
+		SetDeaths(P6, Add, 1, "Zerg Queen's Nest");
+		Comment("ZO(WS)D1");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 90, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 240, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 390, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 590, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 790, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Stasis Cell/Prison", "CD28");
+		Deaths(P6, AtLeast, 940, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Terran Dropship", "CD28", P8);
+		CreateUnit(16, "Terran Dropship", "CD29", P8);
+		CreateUnit(16, "Terran Dropship", "CD48", P8);
+		KillUnit("Terran Dropship", P8);
+	},
+}
+
+
+Trigger { -- ZO(WS)
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 100, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(24, "Fenix (Zealot)", "CD28", P8);
+		CreateUnit(24, "Fenix (Dragoon)", "CD28", P8);
+		CreateUnit(12, "Mojo (Scout)", "CD28", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD28", P8);
+		Order("Fenix (Zealot)", P8, "CD28", Patrol, "CD29");
+		Order("Fenix (Dragoon)", P8, "CD28", Patrol, "CD29");
+		Order("Mojo (Scout)", P8, "CD28", Attack, "CD29");
+		Order("Gantrithor (Carrier)", P8, "CD28", Attack, "CD29");
+		Comment("ZO(WS)");
+	},
+}
+
+
+Trigger { -- ZO(WS)
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 250, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(16, "Edmund Duke (Siege Mode)", "CD28", P8);
+		CreateUnit(12, "Alan Schezar (Goliath)", "CD28", P8);
+		CreateUnit(14, "Tom Kazansky (Wraith)", "CD28", P8);
+		CreateUnit(10, "Danimoth (Arbiter)", "CD28", P8);
+		Order("Alan Schezar (Goliath)", P8, "CD28", Patrol, "CD29");
+		Order("Tom Kazansky (Wraith)", P8, "CD28", Attack, "CD29");
+		Order("Danimoth (Arbiter)", P8, "CD28", Attack, "CD29");
+		Comment("ZO(WS)");
+	},
+}
+
+
+Trigger { -- ZO(WS)
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 400, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(20, "Tassadar/Zeratul (Archon)", "CD28", P8);
+		CreateUnit(14, "Gui Montag (Firebat)", "CD28", P8);
+		CreateUnit(12, "Hyperion (Battlecruiser)", "CD28", P8);
+		Order("Tassadar/Zeratul (Archon)", P8, "CD28", Patrol, "CD29");
+		Order("Gui Montag (Firebat)", P8, "CD28", Patrol, "CD29");
+		Order("Hyperion (Battlecruiser)", P8, "CD28", Attack, "CD29");
+		Comment("ZO(WS)");
+	},
+}
+
+
+Trigger { -- ZO(WS)
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 600, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(20, "Zeratul (Dark Templar)", "CD28", P8);
+		CreateUnit(14, "Edmund Duke (Siege Tank)", "CD28", P8);
+		CreateUnit(20, "Tom Kazansky (Wraith)", "CD28", P8);
+		Order("Zeratul (Dark Templar)", P8, "CD28", Patrol, "CD29");
+		Order("Tom Kazansky (Wraith)", P8, "CD28", Attack, "CD29");
+		Comment("ZO(WS)");
+	},
+}
+
+
+Trigger { -- ZO(WS)
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 800, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(40, "Edmund Duke (Siege Mode)", "CD28", P8);
+		Comment("ZO(WS)");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 950, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(15, "Zerg Broodling", "CD28", P8);
+		CreateUnit(6, "Danimoth (Arbiter)", "CD28", P8);
+		CreateUnit(4, "Norad II (Battlecruiser)", "CD28", P8);
+		Order("Zerg Broodling", P8, "CD28", Attack, "CD29");
+		Order("Danimoth (Arbiter)", P8, "CD28", Attack, "CD29");
+		Order("Norad II (Battlecruiser)", P8, "CD28", Attack, "CD29");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 1100, "Terran Covert Ops");
+	},
+	actions = {
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD28", P8);
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD28", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD28", P8);
+		Order("Gantrithor (Carrier)", P8, "CD28", Attack, "CD29");
+		Order("Infested Kerrigan (Infested Terran)", P8, "CD28", Attack, "CD29");
+		Order("Infested Kerrigan (Infested Terran)", P8, "CD28", Attack, "CD29");
+	},
+}
+
+
+Trigger { -- ZO(WS)1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+		Deaths(P6, AtLeast, 100, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(24, "Fenix (Zealot)", "CD29", P8);
+		CreateUnit(24, "Fenix (Dragoon)", "CD29", P8);
+		CreateUnit(12, "Mojo (Scout)", "CD29", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD29", P8);
+		CreateUnit(24, "Fenix (Zealot)", "CD48", P8);
+		CreateUnit(24, "Fenix (Dragoon)", "CD48", P8);
+		CreateUnit(12, "Mojo (Scout)", "CD48", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD48", P8);
+		Order("Fenix (Zealot)", P8, "CD29", Patrol, "CD28");
+		Order("Fenix (Dragoon)", P8, "CD29", Patrol, "CD28");
+		Order("Mojo (Scout)", P8, "CD29", Attack, "CD28");
+		Order("Gantrithor (Carrier)", P8, "CD29", Attack, "CD28");
+		Comment("ZO(WS)1");
+	},
+}
+
+
+Trigger { -- ZO(WS)1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+		Deaths(P6, AtLeast, 250, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(16, "Edmund Duke (Siege Mode)", "CD29", P8);
+		CreateUnit(12, "Alan Schezar (Goliath)", "CD29", P8);
+		CreateUnit(14, "Tom Kazansky (Wraith)", "CD29", P8);
+		CreateUnit(10, "Danimoth (Arbiter)", "CD29", P8);
+		CreateUnit(16, "Edmund Duke (Siege Mode)", "CD48", P8);
+		CreateUnit(12, "Alan Schezar (Goliath)", "CD48", P8);
+		CreateUnit(14, "Tom Kazansky (Wraith)", "CD48", P8);
+		CreateUnit(10, "Danimoth (Arbiter)", "CD48", P8);
+		Order("Alan Schezar (Goliath)", P8, "CD29", Patrol, "CD28");
+		Order("Tom Kazansky (Wraith)", P8, "CD29", Attack, "CD28");
+		Order("Rhynadon (Badlands)", P8, "CD29", Attack, "CD28");
+		Comment("ZO(WS)1");
+	},
+}
+
+
+Trigger { -- ZO(WS)1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+		Deaths(P6, AtLeast, 400, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(20, "Tassadar/Zeratul (Archon)", "CD29", P8);
+		CreateUnit(14, "Gui Montag (Firebat)", "CD29", P8);
+		CreateUnit(13, "Hyperion (Battlecruiser)", "CD29", P8);
+		CreateUnit(20, "Tassadar/Zeratul (Archon)", "CD48", P8);
+		CreateUnit(14, "Gui Montag (Firebat)", "CD48", P8);
+		CreateUnit(13, "Hyperion (Battlecruiser)", "CD48", P8);
+		Order("Tassadar/Zeratul (Archon)", P8, "CD29", Patrol, "CD28");
+		Order("Gui Montag (Firebat)", P8, "CD29", Patrol, "CD28");
+		Order("Hyperion (Battlecruiser)", P8, "CD29", Attack, "CD28");
+		Comment("ZO(WS)1");
+	},
+}
+
+
+Trigger { -- ZO(WS)1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+		Deaths(P6, AtLeast, 600, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(20, "Zeratul (Dark Templar)", "CD29", P8);
+		CreateUnit(14, "Edmund Duke (Siege Tank)", "CD29", P8);
+		CreateUnit(20, "Tom Kazansky (Wraith)", "CD29", P8);
+		CreateUnit(20, "Zeratul (Dark Templar)", "CD48", P8);
+		CreateUnit(14, "Edmund Duke (Siege Tank)", "CD48", P8);
+		CreateUnit(20, "Tom Kazansky (Wraith)", "CD48", P8);
+		Order("Zeratul (Dark Templar)", P8, "CD29", Patrol, "CD28");
+		Order("Edmund Duke (Siege Tank)", P8, "CD29", Patrol, "CD28");
+		Order("Tom Kazansky (Wraith)", P8, "CD29", Attack, "CD28");
+		Comment("ZO(WS)1");
+	},
+}
+
+
+Trigger { -- ZO(WS)1
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD29");
+		Deaths(P6, AtLeast, 800, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(40, "Edmund Duke (Siege Mode)", "CD29", P8);
+		CreateUnit(40, "Edmund Duke (Siege Mode)", "CD48", P8);
+		Comment("ZO(WS)1");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 950, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(15, "Zerg Broodling", "CD29", P8);
+		CreateUnit(6, "Danimoth (Arbiter)", "CD29", P8);
+		CreateUnit(4, "Norad II (Battlecruiser)", "CD29", P8);
+		CreateUnit(15, "Zerg Broodling", "CD48", P8);
+		CreateUnit(6, "Danimoth (Arbiter)", "CD48", P8);
+		CreateUnit(4, "Norad II (Battlecruiser)", "CD48", P8);
+		Order("Zerg Broodling", P8, "CD29", Attack, "CD28");
+		Order("Danimoth (Arbiter)", P8, "CD29", Attack, "CD28");
+		Order("Norad II (Battlecruiser)", P8, "CD29", Attack, "CD28");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD28");
+		Deaths(P6, AtLeast, 1100, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD29", P8);
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD29", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD29", P8);
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD48", P8);
+		CreateUnit(3, "Infested Kerrigan (Infested Terran)", "CD48", P8);
+		CreateUnit(10, "Gantrithor (Carrier)", "CD48", P8);
+		Order("Gantrithor (Carrier)", P8, "CD29", Attack, "CD28");
+		Order("Infested Kerrigan (Infested Terran)", P8, "CD29", Attack, "CD28");
+		Order("Infested Kerrigan (Infested Terran)", P8, "CD29", Attack, "CD28");
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 70, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 80, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 90, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 100, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 110, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 120, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 130, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 140, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 150, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 160, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 170, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 180, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 190, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 200, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 210, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 220, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 230, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 240, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 250, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 260, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 270, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 280, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 290, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 300, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 310, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 320, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 330, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 340, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 350, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 360, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 370, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 380, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 390, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 400, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 410, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 420, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 430, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 440, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 450, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 460, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 470, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 480, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 490, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 500, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 510, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 520, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 530, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 540, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 550, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 560, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 570, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 580, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 590, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 600, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 610, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 620, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 630, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 640, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 650, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 660, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 670, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 680, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 690, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 700, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 710, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 720, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 730, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 740, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 750, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 760, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 770, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 780, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 790, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 800, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 810, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 820, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 830, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 840, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 850, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 860, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 870, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 880, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 890, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 900, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 910, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 920, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 930, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 940, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger {
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 950, "Terran Physics Lab");
+	},
+	actions = {
+		CreateUnit(1, "Protoss Observer", "CD43", P8);
+		CreateUnit(1, "Protoss Observer", "CD44", P8);
+		CreateUnit(1, "Protoss Observer", "CD45", P8);
+		CreateUnit(1, "Protoss Observer", "CD46", P8);
+		CreateUnit(1, "Protoss Observer", "CD47", P8);
+		KillUnit("Protoss Observer", P8);
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 85, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 130, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 180, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 230, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 280, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 330, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 380, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 430, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 480, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 530, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 580, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 630, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 680, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 730, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 780, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 830, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 880, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 930, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 980, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1030, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1080, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1130, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1180, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1230, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)2
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1280, "Terran Command Center");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD43", P8);
+		Order("Mojo (Scout)", P8, "CD43", Patrol, "CD48");
+		Comment("ZO(WS)2");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 95, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 140, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 190, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 240, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 290, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 340, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 390, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 440, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 490, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 540, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 590, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 640, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 690, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 740, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 790, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 840, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 890, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 940, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 990, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1040, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1090, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1140, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1190, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1240, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)3
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1290, "Terran Missile Turret");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD44", P8);
+		Order("Mojo (Scout)", P8, "CD44", Patrol, "CD48");
+		Comment("ZO(WS)3");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 105, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 150, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 200, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 250, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 300, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 350, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 400, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 450, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 500, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 550, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 600, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 650, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 700, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 750, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 800, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 850, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 900, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 950, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1000, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1050, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1100, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1150, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1200, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1250, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)4
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1300, "Terran Comsat Station");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD45", P8);
+		Order("Mojo (Scout)", P8, "CD45", Patrol, "CD48");
+		Comment("ZO(WS)4");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 115, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 160, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 210, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 260, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 310, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 360, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 410, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 460, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 510, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 560, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 610, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 660, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 710, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 760, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 810, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 860, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 910, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 960, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1010, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1060, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1110, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1160, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1210, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)5
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1260, "Terran Engineering Bay");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD46", P8);
+		Order("Mojo (Scout)", P8, "CD46", Patrol, "CD48");
+		Comment("ZO(WS)5");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 125, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 170, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 220, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 270, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 320, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 370, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 420, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 470, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 520, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 570, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 620, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 670, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 720, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 770, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 820, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 870, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 920, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 970, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1020, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1070, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1120, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1170, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1220, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
+
+
+Trigger { -- ZO(WS)6
+	players = {P8},
+	conditions = {
+		Bring(P8, Exactly, 0, "Zerg Overmind (With Shell)", "CD48");
+		Deaths(P6, AtLeast, 1270, "Zerg Hydralisk Den");
+	},
+	actions = {
+		CreateUnit(4, "Mojo (Scout)", "CD47", P8);
+		Order("Mojo (Scout)", P8, "CD47", Patrol, "CD48");
+		Comment("ZO(WS)6");
+	},
+}
 
 ]]
 
