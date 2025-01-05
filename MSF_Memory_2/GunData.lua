@@ -1361,7 +1361,7 @@ end
 
 	}
 	
-function CS_RatioXY(FCX,FCY,mulX,idivX,mulY,idivY)
+function CCS_RatioXY(FCX,FCY,mulX,idivX,mulY,idivY)
 	local LX = FCX
 	local LY = FCY
 	if mulX ~= nil then
@@ -2537,7 +2537,7 @@ local Cj = 0
 			local PX = k[1]
 			local PY = k[2]
 			local RX,RY
-			RX,RY = CS_RatioXY(PX,PY,CRat,186000,CRat,186000)
+			RX,RY = CCS_RatioXY(PX,PY,CRat,186000,CRat,186000)
 			RX,RY = CS_Rotate3D(RX,RY,CXY,CYZ,CZX)
 			RX = RX + 2048
 			RY = RY + 2048
