@@ -79,6 +79,8 @@
 		for j,k in pairs(arg) do
 			if type(k) == "function" then
 				k()
+			elseif type(k)=="table" and type(k[1]) == "function" then
+				k[1](k[2])
 			elseif type(k) == "string" then
 				local CT = CreateCText(FP,k)
 				BSize=BSize+CT[2]
