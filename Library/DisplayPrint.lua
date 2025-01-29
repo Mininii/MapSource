@@ -2,45 +2,71 @@
 		
 
 	function DisplayPrintTbl(TBLID,arg)
-		local TBLPtr = CreateVar(FP)
-		f_GetTblptr(FP,TBLPtr,TBLID)
+		
+		TBLPtr = {}
+		if dp.TBLKeyArr[TBLID] == nil then
+			local InputTBLPtr = CreateVar(FP)
+			dp.TBLKeyArr[TBLID] = {InputTBLPtr,TBLID}
+			TBLPtr = dp.TBLKeyArr[TBLID][1]
+		else
+			TBLPtr = dp.TBLKeyArr[TBLID][1]
+
+		end
 		Dev = 0
+
+		
 		for j,k in pairs(arg) do
-
-		if type(k) == "string" then
-			local CT = CreateCText(FP,k)
-
-			f_Memcpy(FP,_Add(TBLPtr,Dev),_TMem(Arr(CT[3],0),"X","X",1),CT[2])
 			
-			Dev=Dev+CT[2]
+			if type(k) == "function" then
+				k()
+			elseif type(k)=="table" and type(k[1]) == "function" then
+				local lfunc = k[1]
+				table.remove(k,1)
+				lfunc(table.unpack(k))
+			elseif type(k) == "string" then
+			local CT = CreateCText(FP,k)
+				f_Memcpy(FP,_Add(TBLPtr,Dev),_TMem(Arr(CT[3],0),"X","X",1),CT[2])
+				Dev=Dev+CT[2]
+			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+				if k[2] == "LocalPlayerID" then
+					f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.LPNameVArr,0),4*5)
+					
+				elseif type(k[2])=="number" then
+					f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.PNameVArrArr[k[2]+1],0),4*5)
+				elseif k[2][4] == "V" then
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CMov(FP,dp.VtoNameV,k[2])
+					CallTrigger(FP, dp.Call_VtoName)
+				end
+				Dev=Dev+(4*5)
+			elseif type(k)=="table" and k[4]=="V" then
 
-		elseif type(k)=="table" and k[4]=="V" then
-
-			if k["fwc"] == true then
-				CMov(FP,dp.publicItoDecV,k)
-				CallTrigger(FP,dp.Call_IToDecX)
+				if k["fwc"] == true then
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDecX)
 				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
-				Dev=Dev+(4*12)
-			elseif k["hex"] == true then
-				CMov(FP,dp.publicItoDecV,k)
-				CallTrigger(FP,dp.Call_ItoHex)
+					Dev=Dev+(4*12)
+				elseif k["hex"] == true then
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_ItoHex)
 				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoHexVArr,0),3*4)
-				Dev=Dev+(3*4)
-			else
-				CMov(FP,dp.publicItoDecV,k)
-				CallTrigger(FP,dp.Call_IToDec)
+					Dev=Dev+(3*4)
+				else
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDec)
 				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArr,0),4*4)
-				Dev=Dev+(4*4)
-			end
-
-
-		elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+					Dev=Dev+(4*4)
+				end
+			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 			CDoActions(FP,{TBwrite(_Add(TBLPtr,Dev),SetTo,V(k))})
-			Dev=Dev+(1)
+				Dev=Dev+(1)
+		end
 		end
 
 
-	end
+		table.insert(dp.TBOLutputTxt,{"TBL - "..TBLID.." : "..string.rep("<0D>",Dev+10).."\n"})
+
+
 	end
 	function DisplayPrint(TargetPlayers,arg,FixTextPreset,SoundRepeat) -- ext text ver
 		if FixTextPreset == 3 or FixTextPreset == 1 then
@@ -80,7 +106,9 @@
 			if type(k) == "function" then
 				k()
 			elseif type(k)=="table" and type(k[1]) == "function" then
-				k[1](k[2])
+				local lfunc = k[1]
+				table.remove(k,1)
+				lfunc(table.unpack(k))
 			elseif type(k) == "string" then
 				local CT = CreateCText(FP,k)
 				BSize=BSize+CT[2]
@@ -242,7 +270,6 @@
 				local Strl = GetStrSize(0,k)
 				if Strl%4~=0 then k=string.rep("\x0D", (4-Strl%4))..k Strl=Strl+(4-Strl%4) end
 				table.insert(RetAct,print_utf8_2(12, Dev, k))
-				
 				Dev=Dev+Strl
 			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 				table.insert(ItoNameKey,{k[2],Dev})
@@ -362,7 +389,8 @@
 		end
 		
 		
-		for k, v in pairs(dp.StrXPatchArr) do -- STRXPtr,Deviation,CTextData
+		
+		for k, v in pairs(dp.StrXPatchArr) do -- STRXPtr,Deviation,CTextData(TBL공용)
 			if v[2]==0 then
 				f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
 			else
@@ -370,8 +398,14 @@
 			end
 		end
 
-		for k, v in pairs(dp.StrXPNameArr) do -- STRXPtr,Deviation,PNameVArr
+		for k, v in pairs(dp.StrXPNameArr) do -- STRXPtr,Deviation,PNameVArr(TBL공용)
 			f_Movcpy(FP,_Add(v[1],v[2]),VArr(v[3],0),4*5)
+		end
+
+		
+		
+		for k, v in pairs(dp.TBLKeyArr) do
+			f_GetTblptr(FP,v[1],v[2])
 		end
 
 	end
@@ -737,7 +771,7 @@
 		SetCallEnd2()
 		
 		SetCall2(FP, dp.Call_IToDecX)
-		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,1)
+		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,0)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_ItoHex)
@@ -916,6 +950,24 @@
 		dp.Call_lIToDec = CreateCallIndex()
 		dp.VtoNamePtr = CreateVar(FP)
 		dp.VtoNameV = CreateVar(FP)
+
+		dp.TBLKeyArr = {}
+		dp.TBLPatchArr = {}
+		dp.TBLPNameArr = {}
+		dp.TBOLutputTxt = {}
+
+	if #dp.TBOLutputTxt~=0 then
+	os.execute("mkdir " .. "DP_TBL")
+	local CSfile = io.open(FileDirectory .. "DP_TBL" .. ".txt", "w")
+	io.output(CSfile)
+	for j,k in pairs(dp.TBOLutputTxt) do
+		io.write(k)
+	end
+	io.close(CSfile)
+	end
+
+
+
 		
 	function _0DPatchforVArr(Player,VArrName,VArrLength) -- CtrigAsm 5.1
 		for j=0, VArrLength do
