@@ -1,7 +1,7 @@
 
 		
 
-	function DisplayPrintTbl(TBLID,arg)
+	function DisplayPrintTbl(TBLID,arg,ResetTimer)
 		
 		TBLPtr = {}
 		if dp.TBLKeyArr[TBLID] == nil then
@@ -13,8 +13,19 @@
 
 		end
 		Dev = 0
-
 		
+		if ResetTimer~=nil then
+			
+			if type(ResetTimer)=="table" and ResetTimer[4]== "V" then
+				CIf(FP,{CV(ResetTimer,0)})
+
+			elseif type(ResetTimer)=="number" then
+				ResetTimerCode = CreateCcode()
+				DoActionsX(FP,{SubCD(ResetTimerCode, 1)})
+				CIf(FP,{CD(ResetTimerCode,0)},{SetCD(ResetTimerCode,ResetTimer)})
+
+			end
+		end
 		for j,k in pairs(arg) do
 			
 			if type(k) == "function" then
@@ -63,12 +74,25 @@
 		end
 		end
 
+		
+		
+		
+		CDoActions(FP,{--끝글자에 UTF8 강제 인코딩 코드 삽입
+			TBwrite(_Add(TBLPtr,Dev),SetTo,0xE2),
+			TBwrite(_Add(TBLPtr,Dev+1),SetTo,0x80),
+			TBwrite(_Add(TBLPtr,Dev+2),SetTo,0x89),
+	}) -- 4+1+#"조" 번글자 색상코드
 
+		
+	if ResetTimer~=nil then
+		CIfEnd()
+
+	end
 		table.insert(dp.TBOLutputTxt,{"TBL - "..TBLID.." : "..string.rep("<0D>",Dev+10).."\n"})
 
 
 	end
-	function DisplayPrint(TargetPlayers,arg,FixTextPreset,SoundRepeat) -- ext text ver
+	function DisplayPrint(TargetPlayers,arg,FixTextPreset,SoundRepeat,ResetTimer) -- ext text ver
 		if FixTextPreset == 3 or FixTextPreset == 1 then
 		local TPArr = {}
 		if type(TargetPlayers) == "number"  then
@@ -100,6 +124,18 @@
 		RetV = CreateVar(FP)
 		Dev = 0
 
+		if ResetTimer~=nil then
+			
+			if type(ResetTimer)=="table" and ResetTimer[4]== "V" then
+				CIf(FP,{CV(ResetTimer,0)})
+
+			elseif type(ResetTimer)=="number" then
+				ResetTimerCode = CreateCcode()
+				DoActionsX(FP,{SubCD(ResetTimerCode, 1)})
+				CIf(FP,{CD(ResetTimerCode,0)},{SetCD(ResetTimerCode,ResetTimer)})
+
+			end
+		end
 		
 		dp.StrXIndex=dp.StrXIndex+1
 		for j,k in pairs(arg) do
@@ -165,6 +201,11 @@
 			else
 				PushErrorMsg("Print_Inputdata_Error")
 			end
+		end
+		
+		if ResetTimer~=nil then
+			CIfEnd()
+
 		end
 		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
 		table.insert(dp.StrXKeyArr,{RetV,StrT})
