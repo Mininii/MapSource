@@ -121,7 +121,6 @@
 		dp.Alloc = dp.Alloc+1
 		RetV = CreateVar(FP)
 		Dev = 0
-		CMov(FP,dp.publicItoCusPtr,RetV)
 
 		if ResetTimer~=nil then
 			
@@ -135,6 +134,7 @@
 
 			end
 		end
+		CMov(FP,dp.publicItoCusPtr,RetV)
 		local StrT = {}
 		dp.StrXIndex=dp.StrXIndex+1
 		for j,k in pairs(arg) do
@@ -178,7 +178,7 @@
 					Dev=Dev+(4*12)
 					table.insert(StrT,string.rep("\x0D",4*12))
 				elseif k["hex"] == true then
-					BSize=BSize+(4*4)
+					BSize=BSize+(3*4)
 					CMov(FP,dp.publicItoDecV,k)
 					CallTrigger(FP,dp.Call_ItoHex,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(3*4)
@@ -199,7 +199,6 @@
 			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 				BSize = BSize+#k
 				for o,p in pairs(k) do
-					CMov(FP,,RetV,Dev)
 					CMov(FP,dp.TBwInputChar,p)
 					CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
 					
@@ -208,7 +207,6 @@
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 				BSize=BSize+1
-				CMov(FP,,RetV,Dev)
 				CMov(FP,dp.TBwInputChar,V(k))
 				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
 				Dev=Dev+(1)
@@ -823,17 +821,17 @@
 		CJump(FP,SCJump)
 		SetCall2(FP, dp.Call_IToDec)
 		dp.ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
-		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArr,0),4*12)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArr,0),4*4)
 		SetCallEnd2()
 		
 		SetCall2(FP, dp.Call_IToDecX)
 		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,0)
-		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArrX,0),3*4)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArrX,0),4*12)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_ItoHex)
 		ItoHex(FP, dp.publicItoDecV, VArr(dp.publicItoHexVArr,0), 0, nil, 0)
-		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoHexVArr,0),4*4)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoHexVArr,0),3*4)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_VtoName)
