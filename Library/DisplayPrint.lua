@@ -199,13 +199,18 @@
 			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 				BSize = BSize+#k
 				for o,p in pairs(k) do
-					CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
+					CMov(FP,,RetV,Dev)
+					CMov(FP,dp.TBwInputChar,p)
+					CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
+					
 					Dev=Dev+(1)
 					table.insert(StrT,string.rep("\x0D",1))
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 				BSize=BSize+1
-				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
+				CMov(FP,,RetV,Dev)
+				CMov(FP,dp.TBwInputChar,V(k))
+				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
 				Dev=Dev+(1)
 				table.insert(StrT,string.rep("\x0D",1))
 			else
@@ -840,6 +845,10 @@
 
 		SetCallEnd2()
 		
+		SetCall2(FP, dp.Call_TBwrite)
+		CDoActions(FP,{TBwrite(_Add(dp.publicItoCusPtr,dp.TBwInputPtr),SetTo,dp.TBwInputChar)})
+		SetCallEnd2()
+		
 		
 		if CheckInclude_64BitLibrary == 1 then
 		SetCall2(FP, dp.Call_lIToDec)
@@ -994,6 +1003,8 @@
 		dp.publicItoDecVArrX =CreateVArr(12,FP)
 		dp.publicItoDecV = CreateVar(FP)
 		dp.publicItoCusPtr = CreateVar(FP)
+		dp.TBwInputChar = CreateVar(FP)
+		dp.TBwInputPtr = CreateVar(FP)
 		dp.DevV = CreateVar(FP)
 		
 		dp.Call_IToDec = CreateCallIndex()
@@ -1001,6 +1012,7 @@
 		dp.Call_VtoName = CreateCallIndex()
 		dp.Call_ItoHex = CreateCallIndex()
 		dp.Call_Print13X = CreateCallIndex()
+		dp.Call_TBwrite = CreateCallIndex()
 		dp.Print13V = CreateVar(FP)
 		dp.publiclItoDecVArr =CreateVArr(5,FP)
 		dp.publiclItoDecW = CreateWar(FP)
