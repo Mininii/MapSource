@@ -53,19 +53,16 @@
 			elseif type(k)=="table" and k[4]=="V" then
 
 				if k["fwc"] == true then
-					CMov(FP,dp.publicItoDecV,k)
-					CallTrigger(FP,dp.Call_IToDecX)
-				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
+					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
+					CallTrigger(FP,dp.Call_IToDecX) 
 					Dev=Dev+(4*12)
 				elseif k["hex"] == true then
-					CMov(FP,dp.publicItoDecV,k)
+					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
 					CallTrigger(FP,dp.Call_ItoHex)
-				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoHexVArr,0),3*4)
 					Dev=Dev+(3*4)
 				else
-					CMov(FP,dp.publicItoDecV,k)
+					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
 					CallTrigger(FP,dp.Call_IToDec)
-				f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.publicItoDecVArr,0),4*4)
 					Dev=Dev+(4*4)
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
@@ -81,7 +78,7 @@
 			TBwrite(_Add(TBLPtr,Dev),SetTo,0xE2),
 			TBwrite(_Add(TBLPtr,Dev+1),SetTo,0x80),
 			TBwrite(_Add(TBLPtr,Dev+2),SetTo,0x89),
-	}) -- 4+1+#"조" 번글자 색상코드
+	})
 
 		
 	if ResetTimer~=nil then
@@ -136,20 +133,28 @@
 
 			end
 		end
-		
+		local StrT = {}
 		dp.StrXIndex=dp.StrXIndex+1
 		for j,k in pairs(arg) do
 			if type(k) == "function" then
+				local PrevBSize = BSize
 				k()
+				local NextBSize = BSize
+				table.insert(StrT,string.rep("\x0D",NextBSize-PrevBSize))
+				
 			elseif type(k)=="table" and type(k[1]) == "function" then
 				local lfunc = k[1]
+				local PrevBSize = BSize
 				table.remove(k,1)
 				lfunc(table.unpack(k))
+				local NextBSize = BSize
+				table.insert(StrT,string.rep("\x0D",NextBSize-PrevBSize))
 			elseif type(k) == "string" then
-				local CT = CreateCText(FP,k)
-				BSize=BSize+CT[2]
-				table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
-				Dev=Dev+CT[2]
+				--local CT = CreateCText(FP,k)
+				table.insert(StrT,k)
+				BSize=BSize+#k
+				--table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
+				Dev=Dev+#k
 			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 				BSize = BSize+(4*5)
 				if k[2] == "LocalPlayerID" then
@@ -162,42 +167,45 @@
 					CallTrigger(FP, dp.Call_VtoName)
 				end
 				Dev=Dev+(4*5)
+				table.insert(StrT,string.rep("\x0D",4*5))
 			elseif type(k)=="table" and k[4]=="V" then
 				if k["fwc"] == true then
 					BSize=BSize+(4*12)
-					CMov(FP,dp.publicItoDecV,k)
+					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
 					CallTrigger(FP,dp.Call_IToDecX)
-					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArrX,0),4*12)
 					Dev=Dev+(4*12)
+					table.insert(StrT,string.rep("\x0D",4*12))
 				elseif k["hex"] == true then
 					BSize=BSize+(4*4)
-					CMov(FP,dp.publicItoDecV,k)
+					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
 					CallTrigger(FP,dp.Call_ItoHex)
-					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoHexVArr,0),3*4)
 					Dev=Dev+(3*4)
+					table.insert(StrT,string.rep("\x0D",3*4))
 				else
 					BSize=BSize+(4*4)
-					CMov(FP,dp.publicItoDecV,k)
+					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
 					CallTrigger(FP,dp.Call_IToDec)
-					f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publicItoDecVArr,0),4*4)
 					Dev=Dev+(4*4)
+					table.insert(StrT,string.rep("\x0D",4*4))
 				end
 			elseif type(k)=="table" and k[4]=="W" then
 				BSize=BSize+(4*5)
-				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
-				CallTrigger(FP,dp.Call_lIToDec)
-				f_Movcpy(FP,_Add(RetV,Dev),VArr(dp.publiclItoDecVArr,0),4*5)
+				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1) CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
+				CallTrigger(FP,dp.Call_lIToDec) 
 				Dev=Dev+(4*5)
+				table.insert(StrT,string.rep("\x0D",4*5))
 			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
 				BSize = BSize+#k
 				for o,p in pairs(k) do
 					CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,p)})
 					Dev=Dev+(1)
+					table.insert(StrT,string.rep("\x0D",1))
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 				BSize=BSize+1
 				CDoActions(FP,{TBwrite(_Add(RetV,Dev),SetTo,V(k))})
 				Dev=Dev+(1)
+				table.insert(StrT,string.rep("\x0D",1))
 			else
 				PushErrorMsg("Print_Inputdata_Error")
 			end
@@ -207,7 +215,7 @@
 			CIfEnd()
 
 		end
-		local StrT = "\x0D\x0D\x0DSI"..dp.StrXIndex..string.rep("\x0D", BSize+3)
+		StrT = table.concat(StrT).."\x0D\x0D\x0D\x0D"
 		table.insert(dp.StrXKeyArr,{RetV,StrT})
 		if TargetPlayers==CurrentPlayer or TargetPlayers=="CP" then
 			local Act = {TSetMemory(0x6509B0,SetTo,BackupCp),DisplayText(StrT,4)}
@@ -385,10 +393,10 @@
 			CMov(FP,dp.publicItoDecV,k)
 			if bool == true then
 				CallTrigger(FP,dp.Call_IToDecX)
-				f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArrX,0),4*12)
+				CMov(FP,dp.publicItoCusPtr,0x640B60 + (12 * 218)+p[2])
 			else
 				CallTrigger(FP,dp.Call_IToDec)
-				f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.publicItoDecVArr,0),4*4)
+				CMov(FP,dp.publicItoCusPtr,0x640B60 + (12 * 218)+p[2])
 			end
 		end
 		for j,p in pairs(ItoNameKey) do
@@ -809,14 +817,17 @@
 		CJump(FP,SCJump)
 		SetCall2(FP, dp.Call_IToDec)
 		dp.ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
+		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoDecVArr,0),4*12)
 		SetCallEnd2()
 		
 		SetCall2(FP, dp.Call_IToDecX)
 		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,0)
+		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoDecVArrX,0),3*4)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_ItoHex)
 		ItoHex(FP, dp.publicItoDecV, VArr(dp.publicItoHexVArr,0), 0, nil, 0)
+		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoHexVArr,0),4*4)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_VtoName)
@@ -873,6 +884,7 @@
 			--
 
 
+			f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publiclItoDecVArr,0),4*5)
 		SetCallEnd2()--
 		end
 
@@ -980,6 +992,8 @@
 		dp.publicItoHexVArr =CreateVArr(3,FP)
 		dp.publicItoDecVArrX =CreateVArr(12,FP)
 		dp.publicItoDecV = CreateVar(FP)
+		dp.publicItoCusPtr = CreateVar(FP)
+		
 		dp.Call_IToDec = CreateCallIndex()
 		dp.Call_IToDecX = CreateCallIndex()
 		dp.Call_VtoName = CreateCallIndex()
