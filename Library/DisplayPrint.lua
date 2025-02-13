@@ -26,6 +26,7 @@
 
 			end
 		end
+		CMov(FP,dp.publicItoCusPtr,TBLPtr)
 		for j,k in pairs(arg) do
 			
 			if type(k) == "function" then
@@ -53,16 +54,16 @@
 			elseif type(k)=="table" and k[4]=="V" then
 
 				if k["fwc"] == true then
-					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
-					CallTrigger(FP,dp.Call_IToDecX) 
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDecX,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(4*12)
 				elseif k["hex"] == true then
-					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
-					CallTrigger(FP,dp.Call_ItoHex)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_ItoHex,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(3*4)
 				else
-					CMov(FP,dp.publicItoDecV,k) CAdd(FP,dp.publicItoCusPtr,TBLPtr,Dev)
-					CallTrigger(FP,dp.Call_IToDec)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(4*4)
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
@@ -120,6 +121,7 @@
 		dp.Alloc = dp.Alloc+1
 		RetV = CreateVar(FP)
 		Dev = 0
+		CMov(FP,dp.publicItoCusPtr,RetV)
 
 		if ResetTimer~=nil then
 			
@@ -171,27 +173,27 @@
 			elseif type(k)=="table" and k[4]=="V" then
 				if k["fwc"] == true then
 					BSize=BSize+(4*12)
-					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
-					CallTrigger(FP,dp.Call_IToDecX)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDecX,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(4*12)
 					table.insert(StrT,string.rep("\x0D",4*12))
 				elseif k["hex"] == true then
 					BSize=BSize+(4*4)
-					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
-					CallTrigger(FP,dp.Call_ItoHex)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_ItoHex,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(3*4)
 					table.insert(StrT,string.rep("\x0D",3*4))
 				else
 					BSize=BSize+(4*4)
-					CMov(FP,dp.publicItoDecV,k)	CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
-					CallTrigger(FP,dp.Call_IToDec)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,Dev)}) 
 					Dev=Dev+(4*4)
 					table.insert(StrT,string.rep("\x0D",4*4))
 				end
 			elseif type(k)=="table" and k[4]=="W" then
 				BSize=BSize+(4*5)
-				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1) CAdd(FP,dp.publicItoCusPtr,RetV,Dev)
-				CallTrigger(FP,dp.Call_lIToDec) 
+				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+				CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,Dev)}) 
 				Dev=Dev+(4*5)
 				table.insert(StrT,string.rep("\x0D",4*5))
 			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
@@ -387,16 +389,15 @@
 		end
 		DoActions2(FP, {print_utf8_2(12, 0, string.rep("\x0D", 210))})
 		DoActions2(FP, RetAct)
+		CMov(FP,dp.publicItoCusPtr,0x640B60 + (12 * 218))
 		for j,p in pairs(ItoDecKey) do
 			local k = p[1]
 			local bool = p[3]
 			CMov(FP,dp.publicItoDecV,k)
 			if bool == true then
-				CallTrigger(FP,dp.Call_IToDecX)
-				CMov(FP,dp.publicItoCusPtr,0x640B60 + (12 * 218)+p[2])
+				CallTrigger(FP,dp.Call_IToDecX,{SetV(dp.DevV,p[2])})
 			else
-				CallTrigger(FP,dp.Call_IToDec)
-				CMov(FP,dp.publicItoCusPtr,0x640B60 + (12 * 218)+p[2])
+				CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,p[2])})
 			end
 		end
 		for j,p in pairs(ItoNameKey) do
@@ -817,17 +818,17 @@
 		CJump(FP,SCJump)
 		SetCall2(FP, dp.Call_IToDec)
 		dp.ItoDec(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArr,0),2,nil,1)
-		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoDecVArr,0),4*12)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArr,0),4*12)
 		SetCallEnd2()
 		
 		SetCall2(FP, dp.Call_IToDecX)
 		ItoDecX(FP,dp.publicItoDecV,VArr(dp.publicItoDecVArrX,0),2,nil,0)
-		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoDecVArrX,0),3*4)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoDecVArrX,0),3*4)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_ItoHex)
 		ItoHex(FP, dp.publicItoDecV, VArr(dp.publicItoHexVArr,0), 0, nil, 0)
-		f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publicItoHexVArr,0),4*4)
+		f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publicItoHexVArr,0),4*4)
 		SetCallEnd2()
 
 		SetCall2(FP, dp.Call_VtoName)
@@ -884,7 +885,7 @@
 			--
 
 
-			f_Movcpy(FP,dp.publicItoCusPtr,VArr(dp.publiclItoDecVArr,0),4*5)
+			f_Movcpy(FP,_Add(dp.publicItoCusPtr,dp.DevV),VArr(dp.publiclItoDecVArr,0),4*5)
 		SetCallEnd2()--
 		end
 
@@ -993,6 +994,7 @@
 		dp.publicItoDecVArrX =CreateVArr(12,FP)
 		dp.publicItoDecV = CreateVar(FP)
 		dp.publicItoCusPtr = CreateVar(FP)
+		dp.DevV = CreateVar(FP)
 		
 		dp.Call_IToDec = CreateCallIndex()
 		dp.Call_IToDecX = CreateCallIndex()
