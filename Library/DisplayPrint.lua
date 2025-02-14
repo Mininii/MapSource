@@ -41,10 +41,11 @@
 				Dev=Dev+CT[2]
 			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 				if k[2] == "LocalPlayerID" then
-					f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.LPNameVArr,0),4*5)
-					
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoLPName)
 				elseif type(k[2])=="number" then
-					f_Movcpy(FP,_Add(TBLPtr,Dev),VArr(dp.PNameVArrArr[k[2]+1],0),4*5)
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoName,{SetV(dp.VtoNameV,k[2])})
 				elseif k[2][4] == "V" then
 					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
 					CMov(FP,dp.VtoNameV,k[2])
@@ -67,19 +68,18 @@
 					Dev=Dev+(4*4)
 				end
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
-			CDoActions(FP,{TBwrite(_Add(TBLPtr,Dev),SetTo,V(k))})
+				CMov(FP,dp.TBwInputChar,V(k))
+				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.DevV,Dev)}) 
 				Dev=Dev+(1)
 		end
 		end
 
 		
 		
+		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0xE2),SetV(dp.DevV,Dev)}) 
+		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x80),SetV(dp.DevV,1)}) 
+		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x89),SetV(dp.DevV,2)}) 
 		
-		CDoActions(FP,{--끝글자에 UTF8 강제 인코딩 코드 삽입
-			TBwrite(_Add(TBLPtr,Dev),SetTo,0xE2),
-			TBwrite(_Add(TBLPtr,Dev+1),SetTo,0x80),
-			TBwrite(_Add(TBLPtr,Dev+2),SetTo,0x89),
-	})
 
 		
 	if ResetTimer~=nil then
@@ -155,14 +155,15 @@
 				--local CT = CreateCText(FP,k)
 				table.insert(StrT,k)
 				BSize=BSize+#k
-				--table.insert(dp.StrXPatchArr,{RetV,Dev,CT})
 				Dev=Dev+#k
 			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
 				BSize = BSize+(4*5)
 				if k[2] == "LocalPlayerID" then
-					table.insert(dp.StrXPNameArr,{RetV,Dev,dp.LPNameVArr})
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoLPName)
 				elseif type(k[2])=="number" then
-					table.insert(dp.StrXPNameArr,{RetV,Dev,dp.PNameVArrArr[k[2]+1]})
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoName,{SetV(dp.VtoNameV,k[2])})
 				elseif k[2][4] == "V" then
 					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
 					CMov(FP,dp.VtoNameV,k[2])
@@ -200,7 +201,7 @@
 				BSize = BSize+#k
 				for o,p in pairs(k) do
 					CMov(FP,dp.TBwInputChar,p)
-					CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
+					CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.DevV,Dev)}) 
 					
 					Dev=Dev+(1)
 					table.insert(StrT,string.rep("\x0D",1))
@@ -208,7 +209,7 @@
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 				BSize=BSize+1
 				CMov(FP,dp.TBwInputChar,V(k))
-				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputPtr,Dev)}) 
+				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.DevV,Dev)}) 
 				Dev=Dev+(1)
 				table.insert(StrT,string.rep("\x0D",1))
 			else
@@ -407,18 +408,17 @@
 			local k = p[1]
 			
 			if k == "LocalPlayerID" then
-				f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.LPNameVArr,0),4*5)
+				CallTrigger(FP, dp.Call_VtoLPName,{SetV(dp.VtoNamePtr,0x640B60 + (12 * 218)+p[2])})
 			elseif type(k)=="number" then
-				f_Movcpy(FP,0x640B60 + (12 * 218)+p[2],VArr(dp.PNameVArrArr[k],0),4*5)
+				CallTrigger(FP, dp.Call_VtoName,{SetV(dp.VtoNamePtr,0x640B60 + (12 * 218)+p[2]),SetV(dp.VtoNameV,k)})
 			elseif k[4] == "V" then
-				CMov(FP,dp.VtoNamePtr,0x640B60 + (12 * 218)+p[2])
-				CMov(FP,dp.VtoNameV,k)
-				CallTrigger(FP, dp.Call_VtoName)
+				CallTrigger(FP, dp.Call_VtoName,{SetV(dp.VtoNamePtr,0x640B60 + (12 * 218)+p[2]),})
 			end
 			
 		end
 		for j,p in pairs(VCharKey) do
-			CDoActions(FP,{TBwrite(0x640B60 + (12 * 218)+p[2],SetTo,V(p[1]))})
+			CMov(FP,dp.TBwInputChar,V(p[1]))
+			CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x80),SetV(dp.publicItoCusPtr,0x640B60 + (12 * 218)),SetV(dp.DevV,p[2])}) 
 		end
 		CIfEnd()
 
@@ -441,20 +441,6 @@
 			f_GetStrXptr(FP,v[1],v[2])
 		end
 		
-		
-		
-		for k, v in pairs(dp.StrXPatchArr) do -- STRXPtr,Deviation,CTextData(TBL공용)
-			if v[2]==0 then
-				f_Memcpy(FP,v[1],_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
-			else
-				f_Memcpy(FP,_Add(v[1],v[2]),_TMem(Arr(v[3][3],0),"X","X",1),v[3][2])
-			end
-		end
-
-		for k, v in pairs(dp.StrXPNameArr) do -- STRXPtr,Deviation,PNameVArr(TBL공용)
-			f_Movcpy(FP,_Add(v[1],v[2]),VArr(v[3],0),4*5)
-		end
-
 		
 		
 		for k, v in pairs(dp.TBLKeyArr) do
@@ -840,11 +826,15 @@
 		f_Movcpy(FP, dp.VtoNamePtr, dp.PNameVArrArr[i+1], 4*5)
 		CIfEnd()
 		end
+		SetCallEnd2()
 
+		SetCall2(FP, dp.Call_VtoLPName)
+		f_Movcpy(FP, dp.VtoNamePtr, dp.LPNameVArr[i+1], 4*5)
+		CIfEnd()
 		SetCallEnd2()
 		
 		SetCall2(FP, dp.Call_TBwrite)
-		CDoActions(FP,{TBwrite(_Add(dp.publicItoCusPtr,dp.TBwInputPtr),SetTo,dp.TBwInputChar)})
+		CDoActions(FP,{TBwrite(_Add(dp.publicItoCusPtr,dp.DevV),SetTo,dp.TBwInputChar)})
 		SetCallEnd2()
 		
 		
@@ -993,8 +983,6 @@
 		dp.lastTrigIndex = FuncAlloc
 		FuncAlloc=FuncAlloc+1
 		dp.StrXKeyArr = {}
-		dp.StrXPatchArr = {}
-		dp.StrXPNameArr = {}
 		dp.StrXIndex = 0
 		dp.publicItoDecVArr =CreateVArr(4,FP)
 		dp.publicItoHexVArr =CreateVArr(3,FP)
@@ -1002,7 +990,6 @@
 		dp.publicItoDecV = CreateVar(FP)
 		dp.publicItoCusPtr = CreateVar(FP)
 		dp.TBwInputChar = CreateVar(FP)
-		dp.TBwInputPtr = CreateVar(FP)
 		dp.DevV = CreateVar(FP)
 		
 		dp.Call_IToDec = CreateCallIndex()
@@ -1011,12 +998,15 @@
 		dp.Call_ItoHex = CreateCallIndex()
 		dp.Call_Print13X = CreateCallIndex()
 		dp.Call_TBwrite = CreateCallIndex()
+		dp.Call_VtoLPName = CreateCallIndex()
+		
 		dp.Print13V = CreateVar(FP)
 		dp.publiclItoDecVArr =CreateVArr(5,FP)
 		dp.publiclItoDecW = CreateWar(FP)
 		dp.Call_lIToDec = CreateCallIndex()
 		dp.VtoNamePtr = CreateVar(FP)
 		dp.VtoNameV = CreateVar(FP)
+		dp.VtoLPNamePtr = CreateVar(FP)
 
 		dp.TBLKeyArr = {}
 		dp.TBLPatchArr = {}
