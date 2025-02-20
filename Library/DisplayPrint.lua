@@ -418,7 +418,7 @@
 		end
 		for j,p in pairs(VCharKey) do
 			CMov(FP,dp.TBwInputChar,V(p[1]))
-			CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x80),SetV(dp.publicItoCusPtr,0x640B60 + (12 * 218)),SetV(dp.DevV,p[2])}) 
+			CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.publicItoCusPtr,0x640B60 + (12 * 218)),SetV(dp.DevV,p[2])}) 
 		end
 		CIfEnd()
 
