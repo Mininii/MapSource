@@ -93,6 +93,7 @@ function onInit()
     HDEx1P = 170
     BurEx1P = 170
 	ExRate2 = 5
+
     EasyEx1P2 = 170
     HDEx1P2 = 170
     BurEx1P2 = 170
@@ -422,6 +423,7 @@ function SetZergGroupFlags(UnitID)
 	PaneltyPoint = CreateVar()
 	count = CreateVar()
 	CanC = CreateVar()
+	CanCount = CreateVar(FP)
 	TBossSkill = CreateVar()
 	TBossHP = CreateVar()
 	TBossHPPtr = CreateVar()
@@ -640,7 +642,22 @@ end
 
 function onPluginStart()
 	
-CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100)}) -- onPluginStart
+CIfOnce(AllPlayers,{CDeaths(FP,AtLeast,1,ModeO)},{ModifyUnitEnergy(All,"Any unit",AllPlayers,64,100),
+
+		SetMemory(0x582144 + (0*4),SetTo,8);
+		SetMemory(0x5821A4 + (0*4),SetTo,8);
+		SetMemory(0x582144 + (1*4),SetTo,8);
+		SetMemory(0x5821A4 + (1*4),SetTo,8);
+		SetMemory(0x582144 + (2*4),SetTo,8);
+		SetMemory(0x5821A4 + (2*4),SetTo,8);
+		SetMemory(0x582144 + (3*4),SetTo,8);
+		SetMemory(0x5821A4 + (3*4),SetTo,8);
+		SetMemory(0x582144 + (4*4),SetTo,8);
+		SetMemory(0x5821A4 + (4*4),SetTo,8);
+		SetMemory(0x582144 + (5*4),SetTo,8);
+		SetMemory(0x5821A4 + (5*4),SetTo,8);
+
+}) -- onPluginStart
 CIf(FP,CDeaths(FP,Exactly,0,BGMMode))
 CMov(FP,_Ccode(FP,BGMMode),_Mod(_Rand(),#BModeTArr),1)
 CIfEnd()
@@ -661,20 +678,6 @@ table.insert(MarModePatch,SetSwitch("Switch 211",Set))
 
 
 
-for i = 0, 5 do
-Trigger {
-	players = {FP},
-	conditions = {
-		Label(0);
-		CVar(FP,HiddenPts[2],AtMost,0);
-
-		},
-	actions = {
-		SetMemory(0x582144 + (i*4),SetTo,2000);
-		SetMemory(0x5821A4 + (i*4),SetTo,2000);
-		}
-		}
-	end
 
 Trigger { -- 컴퓨터 플레이어 색상 설정
 	players = {FP},
@@ -727,7 +730,6 @@ Trigger {
 		SetCDeaths(FP,SetTo,0,HiddenMode);
 	}
 }
-
 
 
 

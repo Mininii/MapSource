@@ -29,7 +29,7 @@ HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
-TestStart = 0
+TestStart = 1
 Limit = 1
 GunSafety = 0
 VName = "Ver:HD 1.0"
@@ -860,6 +860,8 @@ CIfX(FP,Never())
 	CIfXEnd()
 LoadCp(FP,SelCP)
 
+
+
 HiddenCommand = {51,50,52,50,52,50,50,62,61,61}
 for i = 1, #HiddenCommand do
 Trigger {
@@ -872,7 +874,7 @@ Trigger {
 	},
 	actions = {
 		SetCDeaths(FP,SetTo,1,KeyToggle);
-		SetCDeaths(FP,Add,1,HiddenMode);
+		--SetCDeaths(FP,Add,1,HiddenMode);
 	}
 	}
 end
@@ -929,6 +931,12 @@ Trigger {
 		PreserveTrigger();
 	}
 	}
+
+	
+
+TriggerX(FP,{Memory(0xA03740,Exactly,0),CDeaths(FP,Exactly,0,ModeO),ElapsedTime(AtLeast,20)},{--코드입력시 히든모드 발동
+	SetCDeaths(FP,SetTo,#HiddenCommand,HiddenMode)
+})
 
 
 CIf(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),CDeaths(FP,Exactly,0,ModeO)})
@@ -1644,20 +1652,19 @@ Trigger {
 		
 	}
 	}
+Trigger {
+	players = {FP},
+	conditions = {
+		Label(0);
+		isname(i,"Sumi_Serina");
+		CDeaths(FP,AtLeast,1,LimitX);
+	},
+	actions = {
+		SetCDeaths(FP,SetTo,1,LimitC);
+		
+	}
+	}
 
-	Trigger {
-		players = {FP},
-		conditions = {
-			Label(0);
-			isname(i,"RonaRonaChan");
-			CDeaths(FP,AtLeast,1,LimitX);
-		},
-		actions = {
-			SetCDeaths(FP,SetTo,1,LimitC);
-			
-		}
-		}
-	
 
 	Trigger {
 		players = {FP},
@@ -2960,6 +2967,13 @@ CIfEnd()
 CMov(FP,Dx,_ReadF(0x51CE8C))
 CiSub(FP,Dy,_Mov(0xFFFFFFFF),Dx)
 CiSub(FP,Dt,Dy,Du)
+--[[
+TriggerX(FP,{Memory(0xA03740,Exactly,0x37373738)},{RotatePlayer({
+	DisplayTextX(StrDesignX("\x1B테스트 전용 맵입니다. 정식버젼으로 시작해주세요.").."\n"..StrDesignX("\x04실행 방지 코드 0x32223223 작동."),4);
+Defeat();
+},HumanPlayers,FP);
+Defeat();
+SetMemory(0xCDDDCDDC,SetTo,1);})]]
 --CMov(FP,0x58F500,Dt)
 CMov(FP,Dv,Dt)
 Count2 = CreateVar()
@@ -3013,7 +3027,7 @@ for i = 0,5 do
 CIfX(FP,HumanCheck(i,1))
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 CMov(FP,0x57f120 + (i*4) , CanC)
-CMov(FP,0x582174 + (i*4) , CanDefeat)
+CMov(FP,0x582174 + (i*4) , CanCount)
 CElseX()
 DoActions(FP,{SetDeaths(i,SetTo,0,440)})
 CIfXEnd()
@@ -3029,8 +3043,10 @@ CIfEnd()
 
 
 CIfX(FP,{CVar(FP,CUnit3[2],AtLeast,1),CVar(FP,CUnit3[2],AtMost,0x7FFFFFFF)})
+
 CMov(FP,0x6509B0,CUnit3)
 
+CTrigger(FP,{CDeaths(FP,AtLeast,1,TestMode),Deaths(P1,AtLeast,1,204)},{TCreateUnitWithProperties(12,100,74,P1,{energy=100})},{preserved}) -- F12 누르면 마린소환
 CIfX(FP,{CDeaths(FP,AtLeast,1,TestMode),Deaths(P1,AtLeast,1,203),Switch("Switch 200",Cleared)})
 DoActions(FP,MoveCp(Add,25*4))
 Trigger {
@@ -3581,6 +3597,7 @@ DoActions(FP,{
 CIfEnd()
 
 
+--[[
 Trigger { -- 지속캔낫 감지용
 	players = {FP},
 	conditions = {
@@ -3591,7 +3608,7 @@ Trigger { -- 지속캔낫 감지용
 		SetCVar(FP,CanDefeat[2],Subtract,1);
 		PreserveTrigger();
 	}
-}
+}]]
 for i = 3, 0, -1 do
 Trigger {
 	players = {FP},
@@ -5387,6 +5404,146 @@ end
 
 
 
+
+
+
+
+CIf(FP,{--캔발동
+	CV(CanCount,0,AtMost);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit(37,Force2);
+	KillUnit(38,Force2);
+	KillUnit(39,Force2);
+	KillUnit(41,Force2);
+	KillUnit(42,Force2);
+	KillUnit(43,Force2);
+	KillUnit(44,Force2);
+	KillUnit(48,Force2);
+	KillUnit(53,Force2);
+	KillUnit(54,Force2);
+	KillUnit(55,Force2);
+	KillUnit(56,Force2);
+	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCDeaths(FP,SetTo,24*7,CanCT);
+	AddV(CanCount,1);})
+Trigger2X(FP,{},{
+	RotatePlayer({
+		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 3 LEFT",4),
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\warn.wav"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+		},HumanPlayers,FP);
+},{preserved})
+CIfEnd()
+
+CIf(FP,{--캔발동
+	CV(CanCount,1,Exactly);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit(37,Force2);
+	KillUnit(38,Force2);
+	KillUnit(39,Force2);
+	KillUnit(41,Force2);
+	KillUnit(42,Force2);
+	KillUnit(43,Force2);
+	KillUnit(44,Force2);
+	KillUnit(48,Force2);
+	KillUnit(53,Force2);
+	KillUnit(54,Force2);
+	KillUnit(55,Force2);
+	KillUnit(56,Force2);
+	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCDeaths(FP,SetTo,24*7,CanCT);
+	AddV(CanCount,1);})
+Trigger2X(FP,{},{
+	RotatePlayer({
+		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 2 LEFT",4),
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\warn.wav"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+		},HumanPlayers,FP);
+},{preserved})
+CIfEnd()
+CIfOnce(FP, {--캔발동
+	CV(CanCount,2,AtLeast);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit(37,Force2);
+	KillUnit(38,Force2);
+	KillUnit(39,Force2);
+	KillUnit(41,Force2);
+	KillUnit(42,Force2);
+	KillUnit(43,Force2);
+	KillUnit(44,Force2);
+	KillUnit(48,Force2);
+	KillUnit(53,Force2);
+	KillUnit(54,Force2);
+	KillUnit(55,Force2);
+	KillUnit(56,Force2);
+	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	AddV(CanCount,1);
+	SetCDeaths(FP,SetTo,24*7,CanCT);})
+
+	Trigger2X(FP,{},{
+		RotatePlayer({
+		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 1 LEFT",4),
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\warn.wav"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+			},HumanPlayers,FP);
+			
+	})
+CIfEnd()
+
+CIfOnce(FP, {--캔발동
+	CV(CanCount,3,AtLeast);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit(37,Force2);
+	KillUnit(38,Force2);
+	KillUnit(39,Force2);
+	KillUnit(41,Force2);
+	KillUnit(42,Force2);
+	KillUnit(43,Force2);
+	KillUnit(44,Force2);
+	KillUnit(48,Force2);
+	KillUnit(53,Force2);
+	KillUnit(54,Force2);
+	KillUnit(55,Force2);
+	KillUnit(56,Force2);
+	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	AddV(CanCount,1);
+	SetCDeaths(FP,SetTo,24*7,CanCT);})
+
+
+
+	Trigger2X(FP,{},{
+		RotatePlayer({
+			DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 0 DEFEAT",4),
+			PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+			PlayWAVX("staredit\\wav\\CanOver.ogg"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV"),
+			PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss05.WAV")
+			},HumanPlayers,FP);
+			RotatePlayer({Defeat()}, Force1, FP)
+			
+	})
+CIfEnd()
+
+
+--[[
 Trigger { -- 지속캔낫 감지용
 	players = {FP},
 	conditions = {
@@ -5493,6 +5650,10 @@ Trigger2X(FP,{
 	CopyCpAction({Defeat()},Force1,FP)})
 DoActionsX(FP,SetCDeaths(FP,Add,1,GameOver))
 CIfEnd() -- 패배트리거 끝
+
+]]
+
+
 for j = 0, 5 do -- 소환
 
 
@@ -7169,13 +7330,13 @@ Trigger { -- 돈 기부 시스템
 	},
 	actions = {
 		SetResources(k,Subtract,GiveRate2[i+1],Ore);
-		SetResources(j,Add,GiveRate2[i+1],Ore);
+		SetResources(j,Add,GiveRate2[i+1]//2,Ore);
 		--SetMemoryB(0x58D2B0+(46*k)+GiveUnitID[j+1],SetTo,0);
 		
 		RemoveUnitAt(1,GiveUnitID[j+1],"Anywhere",k);
-		DisplayText("\x07『 "..Player[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다. \x07』",4);
+		DisplayText("\x07『 "..Player[j+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부하였습니다. (세금 50%)\x07』",4);
 		SetMemory(0x6509B0,SetTo,j);
-		DisplayText("\x12\x07『"..Player[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다.\x02 \x07』",4);
+		DisplayText("\x12\x07『"..Player[k+1].."\x04에게 \x1F"..GiveRate2[i+1].." Ore\x04를 기부받았습니다.\x02 (세금 50%)\x07』",4);
 		SetMemory(0x6509B0,SetTo,k);
 		PreserveTrigger();
 	},
