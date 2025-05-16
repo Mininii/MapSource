@@ -263,7 +263,7 @@ CIfEnd()
 
 
 if Limit == 1 then
-CIf(FP,CDeaths(FP,AtLeast,1,TestMode))
+CIf(FP,CDeaths(FP,AtLeast,1,TestMode),{SetSwitch("Switch 211",Set)})
 
 Trigger {
 	players = {FP},
