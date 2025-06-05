@@ -1,7 +1,7 @@
 
 		
 
-	function DisplayPrintTbl(TBLID,arg,ResetTimer)
+	function DisplayPrintTbl(TBLID,arg,ResetTimer,UTF8OptionOff)
 		
 		TBLPtr = {}
 		if dp.TBLKeyArr[TBLID] == nil then
@@ -75,10 +75,11 @@
 		end
 
 		
-		
+		if UTF8OptionOff == nil then
 		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0xE2),SetV(dp.DevV,Dev)}) 
 		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x80),SetV(dp.DevV,Dev+1)}) 
 		CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.TBwInputChar,0x89),SetV(dp.DevV,Dev+2)}) 
+		end
 		
 
 		
