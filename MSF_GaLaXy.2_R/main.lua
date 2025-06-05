@@ -29,10 +29,10 @@ HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
-TestStart = 1
-Limit = 1
+TestStart = 0
+Limit = 0
 GunSafety = 0
-VName = "Ver:HD 1.0"
+VName = "Ver:HD 1.5"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 DP_Start_init(FP)
@@ -3028,7 +3028,7 @@ for i = 0,5 do
 CIfX(FP,HumanCheck(i,1))
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 CMov(FP,0x57f120 + (i*4) , CanC)
-CMov(FP,0x582174 + (i*4) , CanCount)
+--CMov(FP,0x582174 + (i*4) , CanCount)
 CElseX()
 DoActions(FP,{SetDeaths(i,SetTo,0,440)})
 CIfXEnd()
@@ -5305,7 +5305,7 @@ Trigger { -- 스팀팩
 	players = {i},
 	conditions = {
 		Label(0);
-		CVar(FP,HiddenATK[2],AtLeast,1);
+		CDeaths(FP,AtLeast,1,OneStim[i+1]);
 		Command(i,AtLeast,1,8);
 	},
 	actions = {
@@ -5429,7 +5429,15 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
-	AddV(CanCount,1);})
+	AddV(CanCount,1);
+
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
+})
 Trigger2X(FP,{},{
 	RotatePlayer({
 		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 3 LEFT",4),
@@ -5461,7 +5469,13 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
-	AddV(CanCount,1);})
+	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),})
 Trigger2X(FP,{},{
 	RotatePlayer({
 		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 2 LEFT",4),
@@ -5492,6 +5506,12 @@ CIfOnce(FP, {--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
 	SetCDeaths(FP,SetTo,24*7,CanCT);})
 
 	Trigger2X(FP,{},{
@@ -5526,6 +5546,12 @@ CIfOnce(FP, {--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
 	SetCDeaths(FP,SetTo,24*7,CanCT);})
 
 
@@ -6137,12 +6163,13 @@ DoActions(FP,{
 	RemoveUnit(182,P12),
 	RemoveUnit(183,P12),
 })
+
 Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
 		CGMode(1);
-		CommandLeastAt(174,64);
+		Bring(FP,AtMost,0,174,64),
 	},
 	actions = {
 		SetCDeaths(FP,Add,1,Win);
