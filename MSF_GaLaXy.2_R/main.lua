@@ -29,10 +29,10 @@ HumanPlayers = {P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12}
 MapPlayers = {P1,P2,P3,P4,P5,P6}
 SetForces(MapPlayers,{P7,P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
 UnitNamePtr = 0x591000 -- i * 0x20
-TestStart = 1
-Limit = 1
+TestStart = 0
+Limit = 0
 GunSafety = 0
-VName = "Ver:HD 1.0"
+VName = "Ver:HD 1.4"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 DP_Start_init(FP)
@@ -3028,7 +3028,7 @@ for i = 0,5 do
 CIfX(FP,HumanCheck(i,1))
 CDoActions(FP,{TSetDeathsX(i,Subtract,Dt,440,0xFFFFFF)})
 CMov(FP,0x57f120 + (i*4) , CanC)
-CMov(FP,0x582174 + (i*4) , CanCount)
+--CMov(FP,0x582174 + (i*4) , CanCount)
 CElseX()
 DoActions(FP,{SetDeaths(i,SetTo,0,440)})
 CIfXEnd()
@@ -5407,8 +5407,14 @@ end
 
 
 
-
-
+CIfX(FP,{CDeaths(FP,AtLeast,#HiddenCommand,HiddenMode),TTOR({--히든모드가 켜져있고  4옵션 셋중 하나라도 켜져있으면 캔낫시 정야독과 유닛파괴만
+	CV(HiddenPts,1,AtLeast),
+	CV(HiddenATK,1,AtLeast),
+	CV(HiddenPts,1,AtLeast),
+	CV(AtkSpeedMode,1,AtLeast),
+	
+})})
+--히든모드 캔
 CIf(FP,{--캔발동
 	CV(CanCount,0,AtMost);
 	CDeaths(FP,AtMost,0,CanCT);
@@ -5429,7 +5435,47 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
-	AddV(CanCount,1);})
+})
+Trigger2X(FP,{},{
+	RotatePlayer({
+		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !",4),
+		PlayWAVX("sound\\Bullet\\TNsHit00.wav"),
+		PlayWAVX("staredit\\wav\\warn.wav"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV"),
+		PlayWAVX("sound\\Terran\\GOLIATH\\TGoPss01.WAV")
+		},HumanPlayers,FP);
+},{preserved})
+CIfEnd()
+CElseX()
+CIf(FP,{--캔발동
+	CV(CanCount,0,AtMost);
+	CDeaths(FP,AtMost,0,CanCT);
+	Memory(0x628438,AtMost,0);
+},{
+	KillUnit(37,Force2);
+	KillUnit(38,Force2);
+	KillUnit(39,Force2);
+	KillUnit(41,Force2);
+	KillUnit(42,Force2);
+	KillUnit(43,Force2);
+	KillUnit(44,Force2);
+	KillUnit(48,Force2);
+	KillUnit(53,Force2);
+	KillUnit(54,Force2);
+	KillUnit(55,Force2);
+	KillUnit(56,Force2);
+	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
+	SetCDeaths(FP,SetTo,24*7,CanCT);
+	AddV(CanCount,1);
+
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
+})
 Trigger2X(FP,{},{
 	RotatePlayer({
 		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 3 LEFT",4),
@@ -5461,7 +5507,13 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
-	AddV(CanCount,1);})
+	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),})
 Trigger2X(FP,{},{
 	RotatePlayer({
 		DisplayTextX("\x13\x08! ! ! WARNING - C C M U   D E T E C T E D  - WARNING ! ! !\n\x13\x08COUNT 2 LEFT",4),
@@ -5492,6 +5544,12 @@ CIfOnce(FP, {--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
 	SetCDeaths(FP,SetTo,24*7,CanCT);})
 
 	Trigger2X(FP,{},{
@@ -5526,6 +5584,12 @@ CIfOnce(FP, {--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	AddV(CanCount,1);
+	SetMemory(0x582174 + (0*4),Add,2),
+	SetMemory(0x582174 + (1*4),Add,2),
+	SetMemory(0x582174 + (2*4),Add,2),
+	SetMemory(0x582174 + (3*4),Add,2),
+	SetMemory(0x582174 + (4*4),Add,2),
+	SetMemory(0x582174 + (5*4),Add,2),
 	SetCDeaths(FP,SetTo,24*7,CanCT);})
 
 
@@ -5542,6 +5606,7 @@ CIfOnce(FP, {--캔발동
 			
 	})
 CIfEnd()
+CIfXEnd()
 
 
 --[[
