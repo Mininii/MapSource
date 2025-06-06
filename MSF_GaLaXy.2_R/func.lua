@@ -598,7 +598,7 @@ CWhile(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Spawn_TempW[2],AtLeast,1)})
 				Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY,{Simple_CalcLoc(0,-4,-4,4,4)})
 				CDoActions(FP,{
 					Order("Men", Force2, 1, Attack, DefaultAttackLoc);
-					TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
+					--TCreateUnitWithProperties(1,84,1,CreatePlayer,{energy = 100})
 				})
 
 			CElseIfX(CVar(FP,RepeatType[2],Exactly,188))

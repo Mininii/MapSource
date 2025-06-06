@@ -32,7 +32,7 @@ UnitNamePtr = 0x591000 -- i * 0x20
 TestStart = 0
 Limit = 0
 GunSafety = 0
-VName = "Ver:HD 1.4"
+VName = "Ver:HD 1.5"
 SetFixedPlayer(FP)
 StartCtrig(1,FP,nil,1)
 DP_Start_init(FP)
@@ -5305,7 +5305,7 @@ Trigger { -- 스팀팩
 	players = {i},
 	conditions = {
 		Label(0);
-		CVar(FP,HiddenATK[2],AtLeast,1);
+		CDeaths(FP,AtLeast,1,OneStim[i+1]);
 		Command(i,AtLeast,1,8);
 	},
 	actions = {
@@ -5435,6 +5435,7 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
+<<<<<<< HEAD
 })
 Trigger2X(FP,{},{
 	RotatePlayer({
@@ -5467,6 +5468,8 @@ CIf(FP,{--캔발동
 	SetCp(P7),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCp(P8),RunAIScriptAt("Set Unit Order To: Junk Yard Dog","Anywhere");
 	SetCDeaths(FP,SetTo,24*7,CanCT);
+=======
+>>>>>>> 30371757d54ebff2ac33ddc280996f0e51b9e22a
 	AddV(CanCount,1);
 
 	SetMemory(0x582174 + (0*4),Add,2),
@@ -6202,12 +6205,13 @@ DoActions(FP,{
 	RemoveUnit(182,P12),
 	RemoveUnit(183,P12),
 })
+
 Trigger {
 	players = {FP},
 	conditions = {
 		Label(0);
 		CGMode(1);
-		CommandLeastAt(174,64);
+		Bring(FP,AtMost,0,174,64),
 	},
 	actions = {
 		SetCDeaths(FP,Add,1,Win);
