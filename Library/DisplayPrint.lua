@@ -313,6 +313,7 @@
 		local Dev = 0
 		local RetAct = {}
 		local ItoDecKey = {}
+		local lItoDecKey = {}
 		local ItoNameKey = {}
 		local VCharKey = {}
 		
@@ -340,6 +341,11 @@
 					table.insert(ItoDecKey,{k,Dev,false})
 					Dev=Dev+(4*4)
 				end
+				
+			elseif type(k)=="table" and k[4]=="W" then
+				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 20)))
+				table.insert(lItoDecKey,{k,Dev,false})
+				Dev=Dev+(4*5)
 			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
 				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
 				table.insert(VCharKey,{k,Dev})
@@ -404,6 +410,11 @@
 			else
 				CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,p[2])})
 			end
+		end
+		for j,p in pairs(lItoDecKey) do
+			local k = p[1]
+			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+			CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,p[2])})
 		end
 		for j,p in pairs(ItoNameKey) do
 			local k = p[1]
