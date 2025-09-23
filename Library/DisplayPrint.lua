@@ -1065,3 +1065,126 @@ function print_utf8_A(DB, string)
 	end
 	return ret
 end
+
+
+
+
+	function DisplaySTRX(arg,ResetTimer) -- ext text ver
+		BSize = 0
+		
+
+		dp.Alloc = dp.Alloc+1
+		RetV = CreateVar(FP)
+		Dev = 0
+
+		if ResetTimer~=nil then
+			
+			if type(ResetTimer)=="table" and ResetTimer[4]== "V" then
+				CIf(FP,{CV(ResetTimer,0)})
+
+			elseif type(ResetTimer)=="number" then
+				ResetTimerCode = CreateCcode()
+				DoActionsX(FP,{SubCD(ResetTimerCode, 1)})
+				CIf(FP,{CD(ResetTimerCode,0)},{SetCD(ResetTimerCode,ResetTimer)})
+
+			end
+		end
+		CMov(FP,dp.publicItoCusPtr,RetV)
+		dp.StrT = {}
+		dp.StrXIndex=dp.StrXIndex+1
+		for j,k in pairs(arg) do
+			if type(k) == "function" then
+				local PrevBSize = BSize
+				k()
+				local NextBSize = BSize
+				table.insert(dp.StrT,string.rep("\x0D",NextBSize-PrevBSize))
+				
+			elseif type(k)=="table" and type(k[1]) == "function" then
+				local lfunc = k[1]
+				local PrevBSize = BSize
+				table.remove(k,1)
+				lfunc(table.unpack(k))
+				local NextBSize = BSize
+				table.insert(dp.StrT,string.rep("\x0D",NextBSize-PrevBSize))
+			elseif type(k) == "string" then
+				--local CT = CreateCText(FP,k)
+				table.insert(dp.StrT,k)
+				BSize=BSize+#k
+				Dev=Dev+#k
+			elseif type(k)=="table" and k[1] == "PVA" then -- PNameVArr 우회전용
+				BSize = BSize+(4*5)
+				if k[2] == "LocalPlayerID" then
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoLPName)
+				elseif type(k[2])=="number" then
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CallTrigger(FP, dp.Call_VtoName,{SetV(dp.VtoNameV,k[2])})
+				elseif k[2][4] == "V" then
+					CAdd(FP,dp.VtoNamePtr,RetV,Dev)
+					CMov(FP,dp.VtoNameV,k[2])
+					CallTrigger(FP, dp.Call_VtoName)
+				end
+				Dev=Dev+(4*5)
+				table.insert(dp.StrT,string.rep("\x0D",4*5))
+			elseif type(k)=="table" and k[4]=="V" then
+				if k["fwc"] == true then
+					BSize=BSize+(4*12)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDecX,{SetV(dp.DevV,Dev)}) 
+					Dev=Dev+(4*12)
+					table.insert(dp.StrT,string.rep("\x0D",4*12))
+				elseif k["hex"] == true then
+					BSize=BSize+(3*4)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_ItoHex,{SetV(dp.DevV,Dev)}) 
+					Dev=Dev+(3*4)
+					table.insert(dp.StrT,string.rep("\x0D",3*4))
+				else
+					BSize=BSize+(4*4)
+					CMov(FP,dp.publicItoDecV,k)
+					CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,Dev)}) 
+					Dev=Dev+(4*4)
+					table.insert(dp.StrT,string.rep("\x0D",4*4))
+				end
+			elseif type(k)=="table" and k[4]=="W" then
+				BSize=BSize+(4*5)
+				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+				CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,Dev)}) 
+				Dev=Dev+(4*5)
+				table.insert(dp.StrT,string.rep("\x0D",4*5))
+			elseif type(k)=="table" and k[1][4]=="V" then -- VarArr일 경우
+				BSize = BSize+#k
+				for o,p in pairs(k) do
+					CMov(FP,dp.TBwInputChar,p)
+					CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.DevV,Dev)}) 
+					
+					Dev=Dev+(1)
+					table.insert(dp.StrT,string.rep("\x0D",1))
+				end
+			elseif type(k)=="number" then -- 상수index V 입력, string.char 구현용. 맨앞 0xFF영역만 사용
+				BSize=BSize+1
+				CMov(FP,dp.TBwInputChar,V(k))
+				CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.DevV,Dev)}) 
+				Dev=Dev+(1)
+				table.insert(dp.StrT,string.rep("\x0D",1))
+			else
+				PushErrorMsg("Print_Inputdata_Error")
+			end
+		end
+		
+		if ResetTimer~=nil then
+			CIfEnd()
+		end
+
+		dp.StrT = table.concat(dp.StrT).."\x0D\x0D\x0D\x0D"
+		table.insert(dp.StrXKeyArr,{RetV,dp.StrT})
+		DoActions(FP, {Disabled(DisplayText(dp.StrT))}, 1)
+
+		RetV = nil
+		Dev = nil
+		BSize = nil
+		return dp.StrT
+
+
+	end
+
