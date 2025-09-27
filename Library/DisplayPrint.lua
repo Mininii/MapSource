@@ -192,7 +192,19 @@
 					Dev=Dev+(4*4)
 					table.insert(dp.StrT,string.rep("\x0D",4*4))
 				end
+			elseif type(k)=="table" and k[4]=="VA" then
+				BSize=BSize+(4*4)
+				CMov(FP,dp.publicItoDecV,k)
+				CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,Dev)}) 
+				Dev=Dev+(4*4)
+				table.insert(dp.StrT,string.rep("\x0D",4*4))
 			elseif type(k)=="table" and k[4]=="W" then
+				BSize=BSize+(4*5)
+				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+				CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,Dev)}) 
+				Dev=Dev+(4*5)
+				table.insert(dp.StrT,string.rep("\x0D",4*5))
+			elseif type(k)=="table" and k[4]=="WA" then
 				BSize=BSize+(4*5)
 				f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
 				CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,Dev)}) 
@@ -414,7 +426,7 @@
 		for j,p in pairs(lItoDecKey) do
 			local k = p[1]
 			f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
-			CallTrigger(FP,dp.Call_IToDec,{SetV(dp.DevV,p[2])})
+			CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,p[2])})
 		end
 		for j,p in pairs(ItoNameKey) do
 			local k = p[1]
