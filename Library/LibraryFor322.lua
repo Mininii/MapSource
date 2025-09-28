@@ -281,15 +281,18 @@ end
 
 function TCallTriggerX(Player,Index,Condition,AddonTrigger,Flags) -- CtrigAsm 5.1
 	local Y
+	local X
+	if AddonTrigger == nil then X = {}
+	else
+	X = AddonTrigger
+	end
 	if Flags == nil then Y = {preserved} elseif Flags == "X" or Flags == 1 then Y = {} else PushErrorMsg("CallTriggerX_FlagError") end
-	local X = {SetNext("X",Index,0),SetNext(Index+1,"X",1)}
+	table.insert(X,SetNext("X",Index,0))
+	table.insert(X,SetNext(Index+1,"X",1))
 	table.insert(X,SetCtrigX("X",Index+1,0x158,0,SetTo,"X","X",0x4,1,0))
 	table.insert(X,SetCtrigX("X",Index+1,0x15C,0,SetTo,"X","X",0,0,1))
 	table.insert(X,SetCtrig1X("X",Index+1,0x164,0,SetTo,0x0,0x2))
 	
-	for j,k in pairs(X) do
-		table.insert(AddonTrigger, k)
-	end
 	
 	CTrigger(Player,Condition,AddonTrigger,Y)
 end
