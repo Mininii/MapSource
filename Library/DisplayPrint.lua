@@ -52,6 +52,10 @@
 					CallTrigger(FP, dp.Call_VtoName)
 				end
 				Dev=Dev+(4*5)
+			elseif type(k)=="table" and k[4]=="W" then
+					f_LMov(FP, dp.publiclItoDecW, k, nil, nil, 1)
+					CallTrigger(FP,dp.Call_lIToDec,{SetV(dp.DevV,Dev)}) 
+					Dev=Dev+(5*4)
 			elseif type(k)=="table" and k[4]=="V" then
 
 				if k["fwc"] == true then

@@ -294,7 +294,7 @@ function TCallTriggerX(Player,Index,Condition,AddonTrigger,Flags) -- CtrigAsm 5.
 	table.insert(X,SetCtrig1X("X",Index+1,0x164,0,SetTo,0x0,0x2))
 	
 	
-	CTrigger(Player,Condition,AddonTrigger,Y)
+	CTrigger(Player,Condition,X,Y)
 end
 HumanCheckOffset = 0
 function Enable_HumanCheck(Offset)
