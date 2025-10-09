@@ -326,12 +326,13 @@
 
 
 	function DisplayPrintEr(TargetPlayer,arg)
-		local Dev = 0
+		Dev = 0
 		local RetAct = {}
 		local ItoDecKey = {}
 		local lItoDecKey = {}
 		local ItoNameKey = {}
 		local VCharKey = {}
+		DPGeneralFuncKey = {}
 		
 
 
@@ -358,6 +359,14 @@
 					Dev=Dev+(4*4)
 				end
 				
+			elseif type(k)=="table" and k[4]=="VA" then
+				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 16)))
+				table.insert(ItoDecKey,{k,Dev,false})
+				Dev=Dev+(4*4)
+			elseif type(k)=="table" and k[4]=="WA" then
+				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 20)))
+				table.insert(lItoDecKey,{k,Dev,false})
+				Dev=Dev+(4*5)
 			elseif type(k)=="table" and k[4]=="W" then
 				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 20)))
 				table.insert(lItoDecKey,{k,Dev,false})
@@ -366,7 +375,15 @@
 				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", 1)))
 				table.insert(VCharKey,{k,Dev})
 				Dev=Dev+(1)
-
+			elseif type(k)=="table" and type(k[1]) == "function" then
+				local lfunc = k[1]
+				table.remove(k,1)
+				local PrevDev = Dev
+				lfunc(table.unpack(k))
+				--error(Dev)
+				local NextDev = Dev
+				table.insert(RetAct,print_utf8_2(12, Dev, string.rep("\x0D", NextDev-PrevDev)))
+				
 			else
 				PushErrorMsg("Print_Inputdata_Error")
 			end
@@ -448,8 +465,15 @@
 			CMov(FP,dp.TBwInputChar,V(p[1]))
 			CallTrigger(FP,dp.Call_TBwrite,{SetV(dp.publicItoCusPtr,0x640B60 + (12 * 218)),SetV(dp.DevV,p[2])}) 
 		end
+		for j,p in pairs(DPGeneralFuncKey) do
+			p[1](p[2])
+		end
+
+		
 		CIfEnd()
 
+		DPGeneralFuncKey = nil
+		Dev = nil
 	end
 
 	function Print_13X(PlayerID,TargetPlayer)
