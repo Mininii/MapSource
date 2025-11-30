@@ -471,7 +471,7 @@ SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
 SetMemory(0x6C9EF8 + (74*4),SetTo,1);
 
 CreateUnitWithProperties(1, MarGUID[j+1], 39, i, {energy=100}),
-Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))));
+Simple_SetLoc(0, 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))));
 MoveUnit(1, MarGUID[j+1], i, 39, 1),Order(MarGUID[j+1], i, 39, Attack, 4),
 SetMemoryB(0x6C9E20 + 74,SetTo,40);
 SetMemoryB(0x6C9858 + 74,SetTo,0);
@@ -555,7 +555,7 @@ TriggerX(FP, {
 	Bring(i, AtMost, 2, 100, 3);
 	Bring(i, AtMost, 2, 16, 3);
 }, {SetCD(AutoCombiCcode[i+1], 0),
-Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))));
+Simple_SetLoc(0, 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))));
 MoveUnit(All, 0, i, 3, 1);
 MoveUnit(All, 20, i, 3, 1);
 MoveUnit(All, 100, i, 3, 1);
@@ -643,7 +643,7 @@ CIf(FP,CV(HiddenHP,1,AtLeast))
 
 CMov(FP,0x6509B0,19025+10)
 CWhile(FP,Memory(0x6509B0,AtMost,19025+10 + (84*1699)))
-if X2_Mode == 1 then
+if X2_Map == 1 then
 	CallTriggerX(FP, Call_HealZone, {DeathsXRange(CurrentPlayer, 3552*2,3872*2, 0,0xFFFF),DeathsXRange(CurrentPlayer, 160*2*65536,416*2*65536, 0,0xFFFF0000)})
 else
 	CallTriggerX(FP, Call_HealZone, {DeathsXRange(CurrentPlayer, 3552,3872, 0,0xFFFF),DeathsXRange(CurrentPlayer, 160*65536,416*65536, 0,0xFFFF0000)})
@@ -914,7 +914,7 @@ actions = {
 	ModifyUnitEnergy(3,0,j,3,0);
 	RemoveUnitAt(3,0,3,j);
 	CreateUnitWithProperties(1,20,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 20, j, 39, 1),Order(20, j, 39, Attack, 4);
 	DisplayText("\x02▶ \x04Marine \x043기를 조합하여 \x1BH \x04Marine으로 \x19변환\x04하였습니다.",4);
 	PreserveTrigger();
@@ -930,7 +930,7 @@ actions = {
 	ModifyUnitEnergy(3,20,j,3,0);
 	RemoveUnitAt(3,20,3,j);
 	CreateUnitWithProperties(1,100,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 100, j, 39, 1),Order(100, j, 39, Attack, 4);
 	SetDeaths(j,Add,1,125);
 	DisplayText("\x02▶ \x1BH \x04Marine \x043기를 조합하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다.",4);
@@ -953,7 +953,7 @@ actions = {
 	RemoveUnitAt(3,100,3,j);
 	DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043기를 조합하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다.",4);
 	CreateUnitWithProperties(1,16,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 16, j, 39, 1),Order(16, j, 39, Attack, 4);
 	PreserveTrigger();
 },
@@ -976,7 +976,7 @@ actions = {
 	RemoveUnitAt(3,16,3,j);
 	DisplayText("\x02▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x043기를 조합하여 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다.",4);
 	CreateUnitWithProperties(1,99,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(j*(32+(X2_Mode*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 99, j, 39, 1),Order(99, j, 39, Attack, 4);
 	SetMemoryB(0x6C9E20 + 74,SetTo,40);
 	SetMemoryB(0x6C9858 + 74,SetTo,0);

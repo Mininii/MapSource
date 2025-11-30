@@ -660,7 +660,7 @@ TriggerX(FP,{CV(SetPlayers,4)},{SetResources(Force1,Add,100000,Ore)})
 
 for i = 0, 6 do
 	CIf(FP,{HumanCheck(i, 1)})
-	DoActions(FP, {Simple_SetLoc(0, 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32))), 3728*(X2_Mode+1), 384+(i*(32+(X2_Mode*32)))),CreateUnitWithProperties(3,0,1,i,{energy = 100}),CreateUnitWithProperties(3,20,1,i,{energy = 100})})
+	DoActions(FP, {Simple_SetLoc(0, 3728*(X2_Map+1), ((384/2)*(X2_Map+1))+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), ((384/2)*(X2_Map+1))+(i*(32+(X2_Map*32)))),CreateUnitWithProperties(3,0,1,i,{energy = 100}),CreateUnitWithProperties(3,20,1,i,{energy = 100})})
 	TriggerX(FP,{CV(SetPlayers,1)},{CreateUnitWithProperties(4,0,1,i,{energy = 100}),CreateUnitWithProperties(3,20,1,i,{energy = 100})})
 	TriggerX(FP,{CV(SetPlayers,2)},{CreateUnitWithProperties(3,0,1,i,{energy = 100}),CreateUnitWithProperties(2,20,1,i,{energy = 100})})
 	TriggerX(FP,{CV(SetPlayers,3)},{CreateUnitWithProperties(2,0,1,i,{energy = 100}),CreateUnitWithProperties(1,20,1,i,{energy = 100})})

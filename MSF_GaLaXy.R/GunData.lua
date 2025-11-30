@@ -316,7 +316,7 @@ function Include_GunData(Size,LineNum)
 				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{3,10,20},3},{104,25,4},{48,15,4},{28,{2,5,11},5}
 			},
 		}
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			HiveLinkTable = {
 				{ -- Index 1
 					{2432*2,672*2},{2400*2,288*2},
@@ -360,7 +360,7 @@ function Include_GunData(Size,LineNum)
 			end
 		end
 		CIfEnd()
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			PSIHiveShape = CS_ConnectPathX({3   ,{480*2, 1600*2},{1152*2, 1216*2},{448*2, 864*2}},148)
 			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{preserved})
 		else
@@ -436,7 +436,7 @@ function Include_GunData(Size,LineNum)
 
 
 		CIf(FP,{Gun_Line(3,AtLeast,19),Gun_Line(3,AtMost,22)})
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			HTankZoneArr = {
 				{1216*2,2336*2},{1984*2,2336*2},{1216*2,1952*2},{1984*2,1952*2}
 			}
@@ -477,7 +477,7 @@ function Include_GunData(Size,LineNum)
 		Trigger2X(FP,{Gun_Line(8,AtMost,19)},{Simple_CalcLoc(0,-128,-64,128,64),MoveUnit(All,"Men",FP,1,4)},{preserved})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
-			if X2_Mode==1 then
+			if X2_Map==1 then
 				PySuShape = {4,{-6*32*2,0},{0,-3*32*2},{6*32*2,0},{0,3*32*2}}
 			else
 				PySuShape = {4,{-6*32,0},{0,-3*32},{6*32,0},{0,3*32}}
@@ -520,7 +520,7 @@ function Include_GunData(Size,LineNum)
 	 
 
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			 
 		else 
 			CAdd(FP,G_CA_Y,64)
@@ -547,7 +547,7 @@ function Include_GunData(Size,LineNum)
 	FaciCUTable = {3,6,11}
 	FaciCUTable2 = {7,15,30}
 	FaciCUTable3 = {1,3,10}
-	if X2_Mode == 1 then
+	if X2_Map == 1 then
 		FactTankXY = {1600*2,2144*2}
 	else
 		FactTankXY = {1600,2144}
@@ -620,7 +620,7 @@ function Include_GunData(Size,LineNum)
 
 
 	CIf_GCase(201)
-	if X2_Mode == 1 then
+	if X2_Map == 1 then
 		DoActions(FP,{Simple_SetLoc(35,(1600-256)*2,(2144-256)*2,(1600+256)*2,(2144+256)*2)})
 	else
 		DoActions(FP,{Simple_SetLoc(35,1600-256,2144-256,1600+256,2144+256)})
@@ -634,7 +634,7 @@ function Include_GunData(Size,LineNum)
 		SetMemoryX(0x666458, SetTo, 546,0xFFFF)
 	},preserved)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,10)})
-	if X2_Mode == 1 then
+	if X2_Map == 1 then
 		Shape8130 = {{4032*2, 3392*2},{3392*2, 3072*2},{3392*2, 3712*2},{2752*2, 3392*2}}
 		Shape8151 = {{3072*2, 3232*2},{3072*2, 3552*2},{3712*2, 3552*2},{3712*2, 3232*2}}
 		CCDelayT = 63
@@ -669,7 +669,7 @@ function Include_GunData(Size,LineNum)
 			FaciCUTable = {3,6,11}
 			FaciCUTable2 = {7,15,30}
 			FaciCUTable3 = {1,3,10}
-			if X2_Mode == 1 then
+			if X2_Map == 1 then
 				FaciPosArr = {
 					{2336*2,2144*2},{864*2,2144*2},{1600*2,2528*2},{1600*2,1760*2}
 				}
@@ -722,7 +722,7 @@ function Include_GunData(Size,LineNum)
 
 	CIf_GCase(148)
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,400)})
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 
 			OvrmLinkArr = {
 				{4000*2,2016*2},{3968*2,2752*2}
@@ -756,7 +756,7 @@ function Include_GunData(Size,LineNum)
 				end
 			end
 		end
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 
 			OvrmLinkArr2 = {
 				{2464*2,2720*2},{3200*2,2304*2}
@@ -797,13 +797,21 @@ function Include_GunData(Size,LineNum)
 		CIf(FP,Gun_Line(9,AtMost,0),{Gun_SetLine(9,Add,50)})
 			OvrMineActArr = {}
 			if X2_Mode == 1 then
-	
-				X2_MineXYArr = {
-					{-64,-64},{64,-64},{-64,64},{64,64},
-				}
-				OvrMinePosArr = {
-					{3776*2,2368*2},{3712*2,2144*2},{3904*2,2752*2}
-				}
+				if X2_Map == 1 then
+					X2_MineXYArr = {
+						{-64,-64},{64,-64},{-64,64},{64,64},
+					}
+					OvrMinePosArr = {
+						{3776*2,2368*2},{3712*2,2144*2},{3904*2,2752*2}
+					}
+				else
+					X2_MineXYArr = {
+						{-32,-32},{32,-32},{-32,32},{32,32},
+					}
+					OvrMinePosArr = {
+						{3776,2368},{3712,2144},{3904,2752}
+					}
+				end
 			else
 	
 				OvrMinePosArr = {
@@ -822,7 +830,7 @@ function Include_GunData(Size,LineNum)
 				end
 			end
 			OvrMineActArr2 = {}
-			if X2_Mode == 1 then
+			if X2_Map == 1 then
 	
 			OvrMinePosArr2 = {
 				{2848*2,2432*2},{2752*2,2720*2},{2944*2,2624*2}
@@ -861,14 +869,14 @@ function Include_GunData(Size,LineNum)
 		for l=1, 3 do
 			if i%2 == 0 then
 				
-				if X2_Mode==1 then
+				if X2_Map==1 then
 					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64*2,2048*2},FP,1)
 				else
 					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","LeftLine","MAX",190,{64,2048},FP,1)
 				end
 	
 			else
-				if X2_Mode==1 then
+				if X2_Map==1 then
 					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048*2,4096*2},FP,1)
 				else
 					G_CA_SetSpawn({CD(GMode,l),Gun_Line(8,Exactly,i)},{PsiCUTable[l][i+1]},"ACAS","SouthLine","MAX",190,{2048,4096},FP,1)
@@ -887,7 +895,7 @@ function Include_GunData(Size,LineNum)
 		DoActions(FP,{CreateUnit(1,84,1,FP),KillUnit(84,FP)})
 		CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,50),Gun_SetLine(8,Add,1)})
 			DoActions2(FP,{RotatePlayer({MinimapPing(1)},HumanPlayers,FP),SetMemoryX(0x666458, SetTo, 391,0xFFFF),})
-			if X2_Mode==1 then
+			if X2_Map==1 then
 				FormShape = {4,{-12*32*2,0},{0,-6*32*2},{12*32*2,0},{0,6*32*2}}
 			else
 				FormShape = {4,{-12*32,0},{0,-6*32},{12*32,0},{0,6*32}}

@@ -699,9 +699,15 @@ G_CA_Y = CreateVar(FP)
 Call_Repeat = SetCallForward()
 SetCall(FP)
 if X2_Mode==1 then
+	if X2_Map == 1 then
 	X2_XYArr = {
 		{-128,-128},{128,-128},{-128,128},{128,128},
 	}
+	else
+	X2_XYArr = {
+		{-64,-64},{64,-64},{-64,64},{64,64},
+	}
+	end
 end
 local QueueX = CreateVar(FP)
 local QueueY = CreateVar(FP)
@@ -726,7 +732,7 @@ CWhile(FP,{CVar(FP,Spawn_TempW[2],AtLeast,1)})
 	end
 
 	CElseX()
-	if X2_Mode == 1 then
+	if X2_Map == 1 then
 		CMov(FP,QueueX,3712*2)
 		CMov(FP,QueueY,288*2)
 	else

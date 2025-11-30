@@ -7,6 +7,7 @@
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
 X2_Mode = 1
+X2_Map = 0
 LD2XOption = 1
 
 MapFolder = "MSF_GaLaXy.R"
@@ -34,7 +35,7 @@ end
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
 TestSet(0)
-VNum = "3.6"
+VNum = "4.0"
 
 AutoSettingMode = false
 
@@ -44,11 +45,12 @@ RMode = 1
 if Limit == 1 then
 	RMode = 1
 end
-if X2_Mode == 1 then
+if X2_Map == 1 or X2_Mode == 1 then
 	VName = VNum.."_2X"..Test
+end
+if X2_Map == 1 then
 	MapSize = {256*32,256*32}
 else
-	VName = VNum..Test
 	MapSize = {128*32,128*32}
 end
 FP = P8

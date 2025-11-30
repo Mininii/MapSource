@@ -1,7 +1,7 @@
 function Waves()
 	CIf(FP,Switch("Switch 201",Set))
 	--ElapsedTimeX(Comparison, Time)
-	if X2_Mode == 1 then
+	if X2_Map == 1 then
 		CallXYArr = {{3552*2,160*2},{3872*2,160*2},{3552*2,416*2},{3872*2,416*2}}
 	else
 		CallXYArr = {{3552,160},{3872,160},{3552,416},{3872,416}}
@@ -67,7 +67,7 @@ function Waves()
 	
 	CIf(FP,{ElapsedTimeX(AtMost,60*120),CD(WarpDeath,0)},{AddCD(WaveT,1)})
 		CIf(FP,CD(WaveT,3000,AtLeast),SetCD(WaveT,0))
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			DG1XY = {432*2,688*2}
 		else
 			DG1XY = {432,688}
@@ -93,7 +93,7 @@ function Waves()
 	TriggerX(FP,{Bring(FP, AtLeast, 1, 53, 32)},{MoveUnit(1, 53, FP, 32, 2),MoveUnit(1, 53, FP, 32, 12),MoveUnit(1, 53, FP, 32, 13),Order(53,FP,38,Attack,4)},{preserved})
 	TriggerX(FP,{Bring(FP, AtLeast, 1, 54, 32)},{MoveUnit(1, 54, FP, 32, 2),MoveUnit(1, 54, FP, 32, 12),MoveUnit(1, 54, FP, 32, 13),Order(54,FP,38,Attack,4)},{preserved})
 		CIf(FP,CD(WaveT2,250,AtLeast),SetCD(WaveT2,0))
-		if X2_Mode == 1 then
+		if X2_Map == 1 then
 			DG1XY2 = {3360*2,272*2}
 			DG1XY3 = {352*2,1856*2}
 		else

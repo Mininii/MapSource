@@ -352,13 +352,13 @@ CWhile(FP,Bring(FP,AtLeast,1,193,64),{
 CWhileEnd()
 DoActions(FP,{GiveUnits(All,193,8,"Anywhere",FP),Order(193,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
 CIf(FP,{Bring(FP,AtLeast,1,193,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,193,FP,4,8),KillUnitAt(1,193,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
-if X2_Mode == 1 then
+if X2_Map == 1 then
 	HealZoneSpawnArr = {{3552*2, 160*2},{3552*2, 416*2},{3872*2, 416*2},{3872*2, 160*2}}
 else
 	HealZoneSpawnArr = {{3552, 160},{3552, 416},{3872, 416},{3872, 160}}
 end
 
-if X2_Mode==1 then
+if X2_Map==1 then
 	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
 else
 	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
@@ -400,7 +400,7 @@ CWhileEnd()
 DoActions(FP,{GiveUnits(All,192,8,"Anywhere",FP),Order(192,AllPlayers,"Anywhere",Move,4),SetSwitch("Switch 10",Random),SetSwitch("Switch 11",Random)})
 CIf(FP,{Bring(FP,AtLeast,1,192,4),CD(PyT,0)},{SetCD(PyT,10),GiveUnits(1,192,FP,4,8),KillUnitAt(1,192,4,AllPlayers),SetSwitch(RandSwitch2,Random),SetSwitch(RandSwitch1,Random),AddCD(PyCCode,1)})
 
-if X2_Mode==1 then
+if X2_Map==1 then
 	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712*2,288*2},FP)
 else
 	G_CA_SetSpawn({},{84},"ACAS","ObEffShape","MAX",nil,{3712,288},FP)
@@ -432,16 +432,22 @@ end
 CIfEnd()
 CIfEnd()
 DoActionsX(FP,SubCD(PyT,1))
+
+TriggerX(FP, {CV(count,1499,AtMost),CV(CreateUnitQueueNum,0,AtMost)}, {SetInvincibility(Disable,"Buildings",P8,64)},{preserved})
+TriggerX(FP, {CV(count,1500,AtLeast)}, {SetInvincibility(Enable,"Buildings",P8,64)},{preserved})
+TriggerX(FP, {CV(CreateUnitQueueNum,1,AtLeast)}, {SetInvincibility(Enable,"Buildings",P8,64)},{preserved})
+
+
 function InvDisable(Cond,UnitID,Player,Loc,Name)
 txt = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※\n\n\n\x13\x03"..Name.."\x04의 \x08무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※"
 Wav = "staredit\\wav\\Unlock.ogg"
-Trigger2X(FP,Cond,{
-	MoveLocation(1,UnitID,Player,Loc);
-	SetInvincibility(Disable,UnitID,Player,Loc);
-	RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)
-})
+CIfX(FP, Cond,{SetInvincibility(Disable,UnitID,Player,Loc)})
+Trigger2X(FP,Cond,{MoveLocation(1,UnitID,Player,Loc);RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);MinimapPing(1);DisplayTextX(txt,4);},HumanPlayers,FP)})
+CElseX({SetInvincibility(Enable,UnitID,Player,Loc)})
+CIfXEnd()
 end
 TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 88, FP, 64),Order(88, FP, 23, Attack, 4),Order(21, FP, 23, Attack, 4)},{preserved})
+
 InvDisable({CDeaths(FP,AtLeast,4,ChryCcode),CD(GeneCcode,1,AtLeast)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
 InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
 InvDisable({CDeaths(FP,AtLeast,10,PyCCode)},173,Force2,64,"Ｆｏｒｍａｔｉｏｎ")
@@ -453,7 +459,7 @@ InvDisable({
 	CD(LairCcode,0,AtMost), -- 0일경우
 	CD(HiveCcode,0,AtMost), -- 0일경우
 	CD(IonCcode,1,AtLeast), -- 1일경우
-	CD(NexCcode,2,AtLeast), -- 2일경우
+	CD(NexCcode,2,AtLeast), -- 2일경우 
 	CD(CocoonCcode,1,AtLeast), -- 1일경우
 	CD(GeneCcode,1,AtLeast), -- 1일경우
 	CD(OverGCcode,1,AtLeast), -- 1일경우
@@ -463,19 +469,36 @@ InvDisable({
 	CV(CreateUnitQueueNum,0,AtMost) -- 유닛생성 큐에 아무것도 없어야됨
 	
 },174,Force2,64,"최후의 Ｔｅｍｐｌｅ")
+
+
 function InvDisable2(Cond,UnitID,Player,Locs,Name)
 txt = "\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※\n\n\n\x13\x03"..Name.."\x04의 \x08무적상태\x04가 해제되었습니다.\n\n\n\x13\x07※※※※※※※※※※※※\x1F ＮＯＴＩＣＥ\x07 ※※※※※※※※※※※※"
 Wav = "staredit\\wav\\Unlock.ogg"
 local X = {}
+local Y = {}
+local Z = {}
 for j, k in pairs(Locs) do
+	table.insert(Y,SetInvincibility(Enable,UnitID,Player,k))
+	table.insert(Z,SetInvincibility(Disable,UnitID,Player,k))
+
 	table.insert(X,MoveLocation(1,UnitID,Player,k))
-	table.insert(X,SetInvincibility(Disable,UnitID,Player,k))
 	table.insert(X,RotatePlayer({MinimapPing(1)},HumanPlayers,FP))
 end
+
 	table.insert(X,RotatePlayer({PlayWAVX(Wav);PlayWAVX(Wav);DisplayTextX(txt,4)},HumanPlayers,FP))
 Trigger2X(FP,Cond,X)
+
+CIfX(FP, Cond,Z)
+Trigger2X(FP,Cond,X)
+CElseX(Y)
+CIfXEnd()
+
+
 end
 InvDisable2(CD(FormCcode,1),168,FP,{24,25,26},"Ｓｔａｓｉｓ　Ｃｅｌｌ")
+
+
+
 Trigger2X(FP,{CommandLeastAt(160,27),Memory(0x628438,AtLeast,1)},{CreateUnit(1,65,27,FP),
 RotatePlayer({TalkingPortrait(68, 2000),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV"),PlayWAVX("sound\\Protoss\\ARCHON\\PArYes02.WAV")},HumanPlayers,FP);})
 CIf(FP,{CommandLeastAt(160,27),CD(BossCcode,0)},{ModifyUnitShields(All,65,FP,64,100)})
@@ -646,10 +669,12 @@ end
 
 CElseIfX({Switch("Switch 201",Set),CD(DMode,2,AtLeast)},{})--관전이고 뭐고 모두 ExitDrop 실행
 for i = 0, 6 do
-	TriggerX(FP, {CD(DropShield[i+1],0,AtMost),LocalPlayerID(i)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)}, {preserved}) -- 드랍 방지권 = ExitDrop 실행안함
+	CIf(FP,{CD(DropShield[i+1],0,AtMost)})
+	ExitDrop(FP, i)
+	CIfEnd()
 end
 for i = 128, 131 do
-	TriggerX(FP, {LocalPlayerID(i)},{SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1)}, {preserved})
+	ExitDrop(FP, i)
 end
 CIfXEnd()
 DoActions(FP,{SetResources(FP,Add,0x12345678,OreAndGas)},1)
@@ -737,7 +762,6 @@ function CreateUnitQueue()
 	})
 	DoActionsX(FP,{AddV(CreateUnitQueuePtr2,1),SubV(CreateUnitQueueNum,1)})
 	TriggerX(FP, {CV(CreateUnitQueuePtr2,50000,AtLeast)},{SetV(CreateUnitQueuePtr2,0)},{preserved})
-
 
 
 
