@@ -960,6 +960,27 @@ for y = 0, 3 do
 	TriggerX(FP, {Switch(RandSwitch1,RS1),Switch(RandSwitch2,RS2)}, {CreateUnitWithProperties(1,20,14+y,i,{energy = 100})}, {preserved})
 end
 
+CIfX(FP,{CD(BossStart,1)})--보스시작시 랠리포인트에 마린 소환
+CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
+	CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
+		f_Read(FP,_Add(BarPos[i+1],10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+		f_Read(FP,_Add(Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 249, CPosX, CPosY, CPosX, CPosY)
+		CDoActions(FP, {MoveUnit(1, 20, i, 250, 1)})
+	CIfEnd()
+	CIf(FP,{TTMemory(_Add(BarPos[i+1],10),NotSame,BarRally[i+1]),CVar(FP,BarRally[i+1][2],AtLeast,1)})
+		f_Read(FP,_Add(Nextptrs,10),CPos)
+		Convert_CPosXY()
+		Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
+		Convert_CPosXY(BarRally[i+1])
+		Simple_SetLocX(FP, 249, CPosX, CPosY, CPosX, CPosY)
+		CDoActions(FP, {MoveUnit(1, 20, i, 1, 250)})
+	CIfEnd()
+CIfEnd()
+CElseX()
 CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 	CIf(FP,{CV(BarPos[i+1],19025,AtLeast),CV(BarPos[i+1],19025+(84*1699),AtMost)})
 		f_Read(FP,_Add(BarPos[i+1],10),CPos)
@@ -975,6 +996,10 @@ CIf(FP,{TMemoryX(_Add(Nextptrs,40),AtLeast,150*16777216,0xFF000000)})
 		TSetDeaths(_Add(Nextptrs,22),SetTo,BarRally[i+1],0),TSetMemoryX(_Add(Nextptrs,9),SetTo,0,0xFF0000)})
 	CIfEnd()
 CIfEnd()
+CIfXEnd()
+
+
+
 CWhileEnd()
 
 local ShieldOnOff = CreateCcode()

@@ -29,7 +29,7 @@ end
 VerText = "\x04Ver. 2.0"
 EVFPtsMul = 2
 EVFMode = 1
-TestSet(2)
+TestSet(1)
 X2_Mode = 1
 X2_Map= 0
 if X2_Mode==1 then
@@ -39,6 +39,7 @@ if Limit == 1 then
 	VerText = VerText.."T"
 	
 end
+
 FP = P8
 EUDTurbo(FP)
 SetForces({P1,P2,P3,P4,P5,P6,P7},{P8},{},{},{P1,P2,P3,P4,P5,P6,P7,P8})
