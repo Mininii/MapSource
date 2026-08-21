@@ -609,6 +609,7 @@ function SetCDX(Code,Value,Mask)
 	end
 end
 function AddV(V,Value)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -618,6 +619,7 @@ function AddV(V,Value)
 	end
 end
 function SubV(V,Value)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -627,6 +629,7 @@ function SubV(V,Value)
 	end
 end
 function SetV(V,Value,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = SetTo end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -638,6 +641,7 @@ function SetV(V,Value,Type)
 end
 
 function AddVX(V,Value,Mask)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -647,6 +651,7 @@ function AddVX(V,Value,Mask)
 	end
 end
 function SubVX(V,Value,Mask)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
 	if type(Value) == "number" then
@@ -656,6 +661,7 @@ function SubVX(V,Value,Mask)
 	end
 end
 function SetVX(V,Value,Mask,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = SetTo end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -667,6 +673,7 @@ function SetVX(V,Value,Mask,Type)
 end
 
 function CV(V,Value,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -679,6 +686,7 @@ function CV(V,Value,Type)
 end
 
 function _CV(V,Value,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -691,6 +699,7 @@ function _CV(V,Value,Type)
 end
 
 function SetVX(V,Value,Mask,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = SetTo end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -702,6 +711,7 @@ function SetVX(V,Value,Mask,Type)
 end
 
 function CVX(V,Value,Mask,Type)
+	if V[4] ~= "V" then PushErrorMsg("CV_VarType_Error") end
 	if Value == nil then Value = 1 end
 	if Type == nil then Type = Exactly end
 	if FP == nil then PushErrorMsg("FP Player not defined") end
@@ -1020,7 +1030,9 @@ end
 
 function def_sIndex()
 	local X = sindexAlloc
+	--if X == 0x71F then PushErrorMsg("기사님여기에요") end -- sindex 오류 어딘지 찾을때 쓸라고 만듬
 	sindexAlloc = sindexAlloc + 1
+	
 	return X
 end
 function def_sIndexArr(Size)
@@ -1254,6 +1266,7 @@ function CreateVar3(PlayerID,Value,Offset,Type,Mask)
 	table.insert(CreateVarPArr,{"V2",PlayerID,Offset,Type,Value,Mask})
 	return V(CreateVarXAlloc)
 end
+
 
 function Include_CRandNum(Player)
 
