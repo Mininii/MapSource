@@ -376,15 +376,15 @@ function Text()
 		
 		CA__SetValue(Str1,"\x12포인트 \x04:  000,000,000 \x04| \x17크레딧 \x04:  123\x04,123\x04,123\x04,123\x04,123",nil,1)
 		TriggerX(FP,CV(StatPLoc,999999999,AtLeast),{SetV(StatPLoc,999999999)},{preserved})
-        CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+		CS__ItoCustom(FP,SVA1(Str1,8),StatPLoc,nil,nil,{10,9},1,nil,"\x1C0",0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		f_LMov(FP, TempCrStLoc, CredLoc)
 		CIfX(FP,{TTNWar(TempCrStLoc, AtLeast, "999999999999999"),TTNWar(TempCrStLoc, AtMost, "0x7FFFFFFFFFFFFFFF")})
 		f_LMov(FP,TempCrStLoc,"999999999999999")
 		CElseIfX({TTNWar(TempCrStLoc, AtLeast, "0x8000000000000000"),TTNWar(TempCrStLoc, AtMost, "0xFFFC72815B398000")})
 		f_LMov(FP,TempCrStLoc,"0xFFFC72815B398001")
 		CIfXEnd()
-        CA__lItoCustom(SVA1(Str1,29),TempCrStLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
-        ,{0,1,2,4,5,6,8,9,10,12,13,14,16,17,18},nil,{0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
+		CA__lItoCustom(SVA1(Str1,29),TempCrStLoc,nil,nil,{10,15},1,nil,{"\x07\x0D","\x08-", "\x1B0"},{0x19,0x19,0x19,0x1D,0x1D,0x1D,0x02,0x02,0x02,0x1E,0x1E,0x1E,0x05,0x05,0x05}
+		,{0,1,2,4,5,6,8,9,10,12,13,14,16,17,18},nil,{0,0,{0},0,0,{0},0,0,{0},0,0,{0}})
 
 		
 
@@ -400,7 +400,7 @@ function Text()
 		--CMov(FP,TempFf2,-999999999)
 		--CIfXEnd()
 
-        --CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
+		--CS__ItoCustom(FP,SVA1(Str1,8),TempFf2,nil,nil,{10,9},1,nil,{"\x07\x0D","\x08-", "\x1B0"},0x1C,{0,1,2,4,5,6,8,9,10}, nil,{0,0,{0},0,0,{0},0,0,{0}})
 		--CIfXEnd()
 
 

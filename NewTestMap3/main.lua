@@ -11,22 +11,22 @@
 --Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" then
+	if dir:match "%.[Ll][Uu][Aa]$" then
 		if dir ~= "recover.lua" then
 			InitEXTLua = assert(loadfile(Curdir.."MapSource\\Library\\"..dir))
 			InitEXTLua()
 		end
-     end
+	end
 end
 
 EXTLUA = "dir \""..Curdir.."\\MapSource\\NewTestMap3\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
-     if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "main.lua" then
+	if dir:match "%.[Ll][Uu][Aa]$" and dir ~= "main.lua" then
 		if dir ~= "recover.lua" then
 			InitEXTLua = assert(loadfile(Curdir.."MapSource\\NewTestMap3\\"..dir))
 			InitEXTLua()
 		end
-     end
+	end
 end
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -195,13 +195,13 @@ SetCallErrorCheck()
 --end--
 
 --for j,k in pairs(ctarr) do
---    io.write("BanFlag"..j.." : ")
---    
---    for l,m in pairs(k) do
---        io.write("\""..l.." : "..m.."\", ")
---    end
---    
---    io.write("\n")
+--	io.write("BanFlag"..j.." : ")
+--	
+--	for l,m in pairs(k) do
+--		io.write("\""..l.." : "..m.."\", ")
+--	end
+--	
+--	io.write("\n")
 --end
 --CheckTrig("EndTrig")--
 

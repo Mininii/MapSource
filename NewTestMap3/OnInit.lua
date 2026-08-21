@@ -83,10 +83,7 @@ end
 		}
 	end
 	for i = 0, 7 do -- 내부 관리자 판별 트리거
-		InputTesterID(i,"GALAXY_BURST")
-		InputTesterID(i,"Azusawa_Kohane")
-		--InputTesterID(i,"_Mininii")
-		InputTesterID(i,"RonaRonaChan")
+		InputTesterID(i,"Natori_sana")
 	end
 	
 

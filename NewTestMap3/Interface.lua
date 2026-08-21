@@ -105,8 +105,8 @@ function Interface()
 
 	--CIfEnd()
 	CIf(FP,CD(iv.StatTest,1,AtLeast))
-	--DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"    iv.PLevel : ",iv.PLevel[i+1]," \x07』"})
-	--DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"    CTStatP2 : ",CTStatP2," \x07』"})
+	--DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTPLevel : ",CTPLevel,"	iv.PLevel : ",iv.PLevel[i+1]," \x07』"})
+	--DisplayPrint(i, {"\x13\x07『 \x03SYSTEM Message \x04- \x04CTStatP : ",CTStatP,"	CTStatP2 : ",CTStatP2," \x07』"})
 
 	TriggerX(FP,{CDX(iv.StatTest,2^(6-1),2^(6-1)),LocalPlayerID(i)},{
 		SetCp(i),
@@ -219,7 +219,7 @@ end
 
 		
 		TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoEnchArr,((j-1)*8)+i), Exactly, 1)},{ModifyUnitEnergy(All, k[2], i, 64, 1)},{preserved})
-		--TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UID, i, 36+i, Move, i+73)},{preserved})
+		--TriggerX(FP,{Command(i,AtLeast,1,k[2]),MemX(Arr(AutoSellArr,((j-1)*7)+i), Exactly, 1)},{Order(UIDV, i, 36+i, Move, i+73)},{preserved})
 
 
 	end
@@ -235,7 +235,7 @@ end
 --		for i = 0, 7 do
 --			f_Read(FP, 0x58A364+(48*1)+(4*i), TempV)
 --			
---			DisplayPrint(i, {"CurrentOP : ",TempV2,"P    SCA_LastMessage = ",TempV,"   ",})
+--			DisplayPrint(i, {"CurrentOP : ",TempV2,"P	SCA_LastMessage = ",TempV,"   ",})
 --			DisplayPrint(i, {SCA.YearV,".",SCA.MonthV,".",SCA.DayV,". ",SCA.HourV," : ",SCA.MinV,"   Week : ",SCA.WeekV})--
 --		end
 --	end

@@ -1408,7 +1408,7 @@ function EXCC_Part2()
 			conditions = { 
 				Label(EXCC_Index+1);
 			},
-		   	actions = {
+			actions = {
 				SetDeathsX(0,SetTo,0,0,0xFFFFFFFF); -- RecoverNext
 				SetMemory(0x6509B0,SetTo,P);
 			},
@@ -1733,53 +1733,53 @@ CurTrigCnt = 0
 end
 
 function strsum(a,b)
-    retsum={}
-    e=math.max(#a,#b)
-    m=0
-    for i = 1, e do
-        s1=#a-i+1
-        s2=#b-i+1
-        if s1>=1 then
-            r1=tonumber(string.sub(a,s1,s1))
-        else
-            r1=0
-        end
-        if s2>=1 then
-            r2=tonumber(string.sub(b,s2,s2))
-        else
-            r2=0
-        end
+	retsum={}
+	e=math.max(#a,#b)
+	m=0
+	for i = 1, e do
+		s1=#a-i+1
+		s2=#b-i+1
+		if s1>=1 then
+			r1=tonumber(string.sub(a,s1,s1))
+		else
+			r1=0
+		end
+		if s2>=1 then
+			r2=tonumber(string.sub(b,s2,s2))
+		else
+			r2=0
+		end
 
-        if r1 == nil then r1=0 end
-        if r2 == nil then r2=0 end
-        r4=r1+r2+m
-        m=0
-        retsum[e-i+1]=r4%10
-        --print(e,i,#a-i+1,#b-i+1,r1,r2,m,r4)
-        if r4>= 10 then
-            m=1
-            if e==i then
-                table.insert(retsum,1,"1")
-            end
-        end
-    end
-    return table.concat(retsum)
+		if r1 == nil then r1=0 end
+		if r2 == nil then r2=0 end
+		r4=r1+r2+m
+		m=0
+		retsum[e-i+1]=r4%10
+		--print(e,i,#a-i+1,#b-i+1,r1,r2,m,r4)
+		if r4>= 10 then
+			m=1
+			if e==i then
+				table.insert(retsum,1,"1")
+			end
+		end
+	end
+	return table.concat(retsum)
 end
 
 SubtitleArr = {}
 function Create_utf8_Subtitle(string,SCAID,SCID,Slot)
-    local ret = {}
-    if type(string) == "string" then
-        local str = string
-        local n = 1
-        local t = cp949_to_utf8(str)
-        while n <= #t do
-            ret[#ret+1] = _dw(t, n)
-            n = n + 4
-        end
-    elseif type(string) == "number" then
+	local ret = {}
+	if type(string) == "string" then
+		local str = string
+		local n = 1
+		local t = cp949_to_utf8(str)
+		while n <= #t do
+			ret[#ret+1] = _dw(t, n)
+			n = n + 4
+		end
+	elseif type(string) == "number" then
 		PushErrorMsg("Subtitle_String_InputError")
-    end
+	end
 
 	for j,k in pairs(ret) do
 		if k~=0 then

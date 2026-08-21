@@ -57,13 +57,13 @@ function Operator()
 	OPBan=CreateCcodeArr(8)
 	OPBanT=CreateCcodeArr(8)
 
-    CIfX(FP,Never()) -- 상위플레이어 단락 시작
+	CIfX(FP,Never()) -- 상위플레이어 단락 시작
 	for i = 0, 7 do
 		local TimeT = CreateCcode()
 		local TimeC = CreateCcode()
 		local TimeC2 = CreateCcode()
 		local Time = CreateVar(FP)
-        CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i),AddCD(TimeT,1)})--상위플레이어가 런쳐 연결된경우
+		CElseIfX({HumanCheck(i,1),CD(OPBan[i+1],0),DeathsX(i, Exactly, 1, 1,1)},{SetCVar(FP,CurrentOP[2],SetTo,i),AddCD(TimeT,1)})--상위플레이어가 런쳐 연결된경우
 		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i)}, {AddCD(OPBanT[i+1],1)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,1,AtLeast),CD(SCA.GlobalCheck,2,AtMost),SCA.NotAvailable(i),CD(OPBanT[i+1],60*24,AtLeast)}, {AddCD(OPBan[i+1],1),SetCD(OPBanT[i+1],0)}, {preserved})
 		CTrigger(FP, {CD(SCA.GlobalCheck,3),SCA.Available(i)}, {SetCD(OPBanT[i+1],0)}, {preserved})
@@ -95,7 +95,7 @@ function Operator()
 	SCA.Timer = CreateCcode()
 	CElseX()--OP가 없음. OP밴을 모두 푼다.
 	DoActions2X(FP, OPBanActArr)
-    CIfXEnd()--
+	CIfXEnd()--
 	CIf(FP,{CD(SCA.GlobalCheck,2)},{AddCD(SCA.Timer,1)})
 	--error(SCA.Year)
 	CIf(FP, {Memory(SCA.Month, AtLeast, 1),CDX(SCA.GlobalLoadFlag,0,1)},{SetCDX(SCA.GlobalLoadFlag,1,1),

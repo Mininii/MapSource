@@ -1,5 +1,5 @@
 function CUnit()
-    
+	
 if TestStart == 1 then
 --	CFor(FP, 19025+19, 19025+19+(84*1699), 84)
 --	local CI = CForVariable()
@@ -16,7 +16,7 @@ end
 
 local NBTemp = CreateVar(FP)
 local TempSCCool = CreateVar(FP)
-local UID = CreateVar(FP)
+local UIDV = CreateVar(FP)
 local ReturnUnit1 = CreateVar(FP)
 local ReturnUnit2 = CreateVar(FP)
 NBagLoop(FP,NBagArr,{NBTemp})
@@ -32,11 +32,11 @@ CDoActions(FP, {
 
 
 f_Read(FP, _Add(NBTemp,19), GCP,nil,0xFF,1)
-f_Read(FP, _Add(NBTemp,25), UID,nil,0xFF,1)
+f_Read(FP, _Add(NBTemp,25), UIDV,nil,0xFF,1)
 CMov(FP,Result,0)
 for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
 	if j == #LevelUnitArr then
-		CTrigger(FP,{CV(UID,k[2])},{SetV(Result,0),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이미 최강 단계에 도달한 유닛은 \x08강화할 수 없습니다."), 4)},{preserved})
+		CTrigger(FP,{CV(UIDV,k[2])},{SetV(Result,0),TSetMemory(0x6509B0, SetTo, GCP),DisplayText(StrDesignX("\x04이미 최강 단계에 도달한 유닛은 \x08강화할 수 없습니다."), 4)},{preserved})
 
 	else
 	local ResultUnit1
@@ -47,7 +47,7 @@ for j,k in pairs(LevelUnitArr) do --{Level,UnitID,Per,Exp,ECost}
 	if LevelUnitArr[j+1] ~= nil then ResultUnit1=LevelUnitArr[j+1][2]
 	else ResultUnit1=0
 	end
-	CallTriggerX(FP, Call_Ench, {CV(UID,k[2])},{SetV(EnchNum,k[1]),SetNWar(EnchCost,SetTo,tostring(k[5])),SetV(ReturnUnit1,ResultUnit1),SetV(ReturnUnit2,ResultUnit2),
+	CallTriggerX(FP, Call_Ench, {CV(UIDV,k[2])},{SetV(EnchNum,k[1]),SetNWar(EnchCost,SetTo,tostring(k[5])),SetV(ReturnUnit1,ResultUnit1),SetV(ReturnUnit2,ResultUnit2),
 	SetV(E1Range[1],0),SetV(E1Range[2],k[3]),
 	--SetV(E2Range[1],k[3][1]+1),SetV(E2Range[2],k[3][1]+k[3][2]),
 	--SetV(E3Range[1],k[3][1]+k[3][2]+1),SetV(E3Range[2],k[3][1]+k[3][2]+k[3][3]),
@@ -59,7 +59,7 @@ CIf(FP,{CV(Result,1,AtLeast)})
 	f_Read(FP, _Add(NBTemp,10), CPos)
 	Convert_CPosXY()
 	Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
-	CIfX(FP, {CV(Result,1)},{TRemoveUnitAt(1, UID, 1, GCP)})-- 성공시
+	CIfX(FP, {CV(Result,1)},{TRemoveUnitAt(1, UIDV, 1, GCP)})-- 성공시
 	CDoActions(FP, {
 		SetNVar(SAmount,SetTo,1),
 		TSetNVar(SUnitID,SetTo,ReturnUnit1),
@@ -71,7 +71,7 @@ CIf(FP,{CV(Result,1,AtLeast)})
 	
 	CElseIfX(CV(Result,2),{})-- 유지시
 	CDoActions(FP,{TCreateUnit(1, 84, 1, GCP),KillUnit(84, AllPlayers)})
-	CElseIfX(CV(Result,3),{TKillUnitAt(1, UID, 1, GCP)})-- 하락시
+	CElseIfX(CV(Result,3),{TKillUnitAt(1, UIDV, 1, GCP)})-- 하락시
 
 	CDoActions(FP, {
 		SetNVar(SAmount,SetTo,1),
@@ -91,7 +91,7 @@ CIf(FP,{CV(Result,1,AtLeast)})
 	CallTrigger(FP, CreateStackedUnit)
 	DoActions(FP, KillUnit(50, AllPlayers))
 
-	CElseX({TKillUnitAt(1, UID, 1, GCP),})-- 파괴시
+	CElseX({TKillUnitAt(1, UIDV, 1, GCP),})-- 파괴시
 	CDoActions(FP, {
 		SetNVar(SAmount,SetTo,1),
 		TSetNVar(SUnitID,SetTo,LevelUnitArr[1][2]),
@@ -232,20 +232,20 @@ CTKillT = {}
 --			DoActions(FP, {SetMemory(0x6509B0, Add, 47)})
 --		CIfEnd()
 --		if TestStart ==1 then
---            f_SaveCp()
---            local TempUID = CreateVar(FP)
---            local TempV1 = CreateVar(FP)
---            local TempV2 = CreateVar(FP)
---            local TempV3 = CreateVar(FP)
---            local TempV4 = CreateVar(FP)
---            CMov(FP,TempV2,_ReadF(BackupCp),nil,0xFFFF0000,1)
---            CMov(FP,TempV3,_ReadF(_Add(BackupCp,1)),nil,0xFF,1)
---            CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
---            CMov(FP,TempV1,_ReadF(_Sub(UIDPtr,6)),nil,0xFF00,1)
---            CMov(FP,TempV4,_ReadF(_Sub(UIDPtr,17)),nil,0xFF,1)
---            f_Div(FP,TempV1,256)
---            DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  OrderID : ",TempV1,"  ","DefValue : ",TempV2,"   DefTimer : ",TempV3, "   MoveMentFlag : ",TempV4})--
---            f_LoadCp()
+--			f_SaveCp()
+--			local TempUID = CreateVar(FP)
+--			local TempV1 = CreateVar(FP)
+--			local TempV2 = CreateVar(FP)
+--			local TempV3 = CreateVar(FP)
+--			local TempV4 = CreateVar(FP)
+--			CMov(FP,TempV2,_ReadF(BackupCp),nil,0xFFFF0000,1)
+--			CMov(FP,TempV3,_ReadF(_Add(BackupCp,1)),nil,0xFF,1)
+--			CMov(FP,TempUID,_ReadF(UIDPtr,0xFF),nil,0xFF,1)
+--			CMov(FP,TempV1,_ReadF(_Sub(UIDPtr,6)),nil,0xFF00,1)
+--			CMov(FP,TempV4,_ReadF(_Sub(UIDPtr,17)),nil,0xFF,1)
+--			f_Div(FP,TempV1,256)
+--			DisplayPrint(Force1, {"\x13\x04CurUID : ",TempUID,"  OrderID : ",TempV1,"  ","DefValue : ",TempV2,"   DefTimer : ",TempV3, "   MoveMentFlag : ",TempV4})--
+--			f_LoadCp()
 --		else
 --		end
 --		CIf(FP,{DeathsX(CurrentPlayer,AtLeast,65536*256,0,0xFFFF0000)},{SetMemory(0x6509B0, Add, 1)})----디펜방어력 존재하는데 디펜타이머가 기준치 미달일경우
