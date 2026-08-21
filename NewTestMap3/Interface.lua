@@ -162,46 +162,6 @@ function Interface()
 	local CTSwitch = CreateCcode()
 	local CTSwitch2 = CreateCcode()
 	
-	TriggerX(FP,{Deaths(i, Exactly, 1,13),Deaths(i, Exactly, 0,14)},{SetDeaths(i, SetTo, 1,14)},{preserved})
-
-		
-	CIf(FP,{CD(SCA.LoadSlot1[i+1],0),CD(SCA.GlobalCheck,3),CD(SCA.LoadCheckArr[i+1],2),Deaths(i, AtLeast, 1,14),})--로드슬롯 프로토콜이 완료되어야됨
-if Limit == 1 and SaveLimit == 1 then
-	NIfX(FP,{CV(iv.MapMakerFlag[i+1],1,AtLeast),CV(SaveAvTime[i+1],0,AtMost)},{}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-else
-	NIfX(FP,{CV(SaveAvTime[i+1],0,AtMost)},{}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-end
-
---NIfX(FP,{CV(CurMission[i+1],3,AtLeast)},{SetV(DPErT[i+1],24*10)}) -- 저장버튼을 누르거나 자동저장 시스템에 의해 해당 트리거에 진입했을 경우
-	TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {SetCp(i),DisplayText(StrDesignX("\x03SCArchive\x04에 \x07게임 데이터\x04를 저장하고 있습니다..."), 4),SetCp(FP)}, {preserved})
-	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 4, 2),SetDeaths(i, SetTo, 2,14),SCA.Reset(i)},{preserved})--저장신호 보내기
-	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
-	CMov(FP,iv.PLevel2[i+1],iv.PLevel[i+1])
-	CIf(FP,CV(iv.MapMakerFlag[i+1],1))--제작자일경우 레벨 1으로 저장후 세팅.
-	CMov(FP,PLevelBak,iv.PLevel[i+1])
-	CMov(FP,iv.PLevel[i+1],1)
-	CIfEnd()
-	SCA_DataReset(i)
-	CallTrigger(FP,Call_SCA_DataSaveAll)
-	CIf(FP,CV(iv.MapMakerFlag[i+1],1))
-	CMov(FP,iv.PLevel[i+1],PLevelBak)
-	CIfEnd()
-	NElseIfX({CV(SaveAvTime[i+1],1,AtLeast)},{SetDeaths(i, SetTo, 0,14)}) -- 조건불만족
-	TriggerX(FP, {}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 첫 플레이 시 저장을 하기 위해서는 \x0710분 이상 플레이\x04 하셔야 합니다."), 4),SetCp(FP)}, {preserved})
-	if Limit == 1 then
-	
-	NElseIfX({CV(iv.MapMakerFlag[i+1],0)},{}) -- 조건불만족 - 테스트맵
-	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 2, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장트리거 닫고 CT작동
-	TriggerX(FP, {SCA.Available(i),Deaths(i, Exactly, 1, 14)}, {SetCp(i),PlayWAV("sound\\Misc\\PError.WAV"),DisplayText(StrDesignX("\x08ERROR \x04: 테스트맵에서는 게임 데이터를 저장할 수 없습니다..."), 4),SetCp(FP)}, {preserved})
-	
-	TriggerX(FP,{SCA.Available(i),Deaths(i, Exactly, 1, 14)},{SetDeaths(i, SetTo, 0,14),SetCD(CTSwitch,1),SCA.Reset(i)},{preserved})--저장신호 보내기
-	end
-	NIfXEnd()
-	CIfEnd()
-
-
-
-
 
 	TriggerX(FP,{CD(iv.StatEff[i+1],1)},{SetCD(iv.StatEffLoc,1)},{preserved})
 

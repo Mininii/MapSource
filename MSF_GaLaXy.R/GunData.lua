@@ -64,7 +64,7 @@ function Include_GunData(Size,LineNum)
 		GunBGM(200,8,"발전소 \x18Generator \x04를",250000)
 		GunBGM(147,8,"완전체 \x18Overmind G \x04를",400000)
 		GunBGM(148,8,"초월체 \x18Overmind \x04를",100000)
-		GunBGM(173,8,"수정 집합체 \x18Formation \x04을",100000)
+		GunBGM(173,9,"수정 집합체 \x18Formation \x04을",100000)
 		GunBGM(190,8,"교란기 \x18Psi Disrupter \x04를",300000)
 		GunBGM(168,nil,"봉인 \x18Stasis Cell \x04을",50000)
 
@@ -181,28 +181,28 @@ function Include_GunData(Size,LineNum)
 	CIf_GCase(131)
 	HatcCUTable = {
 		{ -- Index 1
-			{54,25,1},{53,15,2},{55,9,3},{48,15,4},{104,{5,10,15},5}
+			{54,25,1},{53,15,2},{55,9,3},{48,15,4},{104,{5,10,15,45},5}
 		},
 		{ -- Index 2
-			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15},5}
+			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15,45},5}
 		},
 		{ -- Index 3
-			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15},5}
+			{54,25,1},{53,15,2},{55,25,3},{48,9,4},{104,{5,10,15,45},5}
 		},
 		{ -- Index 4
-			{54,25,1},{53,25,2},{55,25,3},{48,9,4},{104,{5,10,15},5},{51,{5,10,15},5}
+			{54,25,1},{53,25,2},{55,25,3},{48,9,4},{104,{5,10,15,45},5},{51,{5,10,15,45},5}
 		},
 		{ -- Index 5
-			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{5,10,25},5},{51,{5,10,15},5}
+			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{5,10,25,60},5},{51,{5,10,15,45},5}
 		},
 		{ -- Index 6
-			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{10,15,25},5},{51,{10,15,25},5}
+			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{10,15,25,60},5},{51,{10,15,25,60},5}
 		},
 		{ -- Index 7
-			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{51,{5,10,15},5}
+			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{51,{5,10,15,45},5}
 		},
 		{ -- Index 8
-			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{10,15,25},3},{51,{10,15,25},5},{56,25,5}
+			{55,25,1},{54,25,1},{53,25,2},{56,25,3},{48,9,4},{104,{10,15,25,60},3},{51,{10,15,25,60},5},{56,{25,25,25,75},5}
 		},
 		}
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,120))
@@ -221,7 +221,9 @@ function Include_GunData(Size,LineNum)
 				for l,m in pairs(k) do
 					if type(m[2]) == "table" then
 						for o,p in pairs(m[2]) do
+							if p >= 1 then
 							f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+							end
 						end
 					else
 						f_TempRepeat({Gun_Line(3,Exactly,j),Gun_Line(8,Exactly,m[3]-1)},m[1],m[2],nil,nil,"CG")
@@ -240,34 +242,34 @@ function Include_GunData(Size,LineNum)
 	CIf_GCase(132)
 	LairCUTable = {
 		{ -- Index 1
-			{53,25,1},{48,15,2},{56,9,3},{51,15,4},{10,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,9,3},{51,15,4},{10,{2,5,15,45},5}
 		},
 		{ -- Index 2
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{77,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{77,{2,5,15,45},5}
 		},
 		{ -- Index 3
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{75,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{75,{2,5,15,45},5}
 		},
 		{ -- Index 4
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{17,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{17,{2,5,15,45},5}
 		},
 		{ -- Index 5
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{82,{1,3,11},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{82,{1,3,11,30},5}
 		},
 		{ -- Index 6
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{78,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{78,{2,5,15,45},5}
 		},
 		{ -- Index 7
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{19,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{19,{2,5,15,45},5}
 		},
 		{ -- Index 8
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{81,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{81,{2,5,15,45},5}
 		},
 		{ -- Index 9
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{79,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{79,{2,5,15,45},5}
 		},
 		{ -- Index 10
-			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{76,{2,5,15},5}
+			{53,25,1},{48,15,2},{56,25,3},{51,15,4},{76,{2,5,15,45},5}
 		},
 		}
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,120))
@@ -307,13 +309,13 @@ function Include_GunData(Size,LineNum)
 		CIf(FP,{Gun_Line(3,AtMost,3),})
 		HiveCUTable = {
 			{ -- Index 1
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{10,{3,10,20},3},{104,25,4},{48,15,4},{21,{5,10,20},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{10,{3,10,20},3},{104,25,4},{48,15,4},{21,{5,10,20,80},5}
 			},
 			{ -- Index 2
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{17,{3,10,20},3},{104,25,4},{48,15,4},{88,{5,10,20},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{17,{3,10,20},3},{104,25,4},{48,15,4},{88,{5,10,20,80},5}
 			},
 			{ -- Index 3
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{3,10,20},3},{104,25,4},{48,15,4},{28,{2,5,11},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{3,10,20},3},{104,25,4},{48,15,4},{28,{2,5,11,50},5}
 			},
 		}
 		if X2_Map == 1 then
@@ -360,66 +362,75 @@ function Include_GunData(Size,LineNum)
 			end
 		end
 		CIfEnd()
-		if X2_Map == 1 then
+		if X2_Mode == 1 then
+
 			PSIHiveShape = CS_ConnectPathX({3   ,{480*2, 1600*2},{1152*2, 1216*2},{448*2, 864*2}},148)
-			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{preserved})
+			if X2_Map == 0 then
+				PSIHiveShape = CS_RatioXY(PSIHiveShape, 0.5, 0.5)
+				TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{preserved})
+			else
+				
+				TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320*2,1216*2,320*2,1216*2),SetMemory(0x6CA010, SetTo, 64)},{preserved})
+			end
 		else
 			PSIHiveShape = CS_ConnectPathX({3   ,{480, 1600},{1152, 1216},{448, 864}},148)
 			TriggerX(FP,{CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4)},{Simple_SetLoc(15,320,1216,320,1216),SetMemory(0x6CA010, SetTo, 64)},{preserved})
 		end
-		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
-		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
+		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),CD(GMode,3,AtMost),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
+		CSPlotAct(PSIHiveShape,FP,29,0,{0,0},1,32,256,{Order(29,FP,1,Attack,16)},FP,{Label(),CD(GMode,2,AtLeast),CD(GMode,3,AtMost),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
+		CSPlotAct(PSIHiveShape,FP,102,0,{0,0},1,32,256,{Order(102,FP,1,Attack,16)},FP,{Label(),CD(GMode,4),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,0)})
+		CSPlotAct(PSIHiveShape,FP,102,0,{0,0},1,32,256,{Order(102,FP,1,Attack,16)},FP,{Label(),CD(GMode,4),Gun_Line(3,Exactly,4),Gun_Line(8,Exactly,4)})
 		TriggerX(FP,{CV(HondonMode,0)},{SetMemory(0x6CA010, SetTo, 640)},{preserved})
 		TriggerX(FP,{CV(HondonMode,1,AtLeast)},{SetMemory(0x6CA010, SetTo, 20000)},{preserved})
 		HiveCUTable2 = {
 			{ -- Index 4
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{104,25,4},{48,15,4},{19,{5,10,20},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{104,25,4},{48,15,4},{19,{5,10,20,60},5}
 			},
 			{ -- Index 5
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{81,{3,10,20},3},{104,25,4},{48,15,4},{29,{2,5,11},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{81,{3,10,20,80},3},{104,25,4},{48,15,4},{29,{2,5,11,45},5}
 			},
 			{ -- Index 6
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{64,{3,10,20},3},{104,25,4},{48,15,4},{80,{1,3,6},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{64,{3,10,20,80},3},{104,25,4},{48,15,4},{80,{1,3,6,20},5}
 			},
 			{ -- Index 7
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{23,{1,3,6},3},{104,25,4},{48,15,4},{102,{1,2,3},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{23,{1,3,6,20},3},{104,25,4},{48,15,4},{102,{1,2,3,10},5}
 			},
 			{ -- Index 8
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{27,{2,5,11},3},{104,25,4},{48,15,4},{61,{2,6,15},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{27,{2,5,11,45},3},{104,25,4},{48,15,4},{61,{2,6,15,45},5}
 			},
 			{ -- Index 9
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{68,{1,2,4},3},{104,25,4},{48,15,4},{98,{3,6,15},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{68,{1,2,4,25},3},{104,25,4},{48,15,4},{98,{3,6,15,45},5}
 			},
 			{ -- Index 10
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{17,{3,10,20},3},{104,25,4},{48,15,4},{29,{2,5,11},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{17,{3,10,20,80},3},{104,25,4},{48,15,4},{29,{2,5,11,45},5}
 			},
 			{ -- Index 11
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{77,{4,10,25},3},{104,25,4},{48,15,4},{88,{5,15,30},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{77,{4,10,25,70},3},{104,25,4},{48,15,4},{88,{5,15,30,90},5}
 			},
 			{ -- Index 12
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{78,{4,10,25},3},{104,25,4},{48,15,4},{88,{5,15,30},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{78,{4,10,25,70},3},{104,25,4},{48,15,4},{88,{5,15,30,90},5}
 			},
 			{ -- Index 13
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{10,{4,10,25},3},{104,25,4},{48,15,4},{21,{5,15,30},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{10,{4,10,25,70},3},{104,25,4},{48,15,4},{21,{5,15,30,90},5}
 			},
 			{ -- Index 14
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{19,{4,10,25},3},{104,25,4},{48,15,4},{21,{5,15,30},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{19,{4,10,25,70},3},{104,25,4},{48,15,4},{21,{5,15,30,90},5}
 			},
 			{ -- Index 15
-				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{25,{4,10,25},3},{104,25,4},{48,15,4},{28,{2,5,11},5}
+				{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{25,{4,10,25,70},3},{104,25,4},{48,15,4},{28,{2,5,11,45},5}
 			},
 			{ -- Index 16
 				{53,15,1},{54,15,2},{51,25,5},{104,25,4},{48,15,3},
-				{77,{2,5,10},1},{78,{2,5,10},2},{77,{2,5,10},3},{78,{2,5,10},4},{77,{2,5,10},5},
-				{88,{2,5,10},1},{88,{2,5,10},2},{88,{2,5,10},3},{88,{2,5,10},4},{88,{2,5,10},5}
+				{77,{2,5,10,30},1},{78,{2,5,10,30},2},{77,{2,5,10,30},3},{78,{2,5,10,30},4},{77,{2,5,10,30},5},
+				{88,{2,5,10,30},1},{88,{2,5,10,30},2},{88,{2,5,10,30},3},{88,{2,5,10,30},4},{88,{2,5,10,30},5}
 			},
 			{ -- Index 17
-				{79,{4,10,25},1},{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{4,10,25},3},{104,25,4},{48,15,4},{80,{2,5,11},5}
+				{79,{4,10,25,70},1},{53,15,1},{54,15,1},{55,25,1},{51,25,2},{56,25,3},{75,{4,10,25,70},3},{104,25,4},{48,15,4},{80,{2,5,11,45},5}
 			},
 			{ -- Index 18
 				{53,15,1},{54,15,2},{51,25,5},{104,25,4},{48,15,3},
-				{10,{2,5,10},1},{17,{2,5,10},2},{10,{2,5,10},3},{17,{2,5,10},4},{10,{2,5,10},5},
-				{21,{2,5,10},1},{21,{2,5,10},2},{21,{2,5,10},3},{21,{2,5,10},4},{21,{2,5,10},5}
+				{10,{2,5,10,30},1},{17,{2,5,10,30},2},{10,{2,5,10,30},3},{17,{2,5,10,30},4},{10,{2,5,10,30},5},
+				{21,{2,5,10,30},1},{21,{2,5,10,30},2},{21,{2,5,10,30},3},{21,{2,5,10,30},4},{21,{2,5,10,30},5}
 			},
 		}
 		for j, k in pairs(HiveCUTable2) do
@@ -445,8 +456,8 @@ function Include_GunData(Size,LineNum)
 				{1216,2336},{1984,2336},{1216,1952},{1984,1952}
 			}
 		end
-			HTankDiffArr = {2,5,nil}
-			HTankDiffArr2 = {nil,nil,3}
+			HTankDiffArr = {2,5,nil,9}
+			HTankDiffArr2 = {nil,nil,3,9}
 			for i = 0, 4 do
 				for j, k in pairs(HTankZoneArr) do
 					for l, m in pairs(HTankDiffArr) do
@@ -502,10 +513,10 @@ function Include_GunData(Size,LineNum)
 		TriggerX(FP,{Memory(0x628438,AtLeast,1),Gun_Line(8,AtLeast,20)},{RotatePlayer({PlayWAVX("staredit\\wav\\res1.ogg")},HumanPlayers,FP),Gun_DoSuspend(),CreateUnit(1,192,1,FP)},{preserved})
 	CIfEnd()
 	CIf_GCase(175)
-	XelCUTable = {3,6,11}
-	XelCUTable2 = {2,5,12}
+	XelCUTable = {3,6,11,44}
+	XelCUTable2 = {2,5,12,50}
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
-				for l = 1, 3 do
+				for l = 1, 4 do
 					f_TempRepeat({CD(GMode,l)},27,XelCUTable[l],nil,nil,"CG")
 					f_TempRepeat({CD(GMode,l)},61,XelCUTable2[l],nil,nil,"CG")
 				end
@@ -514,9 +525,9 @@ function Include_GunData(Size,LineNum)
 		TriggerX(FP,{Gun_Line(8,AtLeast,2)},{Gun_DoSuspend(),AddCD(XelCcode,1)},{preserved})
 	CIfEnd()
 	CIf_GCase(127)
-	IonCUTable = {1,6,25}
-	IonCUTable2 = {28,27,27}
-	IonCUTable3 = {75,19,61}
+	IonCUTable = {1,6,25,75}
+	IonCUTable2 = {28,27,29,102}
+	IonCUTable3 = {75,19,61,61}
 	 
 
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,240))
@@ -526,7 +537,7 @@ function Include_GunData(Size,LineNum)
 			CAdd(FP,G_CA_Y,64)
 		end
 			for i = 0, 1 do
-				for l = 1, 3 do
+				for l = 1, 4 do
 					f_TempRepeat({Gun_Line(8,Exactly,i),CD(GMode,l)},68,IonCUTable[l],nil,nil,"CG")
 					--CSPlotAct(IonShape,FP,IonCUTable2[l],0,{0,0},1,32,256,{Order(IonCUTable2[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
 					--CSPlotAct(IonShape2,FP,IonCUTable3[l],0,{0,0},1,32,256,{Order(IonCUTable3[l],FP,1,Attack,4)},FP,{Label(),Gun_Line(8,Exactly,i),CD(GMode,l)},nil)
@@ -544,18 +555,22 @@ function Include_GunData(Size,LineNum)
 	CIf_GCase(116)
 	
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,120))
-	FaciCUTable = {3,6,11}
-	FaciCUTable2 = {7,15,30}
-	FaciCUTable3 = {1,3,10}
+	FaciCUTable = {3,6,11,30}
+	FaciCUTable2 = {7,15,30,60}
+	FaciCUTable3 = {1,3,10,15}
+
+	FaciCUTable4 = {28,28,27,29}
+	FaciCUTable5 = {21,21,21,8}
+	FaciCUTable6 = {25,25,25,30}
 	if X2_Map == 1 then
 		FactTankXY = {1600*2,2144*2}
 	else
 		FactTankXY = {1600,2144}
 	end
-	for l = 1, 3 do
-		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},28,FaciCUTable[l],187,nil,"CG")
-		f_TempRepeat({Gun_Line(9,Exactly,1),CD(GMode,l)},21,FaciCUTable2[l],187,nil,"CG")
-        f_TempRepeat({CD(GMode,l)},25,FaciCUTable3[l],nil,nil,FactTankXY)
+	for l = 1, 4 do
+		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},FaciCUTable4[l],FaciCUTable[l],187,nil,"CG")
+		f_TempRepeat({Gun_Line(9,Exactly,1),CD(GMode,l)},FaciCUTable5[l],FaciCUTable2[l],187,nil,"CG")
+        f_TempRepeat({CD(GMode,l)},FaciCUTable6[l],FaciCUTable3[l],nil,nil,FactTankXY)
 	end
 	Simple_SetLocX(FP,0,G_CA_X,G_CA_Y,G_CA_X,G_CA_Y,{CreateUnit(5,84,1,FP),KillUnit(84,FP)})
 	DoActionsX(FP,{Gun_SetLine(8,Add,1),Gun_SetLine(9,Add,1)})
@@ -566,17 +581,17 @@ function Include_GunData(Size,LineNum)
 	CIf_GCase(150)
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,360))
 	if X2_Mode==1 then
-
 		for i = 0, 3 do
-			
 			G_CA_SetSpawn({CD(GMode,1)},{25},"ACAS","ChryShape1_"..i+1,"MAX",nil,nil,FP)
 			G_CA_SetSpawn({CD(GMode,2)},{25},"ACAS","ChryShape2_"..i+1,"MAX",nil,nil,FP)
 			G_CA_SetSpawn({CD(GMode,3)},{25},"ACAS","ChryShape3_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({CD(GMode,4)},{25},"ACAS","ChryShape4_"..i+1,"MAX",nil,nil,FP)
 		end
 	else
 		G_CA_SetSpawn({CD(GMode,1)},{25},"ACAS","ChryShape1","MAX",nil,nil,FP)
 		G_CA_SetSpawn({CD(GMode,2)},{25},"ACAS","ChryShape2","MAX",nil,nil,FP)
 		G_CA_SetSpawn({CD(GMode,3)},{25},"ACAS","ChryShape3","MAX",nil,nil,FP)
+		G_CA_SetSpawn({CD(GMode,4)},{25},"ACAS","ChryShape4","MAX",nil,nil,FP)
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
@@ -584,9 +599,9 @@ function Include_GunData(Size,LineNum)
 	CIfEnd()
 	CIf_GCase(154)
 	CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,90))
-	NexCUTable1 = {5,10,30}
-	NexCUTable2 = {1,2,5}
-	for l = 1, 3 do
+	NexCUTable1 = {5,10,30,90}
+	NexCUTable2 = {1,2,5,30}
+	for l = 1, 4 do
 		f_TempRepeat({CD(GMode,l)},88,NexCUTable1[l],nil,nil,"CG")
 		f_TempRepeat({CD(GMode,l)},80,NexCUTable2[l],nil,nil,"CG")
 	end
@@ -598,9 +613,10 @@ function Include_GunData(Size,LineNum)
 
 	CIf_GCase(151)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,20),CreateUnit(5,84,1,FP),KillUnit(84,FP)})
-	CereCUTable = {1,3,10}
-	for l = 1, 3 do
-		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},88,CereCUTable[l],187,nil,"CG")
+	CereCUTable = {1,3,10,30}
+	CereCUTable2 = {88,88,88,80}
+	for l = 1, 4 do
+		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},CereCUTable2[l],CereCUTable[l],187,nil,"CG")
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
@@ -608,9 +624,11 @@ function Include_GunData(Size,LineNum)
 	CIfEnd()
 	CIf_GCase(130)
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,20),CreateUnit(5,84,1,FP),KillUnit(84,FP)})
-	CenCUTable = {1,3,10}
-	for l = 1, 3 do
-		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},21,CenCUTable[l],187,nil,"CG")
+	CenCUTable = {1,3,10,30}
+	CereCUTable2 = {21,21,21,8}
+
+	for l = 1, 4 do
+		f_TempRepeat({Gun_Line(9,Exactly,0),CD(GMode,l)},CereCUTable2[l],CenCUTable[l],187,nil,"CG")
 	end
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
@@ -650,14 +668,18 @@ function Include_GunData(Size,LineNum)
 		CMov(FP,G_CA_X,Shape8130[i][1])
 		CMov(FP,G_CA_Y,Shape8130[i][2])
 		DoActions(FP,{Simple_SetLoc(0,Shape8130[i][1]-128,Shape8130[i][2]-128,Shape8130[i][1]+128,Shape8130[i][2]+128),CreateUnit(1,84,1,FP),KillUnit(84,FP)})
-		f_TempRepeat({Gun_Line(8,AtMost,39)},21,1,201,nil,"CG")
+		f_TempRepeat({Gun_Line(8,AtMost,39),CD(GMode,3,AtMost)},21,1,201,nil,"CG")
+		f_TempRepeat({Gun_Line(8,AtMost,39),CD(GMode,4)},8,1,201,nil,"CG")
+
 		CMov(FP,G_CA_X,Shape8151[i][1])
 		CMov(FP,G_CA_Y,Shape8151[i][2])
 		DoActions(FP,{Simple_SetLoc(0,Shape8151[i][1]-128,Shape8151[i][2]-128,Shape8151[i][1]+128,Shape8151[i][2]+128),CreateUnit(1,72,1,FP),KillUnit(72,FP)})
-		f_TempRepeat({Gun_Line(8,AtMost,39)},88,1,201,nil,"CG")
+		f_TempRepeat({Gun_Line(8,AtMost,39),CD(GMode,3,AtMost)},88,1,201,nil,"CG")
+		f_TempRepeat({Gun_Line(8,AtMost,39),CD(GMode,4)},80,1,201,nil,"CG")
+
 	end
 	TriggerX(FP,{Gun_Line(8,AtLeast,CCDelayT),Gun_Line(8,AtMost,CCDelayT+5)},{SetCp(FP),RunAIScriptAt(JYD,36)},{preserved})
-	TriggerX(FP,{Gun_Line(8,Exactly,CCDelayT+6)},{Order(88,FP,64,Attack,4),Order(21,FP,64,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64)},{preserved})
+	TriggerX(FP,{Gun_Line(8,Exactly,CCDelayT+6)},{Order(88,FP,64,Attack,4),Order(21,FP,64,Attack,4),Order(80,FP,64,Attack,4),Order(8,FP,64,Attack,4),CreateUnit(5,84,36,FP),KillUnit(84,FP),SetInvincibility(Disable,88,FP,64),SetInvincibility(Disable,21,FP,64),SetInvincibility(Disable,80,FP,64),SetInvincibility(Disable,8,FP,64)},{preserved})
 
 	DoActionsX(FP,{Gun_SetLine(8,Add,1)})
 	CIfEnd()
@@ -666,9 +688,11 @@ function Include_GunData(Size,LineNum)
 
 	CIf_GCase(200)
 		CIf(FP,Gun_Line(7,AtMost,0),Gun_SetLine(7,Add,400))
-			FaciCUTable = {3,6,11}
-			FaciCUTable2 = {7,15,30}
-			FaciCUTable3 = {1,3,10}
+			FaciCUTable = {3,6,11,30}
+			FaciCUTable2 = {7,15,30,90}
+			FaciCUTable3 = {1,3,10,30}
+			FaciCUTable4 = {28,28,27,29}
+			FaciCUTable5 = {21,21,21,8}
 			if X2_Map == 1 then
 				FaciPosArr = {
 					{2336*2,2144*2},{864*2,2144*2},{1600*2,2528*2},{1600*2,1760*2}
@@ -685,17 +709,21 @@ function Include_GunData(Size,LineNum)
 			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,1)},{25},"ACAS","ChryShape1_"..i+1,"MAX",nil,nil,FP)
 			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,2)},{25},"ACAS","ChryShape2_"..i+1,"MAX",nil,nil,FP)
 			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,3)},{25},"ACAS","ChryShape3_"..i+1,"MAX",nil,nil,FP)
+			G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,4)},{30},"ACAS","ChryShape4_"..i+1,"MAX",nil,nil,FP)
+
 		end
 	else
 		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,1)},{25},"ACAS","ChryShape1","MAX",nil,nil,FP)
 		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,2)},{25},"ACAS","ChryShape2","MAX",nil,nil,FP)
 		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,3)},{25},"ACAS","ChryShape3","MAX",nil,nil,FP)
+		G_CA_SetSpawn({Gun_Line(8,Exactly,4),CD(GMode,4)},{30},"ACAS","ChryShape4","MAX",nil,nil,FP)
+
 	end
 	
-			for l = 1, 3 do
+			for l = 1, 4 do
 				for j, k in pairs(FaciPosArr) do
-					f_TempRepeat({Gun_Line(9,Exactly,0),Gun_Line(8,AtMost,3),CD(GMode,l)},28,FaciCUTable[l],187,nil,k)
-					f_TempRepeat({Gun_Line(9,Exactly,1),Gun_Line(8,AtMost,3),CD(GMode,l)},21,FaciCUTable2[l],187,nil,k)
+					f_TempRepeat({Gun_Line(9,Exactly,0),Gun_Line(8,AtMost,3),CD(GMode,l)},FaciCUTable4[l],FaciCUTable[l],187,nil,k)
+					f_TempRepeat({Gun_Line(9,Exactly,1),Gun_Line(8,AtMost,3),CD(GMode,l)},FaciCUTable5[l],FaciCUTable2[l],187,nil,k)
 					f_TempRepeat({Gun_Line(8,Exactly,4),CD(GMode,l)},98,FaciCUTable2[l],187,nil,k)
 				end
 			end
@@ -718,6 +746,7 @@ function Include_GunData(Size,LineNum)
 	G_CA_SetSpawn(CD(GMode,1),{56},"ACAS","NBYD",15,147,nil,FP,1)
 	G_CA_SetSpawn(CD(GMode,2),{88},"ACAS","NBYD",15,147,nil,FP,1)
 	G_CA_SetSpawn(CD(GMode,3),{98},"ACAS","NBYD",15,147,nil,FP,1)
+	G_CA_SetSpawn(CD(GMode,4),{29},"ACAS","NBYD",15,147,nil,FP,1)
 	CIfEnd()
 
 	CIf_GCase(148)
@@ -734,19 +763,24 @@ function Include_GunData(Size,LineNum)
 			}
 		end
 		OverLinkCUTable = {
-			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{17,{2,4,10}},{10,{2,4,10}}},
-			{{48,{25,15,10}},{56,25},{19,{3,6,15}}},
-			{{51,{25,20,15}},{104,{25,20,15}},{21,{4,9,25}},{25,{2,4,10}}}
+
+			{{55,25},{54,{25,15,5,0}},{53,{15,15,5,0}},{17,{2,4,10,30}},{10,{2,4,10,30}}},
+
+			{{48,{25,15,10,0}},{56,25},{19,{3,6,15,45}}},
+
+			{{51,{25,20,15,5}},{104,{25,20,15,5}},{21,{4,9,25,75}},{25,{2,4,10,30}}}
 		}
 
 		for j, k in pairs(OverLinkCUTable) do
 			for l,m in pairs(k) do
 				if type(m[2]) == "table" then
 					for o,p in pairs(m[2]) do
+						if p>= 1 then
 						for i = 1, #OvrmLinkArr do
 						f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,OvrmLinkArr[i])
 						end
 						f_TempRepeat({Gun_Line(3,Exactly,1),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+						end
 					end
 				else
 					for i = 1, #OvrmLinkArr do
@@ -768,19 +802,23 @@ function Include_GunData(Size,LineNum)
 			}
 		end
 		OverLinkCUTable2 = {
-			{{55,25},{54,{25,15,5}},{53,{15,15,5}},{77,{2,4,10}},{78,{2,4,10}}},
-			{{48,{25,15,10}},{56,25},{75,{2,4,10}},{79,{2,4,10}}},
-			{{51,{25,20,15}},{104,{25,20,15}},{88,{4,9,25}},{76,{2,4,10}}}
+			{{55,25},{54,{25,15,5,0}},{53,{15,15,5,0}},{77,{2,4,10,30}},{78,{2,4,10,30}}},
+
+			{{48,{25,15,10,0}},{56,25},{75,{2,4,10,30}},{79,{2,4,10,30}}},
+
+			{{51,{25,20,15,5}},{104,{25,20,15,5}},{88,{4,9,25,75}},{76,{2,4,10,30}}}
 		}
 
 		for j, k in pairs(OverLinkCUTable2) do
 			for l,m in pairs(k) do
 				if type(m[2]) == "table" then
 					for o,p in pairs(m[2]) do
+						if p>= 1 then
 						for i = 1, #OvrmLinkArr2 do
 						f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,OvrmLinkArr2[i])
 						end
 						f_TempRepeat({Gun_Line(3,Exactly,2),Gun_Line(8,Exactly,j-1),CD(GMode,o)},m[1],p,nil,nil,"CG")
+						end
 					end
 				else
 					for i = 1, #OvrmLinkArr2 do
@@ -862,11 +900,13 @@ function Include_GunData(Size,LineNum)
 	PsiCUTable = {
 	{55,56,55,56,55,56},
 	{55,56,88,21,28,64},
-	{88,21,28,64,86,98}}
+	{88,21,28,64,86,98},
+	{27,98,82,80,8,29},
+}
 	CIf(FP,Gun_Line(7,AtMost,0),{Gun_SetLine(7,Add,480)})
 
 	for i = 0 ,5 do
-		for l=1, 3 do
+		for l=1, 4 do
 			if i%2 == 0 then
 				
 				if X2_Map==1 then

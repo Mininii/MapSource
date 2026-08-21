@@ -582,17 +582,13 @@ for i = 1, 6 do -- 강퇴기능
 			DisplayPrintEr(i, {"\x07『 \x03TESTMODE OP \x04: 멀티 커맨드가 발동되었습니다. X : ",CPosX,"  Y : ",CPosY," \x07』"})
 				CIfX(FP,{CV(TargetEPD,1,AtLeast)})
 				
-				if TestStart == 1 then
-				DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 해당 좌표에 위치한 유닛을 찾았습니다. : ",TargetEPD," \x07』"})
-				end
+				--DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: [멀티커맨드] 해당 좌표에 위치한 유닛을 찾았습니다. : ",TargetEPD," \x07』"})
 
 				
 
 
 				CIfX(FP, {TTOR({_TMemoryX(_Add(TargetEPD,25),Exactly,0,0xFF),_TMemoryX(_Add(TargetEPD,25),Exactly,20,0xFF)})})
-				if TestStart == 1 then
-					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 대상이 아군 마린입니다. 대상을 따라갑니다. \x07』"})
-				end
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: [멀티커맨드] 대상이 아군 마린입니다. 대상을 따라갑니다. \x07』"})
 
 				local TempPos = CreateVar(FP)
 				CFor(FP, 19025+25, 19025+25+(1700*84),84)
@@ -638,9 +634,7 @@ for i = 1, 6 do -- 강퇴기능
 
 				CElseX()
 				
-				if TestStart == 1 then
-					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 하지만 대상이 마린이 아니므로 일반 무브가 적용됩니다. \x07』"})
-				end
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: [멀티커맨드] 대상이 마린이 아니므로 일반 무브가 적용됩니다. \x07』"})
 	
 				Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 				DoActions(FP, {Order("Men", i, 64, Move, 1)})
@@ -650,9 +644,7 @@ for i = 1, 6 do -- 강퇴기능
 
 	
 				CElseX()
-				if TestStart == 1 then
-					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: 해당 좌표에 위치한 유닛을 찾을 수 없어 일반 무브가 적용됩니다. \x07』"})
-				end
+					DisplayPrint(i, {"\x07『 \x03TESTMODE OP \x04: [멀티커맨드] 해당 좌표에 위치한 유닛을 찾을 수 없어 일반 무브가 적용됩니다. \x07』"})
 					Simple_SetLocX(FP, 0, CPosX, CPosY, CPosX, CPosY)
 					DoActions(FP, {Order("Men", i, 64, Move, 1)})
 				CIfXEnd()

@@ -300,8 +300,7 @@ end
 		CIfEnd()
 	end
 	
-	CIfEnd()
-	
+	CIfEnd() 
 	CIf(FP,{CV(RepHeroIndex,113)}) -- 팩토리 포인터
 	for i = 0,6 do
 		CIf(FP,CVX(PlayerV,i,0xFF))

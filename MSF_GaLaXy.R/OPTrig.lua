@@ -15,9 +15,11 @@ if AutoSettingMode == true then
 	
 	HondonTxt = {"\x04: OFF","\x08: ON"}
 	Text1 = {
-	"\x13\x07\n\x13\x04[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST",
-	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x05[E] \x11BURST",
-	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x04[E] \x11BURST"}
+	"\x13\x07\n\x13\x04[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x05[R] \x10GALAXY",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x05[R] \x10GALAXY",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x04[E] \x11BURST\n\x13\x05[R] \x10GALAXY",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x04[R] \x10GALAXY",
+}
 	Text2 = {
 	"\x13\x07\n\x13\x04[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x05[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드",
 	"\x13\x07\n\x13\x05[Q] \x0E쫄보\x04의 \x04일반모드\n\x13\x04[W] \x08상남자\x04의 \x06드랍모드\n\x13\x05[E] \x10돌아이\x04의 \x11응답없음모드\n\x13\x08드랍 또는 \x11응답없음모드 \x04선택으로 \x06공격력\x04이 \x072배 \x04증가하였습니다.",
@@ -43,7 +45,7 @@ if AutoSettingMode == true then
 		SettingArr
 })
 
-	TriggerX(FP,{CD(GMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
+	TriggerX(FP,{CD(GMode,5,AtLeast)},{SetCD(am.ErrorFlag,1)})
 	TriggerX(FP,{CD(DMode,4,AtLeast)},{SetCD(am.ErrorFlag,1)})
 	TriggerX(FP,{CV(HondonMode,2,AtLeast)},{SetCD(am.ErrorFlag,1)})
 	TriggerX(FP,{CV(AtkSpeedMode,2,AtLeast)},{SetCD(am.ErrorFlag,1)})
@@ -256,6 +258,7 @@ CIf(FP,{CDeaths(FP,Exactly,0,ModeSel)})
 KeyInput(210,nil,{SetCDeaths(FP,SetTo,1,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
 KeyInput(211,nil,{SetCDeaths(FP,SetTo,2,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
 KeyInput(212,nil,{SetCDeaths(FP,SetTo,3,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
+KeyInput(214,nil,{SetCDeaths(FP,SetTo,4,GMode);SetCDeaths(FP,SetTo,1,ToggleSound2)})
 KeyInput(213,{CDeaths(FP,AtLeast,1,GMode);},{SetCDeaths(FP,SetTo,1,ModeSel);SetCDeaths(FP,SetTo,1,SelectorT);})
 CIfEnd()	
 CIf(FP,{CDeaths(FP,Exactly,2,ModeSel)})
@@ -275,7 +278,7 @@ f_Movcpy(FP,0x641598+Str26[2],VArr(Names[j],0),4*6)
 CIfEnd()
 end
 CIf(FP,{CDeaths(FP,Exactly,0,ModeSel)})
-for i = 0, 3 do
+for i = 0, 4 do
 CIf(FP,CDeaths(FP,Exactly,i,GMode))
 f_Memcpy(FP,0x641598+Str26[2]+(4*6)-5,_TMem(Arr(Str25[i+1][3],0),"X","X",1),Str25[i+1][2])
 CIfEnd()
@@ -354,9 +357,12 @@ Trigger {
 	Text2 = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
 	
 	WavFile = "staredit\\wav\\Select.ogg"
-	Text1 = {"\x13\x07\n\x13\x04[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x04난이도 선택이 완료되었습니다.",
-	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x04난이도 선택이 완료되었습니다.",
-	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x04[E] \x11BURST\n\x13\x04난이도 선택이 완료되었습니다."}
+	Text1 = {
+	"\x13\x07\n\x13\x04[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x05[R] \x10GALAXY\n\x13\x04난이도 선택이 완료되었습니다.",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x04[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x05[R] \x10GALAXY\n\x13\x04난이도 선택이 완료되었습니다.",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x04[E] \x11BURST\n\x13\x05[R] \x10GALAXY\n\x13\x04난이도 선택이 완료되었습니다.",
+	"\x13\x07\n\x13\x05[Q] \x0EEASY\n\x13\x05[W] \x08HARD\n\x13\x05[E] \x11BURST\n\x13\x04[R] \x10GALAXY\n\x13\x04난이도 선택이 완료되었습니다.",
+}
 Trigger {
 players = {FP},
 conditions = {
@@ -405,7 +411,7 @@ actions = {
 	PreserveTrigger();
 }
 }
-for i = 1, 3 do
+for i = 1, 4 do
 Trigger2X(FP,{CDeaths(FP,Exactly,1,ModeSel);CDeaths(FP,Exactly,i,GMode);},{
 	RotatePlayer({DisplayTextX(Text1[i]),PlayWAVX(WavFile)},HumanPlayers,FP)
 })
@@ -481,6 +487,13 @@ TriggerX(FP, {CD(GMode,3)}, {SetMemoryW(0x656EB0+(6*2),SetTo,7777),
 SetMemoryW(0x656888+(6*2), SetTo, 96),
 SetMemoryW(0x6570C8+(6*2), SetTo, 96),
 SetMemoryW(0x657780+(6*2), SetTo, 96),
+})
+TriggerX(FP, {CD(GMode,4)}, {
+SetMemoryW(0x656EB0+(6*2),SetTo,9999),
+SetMemoryW(0x656888+(6*2), SetTo, 128),
+SetMemoryW(0x6570C8+(6*2), SetTo, 128),
+SetMemoryW(0x657780+(6*2), SetTo, 128),
+SetMemoryX(0x664080 + (13*4),SetTo,4,4),
 })
 
 Trigger {
@@ -652,11 +665,17 @@ NJumpEnd(FP,HiddenCancel)
 
 
 
-TriggerX(FP,{},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,350000,Ore)})
-TriggerX(FP,{CV(SetPlayers,1)},{SetResources(Force1,Add,300000,Ore)})
-TriggerX(FP,{CV(SetPlayers,2)},{SetResources(Force1,Add,250000,Ore)})
-TriggerX(FP,{CV(SetPlayers,3)},{SetResources(Force1,Add,175000,Ore)})
-TriggerX(FP,{CV(SetPlayers,4)},{SetResources(Force1,Add,100000,Ore)})
+TriggerX(FP,{CD(GMode,3,AtMost)},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,350000,Ore)})
+TriggerX(FP,{CD(GMode,4)},{SetSwitch("Switch 201",Set),RotatePlayer({CenterView(4)},HumanPlayers,FP),SetV(BGMType,1),SetResources(Force1,Add,1000000,Ore)})
+
+TriggerX(FP,{CD(GMode,3,AtMost),CV(SetPlayers,1)},{SetResources(Force1,Add,300000,Ore)})
+TriggerX(FP,{CD(GMode,3,AtMost),CV(SetPlayers,2)},{SetResources(Force1,Add,250000,Ore)})
+TriggerX(FP,{CD(GMode,3,AtMost),CV(SetPlayers,3)},{SetResources(Force1,Add,175000,Ore)})
+TriggerX(FP,{CD(GMode,3,AtMost),CV(SetPlayers,4)},{SetResources(Force1,Add,100000,Ore)})
+TriggerX(FP,{CD(GMode,4),CV(SetPlayers,1)},{SetResources(Force1,Add,1000000,Ore)})
+TriggerX(FP,{CD(GMode,4),CV(SetPlayers,2)},{SetResources(Force1,Add,750000,Ore)})
+TriggerX(FP,{CD(GMode,4),CV(SetPlayers,3)},{SetResources(Force1,Add,500000,Ore)})
+TriggerX(FP,{CD(GMode,4),CV(SetPlayers,4)},{SetResources(Force1,Add,250000,Ore)})
 
 for i = 0, 6 do
 	CIf(FP,{HumanCheck(i, 1)})
@@ -670,7 +689,7 @@ end
 
 
 
-for i = 1, 3 do
+for i = 1, 4 do
 	for j = 1, 7 do
 		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..(ExArr[i][j]/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[65.00%]  \x1BH \x04Marine\x0F[20.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[8.90%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[4.10%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.70%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.25%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP),SetV(ExRateV,ExArr[i][j])})
 	end
@@ -681,7 +700,7 @@ CIfEnd()
 
 CIfEnd({SetCp(FP)})
 CIfOnce(FP,{Switch("Switch 201",Set),CommandLeastAt(189,20)})
-for i = 1, 3 do
+for i = 1, 4 do
 	for j = 1, 7 do
 		TriggerX(FP,{CV(SetPlayers,j),CD(GMode,i)},{RotatePlayer({SetMissionObjectivesX("\x13\x04마린키우기 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy\x04:\x1FRe\x11B\x01∞\x07t \n\x13"..DifLeaderBoard[i].." "..j.."인 \x04플레이 중입니다. -\n\x13\x0E환전률 : "..((ExArr[i][j]+50)/10).."%\n\x13\x04간단 확률표\n\x13\x04Marine\x0E[65.00%]  \x1BH \x04Marine\x0F[20.00%]  \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine\x10[8.90%]  \n\x13\x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ\x11[4.10%] \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x08[1.70%]\n\x13\x07Ｓ\x1FＵ\x1CＰ\x0EＥ\x0FＲ\x10Ｎ\x17Ｏ\x11Ｖ\x08Ａ\x1D[0.25%]  \x11Ｑ\x1FＵ\x1BＡ\x16Ｓ\x10Ａ\x1DＲ\x1F[0.05%]\n\x13\x04\x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ\x04 까지 하위 유닛 3기로 \x07조합가능\n\x13\x04환전 : \x03배럭에서 F를 누르세요.")},HumanPlayers,FP)})
 	end

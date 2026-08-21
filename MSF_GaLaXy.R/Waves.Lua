@@ -52,12 +52,33 @@ function Waves()
 		CallSet(2800,{{10,40},{29,11}})
 		CallSet(3200,{{79,50},{80,10}})
 	CIfEnd()
+	CIf(FP,{CD(GMode,4)})
+		CallSet(390,{{77,10*3}})
+		CallSet(700,{{78,15*3}})
+		CallSet(900,{{25,15*3},{30,5*3}})
+		CallSet(1000,{{13,25*3},{88,15*3}})
+		CallSet(1250,{{27,11*3},{19,30*3}})
+		CallSet(1680,{{76,35*3},{88,40*3}})
+		CallSet(2370,{{17,30*3},{102,5}})
+		CallSet(2800,{{10,40*3},{29,11*3}})
+		CallSet(3200,{{79,50*3},{80,10*3}})
+	CIfEnd()
+	CIf(FP,{CD(GMode,3,AtMost)})
 	for i = 1, 10 do
 		CallSet(1850*i,{
 			{28,4},{88,5},{21,5},{17,3},{77,3},{78,3},
 		},1,1)
 		
 	end
+	CIfEnd()
+	CIf(FP,{CD(GMode,4)})
+	for i = 1, 10 do
+		CallSet(1850*i,{
+			{28,4*3},{88,5*3},{21,5*3},{17,3*3},{77,3*3},{78,3*3},
+		},1,1)
+		
+	end
+	CIfEnd()
 	
 	local WaveT = CreateCcode()
 	local WaveT2 = CreateCcode()
@@ -142,7 +163,8 @@ function Waves()
 		DoActions2(FP,{RotatePlayer({DisplayTextX("\x13\x04누군가가 \x08적의 \x07영역\x04을 침범하였습니다."),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav"),PlayWAVX("sound\\Bullet\\TNsFir00.wav")},HumanPlayers,FP)})
 		GetLocCenter(TTArr[j]-1,G_CA_X,G_CA_Y)
 		for l, m in pairs(k) do
-			f_TempRepeat(nil,m[1],m[2],nil,nil,"CG",1)
+			f_TempRepeat({CD(GMode,3,AtMost)},m[1],m[2],nil,nil,"CG",1)
+			f_TempRepeat({CD(GMode,4)},m[1],m[2]*3,nil,nil,"CG",1)
 		end
 		CIfEnd()
 	end

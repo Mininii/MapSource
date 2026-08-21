@@ -26,12 +26,6 @@ function Operator()
 	Trigger2X(FP, {CV(iv.Time4,200000,AtLeast)}, {SetV(iv.Time4, 0),SetMemory(0x58F504, SetTo, 0x50000),}, {preserved})
 
 	if Limit == 1 then
-		TriggerX(FP, {KeyPress("I","Down")}, {SetMemory(0x58F504, SetTo, 0x20000)}, {preserved})
-	end
-	if Limit == 1 then
-		TriggerX(FP, {KeyPress("T","Down")}, {SetMemory(0x58F504, SetTo, 0x50000)}, {preserved})
-	end
-	if Limit == 1 then
 		--TriggerX(FP, {KeyPress("Y","Down")}, {SetV(SCA.WeekV,0)}, {preserved})
 	end
 	for i = 0,7 do

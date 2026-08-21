@@ -518,6 +518,7 @@ end
 			InputTesterID(i,"RonaRonaChan")
 			InputTesterID(i,"Natori_sana")
 			InputTesterID(i,"Azusawa_Kohane")
+			InputTesterID(i,"Sana_Channel")
 			
 			
 		end

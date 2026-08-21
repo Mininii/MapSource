@@ -136,8 +136,22 @@ function Interface()
 		players = {i},
 		conditions = {
 			Label(0);
+			CD(GMode,3,AtMost),
 			CDeaths(FP, AtLeast, 2, DMode);
 			Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+		},
+		actions = {
+			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 데스카운트 아웃으로 인해 \x06드랍 \x04당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
+			},
+		}
+		
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CD(GMode,4),
+			CDeaths(FP, AtLeast, 2, DMode);
+			Score(i,Custom,AtLeast,300);--데카 300 이상일 경우
 		},
 		actions = {
 			RotatePlayer({DisplayTextX("\x07『 \x04"..PlayerString[i+1].."\x04가 데스카운트 아웃으로 인해 \x06드랍 \x04당했습니다.\x07 』",4),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,i);
@@ -163,8 +177,23 @@ function Interface()
 		players = {i},
 		conditions = {
 			Label(0);
+			CD(GMode,3,AtMost),
 			CDeaths(FP, AtLeast, 2, DMode);
 			Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+			CD(DropShield[i+1],1,AtLeast);
+		},
+		actions = {
+			DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 드랍 방지권이 있어 드랍되지 않습니다.\x07 』",4);
+			Defeat();
+			},
+		}
+		Trigger { -- 강퇴
+		players = {i},
+		conditions = {
+			Label(0);
+			CD(GMode,4),
+			CDeaths(FP, AtLeast, 2, DMode);
+			Score(i,Custom,AtLeast,300);--데카 100 이상일 경우
 			CD(DropShield[i+1],1,AtLeast);
 		},
 		actions = {
@@ -193,6 +222,7 @@ function Interface()
 			players = {i},
 			conditions = {
 				Label(0);
+				CD(GMode,3,AtMost),
 				CDeaths(FP, Exactly, 2, DMode);--드랍모드
 				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
 				CD(DropShield[i+1],0);
@@ -234,8 +264,93 @@ function Interface()
 			players = {i},
 			conditions = {
 				Label(0);
+				CD(GMode,3,AtMost),
 				CDeaths(FP, Exactly, 3, DMode);--드랍모드
 				Score(i,Custom,AtLeast,100);--데카 100 이상일 경우
+				CD(DropShield[i+1],0);
+				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 스타가 시공의 폭풍에 빠집니다.\x07 』",4);
+				SetCD(InfWhile, 1),--응답없음
+				},
+			}
+			
+		Trigger { -- 강퇴 드랍
+			players = {i},
+			conditions = {
+				Label(0);
+				CD(GMode,4),
+				CDeaths(FP, Exactly, 2, DMode);--드랍모드
+				Score(i,Custom,AtLeast,300);--데카 100 이상일 경우
+				CD(DropShield[i+1],0);
+				Memory(0x57F1B0, Exactly, i);--로컬플레이어아이디
+				
+			},
+			actions = {
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				PlayWAV("sound\\Protoss\\ARCHON\\PArDth00.WAV");
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				DisplayText("\x07『 \x04저런.. 얼마나 죽으신 겁니까? 좀 더 노력하세요. 바탕화면가서 바람좀 쐬고오시구요.\x07 』",4);
+				SetCD(Drop, 1),--드랍
+				SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1);--ExitDrop
+				},
+			}
+		Trigger { -- 강퇴 응없
+			players = {i},
+			conditions = {
+				Label(0);
+				CD(GMode,4),
+				CDeaths(FP, Exactly, 3, DMode);--드랍모드
+				Score(i,Custom,AtLeast,300);--데카 100 이상일 경우
 				CD(DropShield[i+1],0);
 				Memory(0x57F1B0, Exactly, i)--로컬플레이어아이디
 				
@@ -471,7 +586,7 @@ SetMemoryW(0x6C9C78 + (74*2),SetTo,1);
 SetMemory(0x6C9EF8 + (74*4),SetTo,1);
 
 CreateUnitWithProperties(1, MarGUID[j+1], 39, i, {energy=100}),
-Simple_SetLoc(0, 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))));
+Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(i*(32+(X2_Map*32))));
 MoveUnit(1, MarGUID[j+1], i, 39, 1),Order(MarGUID[j+1], i, 39, Attack, 4),
 SetMemoryB(0x6C9E20 + 74,SetTo,40);
 SetMemoryB(0x6C9858 + 74,SetTo,0);
@@ -555,7 +670,7 @@ TriggerX(FP, {
 	Bring(i, AtMost, 2, 100, 3);
 	Bring(i, AtMost, 2, 16, 3);
 }, {SetCD(AutoCombiCcode[i+1], 0),
-Simple_SetLoc(0, 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(i*(32+(X2_Map*32))));
+Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(i*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(i*(32+(X2_Map*32))));
 MoveUnit(All, 0, i, 3, 1);
 MoveUnit(All, 20, i, 3, 1);
 MoveUnit(All, 100, i, 3, 1);
@@ -914,7 +1029,7 @@ actions = {
 	ModifyUnitEnergy(3,0,j,3,0);
 	RemoveUnitAt(3,0,3,j);
 	CreateUnitWithProperties(1,20,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 20, j, 39, 1),Order(20, j, 39, Attack, 4);
 	DisplayText("\x02▶ \x04Marine \x043기를 조합하여 \x1BH \x04Marine으로 \x19변환\x04하였습니다.",4);
 	PreserveTrigger();
@@ -930,7 +1045,7 @@ actions = {
 	ModifyUnitEnergy(3,20,j,3,0);
 	RemoveUnitAt(3,20,3,j);
 	CreateUnitWithProperties(1,100,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 100, j, 39, 1),Order(100, j, 39, Attack, 4);
 	SetDeaths(j,Add,1,125);
 	DisplayText("\x02▶ \x1BH \x04Marine \x043기를 조합하여 \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine으로 \x19변환\x04하였습니다.",4);
@@ -953,7 +1068,7 @@ actions = {
 	RemoveUnitAt(3,100,3,j);
 	DisplayText("\x02▶ \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x18M\x16arine \x043기를 조합하여 \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ 으로 \x19변환\x04하였습니다.",4);
 	CreateUnitWithProperties(1,16,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 16, j, 39, 1),Order(16, j, 39, Attack, 4);
 	PreserveTrigger();
 },
@@ -976,7 +1091,7 @@ actions = {
 	RemoveUnitAt(3,16,3,j);
 	DisplayText("\x02▶ \x11Ｎ\x07Ｅ\x1FＢ\x1CＵ\x17Ｌ\x11Ａ \x043기를 조합하여 \x10Ｔ\x07Ｅ\x0FＲＲ\x1FＡ 으로 \x19변환\x04하였습니다.",4);
 	CreateUnitWithProperties(1,99,39,j,{energy = 100});
-	Simple_SetLoc(0, 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), 384+(j*(32+(X2_Map*32))));
+	Simple_SetLoc(0, 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))), 3728*(X2_Map+1), ((192)*(X2_Map+1))+(j*(32+(X2_Map*32))));
 	MoveUnit(1, 99, j, 39, 1),Order(99, j, 39, Attack, 4);
 	SetMemoryB(0x6C9E20 + 74,SetTo,40);
 	SetMemoryB(0x6C9858 + 74,SetTo,0);

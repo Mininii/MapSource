@@ -12,17 +12,20 @@ function Source()
 	EasyEx1P = 160
 	HDEx1P = 175
 	BurEx1P = 190
+	GalEx1P = 210
 	GunLimit = 1500
 
 	ExArr = {--환전률
 		{},--이지
 		{},--하드
 		{},--뻥
+		{},--갤
 	}
 	for i = 1, 7 do
 		table.insert(ExArr[1],EasyEx1P+(ExRate*(i-1)))
 		table.insert(ExArr[2],HDEx1P+(ExRate*(i-1)))
 		table.insert(ExArr[3],BurEx1P+(ExRate*(i-1)))
+		table.insert(ExArr[4],GalEx1P+(ExRate*(i-1)))
 	end
 
 	--System
@@ -108,10 +111,11 @@ function Source()
 --CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST\x04 \x03[R] \x03G\x0Fa\x10L\x0Fa\x03X\x0Fy \x04[Y] \x07선택완료"),
 --}
 Str25 = {
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료"),
-CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[Y] \x07선택완료"),
-CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[R] \x10GALAXY \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x03[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x04[R] \x10GALAXY \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x03[W] \x08HARD \x04[E] \x11BURST \x04[R] \x10GALAXY \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x03[E] \x11BURST \x04[R] \x10GALAXY \x04[Y] \x07선택완료"),
+CreateCText(FP,"\x04 : \x04[Q] \x0EEASY \x04[W] \x08HARD \x04[E] \x11BURST \x03[R] \x10GALAXY \x04[Y] \x07선택완료"),
 }
 Str27 = {
 CreateCText(FP,"\x04 : \x04[Q] \x0E쫄보\x04의 \x04일반모드 \x04[W] \x08상남자\x04의 \x06드랍모드 \x04[E] \x10돌아이\x04의 \x11응답없음모드 \x04[Y] \x07선택완료"),
@@ -123,7 +127,9 @@ CreateCText(FP,"\x04 : \x04[Q] \x0E쫄보\x04의 \x04일반모드 \x04[W] \x08�
 DifLeaderBoard = {
 	"\x04 - \x0EEASY \x04Mode",
 	"\x04 - \x08HARD \x04Mode",
-	"\x04 - \x11BURST \x04Mode"}
+	"\x04 - \x11BURST \x04Mode",
+	"\x04 - \x10GALAXY \x04Mode",
+}
 	RandSwitch1 = "Switch 100"
 	RandSwitch2 = "Switch 101"
 	--Gun_SVA = CreateSVArr(16,64,FP)

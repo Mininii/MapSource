@@ -178,6 +178,7 @@ CWhileEnd()
     AddBGM(6,"staredit\\wav\\BGM_3.ogg",62*1000)
     AddBGM(7,"staredit\\wav\\BGM_4.ogg",61*1000)
     AddBGM(8,"staredit\\wav\\BGM_5.ogg",84*1000)
+    AddBGM(9,"staredit\\wav\\Formation.ogg",30*1000)
 
 	
 	
@@ -372,6 +373,10 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},78,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},75,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},88,15,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},77,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},78,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},75,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},88,15*3,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
 WaveArr = {
@@ -414,6 +419,10 @@ for j, k in pairs(HealZoneSpawnArr) do
 	f_TempRepeat({CD(GMode,3)},17,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},19,6,nil,nil,k)
 	f_TempRepeat({CD(GMode,3)},21,15,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},10,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},17,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},19,6*3,nil,nil,k)
+	f_TempRepeat({CD(GMode,4)},21,15*3,nil,nil,k)
 end
 CMov(FP,0x6509B0,FP)
 WaveArr = {
@@ -446,7 +455,7 @@ Trigger2X(FP,Cond,{MoveLocation(1,UnitID,Player,Loc);RotatePlayer({PlayWAVX(Wav)
 CElseX({SetInvincibility(Enable,UnitID,Player,Loc)})
 CIfXEnd()
 end
-TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 88, FP, 64),Order(88, FP, 23, Attack, 4),Order(21, FP, 23, Attack, 4)},{preserved})
+TriggerX(FP,{CD(CocoonCcode,1,AtLeast),},{SetInvincibility(Disable, 21, FP, 64),SetInvincibility(Disable, 80, FP, 64),SetInvincibility(Disable, 8, FP, 64),SetInvincibility(Disable, 88, FP, 64),Order(88, FP, 23, Attack, 4),Order(21, FP, 23, Attack, 4),Order(80, FP, 23, Attack, 4),Order(8, FP, 23, Attack, 4)},{preserved})
 
 InvDisable({CDeaths(FP,AtLeast,4,ChryCcode),CD(GeneCcode,1,AtLeast)},147,Force2,64,"Ｏｖｅｒｍｉｎｄ　Ｇ")
 InvDisable({CDeaths(FP,AtLeast,4,FaciCcode)},200,Force2,64,"Ｇｅｎｅｒａｔｏｒ")
@@ -507,6 +516,19 @@ BossT = CreateCcode()
 DoActionsX(FP,{SubCD(BossT,1)})
 TriggerX(FP,{CD(GMode,2,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(9,70,1,FP),Order(70,FP,64,Patrol,1)},{preserved})
 TriggerX(FP,{CD(GMode,3,Exactly),CD(BossT,0)},{AddCD(BossT,20),CreateUnit(1,12,1,FP),KillUnit(12,FP),CreateUnit(20,70,1,FP),Order(70,FP,64,Patrol,1)},{preserved})
+
+Trigger2X(FP,{CD(GMode,4,Exactly),CD(BossT,0)},{CreateUnit(1,12,1,FP),KillUnit(12,FP),
+CreateUnit(20,70,1,FP),
+Simple_CalcLoc(0,-64,-64,-64,-64),
+CreateUnit(20,70,1,FP),
+Simple_CalcLoc(0,128,0,128,0),
+CreateUnit(20,70,1,FP),
+Simple_CalcLoc(0,0,128,0,128),
+CreateUnit(20,70,1,FP),
+Simple_CalcLoc(0,-128,0,-128,0),
+CreateUnit(20,70,1,FP),
+Simple_CalcLoc(0,64,64,64,64),
+Order(70,FP,64,Patrol,1),AddCD(BossT,20),},{preserved})
 TriggerX(FP,{CD(GMode,2,AtLeast),CD(BossT,5)},{KillUnit(70,FP)},{preserved})
 
 Trigger2X(FP,{Bring(FP,AtMost,0,65,64)},{AddCD(BossCcode,1),SetScore(Force1,Add,1000000,Kills),KillUnit(70,FP),RotatePlayer({PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),PlayWAVX("staredit\\wav\\BossKill.ogg"),DisplayTextX("\n\n\n\n\n\n\n\n\n\n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※\n\n\n\x13\x04적의 \x08수호자 \x07Nought \x04가 쓰러졌습니다.\n\x13\x10+\x17 1000000 P t s \n\n\x13\x07※※※※※※※※※※※※\x08 N O T I C E\x07 ※※※※※※※※※※※※",4)},HumanPlayers,FP)})
@@ -542,9 +564,9 @@ for j, k in pairs(ClearTextArr) do
 end
 
 PlayersT = {"\x081인","\x0E2인","\x0F3인","\x104인","\x115인","\x186인","\x167인"}
-GModeT = {"\x0EEASY","\x08HARD","\x11BURST"}
+GModeT = {"\x0EEASY","\x08HARD","\x11BURST","\x10GALAXY"}
 
-for i = 1, 3 do
+for i = 1, 4 do
 for k = 1, 7 do
 
 
@@ -618,6 +640,9 @@ ScoreBoardArr = {
 	},
 	{
 		{0,5},{6,15},{16,30},{31,70},{71,100},{101,200},{201,300},{301,99999999}--버
+	},
+	{
+		{0,20},{21,80},{81,200},{201,350},{351,500},{501,750},{751,1000},{1001,99999999}--갤
 	}
 }
 
@@ -640,7 +665,7 @@ RankTextArr2 = {
 "\x13\x17E\x04 - \x04",
 "\x13\x08Game Over\x04 - \x04"}
 ScoreBoardTextArr = {
-	{},{},{}
+	{},{},{},{}
 }
 for j, k in pairs(ScoreBoardArr) do
 	for l,m in pairs(k) do
@@ -650,7 +675,7 @@ for j, k in pairs(ScoreBoardArr) do
 		table.insert(ScoreBoardTextArr[j],m[1].." ～ "..X.."\n")
 	end
 end
-for i = 1, 3 do
+for i = 1, 4 do
 	TriggerX(FP,{CD(GMode,i),CD(Win,500,AtLeast)},{RotatePlayer({PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),DisplayTextX("\x13"..DifLeaderBoard[i].." \x07ScoreBoard \x04-\n"..table.concat(ScoreBoardTextArr[i]),4),},HumanPlayers,FP)})
 end
 for i = 0, 6 do
@@ -662,7 +687,7 @@ for i = 0, 6 do
 			DisplayDeathRank(i,j,m[1],m[2],"\x13\x08Death\x04Rank \x04: "..RankTextArr[l],X)
 		end
 	end
-	--TriggerX(FP,{CD(GMode,3),Score(i,Custom,AtMost,70)},{SetCp(i),DisplayText("\x13\x07GOD \x04Rank 보상 : 히든 활성화\x13\x04스크린샷으로 이 문구를 제작자에게 보여주세요.",4),SetCp(FP)})
+	--TriggerX(FP,{CD(GMode,4),Score(i,Custom,AtMost,70)},{SetCp(i),DisplayText("\x13\x07GOD \x04Rank 보상 : 히든 활성화\x13\x04스크린샷으로 이 문구를 제작자에게 보여주세요.",4),SetCp(FP)})
 end
 
 
