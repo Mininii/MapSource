@@ -39,7 +39,15 @@ end
 
 function PushErrorMsg(Message)
 	if Message~=nil then
-		return error(Message,1)
+		-- TEP 3.0 은 lua 소스를 UTF-8 로 읽지만 에러 출력창은 CP949(ANSI)로 찍는다.
+		-- 그대로 넘기면 한글 메시지가 "?쒖뒪..." 처럼 깨지므로 호스트 내장 __encode_cp949 로
+		-- 바꿔서 넘긴다(ASCII 는 변환해도 그대로라 영문 메시지에는 영향 없음).
+		if TEP30Flag == 1 and __encode_cp949 ~= nil and type(Message) == "string" then
+			Message = __encode_cp949(Message)
+		end
+		-- level 2 = "PushErrorMsg 를 부른 쪽" 의 파일:줄 이 에러 앞에 찍힌다.
+		-- (1 이면 항상 이 파일의 이 줄이 찍혀서 어느 설정이 틀렸는지 안 보인다)
+		return error(Message,2)
 	else
 		PushErrorMsg_is_nil()
 		

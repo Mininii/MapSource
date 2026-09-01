@@ -1,6 +1,13 @@
 -- ObserverChat.lua v1.0 Made by Ninfia
 -- 관전자 ↔ 플레이어간 채팅을 지원하는 플러그인
 -- 2.0부터는 CtrigAsm v5.4.lua에 자동으로 포함됩니다.
+--
+-- NOTE: 이 파일은 v1.0 시절 단독 플러그인이던 흔적으로, 함수 5개 안에서 PushErrorMsg 를
+--       전역 재정의하고 있었다. 지금은 CtrigAsm 과 LibraryFor322.lua 가 로드 시점에
+--       PushErrorMsg 를 이미 정의하는데, 여기 함수가 한 번이라도 호출되면 그 재정의가
+--       전역을 덮어써서 LibraryFor322 판의 CP949 인코딩(한글 에러 메시지)과
+--       error level 2(에러를 낸 호출부 위치 표시)가 통째로 날아갔다.
+--       -> 재정의 5개를 전부 제거하고 LibraryFor322.lua 판을 그대로 쓴다.
 
 function TogglePlayerModerate(PlayerID,State,Timer,TargetPlayer,Condition,Action)
 	if State == "Off" then
@@ -172,9 +179,7 @@ function TogglePlayerChat(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 		return ret
 	end
 
-	function PushErrorMsg(Message)
-		_G["\n"..Message.."\n"]() 
-	end
+	-- (PushErrorMsg 재정의 제거 - 파일 상단 NOTE 참고)
 
 	local KeyCond = {}
 	if KeyName ~= nil then
@@ -426,9 +431,7 @@ function ObserverChatToAll(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,A
 		return ret
 	end
 
-	function PushErrorMsg(Message)
-		_G["\n"..Message.."\n"]() 
-	end
+	-- (PushErrorMsg 재정의 제거 - 파일 상단 NOTE 참고)
 
 	local KeyCond = {}
 	if KeyName ~= nil then
@@ -596,9 +599,7 @@ function ObserverChatToNone(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,
 		return ret
 	end
 
-	function PushErrorMsg(Message)
-		_G["\n"..Message.."\n"]() 
-	end
+	-- (PushErrorMsg 재정의 제거 - 파일 상단 NOTE 참고)
 
 	local KeyCond = {}
 	if KeyName ~= nil then
@@ -766,9 +767,7 @@ function ObserverChatToPlayer(PlayerID,Timer,TargetPlayer,KeyName,Delay,Conditio
 		return ret
 	end
 
-	function PushErrorMsg(Message)
-		_G["\n"..Message.."\n"]() 
-	end
+	-- (PushErrorMsg 재정의 제거 - 파일 상단 NOTE 참고)
 
 	local KeyCond = {}
 	if KeyName ~= nil then
@@ -1007,9 +1006,7 @@ function ObserverChatToOb(PlayerID,Timer,TargetPlayer,KeyName,Delay,Condition,Ac
 		return ret
 	end
 
-	function PushErrorMsg(Message)
-		_G["\n"..Message.."\n"]() 
-	end
+	-- (PushErrorMsg 재정의 제거 - 파일 상단 NOTE 참고)
 
 	local KeyCond = {}
 	if KeyName ~= nil then
