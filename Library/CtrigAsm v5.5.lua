@@ -42,6 +42,7 @@ NotSame = 9
 
 -- STR(X) ptr 고정 0x191943c8 --
 -- TBL ptr 고정 0x19184660 --
+-- TRIG (P1) ptr 고정 0x191BD830 --
 STRXFlag = 0
 
 CtrigInitArr = {}
@@ -1658,6 +1659,11 @@ function EndCtrig()
 				},
 				flag = {Preserved}
 			}
+		else
+			local faddon = "__def_".._G[CreateVarPArr[k][1]]
+			if type(faddon) == "function" then
+				_G[faddon](i)
+			end
 		end
 		if TEP30STRx == 1 then 
 			if CreateVarPArr[k]["STRx"] == 1 or CreateVarPArr[k][1] == "FA" then
@@ -1683,7 +1689,7 @@ function EndCtrig()
 	for i = 0xFE00, MAXVAlloc do
 		CVariable(AllPlayers,i)
 	end
-	for j = 1, 16 do
+	for j = 1, 32 do
 		for i = SVarXOrig[j], MAXSVAlloc[j] do
 			CSVariable(AllPlayers,i,j)
 		end
@@ -1741,6 +1747,7 @@ function Label(Index)
 		Index = 0
 	end
 	local Label = Condition(0,0,Index,0,Exactly,0xFE,0,0x2) -- flag : 조건/액션 - 0x2 = Disabled
+
 	if Index >= 1 then
 		table.insert(LabelArr,Index)
 	end
@@ -10348,7 +10355,7 @@ function NJumpX(PlayerID,sIndex,Conditions,Actions,UnPack)
 	TTPopTrigArr(PlayerID)
 	Conditions = PopCondArr(Conditions)
 	Actions = PopActArr(Actions)
-	PopTrigArr(PlayerID,1)
+	PopTrigArr(PlayerID,4)
 	Trigger {
 		players = {PlayerID},
 		conditions = {
@@ -13334,6 +13341,9 @@ function TSetMemory(Offset,Type,Value)
 end
 
 function TMemoryX(Offset,Type,Value,Mask)
+	if Value == nil or Mask == nil then
+		TMemoryX_InputData_Error()
+	end
 	local PushLine = 0
 	local TypeNum = 0
 	if type(Mask) == "table" then
@@ -13476,6 +13486,9 @@ function TMemoryX(Offset,Type,Value,Mask)
 end
 
 function TSetMemoryX(Offset,Type,Value,Mask)
+	if Value == nil or Mask == nil then
+		TSetMemoryX_InputData_Error()
+	end
 	local PushLine = 0
 	local TypeNum = 0
 	if type(Mask) == "table" then
@@ -18904,6 +18917,9 @@ function TTMemory(Offset,Type,Value)
 end
 
 function TTMemoryX(Offset,Type,Value,Mask)
+	if Value == nil or Mask == nil then
+		TTMemoryX_InputData_Error()
+	end
 	local Mode
 	if Type == ">" or Type == Above then
 		Mode = 1
