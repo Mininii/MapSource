@@ -31,3 +31,6 @@ TestCode/etc2.lua
 TestCode/TestMap TRIG.lua
 NewTestMap2/TableArr/Stable.txt
 TestCode/1.lua
+
+# 부트스트랩의 PC 별 설정 (Bootstrap.lua 가 마지막에 실행한다)
+local.lua

@@ -1,6 +1,40 @@
 
--- to DeskTop : Curdir="C:\\Users\\USER\\Documents\\"
--- to LAPTOP : Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
+-- ── MapSource 부트스트랩 ─────────────────────────────────────────────────
+-- PC 마다 다른 경로는 MapSource/Bootstrap.lua 한 곳에서 관리한다.  이 블록은
+-- 모든 맵에서 똑같고 어느 PC 에서도 고칠 필요가 없다.  자동 탐지가 빗나가는
+-- PC 에서는 그 PC 의 환경변수 MAPSOURCE_CURDIR 만 잡아 주면 된다.
+do
+	local sep  = package.config:sub(1, 1)
+	local home = os.getenv("USERPROFILE") or os.getenv("HOME") or ""
+	local function try(c)
+		if type(c) ~= "string" or c == "" then return false end
+		local root = c:gsub("[/\\]+$", "") .. sep
+		local boot = root .. "MapSource" .. sep .. "Bootstrap.lua"
+		local f = io.open(boot, "r")
+		if not f then return false end
+		f:close()
+		Curdir = root
+		dofile(boot)
+		return true
+	end
+	-- rawget 을 쓰는 이유: basescript 가 _G 에 __index 를 걸어 정의되지 않은
+	-- 전역을 "읽는 것" 자체를 에러로 만든다.  __newindex 가 키를 소문자로 눕히므로
+	-- 소문자로 찾아야 한다 (Curdir -> _G["curdir"]).
+	local ok = try(os.getenv("MAPSOURCE_CURDIR")) or try(rawget(_G, "curdir"))
+		or try(home .. sep .. "Documents") or try(home .. sep .. "Desktop")
+		or try(home .. sep .. "OneDrive" .. sep .. "Documents") or try(home)
+	if not ok then
+		local p = io.popen(sep == "/" and "pwd" or "cd")
+		local cwd = p and p:read("*l")
+		if p then p:close() end
+		while not ok and cwd and cwd ~= "" do
+			ok  = try(cwd)
+			cwd = cwd:match("^(.*)[/\\][^/\\]+$")
+		end
+	end
+	assert(ok, "MapSource/Bootstrap.lua 를 못 찾았다.  이 PC 의 환경변수 "
+	        .. "MAPSOURCE_CURDIR 에 MapSource 의 부모 디렉터리를 넣을 것.")
+end
 --__MapDirSetting(__encode_cp949("C:\\euddraft0.9.2.0")) -- 맵파일 경로(\를 \\로 바꿔야함)
 --__SubDirSetting(__encode_cp949(Curdir.."MapSource\\MSF_Breeze")) -- Main.lua 폴더경로 (\를 \\로 바꿔야함, 없으면 비우기)
 --속도측정용
@@ -8,7 +42,6 @@
 ----------------------------------------------Loader Space ---------------------------------------------------------------------
 
 
---Curdir="C:\\Users\\whatd\\Desktop\\Stormcoast Fortress\\ScmDraft 2\\"
 EXTLUA = "dir \""..Curdir.."\\MapSource\\Library\\\" /b"
 for dir in io.popen(EXTLUA):lines() do
      if dir:match "%.[Ll][Uu][Aa]$"  then
