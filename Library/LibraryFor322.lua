@@ -42,7 +42,14 @@ function PushErrorMsg(Message)
 		-- TEP 3.0 은 lua 소스를 UTF-8 로 읽지만 에러 출력창은 CP949(ANSI)로 찍는다.
 		-- 그대로 넘기면 한글 메시지가 "?쒖뒪..." 처럼 깨지므로 호스트 내장 __encode_cp949 로
 		-- 바꿔서 넘긴다(ASCII 는 변환해도 그대로라 영문 메시지에는 영향 없음).
-		if TEP30Flag == 1 and __encode_cp949 ~= nil and type(Message) == "string" then
+		--
+		-- 단 리눅스 헤드리스(tepc)에서는 변환하면 안 된다. 거기는 출력이 GUI 창이 아니라
+		-- UTF-8 터미널이라, CP949 로 바꾸면 오히려 그때부터 깨진다. 구분은 이 Lua 빌드의
+		-- 디렉터리 구분자로 한다 - MSVC 판(TEP 3.0 GUI, Windows tepc.exe)은 "\", 리눅스
+		-- tepc 는 "/" 다. Windows tepc.exe 는 한국어 로캘 콘솔이 CP949 라 변환이 맞다.
+		local HostIsPosix = (package.config:sub(1, 1) == "/")
+		if TEP30Flag == 1 and __encode_cp949 ~= nil and type(Message) == "string"
+			and not HostIsPosix then
 			Message = __encode_cp949(Message)
 		end
 		-- level 2 = "PushErrorMsg 를 부른 쪽" 의 파일:줄 이 에러 앞에 찍힌다.

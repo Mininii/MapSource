@@ -34,3 +34,7 @@ TestCode/1.lua
 
 # 부트스트랩의 PC 별 설정 (Bootstrap.lua 가 마지막에 실행한다)
 local.lua
+
+# 핵심 프로텍터 - 절대 커밋 금지 (유출 시 맵 보호가 무력화된다)
+Library/py/CPLP.py
+CPLP.py
