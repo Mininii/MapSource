@@ -13,6 +13,24 @@ from tileset import Tileset
 from wfc import TupleSet, Field
 
 
+def flat_low(ts, g0, g1):
+    """True when both tiles of a cell are ordinary low ground a unit can cross."""
+    for g in (g0, g1):
+        if g >= len(ts.groups):
+            return False
+        grp = ts.groups[g]
+        if grp.ground_height != 0:
+            return False
+        for sub in range(16):
+            mt = grp.megatiles[sub]
+            if mt == 0 or mt >= ts.nmega:
+                continue
+            fl = struct.unpack_from("<16H", ts.vf4, mt * 32)
+            if any(not (f & 1) for f in fl):
+                return False
+    return True
+
+
 def load_tuplesets(tablepath):
     """Returns ({parity: TupleSet}, {parity: {types: (g0,g1)}}, value weights)."""
     d = pickle.load(open(tablepath, "rb"))
@@ -39,12 +57,25 @@ def load_tuplesets(tablepath):
 
 
 class TerrainBuilder:
-    def __init__(self, w, h, tablepath, era=7, seed=1234):
+    def __init__(self, w, h, tablepath, era=7, seed=1234, low_types=None):
         assert w % 2 == 0 and h % 2 == 0
         self.w, self.h = w, h
         self.iw, self.ih = w // 2 + 1, h + 1
         self.tsets, self.tilemap, self.valw = load_tuplesets(tablepath)
         self.ts = Tileset(era)
+        # Two low-ground regions must not grow a cliff between them, so cells whose
+        # whole neighbourhood is low ground may only use tuples whose tiles are
+        # flat, fully walkable, height-0 terrain.
+        self.low_types = set(low_types or ())
+        self.flat_mask = {}
+        for parity in (0, 1):
+            tset = self.tsets[parity]
+            m = 0
+            for i, types in enumerate(tset.tuples):
+                pair = self.tilemap[parity].get(types)
+                if pair and flat_low(self.ts, pair[0], pair[1]):
+                    m |= (1 << i)
+            self.flat_mask[parity] = m
         self.era = era
         self.rng = random.Random(seed)
         self.region = [[1] * self.iw for _ in range(self.ih)]
@@ -81,6 +112,17 @@ class TerrainBuilder:
         return d
 
     # ----------------------------------------------------------------- build
+    def low_only(self, ix, iy, rad=2):
+        for dy in range(-rad, rad + 1):
+            jy = iy + dy
+            if jy < 0 or jy >= self.ih:
+                continue
+            for dx in range(-rad, rad + 1):
+                jx = ix + dx
+                if 0 <= jx < self.iw and self.region[jy][jx] not in self.low_types:
+                    return False
+        return True
+
     def build(self, pin_radius=1, max_repair=250, log=print):
         bd = self.boundary_distance()
         relax = [[0] * self.iw for _ in range(self.ih)]
@@ -96,6 +138,12 @@ class TerrainBuilder:
                         if len(f.dom(var)) != 1:
                             f.pin(var, t)
                             npin += 1
+            if self.low_types:
+                f.restrict = {}
+                for iy in range(self.ih):
+                    for ix in range(self.iw):
+                        if self.low_only(ix, iy):
+                            f.restrict[(ix, iy)] = self.flat_mask[(ix + iy) % 2]
             if f.propagate():
                 ok = f.solve(self.rng, weights=self.valw, log=lambda s: None)
                 if ok:

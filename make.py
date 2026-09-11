@@ -15,7 +15,7 @@ OUT_SCX = "out/marine128.scx"
 SRC_SCX = "work/src.scx"
 
 
-def main(seed=17, tag=""):
+def main(seed=19, tag=""):
     t0 = time.time()
     out_chk = OUT_CHK if not tag else "out/marine128_%s.chk" % tag
     out_scx = OUT_SCX if not tag else "out/marine128_%s.scx" % tag
@@ -40,5 +40,5 @@ def main(seed=17, tag=""):
 
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]) if len(sys.argv) > 1 else 17,
+    main(int(sys.argv[1]) if len(sys.argv) > 1 else 19,
          sys.argv[2] if len(sys.argv) > 2 else "")

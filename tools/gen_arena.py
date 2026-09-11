@@ -2,7 +2,7 @@
 and render both for inspection."""
 import sys, os, struct, time, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from arena import Arena, WATER, LOW, HIGH
+from arena import Arena, WATER, LOW, HIGH, PASSABLE
 from terrain import TerrainBuilder
 from walk import WalkGrid
 from render import render
@@ -13,7 +13,7 @@ TABLE = "work/isom_twilight.pkl"
 
 def build(seed=7, pin_radius=2, log=print):
     ar = Arena(seed=1700 + seed * 37)
-    tb = TerrainBuilder(ar.w, ar.h, TABLE, era=7, seed=seed)
+    tb = TerrainBuilder(ar.w, ar.h, TABLE, era=7, seed=seed, low_types=PASSABLE)
     grid = ar.grid()
     tb.set_region(lambda ix, iy: grid[iy][ix])
     t0 = time.time()

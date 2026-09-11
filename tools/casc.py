@@ -1,6 +1,7 @@
-"""Minimal CascLib ctypes wrapper to pull tileset graphics out of a StarCraft install."""
+"""Minimal CascLib ctypes wrapper to pull tileset graphics out of a StarCraft
+install. This build of CascLib takes ANSI (char*) paths."""
 import ctypes, os, sys
-from ctypes import c_void_p, c_char_p, c_wchar_p, c_uint32, c_int, byref, POINTER
+from ctypes import c_void_p, c_char_p, c_uint32, c_uint64, c_int, byref, POINTER
 
 DLL_CANDIDATES = [
     r"C:\Users\USER\Downloads\Release\CascLib.dll",
@@ -9,26 +10,23 @@ DLL_CANDIDATES = [
 SC_PATH = r"C:\Program Files (x86)\StarCraft"
 
 
-def load():
-    last = None
-    for d in DLL_CANDIDATES:
-        if not os.path.exists(d):
-            continue
-        try:
-            return ctypes.WinDLL(d), d
-        except Exception as e:
-            last = e
-    raise OSError("no CascLib could be loaded: %s" % last)
-
-
 class Casc:
     def __init__(self, path=SC_PATH):
-        self.C, self.dllpath = load()
+        last = None
+        self.C = None
+        for d in DLL_CANDIDATES:
+            if not os.path.exists(d):
+                continue
+            try:
+                self.C = ctypes.WinDLL(d)
+                self.dllpath = d
+                break
+            except Exception as e:
+                last = e
+        if self.C is None:
+            raise OSError("no CascLib could be loaded: %s" % last)
         C = self.C
-        self.h = c_void_p()
-        for argt, name in (((c_wchar_p, POINTER(c_void_p)), "CascOpenStorage"),):
-            pass
-        C.CascOpenStorage.argtypes = [c_wchar_p, c_uint32, POINTER(c_void_p)]
+        C.CascOpenStorage.argtypes = [c_char_p, c_uint32, POINTER(c_void_p)]
         C.CascOpenStorage.restype = c_int
         C.CascCloseStorage.argtypes = [c_void_p]
         C.CascOpenFile.argtypes = [c_void_p, c_char_p, c_uint32, c_uint32, POINTER(c_void_p)]
@@ -38,16 +36,19 @@ class Casc:
         C.CascReadFile.argtypes = [c_void_p, c_void_p, c_uint32, POINTER(c_uint32)]
         C.CascReadFile.restype = c_int
         C.CascCloseFile.argtypes = [c_void_p]
-        C.GetLastError = ctypes.windll.kernel32.GetLastError
-        if not C.CascOpenStorage(path, 0, byref(self.h)):
-            raise OSError("CascOpenStorage failed err=%d for %s" % (ctypes.GetLastError(), path))
+        self.h = c_void_p()
+        if not C.CascOpenStorage(path.encode("mbcs"), 0, byref(self.h)) or not self.h.value:
+            raise OSError("CascOpenStorage failed for %s" % path)
 
     def read(self, name):
         f = c_void_p()
-        if not self.C.CascOpenFile(self.h, name.encode("mbcs"), 0, 0, byref(f)):
-            raise KeyError("%s (err %d)" % (name, ctypes.GetLastError()))
+        if not self.C.CascOpenFile(self.h, name.encode("mbcs"), 0, 0, byref(f)) or not f.value:
+            raise KeyError(name)
         hi = c_uint32(0)
         sz = self.C.CascGetFileSize(f, byref(hi))
+        if sz in (0, 0xFFFFFFFF):
+            self.C.CascCloseFile(f)
+            raise KeyError("%s (size %s)" % (name, sz))
         buf = ctypes.create_string_buffer(sz)
         rd = c_uint32(0)
         ok = self.C.CascReadFile(f, buf, sz, byref(rd))
@@ -68,14 +69,28 @@ class Casc:
         self.close()
 
 
+TILESET_FILES = ["cv5", "vf4", "vx4", "vx4ex", "vr4", "wpe"]
+
+
+def dump_tileset(name, outdir, path=SC_PATH):
+    os.makedirs(outdir, exist_ok=True)
+    got = []
+    with Casc(path) as c:
+        for ext in TILESET_FILES:
+            for cand in ("tileset/%s.%s" % (name, ext), "tileset\\%s.%s" % (name, ext)):
+                try:
+                    d = c.read(cand)
+                except Exception:
+                    continue
+                p = os.path.join(outdir, "%s.%s" % (name, ext))
+                open(p, "wb").write(d)
+                got.append((cand, len(d)))
+                break
+    return got
+
+
 if __name__ == "__main__":
-    with Casc() as c:
-        print("opened storage via", c.dllpath)
-        for n in ["tileset/twilight.vr4", "tileset/twilight.vx4ex", "tileset/twilight.vx4",
-                  "tileset/twilight.wpe", "tileset/twilight.cv5", "tileset/twilight.vf4",
-                  "tileset\\twilight.vr4"]:
-            try:
-                d = c.read(n)
-                print("  %-28s %d bytes" % (n, len(d)))
-            except Exception as e:
-                print("  %-28s MISS (%s)" % (n, e))
+    name = sys.argv[1] if len(sys.argv) > 1 else "twilight"
+    outdir = sys.argv[2] if len(sys.argv) > 2 else "work/tileset"
+    for cand, n in dump_tileset(name, outdir):
+        print("  %-30s %d bytes" % (cand, n))

@@ -47,6 +47,7 @@ class TupleSet:
 class Field:
     def __init__(self, iw, ih, tset):
         self.fail_cell = None
+        self.restrict = {}      # {(ix,iy): tuple bitmask} extra per-cell limits
         self.iw, self.ih = iw, ih
         self.tset = tset            # {parity: TupleSet}
         allvals = set()
@@ -95,6 +96,9 @@ class Field:
         for p in range(4):
             masks.append(ts.mask_for(p, self.dom(vs[p])))
         allowed = masks[0] & masks[1] & masks[2] & masks[3]
+        r = self.restrict.get((ix, iy))
+        if r is not None:
+            allowed &= r
         if allowed == 0:
             return False
         for p in range(4):

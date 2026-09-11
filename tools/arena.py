@@ -153,7 +153,7 @@ class Arena:
                     if self.blobby(jx, jy, ix, iy, r, 700 + len(placed) * 23, amp=1.8):
                         out[jy][jx] = kind
             placed.append((ix, iy, r))
-            if len(placed) >= 24:
+            if len(placed) >= 34:
                 break
         self.peaks = placed
         return out
@@ -221,7 +221,7 @@ class Arena:
         out = [row[:] for row in g]
         _, base_conn = self.connected(out)
         for (dd, ix, iy) in cand:
-            if any(abs(ix - px) + abs(iy - py) < pr + 8 for (px, py, pr) in placed):
+            if any(abs(ix - px) + abs(iy - py) < pr + 5 for (px, py, pr) in placed):
                 continue
             r = min(7, dd - buf - 1)
             if r < 2:
