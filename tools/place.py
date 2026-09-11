@@ -93,7 +93,25 @@ class Placer:
                     ok += 1
         return (ok / float(tot)) if tot else 0.0
 
-    def place_arena(self, L, spread=1.0, want=0.85, topk=40):
+    def ranked(self, L, spread=1.0, topk=60):
+        """Top candidate centres for a location, cheapest cost first."""
+        target = (L["dist"] or 0) * self.scale
+        ang = self.polar(L)
+        scored = []
+        for (mx, my, d, a) in self.cands:
+            da = abs(((a - ang + math.pi) % (2 * math.pi)) - math.pi)
+            cost = abs(d - target) / 12.0 + da * 4.0
+            pen = 0.0
+            for (px, py) in self.placed:
+                dd = abs(px - mx) + abs(py - my)
+                if dd < 12:
+                    pen += (12 - dd) * 0.25
+            cost += min(pen, 3.0) * spread
+            scored.append((cost, mx, my))
+        scored.sort()
+        return [(mx, my) for (_, mx, my) in scored[:topk]]
+
+    def place_arena(self, L, spread=1.0, want=0.85, topk=150):
         """Best candidate for a reachable source location: matching bearing and
         scaled distance, spread out from earlier picks, and with a rectangle that
         actually sits on reachable ground."""
@@ -114,6 +132,20 @@ class Placer:
         fallback = None
         bestcov = -1.0
         for (cost, mx, my) in scored[:topk]:
+            rect = self.rect_for(L, mx * 8 + 4, my * 8 + 4)
+            cov = self.rect_coverage(rect)
+            if cov >= want:
+                return (mx, my)
+            if cov > bestcov:
+                bestcov = cov
+                fallback = (mx, my)
+        if bestcov >= want - 0.15:
+            return fallback
+        # Nothing near the wanted bearing has room. Drop the bearing term and take
+        # the closest distance match that the location actually fits on - a spawn
+        # point on a cliff is worse than one that is 30 degrees off.
+        relaxed = sorted((abs(d - target), mx, my) for (mx, my, d, a) in self.cands)
+        for (_, mx, my) in relaxed[:topk * 2]:
             rect = self.rect_for(L, mx * 8 + 4, my * 8 + 4)
             cov = self.rect_coverage(rect)
             if cov >= want:

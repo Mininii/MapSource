@@ -8,8 +8,8 @@ COL = {WATER: (20, 40, 90), LOW: (70, 110, 60), HIGH: (150, 180, 120), MUD: (120
        13: (95, 105, 75), 6: (110, 95, 70), 7: (85, 95, 85)}
 
 
-def flood(g, iw, ih, sx, sy):
-    passable = PASSABLE
+def flood(g, iw, ih, sx, sy, passable=None):
+    passable = passable or PASSABLE
     dist = [[-1] * iw for _ in range(ih)]
     if g[sy][sx] not in passable:
         return dist, 0, 0
@@ -37,7 +37,7 @@ def main(out="work/region_grid.png"):
     print("cells %d  " % total + "  ".join("%s=%d(%.0f%%)" % (
         {WATER: "water", LOW: "low", HIGH: "high", MUD: "mud"}.get(k, k), v, 100.0 * v / total)
         for k, v in sorted(cnt.items())))
-    dist, n, mx = flood(g, ar.iw, ar.ih, ar.fx, ar.fy)
+    dist, n, mx = flood(g, ar.iw, ar.ih, ar.fx, ar.fy, ar.PASSABLE)
     print("arena connected cells: %d (%.0f%% of floor)  max cell-hops from fortress: %d"
           % (n, 100.0 * n / max(1, cnt[LOW] + cnt[MUD]), mx))
     # isolated rooms should NOT be connected

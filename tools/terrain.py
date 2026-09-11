@@ -79,8 +79,16 @@ class TerrainBuilder:
         self.era = era
         self.rng = random.Random(seed)
         self.region = [[1] * self.iw for _ in range(self.ih)]
+        self.protect = [[False] * self.iw for _ in range(self.ih)]
         self.repairs = 0
         self.pinned = 0
+
+    def set_protected(self, fn):
+        """Cells whose pins must survive the repair loop - the walls that keep the
+        isolated rooms isolated. Relaxing those quietly opens the room up."""
+        for iy in range(self.ih):
+            for ix in range(self.iw):
+                self.protect[iy][ix] = bool(fn(ix, iy))
 
     def set_region(self, fn):
         for iy in range(self.ih):
@@ -156,11 +164,17 @@ class TerrainBuilder:
             else:
                 fc = f.fail_cell or self._random_cell()
             ix, iy = fc
+            # protected cells hold their pins for the first half of the budget,
+            # then give way so the solver is never wedged
+            hard = self.protect[iy][ix] or attempt > max_repair // 2
             for dy in range(-2, 3):
                 for dx in range(-2, 3):
                     jy, jx = iy + dy, ix + dx
-                    if 0 <= jy < self.ih and 0 <= jx < self.iw:
-                        relax[jy][jx] += 1
+                    if not (0 <= jy < self.ih and 0 <= jx < self.iw):
+                        continue
+                    if self.protect[jy][jx] and not hard:
+                        continue          # keep the room walls pinned
+                    relax[jy][jx] += 1
         log("terrain build failed after %d repair rounds" % max_repair)
         return False
 

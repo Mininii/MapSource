@@ -3,19 +3,25 @@ and render both for inspection."""
 import sys, os, struct, time, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from arena import Arena, WATER, LOW, HIGH, PASSABLE
+from profile import load_profile
 from terrain import TerrainBuilder
 from walk import WalkGrid
 from render import render
 import png
 
-TABLE = "work/isom_twilight.pkl"
+TABLES = {7: "work/isom_twilight.pkl", 4: "work/isom_jungle.pkl"}
+TABLE = TABLES[7]
 
 
-def build(seed=7, pin_radius=2, log=print):
-    ar = Arena(seed=1700 + seed * 37)
-    tb = TerrainBuilder(ar.w, ar.h, TABLE, era=7, seed=seed, low_types=PASSABLE)
+def build(seed=7, pin_radius=2, log=print, era=7):
+    table = TABLES[era]
+    prof = load_profile(era, table, log=lambda s: None)
+    ar = Arena(seed=1700 + seed * 37, profile=prof)
+    tb = TerrainBuilder(ar.w, ar.h, table, era=era, seed=seed, low_types=ar.PASSABLE)
     grid = ar.grid()
     tb.set_region(lambda ix, iy: grid[iy][ix])
+    tb.set_protected(lambda ix, iy: any(
+        ar.in_rect(ix, iy, r, pad=ar.room_wall + 1) for r in (ar.control_room, ar.boss_island)))
     t0 = time.time()
     ok = False
     for pr in (pin_radius, pin_radius + 1, pin_radius + 2):
@@ -32,8 +38,8 @@ def build(seed=7, pin_radius=2, log=print):
     return ar, tb, tiles
 
 
-def distances(ar, tiles):
-    wg = WalkGrid(tiles, ar.w, ar.h, 7)
+def distances(ar, tiles, era=7):
+    wg = WalkGrid(tiles, ar.w, ar.h, era)
     clear = wg.clearance(2)
     # fortress centre in minitiles: cell (fx, fy) -> tile (2*fx, fy)
     tx, ty = ar.fx * 2, ar.fy

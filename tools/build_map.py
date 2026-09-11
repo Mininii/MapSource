@@ -39,17 +39,26 @@ def log(*a):
     print(*a, flush=True)
 
 
-def build(seed=7, out_chk="out/marine128.chk"):
+def build(seed=7, out_chk="out/marine128.chk", era=7):
     src = CHK(open(SRC_CHK, "rb").read())
     roles = json.load(open(ROLES, encoding="utf-8"))
     sw, sh = struct.unpack("<HH", src.get("DIM"))
 
     # ---------------------------------------------------------------- terrain
     t0 = time.time()
-    ar, tb, tiles = build_arena(seed, log=log)
+    for attempt in range(6):
+        ar, tb, tiles = build_arena(seed + attempt * 1000, log=log, era=era)
+        if tiles is None:
+            continue
+        wg, clear, dist = distances(ar, tiles, era)
+        leaks = rooms_leaking(ar, wg, dist)
+        if not leaks:
+            break
+        log("terrain attempt %d: %s not isolated, regenerating" % (attempt + 1, ", ".join(leaks)))
+    else:
+        raise SystemExit("could not generate terrain with both rooms sealed")
     if tiles is None:
         raise SystemExit("terrain generation failed")
-    wg, clear, dist = distances(ar, tiles)
     new_max = max([d for d in dist if d >= 0] or [1])
     src_max = max(v["dist"] for v in roles.values() if v["dist"] is not None)
     log("terrain %.1fs  new max walk distance %d minitiles (source %d, ratio %.2f)"
@@ -95,15 +104,32 @@ def build(seed=7, out_chk="out/marine128.chk"):
                              if roles[str(i)]["dist"] is not None] or [None]))
         if box["dist"] is None:
             cx0, cy0 = fx_px, fy_px
+            newbox = pl.rect_for(box, cx0, cy0)
+            mapped = {i: affine_rect((L0, T0, R0, B0), newbox,
+                                     (roles[str(i)]["L"], roles[str(i)]["T"],
+                                      roles[str(i)]["R"], roles[str(i)]["B"]))
+                      for i in g}
         else:
-            c = pl.place_arena(box)
-            cx0, cy0 = (c[0] * 8 + 4, c[1] * 8 + 4) if c else (fx_px, fy_px)
-            pl.placed.append((cx0 // 8, cy0 // 8))
-        newbox = pl.rect_for(box, cx0, cy0)
+            # Score whole groups by their worst member: a spawn rectangle that
+            # lands on a cliff is what actually breaks the game, not the group
+            # centre being a few tiles off.
+            best = None
+            for (mx, my) in pl.ranked(box):
+                nb = pl.rect_for(box, mx * 8 + 4, my * 8 + 4)
+                mp = {i: affine_rect((L0, T0, R0, B0), nb,
+                                     (roles[str(i)]["L"], roles[str(i)]["T"],
+                                      roles[str(i)]["R"], roles[str(i)]["B"]))
+                      for i in g}
+                worst = min(pl.rect_coverage(mp[i]) for i in g
+                            if roles[str(i)].get("spawn", 0) or len(g) == 1)                     if any(roles[str(i)].get("spawn", 0) for i in g) or len(g) == 1                     else min(pl.rect_coverage(mp[i]) for i in g)
+                if best is None or worst > best[0]:
+                    best = (worst, mx, my, nb, mp)
+                if worst >= 0.85:
+                    break
+            _, mx, my, newbox, mapped = best
+            pl.placed.append((mx, my))
         for i in g:
-            L = roles[str(i)]
-            newrect[i] = affine_rect((L0, T0, R0, B0), newbox,
-                                     (L["L"], L["T"], L["R"], L["B"]))
+            newrect[i] = mapped[i]
             nested += 1
     log("locations placed in %d overlap groups: %d" % (len(groups), nested))
 
@@ -214,10 +240,10 @@ def build(seed=7, out_chk="out/marine128.chk"):
             for tx in range(max(0, rx0 * 2 - 4), min(W, (rx1 + 1) * 2 + 4)):
                 avoid.add((tx, ty))
 
-    lib_path = "work/doodads_7.pkl"
+    lib_path = "work/doodads_%d.pkl" % era
     if os.path.exists(lib_path):
         lib = pickle.load(open(lib_path, "rb"))
-        dp = DoodadPlacer(lib, era=7)
+        dp = DoodadPlacer(lib, era=era)
         rng = random.Random(seed * 31 + 7)
         placed = dp.place(tiles, W, H, region_of_tile, avoid, rng, count=320, tries_per=400)
         dd2 = dd2_bytes(placed)
@@ -227,7 +253,7 @@ def build(seed=7, out_chk="out/marine128.chk"):
 
     # --------------------------------------------------------------- sprites
     thg2 = b""
-    sp_path = "work/sprites_7.pkl"
+    sp_path = "work/sprites_%d.pkl" % era
     if os.path.exists(sp_path):
         sp = SpritePlacer(pickle.load(open(sp_path, "rb")))
         srng = random.Random(seed * 17 + 3)
@@ -241,7 +267,7 @@ def build(seed=7, out_chk="out/marine128.chk"):
     mtxm = struct.pack("<%dH" % len(tiles), *tiles)
     newstr = substitute(src.get("STR "), TEXT_SUBS, TEXT_REPLACE)
     fresh = {
-        "ERA ": struct.pack("<H", 7),
+        "ERA ": struct.pack("<H", era),
         "DIM ": struct.pack("<HH", W, H),
         "MTXM": mtxm,
         "TILE": mtxm,
@@ -262,6 +288,20 @@ def build(seed=7, out_chk="out/marine128.chk"):
     log("wrote %s (%d bytes, %d sections)" % (out_chk, len(data), len(out.sections)))
     return dict(ar=ar, tb=tb, tiles=tiles, wg=wg, dist=dist, newrect=newrect,
                 roles=roles, chk=out_chk, new_max=new_max, src_max=src_max)
+
+
+def rooms_leaking(ar, wg, dist):
+    """Which isolated rooms can be walked into from the arena. The boss arena and
+    the menu room are reached by MoveUnit teleports only, exactly as in the
+    source map, so a breach in their wall changes the game."""
+    bad = []
+    for name, rect in (("menu room", ar.control_room), ("boss arena", ar.boss_island)):
+        x0, y0, x1, y1 = rect
+        mx = ((x0 + x1) // 2) * 2 * 4 + 4
+        my = ((y0 + y1) // 2) * 4 + 2
+        if 0 <= mx < wg.MW and 0 <= my < wg.MH and dist[my * wg.MW + mx] >= 0:
+            bad.append(name)
+    return bad
 
 
 def walkable_bbox(wg, clear, cell_rect, margin=1):

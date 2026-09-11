@@ -36,6 +36,7 @@ def test(path, table):
 
 
 if __name__ == "__main__":
+    ERA = int(os.environ.get("ERA", "7"))
     table = IsomTable(sys.argv[1])
     print("table: parity0 keys=%d parity1 keys=%d" % (
         len(table.keys[0]), len(table.keys[1])))
@@ -45,7 +46,7 @@ if __name__ == "__main__":
             r = test(p, table)
         except Exception as e:
             continue
-        if not r or r["era"] != 7:
+        if not r or r["era"] != ERA:
             continue
         n = r["same"] + r["diff"] + r["miss"]
         print("%-38s %3dx%-3d match=%.4f miss=%d doodad=%d" % (

@@ -16,11 +16,11 @@ OUT_SCX = "out/marine128.scx"
 SRC_SCX = "work/src.scx"
 
 
-def main(seed=19, tag=""):
+def main(seed=19, tag="", era=7):
     t0 = time.time()
     out_chk = OUT_CHK if not tag else "out/marine128_%s.chk" % tag
     out_scx = OUT_SCX if not tag else "out/marine128_%s.scx" % tag
-    res = build_map.build(seed, out_chk)
+    res = build_map.build(seed, out_chk, era=era)
     pack(out_chk, out_scx, SRC_SCX)
     txt, problems = verify(out_chk, out_txt="work/verify%s.txt" % (("_" + tag) if tag else ""))
     print("\n".join(txt.splitlines()[:4]))
@@ -47,4 +47,5 @@ def main(seed=19, tag=""):
 
 if __name__ == "__main__":
     main(int(sys.argv[1]) if len(sys.argv) > 1 else 19,
-         sys.argv[2] if len(sys.argv) > 2 else "")
+         sys.argv[2] if len(sys.argv) > 2 else "",
+         int(sys.argv[3]) if len(sys.argv) > 3 else 7)
