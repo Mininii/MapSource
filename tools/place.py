@@ -5,7 +5,7 @@ Reachable locations keep their polar position relative to the defence point
 maps' maximum walking distances. Locations that are isolated in the source (the
 menu room and the boss arena) are mapped by an affine transform of their room.
 """
-import sys, os, struct, math, json, collections
+import sys, os, struct, math, json, bisect, collections
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 HP1 = 1
@@ -34,6 +34,11 @@ class Placer:
         self.src_hp = ((hp["L"] + hp["R"]) / 2.0, (hp["T"] + hp["B"]) / 2.0)
         self.fort = (arena.fx * 2 * 32 + 32, arena.fy * 32 + 16)   # pixel centre
         self.placed = []                    # (cx, cy) pixel centres already used
+        self.covered = set()                # tiles already inside some location
+        self.cov_block = collections.Counter()   # coarse coverage, 4x4 tile blocks
+        self.BLK = 4
+        self.orig_sorted = None
+        self.new_sorted = None
 
     # ------------------------------------------------------------- candidates
     def build_candidates(self, step=2, clearance=None):
@@ -72,6 +77,51 @@ class Placer:
                     n += 1
         return tot and n >= tot * 0.8
 
+    # ------------------------------------------------------------- distances
+    def fit_distances(self, orig_dists):
+        """Match distance *percentiles* rather than raw distances.
+
+        A straight scale factor bunches everything into the middle of the new
+        map, because the new arena's distance profile is not a scaled copy of the
+        source's. Mapping percentile to percentile spreads the locations across
+        whatever range of walking distances this map actually offers."""
+        self.orig_sorted = sorted(d for d in orig_dists if d is not None)
+        self.new_sorted = sorted(d for (_, _, d, _) in self.cands)
+
+    def target_dist(self, d):
+        if not self.orig_sorted or not self.new_sorted:
+            return (d or 0) * self.scale
+        i = bisect.bisect_left(self.orig_sorted, d or 0)
+        p = i / float(max(1, len(self.orig_sorted) - 1))
+        j = int(round(min(1.0, p) * (len(self.new_sorted) - 1)))
+        return self.new_sorted[j]
+
+    def mark_covered(self, rect):
+        L, T, R, B = rect
+        for ty in range(T // 32, max(T // 32 + 1, B // 32)):
+            for tx in range(L // 32, max(L // 32 + 1, R // 32)):
+                if (tx, ty) not in self.covered:
+                    self.covered.add((tx, ty))
+                    self.cov_block[(tx // self.BLK, ty // self.BLK)] += 1
+
+    def block_fresh(self, mx, my):
+        """0..1 - how much of the 4x4 tile block under a candidate is still
+        unclaimed. Cheap enough to fold into the cost for every candidate."""
+        b = (mx // (4 * self.BLK), my // (4 * self.BLK))
+        used = self.cov_block.get(b, 0)
+        return max(0.0, 1.0 - used / float(self.BLK * self.BLK))
+
+    def fresh_fraction(self, rect):
+        """How much of a rectangle is floor no other location has claimed."""
+        L, T, R, B = rect
+        tot = new = 0
+        for ty in range(T // 32, max(T // 32 + 1, B // 32)):
+            for tx in range(L // 32, max(L // 32 + 1, R // 32)):
+                tot += 1
+                if (tx, ty) not in self.covered:
+                    new += 1
+        return (new / float(tot)) if tot else 0.0
+
     # ------------------------------------------------------------- placement
     def polar(self, L):
         cx = (L["L"] + L["R"]) / 2.0
@@ -95,7 +145,7 @@ class Placer:
 
     def ranked(self, L, spread=1.0, topk=60):
         """Top candidate centres for a location, cheapest cost first."""
-        target = (L["dist"] or 0) * self.scale
+        target = self.target_dist(L["dist"])
         ang = self.polar(L)
         scored = []
         for (mx, my, d, a) in self.cands:
@@ -107,6 +157,7 @@ class Placer:
                 if dd < 12:
                     pen += (12 - dd) * 0.25
             cost += min(pen, 3.0) * spread
+            cost -= 5.0 * self.block_fresh(mx, my)   # pull toward unclaimed floor
             scored.append((cost, mx, my))
         scored.sort()
         return [(mx, my) for (_, mx, my) in scored[:topk]]
@@ -115,7 +166,7 @@ class Placer:
         """Best candidate for a reachable source location: matching bearing and
         scaled distance, spread out from earlier picks, and with a rectangle that
         actually sits on reachable ground."""
-        target = (L["dist"] or 0) * self.scale
+        target = self.target_dist(L["dist"])
         ang = self.polar(L)
         scored = []
         for (mx, my, d, a) in self.cands:

@@ -8,10 +8,10 @@ credit phrase needs its own replacement; `strings.substitute` applies them in a
 single longest-match-first pass so nothing is substituted twice.
 """
 
-MAP_TITLE = "마린키우기 황혼협곡 1.0"
+MAP_TITLE = "마린키우기 황혼협곡 1.1"
 MAP_DESC = ("제작 Opus5   |   픽시브가 제작한 마린키우기 쥬림산맥을 학습하여 만든 맵입니다"
             "   |   128x128 트와일라잇, 지형과 배치 전면 신규 제작")
-MAP_VERSION = "황혼협곡 1.0"
+MAP_VERSION = "황혼협곡 1.1"
 
 
 def _prefixes(old, new, keep=0):
@@ -46,7 +46,9 @@ PAIRS.append(("제작", "원작"))
 # the setting is renamed
 PAIRS += [("쥬림 산맥", "황혼협곡"), ("쥬림 산", "황혼협"),
           ("쥬림산맥", "황혼협곡"), ("쥬림산", "황혼협"),
-          ("쥬림 ", "황혼 "), ("쥬림", "황혼"), ("쥬", "황")]
+          ("쥬림 ", "황혼 "), ("쥬림", "황혼"), ("쥬", "황"),
+          # a bare 산맥 elsewhere in the text ("산맥의 리치") becomes 협곡 too
+          ("산맥", "협곡")]
 
 
 def text_subs():

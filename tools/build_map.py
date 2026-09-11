@@ -67,7 +67,9 @@ def build(seed=7, out_chk="out/marine128.chk", era=7):
     # -------------------------------------------------------------- locations
     pl = Placer(roles, dist, wg, ar, src_max, W, H)
     pl.build_candidates(step=2)
-    log("placement candidates: %d" % len(pl.cands))
+    pl.fit_distances([v["dist"] for v in roles.values() if v["dist"] is not None])
+    log("placement candidates: %d (distance range %d..%d minitiles)"
+        % (len(pl.cands), pl.new_sorted[0], pl.new_sorted[-1]))
 
     newrect = {}
     # the defence point sits at the fortress centre
@@ -113,23 +115,29 @@ def build(seed=7, out_chk="out/marine128.chk", era=7):
             # Score whole groups by their worst member: a spawn rectangle that
             # lands on a cliff is what actually breaks the game, not the group
             # centre being a few tiles off.
+            # Score by the worst member's footing first - a spawn rectangle on a
+            # cliff is what breaks the game - then, among candidates that stand up,
+            # prefer the one covering floor no other location has claimed. That is
+            # what pulls locations out into the empty corners of the map.
             best = None
-            for (mx, my) in pl.ranked(box):
+            for (mx, my) in pl.ranked(box, topk=140):
                 nb = pl.rect_for(box, mx * 8 + 4, my * 8 + 4)
                 mp = {i: affine_rect((L0, T0, R0, B0), nb,
                                      (roles[str(i)]["L"], roles[str(i)]["T"],
                                       roles[str(i)]["R"], roles[str(i)]["B"]))
                       for i in g}
-                worst = min(pl.rect_coverage(mp[i]) for i in g
-                            if roles[str(i)].get("spawn", 0) or len(g) == 1)                     if any(roles[str(i)].get("spawn", 0) for i in g) or len(g) == 1                     else min(pl.rect_coverage(mp[i]) for i in g)
-                if best is None or worst > best[0]:
-                    best = (worst, mx, my, nb, mp)
-                if worst >= 0.85:
+                worst = min(pl.rect_coverage(mp[i]) for i in g)
+                fresh = sum(pl.fresh_fraction(mp[i]) for i in g) / float(len(g))
+                score = (1 if worst >= 0.85 else 0, fresh if worst >= 0.85 else worst)
+                if best is None or score > best[0]:
+                    best = (score, mx, my, nb, mp)
+                if worst >= 0.85 and fresh >= 0.95:
                     break
             _, mx, my, newbox, mapped = best
             pl.placed.append((mx, my))
         for i in g:
             newrect[i] = mapped[i]
+            pl.mark_covered(mapped[i])
             nested += 1
     log("locations placed in %d overlap groups: %d" % (len(groups), nested))
 
@@ -197,6 +205,7 @@ def build(seed=7, out_chk="out/marine128.chk", era=7):
         kept.append(u)
     log("units: %d (%d followed their location)" % (len(kept), by_loc))
     moved = repair_counted_units(kept, roles, newrect, src)
+    moved += repair_counted_units(kept, roles, newrect, src, rng_seed=1234)
     log("units nudged to restore trigger-counted placement: %d" % moved)
     snapped = snap_mobile_units(kept, wg, dist, src)
     log("mobile units snapped off cliffs onto open ground: %d" % snapped)
@@ -409,11 +418,26 @@ def repair_counted_units(units, roles, newrect, src, rng_seed=99):
                            for k, u in enumerate(units)
                            if u["uid"] == uid and u["player"] == pl and k not in used
                            and not (nl <= u["x"] < nr and nt <= u["y"] < nb))
-            for _, k in cands[:need - len(inside)]:
+            short = need - len(inside)
+            for _, k in cands[:short]:
                 u = units[k]
                 u["x"] = int(rng.uniform(nl + 16, max(nl + 17, nr - 16)))
                 u["y"] = int(rng.uniform(nt + 16, max(nt + 17, nb - 16)))
                 used.add(k)
+                moved += 1
+                short -= 1
+            # Overlapping source locations can share one unit; once they are
+            # separated only one of them can hold it, so clone the marker. These
+            # are decorative buildings that triggers only count per location.
+            for _ in range(min(short, 4)):
+                proto = next((u for u in units if u["uid"] == uid and u["player"] == pl), None)
+                if proto is None:
+                    break
+                clone = dict(proto)
+                clone["x"] = int(rng.uniform(nl + 16, max(nl + 17, nr - 16)))
+                clone["y"] = int(rng.uniform(nt + 16, max(nt + 17, nb - 16)))
+                units.append(clone)
+                used.add(len(units) - 1)
                 moved += 1
     return moved
 

@@ -50,29 +50,32 @@ class Arena:
         self.w, self.h = w, h
         self.iw, self.ih = w // 2 + 1, h + 1          # 65 x 129
         self.seed = seed
-        self.bx, self.by = 3, 4                       # border thickness (cells)
-        self.fx, self.fy = 32, 108                    # fortress centre
+        self.bx, self.by = 2, 3                       # border thickness (cells)
+        self.fx, self.fy = 32, 112                    # fortress centre
         # The rooms sit hard against the map border so two of their four walls are
         # the border itself - a full ring of wall would eat a fifth of the map.
-        self.control_room = (4, 6, 17, 25)            # top-left menu room
-        self.boss_island = (47, 6, 60, 25)            # top-right boss arena
+        # The rooms are teleport-only, so they go where the map would otherwise
+        # have dead floor: the corners flanking the fortress. That leaves the
+        # whole upper map as open arena.
+        self.control_room = (3, 99, 14, 121)          # bottom-left menu room
+        self.boss_island = (50, 99, 61, 121)          # bottom-right boss arena
         self.room_wall = 6
         # ridges: (L1 radius, thickness) around the fortress
-        self.rings = [(15, 5), (40, 5), (68, 5)]
+        self.rings = [(13, 5), (48, 5)]
         # corridors through the ridges: vertical strips of cell columns.
         # A ridge is an L1 diamond so a column strip always cuts it exactly once
         # per side, wherever the ridge happens to run.
         self.ring_gaps = [
-            [(16, 24), (40, 48)],      # fortress rim: west and east gate
-            [(3, 11), (51, 59)],       # middle ridge: far west and far east
-            [(27, 35)],                # outer ridge: centre pass only
+            [(16, 24), (40, 48)],                 # fortress rim: west and east gate
+            [(3, 12), (28, 37), (52, 61)],        # outer ridge: three passes
         ]
         # scattered plateaus (cx, cy, L1 radius) - deliberately asymmetric
+        # Fewer, larger massifs. Every extra mountain costs two cliff faces, and
+        # cliff faces are what made the 1.0 map feel cramped.
         self.blobs = [
-            (12, 93, 6), (50, 90, 5), (24, 82, 6), (41, 78, 5), (33, 88, 5),
-            (9, 71, 5), (56, 73, 6), (19, 37, 6), (46, 40, 5), (30, 29, 5),
-            (13, 117, 5), (52, 114, 6), (37, 47, 5), (22, 51, 4), (57, 52, 5),
-            (7, 46, 5), (43, 62, 4), (18, 64, 4),
+            (23, 80, 7), (42, 76, 6), (9, 68, 7), (56, 71, 7), (19, 38, 8),
+            (46, 40, 7), (30, 24, 7), (10, 14, 6), (54, 14, 6), (32, 56, 6),
+            (33, 8, 6), (7, 28, 6), (58, 30, 6),
         ]
         self.lakes = [(33, 68, 6), (15, 22, 5), (50, 21, 5), (60, 92, 5), (6, 84, 5)]
         self.patches = [(22, 103, 6), (44, 105, 6), (32, 80, 5), (15, 54, 6),
