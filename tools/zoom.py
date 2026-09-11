@@ -39,8 +39,13 @@ def render(chk_path, out, x0, y0, x1, y1, px=8):
                         col = (26, 44, 86)                        # water
                     elif not walk:
                         col = {0: (74, 60, 44), 2: (92, 76, 54), 4: (112, 94, 68)}.get(gh, (74, 60, 44))
+                    elif gh == 0:
+                        # low ground, tinted by which floor type it is
+                        col = {2: (58, 92, 58), 4: (96, 104, 96), 8: (92, 84, 56),
+                               15: (86, 78, 62), 11: (70, 88, 72), 13: (74, 96, 66),
+                               23: (62, 96, 62), 22: (64, 90, 62)}.get(idx, (58, 92, 58))
                     else:
-                        col = {0: (58, 92, 58), 2: (116, 150, 94), 4: (182, 200, 150)}.get(gh, (58, 92, 58))
+                        col = {2: (116, 150, 94), 4: (182, 200, 150)}.get(gh, (116, 150, 94))
                     put((tx - x0) * px + sx, (ty - y0) * px + sy, col)
     m = c.get("MRGN")
     for i in range(len(m) // 20):

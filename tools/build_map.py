@@ -17,6 +17,7 @@ from units import parse_units
 from decompile import load_unit_names
 from strings import substitute
 from doodads import DoodadPlacer, dd2_bytes
+from sprites import SpritePlacer, thg2_bytes
 import pickle, random
 
 W = H = 128
@@ -187,37 +188,50 @@ def build(seed=7, out_chk="out/marine128.chk"):
 
     # --------------------------------------------------------------- doodads
     dd2 = b""
+    grid = ar.grid()
+
+    def region_of_tile(tx, ty):
+        ix, iy = tx // 2, ty
+        if 0 <= iy < len(grid) and 0 <= ix < len(grid[0]):
+            return grid[iy][ix]
+        return -1
+
+    avoid = set()
+    for i, (nl, nt, nr, nb) in newrect.items():
+        if (nr - nl) > 3000 or (nb - nt) > 3000:
+            continue
+        for ty in range(max(0, nt // 32 - 1), min(H, nb // 32 + 2)):
+            for tx in range(max(0, nl // 32 - 1), min(W, nr // 32 + 2)):
+                avoid.add((tx, ty))
+    for u in kept:
+        avoid.add((u["x"] // 32, u["y"] // 32))
+    # the isolated rooms are tight, and a blocking doodad there would cut the
+    # control unit off from a beacon, so keep them clear entirely
+    for (rx0, ry0, rx1, ry1) in (ar.control_room, ar.boss_island):
+        for ty in range(max(0, ry0 - 2), min(H, ry1 + 3)):
+            for tx in range(max(0, rx0 * 2 - 4), min(W, (rx1 + 1) * 2 + 4)):
+                avoid.add((tx, ty))
+
     lib_path = "work/doodads_7.pkl"
     if os.path.exists(lib_path):
         lib = pickle.load(open(lib_path, "rb"))
         dp = DoodadPlacer(lib, era=7)
-        grid = ar.grid()
-
-        def region_of_tile(tx, ty):
-            ix, iy = tx // 2, ty
-            if 0 <= iy < len(grid) and 0 <= ix < len(grid[0]):
-                return grid[iy][ix]
-            return -1
-
-        avoid = set()
-        for i, (nl, nt, nr, nb) in newrect.items():
-            if (nr - nl) > 3000 or (nb - nt) > 3000:
-                continue
-            for ty in range(max(0, nt // 32 - 1), min(H, nb // 32 + 2)):
-                for tx in range(max(0, nl // 32 - 1), min(W, nr // 32 + 2)):
-                    avoid.add((tx, ty))
-        for u in kept:
-            avoid.add((u["x"] // 32, u["y"] // 32))
-        # the isolated rooms are tight, and a blocking doodad there would cut the
-        # control unit off from a beacon, so keep them clear entirely
-        for (rx0, ry0, rx1, ry1) in (ar.control_room, ar.boss_island):
-            for ty in range(max(0, ry0 - 2), min(H, ry1 + 3)):
-                for tx in range(max(0, rx0 * 2 - 4), min(W, (rx1 + 1) * 2 + 4)):
-                    avoid.add((tx, ty))
         rng = random.Random(seed * 31 + 7)
         placed = dp.place(tiles, W, H, region_of_tile, avoid, rng, count=320, tries_per=400)
         dd2 = dd2_bytes(placed)
         log("doodads: %d placed (%d tiles reserved)" % (len(placed), len(avoid)))
+        for (num, px, py) in placed:
+            avoid.add((px // 32, py // 32))
+
+    # --------------------------------------------------------------- sprites
+    thg2 = b""
+    sp_path = "work/sprites_7.pkl"
+    if os.path.exists(sp_path):
+        sp = SpritePlacer(pickle.load(open(sp_path, "rb")))
+        srng = random.Random(seed * 17 + 3)
+        sprites = sp.place(W, H, region_of_tile, avoid, srng, count=220)
+        thg2 = thg2_bytes(sprites)
+        log("sprites: %d placed" % len(sprites))
 
     # ------------------------------------------------------------------- CHK
     # Same section order as the source map, so StarCraft sees a familiar layout.
@@ -232,7 +246,7 @@ def build(seed=7, out_chk="out/marine128.chk"):
         "ISOM": tb.isom_bytes(),
         "MASK": bytes([0xFF]) * (W * H),      # fog of war set for every player, as in the source
         "UNIT": unit_bytes,
-        "THG2": b"",
+        "THG2": thg2,
         "DD2 ": dd2,
         "MRGN": bytes(mrgn),
         "STR ": newstr,

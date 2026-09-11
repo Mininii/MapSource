@@ -57,6 +57,9 @@ def verify(chk_path, roles_path="work/roles.json", out_txt=None):
     used_spawn = collections.Counter()
     used_order_dst = collections.Counter()
     used_any = collections.Counter()
+    move_dst = collections.Counter()      # MoveUnit destination - a unit teleported
+    ai_at = collections.Counter()         # RunAIScriptAt - the AI needs somewhere to go
+    view_at = collections.Counter()       # CenterView / MinimapPing
     for t in tr:
         for x in t.active_conds():
             if x.loc:
@@ -69,6 +72,13 @@ def verify(chk_path, roles_path="work/roles.json", out_txt=None):
                 if a.atype == 46 and a.p2:
                     used_order_dst[a.p2] += 1
                     used_any[a.p2] += 1
+                if a.atype == 39 and a.p2:          # MoveUnit(..., from loc, to p2)
+                    move_dst[a.p2] += 1
+                    used_any[a.p2] += 1
+                if a.atype == 16:
+                    ai_at[a.loc] += 1
+                if a.atype in (10, 28):
+                    view_at[a.loc] += 1
 
     out = io.StringIO()
     out.write("map %dx%d era=%d  locations=%d  units=%d  triggers=%d\n" % (
@@ -110,6 +120,29 @@ def verify(chk_path, roles_path="work/roles.json", out_txt=None):
             if cov > 10:
                 problems.append("loc %d '%s' should be isolated but is %.0f%% reachable"
                                 % (i, locs[i]["name"], cov))
+    # a teleport target that is not walkable would strand the unit
+    for i, n in move_dst.items():
+        if i not in locs or i in EXPECTED_ISOLATED:
+            continue
+        L = locs[i]
+        if (L["L"], L["T"], L["R"], L["B"]) == (0, 0, 0, 0):
+            continue
+        cov, d = coverage(L)
+        if cov < 40:
+            problems.append("MoveUnit target loc %d '%s' only %.0f%% reachable (%d uses)"
+                            % (i, L["name"], cov, n))
+    for i, n in ai_at.items():
+        if i not in locs or i in EXPECTED_ISOLATED:
+            continue
+        L = locs[i]
+        if (L["L"], L["T"], L["R"], L["B"]) == (0, 0, 0, 0):
+            continue
+        cov, d = coverage(L)
+        if cov < 25:
+            problems.append("RunAIScriptAt loc %d '%s' only %.0f%% reachable (%d uses)"
+                            % (i, L["name"], cov, n))
+    out.write("\nMoveUnit targets: %d, RunAIScriptAt: %d, CenterView/Ping: %d\n"
+              % (len(move_dst), len(ai_at), len(view_at)))
     missing_rect = [i for i in used_any
                     if i in locs and (locs[i]["L"], locs[i]["T"], locs[i]["R"], locs[i]["B"]) == (0, 0, 0, 0)]
     for i in missing_rect:

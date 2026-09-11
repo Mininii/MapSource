@@ -22,9 +22,11 @@ WATER, LOW, HIGH, MUD = 3, 1, 2, 4
 # low-ground variants whose transition to Dirt stays fully walkable (measured
 # with tools/sep_test.py): 4 mud, 6 rocky, 7 rough, 13 flagstone-ish.
 FLOOR_VARIANTS = [4, 13, 6, 7]
+FORTRESS_FLOOR = 13   # paving inside the fortress rim; transition to Dirt is walkable
 PEAK = 12          # highest ground: sits inside a High Dirt plateau (1 -> 2 -> 12)
 PLATEAU_VARIANTS = [9, 10]
 PASSABLE = {LOW, MUD, 13, 6, 7}
+
 
 W = H = 128
 
@@ -83,6 +85,9 @@ class Arena:
             if self.in_rect(ix, iy, room, pad=self.room_wall):
                 return LOW if self.in_rect(ix, iy, room) else HIGH
         r = abs(ix - self.fx) + abs(iy - self.fy)
+        # the fortress floor gets its own paving so the base reads as a place
+        if r < 11 + 1.6 * self.n(ix, iy, 6.0, 61):
+            return FORTRESS_FLOOR
         for k, (rad, thick) in enumerate(self.rings):
             lo = rad + 2.4 * self.n(ix, iy, 8.0, 31 + k * 7)
             if lo <= r < lo + thick:
