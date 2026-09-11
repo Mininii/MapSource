@@ -57,8 +57,10 @@ class Arena:
         # The rooms are teleport-only, so they go where the map would otherwise
         # have dead floor: the corners flanking the fortress. That leaves the
         # whole upper map as open arena.
-        self.control_room = (3, 99, 14, 121)          # bottom-left menu room
-        self.boss_island = (50, 99, 61, 121)          # bottom-right boss arena
+        # Tall enough that the menu room's control pads get real space; the pads
+        # are a user interface a probe has to walk onto, not decoration.
+        self.control_room = (3, 89, 14, 121)          # bottom-left menu room
+        self.boss_island = (50, 89, 61, 121)          # bottom-right boss arena
         self.room_wall = 6
         # ridges: (L1 radius, thickness) around the fortress
         self.rings = [(13, 5), (48, 5)]

@@ -16,6 +16,7 @@ from place import (Placer, affine_room, affine_rect, containment, clusters,
 from units import parse_units
 from decompile import load_unit_names
 from strings import substitute
+import menuroom
 from doodads import DoodadPlacer, dd2_bytes
 from sprites import SpritePlacer, thg2_bytes
 import pickle, random
@@ -83,7 +84,13 @@ def build(seed=7, out_chk="out/marine128.chk", era=7):
     boss_rect = walkable_bbox(wg, clear, ar.boss_island, margin=1)
     log("menu room floor  tiles (%d,%d)-(%d,%d)" % tuple(v // 32 for v in ctrl_rect))
     log("boss arena floor tiles (%d,%d)-(%d,%d)" % tuple(v // 32 for v in boss_rect))
-    newrect.update(affine_room(roles, CONTROL_ROOM, None, ctrl_rect))
+    if menuroom.fits(ctrl_rect):
+        newrect.update(menuroom.build(ctrl_rect))
+        log("menu room: explicit pad layout in a %dx%d tile floor"
+            % ((ctrl_rect[2] - ctrl_rect[0]) // 32, (ctrl_rect[3] - ctrl_rect[1]) // 32))
+    else:
+        newrect.update(affine_room(roles, CONTROL_ROOM, None, ctrl_rect))
+        log("menu room floor too small for the pad layout, falling back to affine")
     newrect.update(affine_room(roles, BOSS_ROOM, None, boss_rect))
     for i in WHOLE_MAP:
         newrect[i] = (0, 0, W * 32, H * 32)
