@@ -172,6 +172,8 @@ def build(seed=7, out_chk="out/marine128.chk"):
     log("units: %d (%d followed their location)" % (len(kept), by_loc))
     moved = repair_counted_units(kept, roles, newrect, src)
     log("units nudged to restore trigger-counted placement: %d" % moved)
+    snapped = snap_mobile_units(kept, wg, dist, src)
+    log("mobile units snapped off cliffs onto open ground: %d" % snapped)
     kept = thin_revealers(kept, min_tiles=11)
     # start locations decide where each player's camera opens; put them on the
     # intro spot, spread one tile apart, as the source map does
@@ -374,6 +376,54 @@ def repair_counted_units(units, roles, newrect, src, rng_seed=99):
                 used.add(k)
                 moved += 1
     return moved
+
+
+MOBILE_MAX_ID = 105          # 0..105 are mobile units; 106+ are buildings/specials
+
+
+def snap_mobile_units(units, wg, dist, src, radius_tiles=16):
+    """A ground unit dropped into a cliff face or onto an unreachable plateau can
+    never move. Buildings are fine there, and anything a trigger counts has
+    already been placed deliberately, so only shift the rest."""
+    from trig import parse_triggers
+    counted = set()
+    for t in parse_triggers(src.get("TRIG")):
+        for x in t.active_conds():
+            if x.ctype in (3, 7, 17) and x.loc:
+                counted.add(x.unit)
+    MW, MH = wg.MW, wg.MH
+    n = 0
+    for u in units:
+        if u["uid"] > MOBILE_MAX_ID or u["uid"] in counted:
+            continue
+        mx, my = u["x"] // 8, u["y"] // 8
+        if not (0 <= mx < MW and 0 <= my < MH):
+            continue
+        i = my * MW + mx
+        if wg.walk[i] and dist[i] >= 0:
+            continue
+        best = None
+        for r in range(2, radius_tiles * 4, 2):
+            for dy in range(-r, r + 1, 2):
+                yy = my + dy
+                if yy < 0 or yy >= MH:
+                    continue
+                rem = r - abs(dy)
+                row = yy * MW
+                for dx in (-rem, rem):
+                    xx = mx + dx
+                    if 0 <= xx < MW and wg.walk[row + xx] and dist[row + xx] >= 0:
+                        best = (xx, yy)
+                        break
+                if best:
+                    break
+            if best:
+                break
+        if best:
+            u["x"] = best[0] * 8 + 4
+            u["y"] = best[1] * 8 + 4
+            n += 1
+    return n
 
 
 MAP_REVEALER = 101

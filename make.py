@@ -8,6 +8,7 @@ from overlay import build as overlay
 from render import render
 from room_check import main as room_check
 from unit_diff import main as unit_diff
+from unit_terrain import main as unit_terrain
 
 OUT_CHK = "out/marine128.chk"
 OUT_SCX = "out/marine128.scx"
@@ -30,6 +31,11 @@ def main(seed=19, tag=""):
     _, lost = unit_diff("work/src.chk", out_chk,
                         "work/unit_diff%s.txt" % (("_" + tag) if tag else ""))
     print("locations that lost a trigger-counted unit: %d" % len(lost))
+    _, ustats = unit_terrain(out_chk, "work/unit_terrain%s.txt" % (("_" + tag) if tag else ""))
+    tot = max(1, sum(ustats.values()))
+    print("units on open ground %.0f%%, stranded %.0f%%, in a cliff face %.0f%%"
+          % (100.0 * ustats["ok"] / tot, 100.0 * ustats["stranded"] / tot,
+             100.0 * ustats["on_cliff"] / tot))
     for l in lost:
         print("   " + l)
     overlay(out_chk, "work/new_overlay%s.png" % (("_" + tag) if tag else ""), 4)
