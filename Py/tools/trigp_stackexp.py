@@ -105,8 +105,11 @@ def hazard(recs, kinds):
 
 
 def dead_targets(recs, kinds):
-    """청크 내부(양수 상대 EPD) SetCtrig 참조 중, 대상 트리거의 '점유 영역'(prev/next, 사용 조건, 조건 종료 표시,
-    사용 액션, 액션 종료 표시, 플래그, 마지막 바이트) 밖을 가리키는 것의 대상 집합. 음수 참조(청크 밖 기준)는 제외."""
+    """P8 청크 안을 가리키는 SetCtrig 참조 중, 대상 트리거의 '점유 영역'(prev/next, 사용 조건, 조건 종료 표시,
+    사용 액션, 액션 종료 표시, 플래그, 마지막 바이트) 밖을 가리키는 것의 대상 집합.
+    ★ 2026-09-12 해독 버그 수정: tepc 는 EPD 계열 참조를 (청크 오프셋 >> 2) - 0x58A364/4 로 적는다. 예전 판은 저장값을
+    dword 번호로 그대로 읽고 음수(= 대부분의 청크 안 참조)를 '청크 밖'으로 버려서 audit/safe 수치(문서 7.7절 두 번째)가
+    무효였다. 이제 hazard() 와 같은 해독(저장값 + BASE)을 쓰고, P8 을 가리키는 표식(타입 0xF8 / 값 p=8)만 본다."""
     N = len(recs); shapes = [shape(r[8:2408]) for r in recs]
     dead = {}; term_type = 0
     def visit(rel, mask):
@@ -129,15 +132,16 @@ def dead_targets(recs, kinds):
         for c in range(16):
             f = struct.unpack_from('<IIIHBBBBH', t, c*20)
             if f[5] == 0: break
-            if (f[5] & 0xF0) == 0xF0 and f[5] not in (0xFE, 0xFB) and (f[4] & 0x80) and f[1] < 0x80000000: visit(f[1]*4, 0)
+            if f[5] == 0xF8 and (f[4] & 0x80): visit(((f[1] + BASE) & 0xFFFFFFFF) * 4, 0)
         for a in range(64):
             f = struct.unpack_from('<IIIIIIHBBBBH', t, 320+a*32)
             if f[7] == 0: break
-            if f[7] == 0xF8:
+            if f[7] == 0xF8 and (f[8] & 0x80):
                 mask = f[0] if f[11] == 0x4353 else 0xFFFFFFFF
-                if (f[8] & 0x80) and f[4] < 0x80000000: visit(f[4]*4, mask)
-                if (f[9] & 0x80) and (f[10] & 0xF0) in (0xF0, 0xE0) and f[5] < 0x80000000:
-                    visit(f[5]*4 if (f[10] & 0xF0) == 0xF0 else f[5], 0)
+                visit(((f[4] + BASE) & 0xFFFFFFFF) * 4, mask)
+            if (f[9] & 0x80) and (f[10] & 0xF) == 8 and (f[10] & 0xF0) in (0xF0, 0xE0):   # 값 참조 (p=8)
+                if (f[10] & 0xF0) == 0xF0: visit(((f[5] + BASE) & 0xFFFFFFFF) * 4, 0)
+                elif f[5] < 0x80000000: visit(f[5], 0)
     return dead, term_type
 
 def strip_label(sec):

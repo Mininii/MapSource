@@ -9,6 +9,8 @@
                 메모리), 그리고 _plan 이 고르는 코드 트리거(빈 칸을 참조당함, 604 보폭 포인터·배열·점프 테이블의
                 base 가 든 같은 모양 구간)는 원래 배치 그대로 연속 묶음으로 둔다 - 런타임에 "주소 + 번호*604" 로
                 계산하는 코드가 그 안에서만 돌기 때문이다.
+  Pin  : safe   (stack 모드 기본) 원래 배치로 둘 트리거를 넓게 고른다 - 2026-09-12 theSeed 인게임 통과 규칙.
+         lean   safe 에서 '순수 점프'(함수 복귀 주소처럼 next 로만 흘러가는 트리거 주소)만 풀어 준다. _plan 설명.
 
 원본의 맵 시작 재배치 = (1) Connect Next: next += 청크 주소  (2) 표식 해제: 조건 타입 0x0F, 액션 타입 0x2D, 값 플래그
 (3) base 덧셈: STRx 대상은 청크 TRIGPp, 맵 TRIG 대상은 런타임에 찾은 PpSTART  (4) NSQC.
@@ -153,7 +155,7 @@ def _varlike(b, body, nc, na):
     return True
 
 
-def _plan(ch, role, p0, run_fix=256):
+def _plan(ch, role, p0, run_fix=256, rules="safe"):
     """stack 모드에서 겹쳐 싣지 않고 원래 배치로 둘 코드 레코드를 고른다 (겹쳐 싣으면 런타임에 깨지는 것).
     ch / role: [None, 청크 1~8 의 bytearray / _roles 결과],  p0: TRIGP0.chk 원본(표식이 그대로 있는 것).
     반환: (pinned = {(p, i)}, 이유별 레코드 수)
@@ -164,7 +166,18 @@ def _plan(ch, role, p0, run_fix=256):
       base0 트리거 주소(+0)가 next 칸이 아닌 곳(변수, CP, 다른 필드)에 저장된다 - 런타임 포인터 연산의 출발점.
             next 칸에 바로 들어가는 +0 은 점프라 괜찮다. (CP 로 연속 노드를 고치며 SetNext 대상을 2416 씩 옮기는
             점프 테이블 루틴은 base 가 런타임 복사로 들어와 step 으로는 안 잡힌다 - 이 규칙이 잡는다.)
-    step/field/base0 은 대상이 속한 '같은 모양 연속 구간' 통째를 고정한다 - 비트 루프는 끝 원소에서 거꾸로 걷는다."""
+    step/field/base0 은 대상이 속한 '같은 모양 연속 구간' 통째를 고정한다 - 비트 루프는 끝 원소에서 거꾸로 걷는다.
+    rules: "safe" = 위 규칙 전부 (2026-09-12 theSeed stack 3차 인게임 통과).
+           "lean" = safe 에서, base0 중 '순수 점프 칸'에 저장되는 +0 PTR 을 뺀다. 순수 점프 칸 F:
+                    (1) next 칸을 목적지로 하는 SetTo 액션의 값 칸이고, F 가 든 트리거는 code 이면서
+                        dead/run/step/field 로 고정되지 않았다 (런타임 배열 원소가 아니다). 목적지가 런타임에
+                        채워지는 액션(CtrigAsm 복귀 트램펄린)은 목적지 칸에 쓰는 액션이 모두 SetTo + 'next 칸 EPD'
+                        정적 참조이고 그 칸이 노출·계산되지 않을 때만 next 로 본다.
+                    (2) 누구도 F 의 주소를 값으로 들고 있지 않고 조건으로 F 를 읽지도 않는다 (값이 새지 않는다)
+                    (3) F 에 쓰는 액션이 전부 SetTo 이고 모두 STRx 청크 안에 있으며, 그 액션들의 값 칸도 아무도
+                        쓰지 않고 주소도 잡히지 않는다 (정적 참조나 상수만 들어온다 - 계산된 주소가 들어올 길이 없다).
+                    CtrigAsm 함수 호출의 복귀 주소처럼 "칸에 넣어 두었다가 나중에 next 로 옮기는" +0 이 여기 해당한다.
+                    theSeed 실측(2026-09-12): base0 참조 12,912 중 8,842 가 여기 해당, 원래 배치 코드 12,263 -> 10,311."""
     n = [0] + [len(ch[k]) // REC for k in range(1, 9)]
     cache = {}
 
@@ -211,13 +224,17 @@ def _plan(ch, role, p0, run_fix=256):
         for fo, kind, strx, p in _scan(buf, body, None):
             if not strx:
                 continue
+            A = _target_bytes(kind, _u32(buf, fo))
             nxt = False
+            d = None
             if kind in "EP":
                 d = dest_of(buf, body + 320 + (fo - body - 320) // 32 * 32)
                 nxt = d is not None and d[1] % REC == 4
-            marks.append((kind, p, _target_bytes(kind, _u32(buf, fo)), nxt))
+            if kind != 'D':
+                exposed.add((p, A))                         # 그 칸의 주소를 값으로 들고 있다(E/P) / 조건으로 읽는다(C)
+            marks.append((kind, p, A, nxt, d))
             if sk:
-                refmap[(sk, fo)] = (p, _target_bytes(kind, _u32(buf, fo)))
+                refmap[(sk, fo)] = (p, A)
         for a in range(64):
             ao = body + 320 + a * 32
             if buf[ao + 26] == 0:
@@ -226,6 +243,8 @@ def _plan(ch, role, p0, run_fix=256):
             if d is None:
                 continue
             f = buf[ao + 29] >> 4
+            writers.setdefault(d, []).append((buf[ao + 27] & 0x7F, (f == 0xF or f == 0xE) and (buf[ao + 28] & 0x80) != 0,
+                                              (sk, ao + 20) if sk else None))
             if (f == 0xF or f == 0xE) and (buf[ao + 28] & 0x80):
                 setters.setdefault(d, []).append(
                     (buf[ao + 29] & 0xF, _target_bytes('E' if f == 0xF else 'P', _u32(buf, ao + 20))))
@@ -234,6 +253,8 @@ def _plan(ch, role, p0, run_fix=256):
                 if v and v % 302 == 0 and v <= REC * 4096:
                     stepped.add(d)
 
+    writers = {}        # 칸 (p, A) -> [(modifier, 값이 정적 참조인가, 그 액션의 값 칸 (청크, 오프셋) / P0 액션이면 None)]
+    exposed = set()     # 주소가 값으로 잡혔거나 조건이 읽는 칸 (p, A)
     for k in range(1, 9):
         b = ch[k]
         for i in range(n[k]):
@@ -253,8 +274,8 @@ def _plan(ch, role, p0, run_fix=256):
                 pinned.add((p, q))
                 why[r] += 1
 
-    starts = []
-    for kind, p, A, nxt in marks:
+    fields, base0 = [], []
+    for kind, p, A, nxt, d in marks:
         if A < 0 or A >= len(ch[p]):
             continue
         ti, off = divmod(A, REC)
@@ -263,9 +284,9 @@ def _plan(ch, role, p0, run_fix=256):
         if kind in "EP":
             if off == 0:
                 if not nxt:
-                    starts.append((p, ti, "base0"))
+                    base0.append((p, ti, kind, d))
                 continue
-            starts.append((p, ti, "field"))
+            fields.append((p, ti))
         nc, na = ncna(p, ti)
         if not _occupied(nc, na, off) and (p, ti) not in pinned:
             pinned.add((p, ti))
@@ -280,9 +301,58 @@ def _plan(ch, role, p0, run_fix=256):
         for p, A in bases:
             if 0 <= A < len(ch[p]) and role[p][A // REC] == "code":
                 pin_run(p, A // REC, "step")
-    for p, ti, r in starts:
+    for p, ti in fields:
         if run_of[(p, ti)][1] >= 2:
-            pin_run(p, ti, r)
+            pin_run(p, ti, "field")
+    guard = set(pinned)                                     # 런타임 배열 원소 등 - 여기 든 칸은 순수 점프 칸이 아니다
+
+    def pure_jump(F):
+        p, A = F
+        if A < 0 or A >= len(ch[p]):
+            return False
+        R, off = divmod(A, REC)
+        if role[p][R] != "code" or (p, R) in guard or off < 328 or (off - 328) % 32 != 20:
+            return False
+        a = (off - 328) // 32
+        if a >= ncna(p, R)[1]:
+            return False
+        ao = R * REC + 328 + a * 32                         # F 를 값 칸으로 갖는 액션
+        d = dest_of(ch[p], ao)
+        if (ch[p][ao + 27] & 0x7F) != 7 or F in exposed:
+            return False
+        if d is None:
+            # 목적지를 런타임에 채우는 액션 = CtrigAsm 복귀 트램펄린. 호출하는 쪽이 "목적지 = 자기 next,
+            # 값 = 돌아올 트리거" 를 채워 두고 넘어온다. 목적지 칸에 쓰는 액션이 모두 SetTo + 'next 칸의 EPD'
+            # 정적 참조이고, 그 칸이 노출되지 않고 런타임에 계산돼 채워지지도 않을 때만 next 로 본다.
+            DS = (p, ao + 16)
+            ws = writers.get(DS)
+            if not ws or DS in exposed:
+                return False
+            for mod, vref, wslot in ws:
+                if mod != 7 or not vref or wslot is None or wslot in writers or wslot in exposed:
+                    return False
+                wb, wo = ch[wslot[0]], wslot[1]
+                if (wb[wo + 9] >> 4) != 0xF:                  # 값 플래그(값 칸 + 9) 가 EPD 여야 한다
+                    return False
+                q, T = wb[wo + 9] & 0xF, _target_bytes('E', _u32(wb, wo))
+                if not (1 <= q <= 8) or not (0 <= T < len(ch[q])) or T % REC != 4:
+                    return False
+        elif d[1] % REC != 4:
+            return False
+        for mod, vref, wslot in writers.get(F, ()):
+            if mod != 7 or wslot is None or wslot in writers or wslot in exposed:
+                return False
+        return True
+    jump = {}
+    for p, ti, kind, d in base0:
+        if rules == "lean" and kind == 'P' and d is not None:
+            if d not in jump:
+                jump[d] = pure_jump(d)
+            if jump[d]:
+                why["jump_refs"] = why.get("jump_refs", 0) + 1
+                continue
+        if run_of[(p, ti)][1] >= 2:
+            pin_run(p, ti, "base0")
     return pinned, why
 
 
@@ -308,6 +378,7 @@ batcheck = 0
 pathcheck = 0
 MODE = "stack"
 REPORT = ""
+PIN = "safe"        # stack 모드에서 원래 배치로 둘 트리거를 고르는 규칙 묶음 (_plan 의 rules): safe / lean
 for k, v in settings.items():
     kl = k.lower()
     if kl == "path":
@@ -321,8 +392,12 @@ for k, v in settings.items():
         MODE = v.strip().lower()
     elif kl == "report":
         REPORT = v.strip()
+    elif kl == "pin":
+        PIN = v.strip().lower()
 if MODE not in ("reloc", "stack"):
     raise Exception("STRCtrig Assembler v5.5 Stack: Mode 는 reloc 또는 stack 이어야 한다 (받은 값: %s)" % MODE)
+if PIN not in ("safe", "lean"):
+    raise Exception("STRCtrig Assembler v5.5 Stack: Pin 은 safe 또는 lean 이어야 한다 (받은 값: %s)" % PIN)
 
 if batcheck == 1:
     os.system(batpath + batname + ".bat")
@@ -473,8 +548,8 @@ def _build():
     pinned = set()
     why = {}
     if stack:
-        pinned, why = _plan(ch, role, bytearray(open(_files[0], 'rb').read()))
-        print("[STRCtrig Stack] kept in place: %d code records %s" % (len(pinned), why))
+        pinned, why = _plan(ch, role, bytearray(open(_files[0], 'rb').read()), rules=PIN)
+        print("[STRCtrig Stack] pin rules=%s, kept in place: %d code records %s" % (PIN, len(pinned), why))
 
     # 2) 객체 만들기
     objs = []
@@ -606,7 +681,7 @@ def _build():
             rc[r] = rc.get(r, 0) + 1
     stat = {
         "records": sum(n[1:]), "stacked": sum(nstack), "blobs": sum(nblob), "pinned": len(pinned),
-        "why": why, "roles": rc,
+        "why": why, "roles": rc, "pin": PIN if stack else "-",
         "reloc": nreloc, "runtime_fix": len(runtime_fix), "p0fix": len(_P0FIX), "bad": bad,
         "anchor": len(anchor.objs) if anchor else 0,
         "per_chunk": [(k, n[k], nstack[k], nblob[k]) for k in range(1, 9)],
@@ -799,7 +874,8 @@ def onPluginStart():  # Ctrig Assembler v5.5 for Tep Made by Ninfia - 청크 싣
         "[STRCtrig Stack] compile-time relocations=%d, runtime: TRIG-target adds=%d, TRIGP0->STRx fills=%d, anchor=%d" % (
             stat["reloc"], stat["runtime_fix"], stat["p0fix"], stat["anchor"]),
         "[STRCtrig Stack] per chunk (P, records, stacked, blobs): %s" % stat["per_chunk"],
-        "[STRCtrig Stack] roles %s; kept-in-place code records by reason %s" % (stat["roles"], stat["why"]),
+        "[STRCtrig Stack] pin rules=%s; roles %s; kept-in-place code records by reason %s" % (
+            stat["pin"], stat["roles"], stat["why"]),
         "[STRCtrig Stack] NSQC label: %s%s" % (stat["nsqc"], "  ** stack 모드에서는 NSQC 플러그인과 호환되지 않음" if stat["nsqc_warn"] else ""),
     ]
     if stat["bad"]:
