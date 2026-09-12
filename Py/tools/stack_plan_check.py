@@ -12,11 +12,12 @@
     base 가 런타임 복사로만 들어오는 칸은 정적으로 못 본다 - --detail 로 목록을 보고 역할(var/data)을 확인할 것.
 
 사용:
-  python stack_plan_check.py [Ctemp 폴더] [--plugin 플러그인.py] [--rules 이름,이름,...] [--detail]
+  python stack_plan_check.py [Ctemp 폴더] [--plugin 플러그인.py] [--rules 이름,이름,...] [--detail] [--layout 파일]
     Ctemp 폴더   기본 C:\\euddraft0.9.2.0\\Ctemp  (빌드 뒤 남는 tepc 출력 그대로)
     --plugin     기본: 이 파일 기준 ..\\STRCtrig Assembler v5.5 Stack.py
     --rules      플러그인 _plan 이 rules 인자를 받으면 규칙 묶음 여러 개를 나란히 계산한다 (예: safe,lean)
     --detail     base 없는 보폭 칸, BASE STACKED 칸 목록
+    --layout F   청크 배치 기록(플러그인 Layout 과 같은 형식)을 F 로 쓴다 (--rules 가 여럿이면 F_규칙.확장자)
 32비트 Python 3.9 로 확인했다 (theSeed P8 청크 약 115MB, 1~2분)."""
 import inspect
 import os
@@ -44,6 +45,7 @@ def main():
     here = os.path.dirname(os.path.abspath(__file__))
     plugin = opt("--plugin", os.path.join(here, "..", "STRCtrig Assembler v5.5 Stack.py"))
     rules = opt("--rules")
+    layout = opt("--layout")
     detail = "--detail" in args
     if detail:
         args.remove("--detail")
@@ -125,6 +127,12 @@ def main():
                 ti = A // REC
                 print("    no static base: slot P%d rec %d +%d role %s steps %s"
                       % (p, ti, A % REC, role[p][ti] if 0 <= ti < n[p] else "?", sorted(steps)[:4]))
+        if layout and "_layout_text" in ns:
+            root, ext = os.path.splitext(layout)
+            path = layout if len(names) == 1 else "%s_%s%s" % (root, name or "default", ext)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(ns["_layout_text"](ch, role, pinned, name or "default"))
+            print("    layout -> %s" % path)
 
 
 if __name__ == "__main__":

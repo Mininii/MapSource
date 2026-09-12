@@ -158,7 +158,7 @@ def _varlike(b, body, nc, na):
 def _plan(ch, role, p0, run_fix=256, rules="safe"):
     """stack 모드에서 겹쳐 싣지 않고 원래 배치로 둘 코드 레코드를 고른다 (겹쳐 싣으면 런타임에 깨지는 것).
     ch / role: [None, 청크 1~8 의 bytearray / _roles 결과],  p0: TRIGP0.chk 원본(표식이 그대로 있는 것).
-    반환: (pinned = {(p, i)}, 이유별 레코드 수)
+    반환: (pinned = {(p, i): 이유}, 이유별 레코드 수)
       dead  정적 참조가 트리거의 빈 칸(종료 표시 뒤)을 읽거나 쓴다.
       run   같은 모양이 run_fix 개 이상 이어진 구간 (언롤 배열 안전망).
       step  0x970/8(302) 배수를 상수로 더하고 빼는 칸(604/1208/2416/9664 보폭으로 걷는 포인터)의 base.
@@ -264,14 +264,14 @@ def _plan(ch, role, p0, run_fix=256, rules="safe"):
         if p0[q * 2400 + 15] == 0xFE:
             scan(p0, q * 2400, 0)
 
-    pinned = set()
+    pinned = {}
     why = {"dead": 0, "run": 0, "step": 0, "field": 0, "base0": 0}
 
     def pin_run(p, ti, r):
         st, ln = run_of[(p, ti)]
         for q in range(st, st + ln):
             if (p, q) not in pinned:
-                pinned.add((p, q))
+                pinned[(p, q)] = r
                 why[r] += 1
 
     fields, base0 = [], []
@@ -289,7 +289,7 @@ def _plan(ch, role, p0, run_fix=256, rules="safe"):
             fields.append((p, ti))
         nc, na = ncna(p, ti)
         if not _occupied(nc, na, off) and (p, ti) not in pinned:
-            pinned.add((p, ti))
+            pinned[(p, ti)] = "dead"
             why["dead"] += 1
     for (p, i), (st, ln) in run_of.items():
         if i == st and ln >= run_fix:
@@ -367,6 +367,52 @@ def _occupied(nc, na, off):
     """겹쳐 쌓았을 때 엔진/코드가 읽고 쓰는 칸 (prev/next, 조건+종료, 액션+종료, 플래그, 마지막 dword)."""
     return (off < 8 + 20 * min(nc + 1, 16) or 328 <= off < 328 + 32 * min(na + 1, 64)
             or 2376 <= off < 2380 or 2404 <= off < 2408)
+
+
+def _layout_text(ch, role, pinned, pin_name="-"):
+    """stack 모드 청크 배치 기록 - 어느 레코드 구간을 겹쳐 싣고 어느 구간을 원래 배치로 뒀는지.
+    한 줄 = 같은 처리를 받은 연속 레코드 구간. 플러그인이 .eds 의 Layout 파일로 쓰고, 오프라인 도구도 이 함수를 쓴다."""
+    head = [
+        "# STRCtrig Assembler v5.5 Stack - 청크 배치 기록 (Pin=%s)" % pin_name,
+        "# 한 줄 = 같은 처리를 받은 연속 레코드 구간. 레코드 번호 = tepc 출력 TRIGPp.chk 안의 순서(0부터, 2416바이트 단위).",
+        "#   STACK : 겹쳐 실음 - 엔진이 읽는 칸만 차지하고 나머지 칸은 다른 트리거와 공유한다",
+        "#   KEEP  : 원래 배치(2416바이트 연속). 이유 data = skip 데이터 블록, var = 변수형, mem = 빈 트리거(메모리 배열),",
+        "#           full = 액션 60개 이상, dead/run/step/field/base0 = 플러그인 _plan 의 고정 규칙",
+        "# 라벨 = 구간 안 첫~마지막 CtrigAsm 라벨 번호(16진). 라벨 없는 구간은 -",
+        "# P\t시작\t끝\t개수\t처리\t이유\t라벨",
+    ]
+    out = []
+    tot = {}
+    for k in range(1, 9):
+        b = ch[k]
+        n = len(b) // REC
+
+        def state(i):
+            r = role[k][i]
+            if r == "code":
+                w = pinned.get((k, i))
+                return ("KEEP", w) if w else ("STACK", "-")
+            return ("KEEP", "data" if r == "hdr" else r)
+        i = 0
+        while i < n:
+            s = state(i)
+            j = i
+            first = last = None
+            while j < n and state(j) == s:
+                if role[k][j] != "data" and b[j * REC + 8 + 15] == 0xFE:
+                    lab = _u32(b, j * REC + 16)
+                    if lab:
+                        first = lab if first is None else first
+                        last = lab
+                j += 1
+            labs = "-" if first is None else ("%X" % first if first == last else "%X-%X" % (first, last))
+            out.append("%d\t%d\t%d\t%d\t%s\t%s\t%s" % (k, i, j - 1, j - i, s[0], s[1], labs))
+            tot[s] = tot.get(s, 0) + (j - i)
+            i = j
+    foot = ["# 합계 - %s %s: %d 레코드" % (s[0], s[1], c) for s, c in sorted(tot.items(), key=lambda x: -x[1])]
+    return "\n".join(head + out + foot) + "\n"
+
+
 # ==== CORE END ====
 
 
@@ -379,6 +425,7 @@ pathcheck = 0
 MODE = "stack"
 REPORT = ""
 PIN = "safe"        # stack 모드에서 원래 배치로 둘 트리거를 고르는 규칙 묶음 (_plan 의 rules): safe / lean
+LAYOUT = ""         # stack 모드 청크 배치 기록 파일 - 어느 레코드 구간을 겹쳐 실었나 (_layout_text)
 for k, v in settings.items():
     kl = k.lower()
     if kl == "path":
@@ -394,6 +441,8 @@ for k, v in settings.items():
         REPORT = v.strip()
     elif kl == "pin":
         PIN = v.strip().lower()
+    elif kl == "layout":
+        LAYOUT = v.strip()
 if MODE not in ("reloc", "stack"):
     raise Exception("STRCtrig Assembler v5.5 Stack: Mode 는 reloc 또는 stack 이어야 한다 (받은 값: %s)" % MODE)
 if PIN not in ("safe", "lean"):
@@ -545,7 +594,7 @@ def _build():
     #    액션 60+, 빈 트리거 = 메모리 배열)는 애초에 겹쳐 싣지 않는다.
     #    이력: stack 1차 = EXCC 1700 슬롯이 흩어져 유닛이 생기는 순간 끊김 / 2차 = CreateArr 빈 트리거 위에 다른
     #    트리거가 겹쳐 게임 시작 배치에서 끊김. 둘 다 "주소 + 번호*604" 런타임 계산이 원인이었다.
-    pinned = set()
+    pinned = {}
     why = {}
     if stack:
         pinned, why = _plan(ch, role, bytearray(open(_files[0], 'rb').read()), rules=PIN)
@@ -675,6 +724,10 @@ def _build():
     if stack:
         anchor = _Anchor([o for o in objs if id(o) not in referenced])
 
+    if stack and LAYOUT:
+        with open(LAYOUT, "w", encoding="utf-8") as f:
+            f.write(_layout_text(ch, role, pinned, PIN))
+        print("[STRCtrig Stack] layout: %s" % LAYOUT)
     rc = {}
     for k in range(1, 9):
         for r in role[k]:
