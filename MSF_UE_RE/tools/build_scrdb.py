@@ -46,6 +46,8 @@ FINAL = r"C:\Program Files (x86)\StarCraft\Maps\마린키우기_UnLimit_ExceeD_S
 TEPC = os.path.join(DOCS, "theSeed", "tools", "tepc_20260905.exe")
 STAT = os.path.join(DOCS, "theSeed", "stat_txt.tbl")
 MANIFEST = r"C:\Temp\SCR_DB_manifest_MSF_UE_RE.json"
+# SCR_DB MSQC 워드의 최댓값 (레이아웃 7: 토글 비트 18/19 + 꼬리표 16/17 + 페이로드 16비트 = 20비트)
+SCRDB_WORD_MAX = 0xFFFFF
 LAUNCHER_MANIFESTS = os.path.join(DOCS, "DPS_Enhance", "tools", "manifests")
 # EUD Editor 가 GUI 빌드 때 build 폴더로 복사해 넣는 TE 라이브러리. SCA 것은 쓰지 않는다.
 TE_LIB = os.path.join(EUD_EDITOR, "Data", "TriggerEditor")
@@ -248,10 +250,22 @@ def main():
     cmd = [EUDDRAFT, eds]
     print("  " + " ".join('"%s"' % c if " " in c else c for c in cmd))
     # 오류가 나면 euddraft 가 "Press Enter" 로 멈추므로 표준입력을 막아 둔다.
-    r = subprocess.run(cmd, cwd=EUDDIR, timeout=3600, stdin=subprocess.DEVNULL)
+    r = subprocess.run(cmd, cwd=EUDDIR, timeout=3600, stdin=subprocess.DEVNULL, capture_output=True)
+    out = decode(r.stdout + r.stderr)
+    print(out.rstrip())
     print("  rc=%d" % r.returncode)
     if r.returncode != 0:
         return r.returncode
+    # MSQC 의 val 로 실을 수 있는 크기는 맵 크기에 달렸다. SCR_DB 워드가 안 들어가면 맵은 만들어져도
+    # 런처의 워드가 하나도 도착하지 않는다 (레이아웃 6 이 이 맵에서 그렇게 실패했다). 여기서 막는다.
+    m = re.search(r"Sendable value range for 'val' syntax: 0 to (\d+)", out)
+    if not m:
+        print("주의: euddraft 출력에서 MSQC val 범위를 찾지 못했다")
+    elif int(m.group(1)) < SCRDB_WORD_MAX:
+        print("오류: 이 맵의 MSQC val 범위(0~%s)가 SCR_DB 워드(0~0x%X)보다 작다" % (m.group(1), SCRDB_WORD_MAX))
+        return 3
+    else:
+        print("  MSQC val 범위 0~%s >= SCR_DB 워드 0~0x%X" % (m.group(1), SCRDB_WORD_MAX))
     if os.path.isfile(FINAL):
         print("최종 산출물: %s (%d B)" % (FINAL, os.path.getsize(FINAL)))
     stash_manifest(doc)

@@ -269,7 +269,7 @@ function OPTrig()
 		CAPrint(OPiStr,{Force1,Force5},{1,0,0,0,1,1,0,0},"CA_OPText",FP,{}) 
 		
 		local IntroT1 = "\x13\x1E▶ \x04상위 플레이어는 시작 레벨 선택 후 Y를 눌러주세요.(좌우버튼) 현재 \x07LV."..LvLimit.." \x04까지 선택가능합니다. \x1E◀"
-		local IntroT2 = "\x13\x1E▶ \x08게임이 시작되면 SCA에서 데이터를 불러올 수 없습니다. \x1E◀"
+		local IntroT2 = "\x13\x1E▶ \x08게임이 시작되면 SCR_DB 런처에서 데이터를 불러올 수 없습니다. \x1E◀"
 		DoActions2(FP, RotatePlayer({
 			DisplayTextX(IntroT1,4),
 			DisplayTextX(IntroT2,4),
