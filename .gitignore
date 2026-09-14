@@ -35,6 +35,9 @@ TestCode/1.lua
 # 부트스트랩의 PC 별 설정 (Bootstrap.lua 가 마지막에 실행한다)
 local.lua
 
+# 빌드 스크립트(MSF_UE_RE/tools 등)를 돌리면 생긴다
+__pycache__/
+
 # 핵심 프로텍터 - 절대 커밋 금지 (유출 시 맵 보호가 무력화된다)
 # 파일명 패턴이라 Py/ 든 어디로 옮기든 계속 막힌다.
 CPLP.py

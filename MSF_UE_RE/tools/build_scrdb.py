@@ -1,22 +1,30 @@
 #!/usr/bin/env python3
 """MSF_UE_RE 를 SCR_DB 판(오프라인 세이브)으로 빌드한다. SCMDraft·EUD Editor GUI 없이.
 
-    py -3.10 MSF_UE_RE\\tools\\build_scrdb.py            # tepc -> euddraft
-    py -3.10 MSF_UE_RE\\tools\\build_scrdb.py --regen    # e3s 에서 build/ 를 다시 만든 뒤 빌드
-    py -3.10 MSF_UE_RE\\tools\\build_scrdb.py --tepc-only
+    build.bat                                          # 더블클릭 = 아래 첫 줄
+    python MSF_UE_RE\\tools\\build_scrdb.py            # tepc -> euddraft(+음원) -> CPLP
+    python MSF_UE_RE\\tools\\build_scrdb.py --regen    # e3s 에서 build/ 를 다시 만든 뒤 빌드
+    python MSF_UE_RE\\tools\\build_scrdb.py --tepc-only
+    python MSF_UE_RE\\tools\\split_map.py              # 원본 맵 -> 기본 맵 + 음원 폴더 (맵을 고쳤을 때)
 
+입력
+  MSF_UE_RE_base.scx                  지형·유닛·로케이션. 음원을 뺀 chk 하나짜리 (split_map.py 가 만든다)
+  C:\\euddraft0.9.2.0\\MSF_UE_RE_BGM\\  음원. MSF_UE_RE_BGMInput.py 가 euddraft 단계에서 넣는다
+                                      (theSeed 의 theSeed_BGM + theSeed_BGMInput.py 와 같은 짝)
 단계
   0. (--regen 이거나 build/ 가 없으면) EudGen: MSF_UE_RE.e3s -> build/eudplibData
      EUD Editor 3 의 생성기를 GUI 없이 돌린다(tools/EudGenMsf.cs). SCA 를 끄고 TE 메인 파일을
      main_scrdb.eps 로 바꾼다. e3s 는 건드리지 않는다.
-  1. tepc: 원본 맵(C:\\euddraft0.9.2.0\\MSF_UE_RE.scx)에 main.lua 를 컴파일 -> 1단계 맵.
+  1. tepc: 기본 맵에 main.lua 를 컴파일 -> 1단계 맵(작업 폴더).
      트리거 본체는 C:\\euddraft0.9.2.0\\Ctemp 의 TRIGP*.chk 로 가고 euddraft 가 넣는다.
   2. euddraft: build/eudplibData/EUDEditor.eds 를 이 빌드에 맞게 고쳐서 돌린다 -> 최종 맵.
-     입출력 경로, STRCtrig 어셈블러 v5.4 -> v5.5(라이브러리가 v5.5), SCR_DB 전용 MSQC 채널 8줄.
+     입출력 경로, STRCtrig 어셈블러 v5.4 -> v5.5(라이브러리가 v5.5), SCR_DB 전용 MSQC 채널 8줄,
+     음원 플러그인, [CPLP]. 끝나면 음원이 전부 들어갔는지 맵을 열어 바이트까지 확인한다.
+  3. CPLP: 최종 맵을 보호해서 *_out.scx 를 만든다 (DPS 와 같다. eds 가 freeze: 0 이라 호환).
   끝나면 매니페스트를 런처 배포본이 모으는 곳(DPS_Enhance/tools/manifests)에도 넣는다.
 
-예전 GUI 빌드는 SCMDraft(TEP) -> CS_STRConverter -> EUD Editor 3 였다. CS_STRConverter 는
-STR/STRx 문자열 구역 변환기인데, tepc 는 cflag 1 에서 STRx 로 쓰므로 필요 없는지 빌드로 확인한다.
+예전 GUI 빌드는 SCMDraft(TEP) -> CS_STRConverter -> EUD Editor 3 였다. tepc 는 cflag 1 에서 STRx 로
+쓰므로 CS_STRConverter 는 필요 없다 (이 흐름으로 만든 맵이 인게임에서 돌았다).
 """
 import argparse
 import glob
@@ -30,6 +38,9 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import mpq  # noqa: E402
+
 MSF = os.path.dirname(HERE)
 MAPSOURCE = os.path.dirname(MSF)
 DOCS = os.path.dirname(MAPSOURCE)
@@ -39,10 +50,17 @@ MAIN_EPS = os.path.join(MSF, "main_scrdb.eps")
 EUD_EDITOR = r"C:\Users\USER\Desktop\EUD.Editor.3.0.19.6.0"
 EUDDIR = r"C:\euddraft0.9.2.0"
 EUDDRAFT = os.path.join(EUDDIR, "euddraft.exe")
-# SCMDraft 로 마지막에 저장한 맵(2024-03-23). 지형·유닛·로케이션·사운드가 여기서 온다.
-BASEMAP = os.path.join(EUDDIR, "MSF_UE_RE.scx")
-STAGE1 = os.path.join(EUDDIR, "MSF_UE_RE_SCRDB_stage1.scx")
+CPLP = os.path.join(EUDDIR, "CustomPlibLockProtector.exe")
+CPLP_PLUGIN = os.path.join(EUDDIR, "plugins", "CPLP.py")
+# 지형·유닛·로케이션·사운드 목록이 오는 맵. 음원을 뺀 chk 하나짜리다 (tools/split_map.py).
+# 음원이 든 원본은 C:\euddraft0.9.2.0\MSF_UE_RE.scx (SCMDraft 로 마지막에 저장한 맵).
+BASEMAP = os.path.join(MSF, "MSF_UE_RE_base.scx")
+# 음원 폴더와 그걸 맵에 넣는 euddraft 플러그인. theSeed 의 theSeed_BGM + theSeed_BGMInput.py 와 같은 짝.
+BGM_DIR = os.path.join(EUDDIR, "MSF_UE_RE_BGM")
+BGM_MODULE = os.path.join(MSF, "MSF_UE_RE_BGMInput.py")
+SOUND_EXT = (".ogg", ".wav")
 FINAL = r"C:\Program Files (x86)\StarCraft\Maps\마린키우기_UnLimit_ExceeD_SCR_DB.scx"
+FINAL_OUT = FINAL[:-4] + "_out.scx"      # CPLP 가 새로 쓰는 보호판 = 실제로 플레이할 맵
 TEPC = os.path.join(DOCS, "theSeed", "tools", "tepc_20260905.exe")
 STAT = os.path.join(DOCS, "theSeed", "stat_txt.tbl")
 MANIFEST = r"C:\Temp\SCR_DB_manifest_MSF_UE_RE.json"
@@ -66,6 +84,27 @@ def decode(b):
         except UnicodeDecodeError:
             pass
     return b.decode("utf-8", "replace")
+
+
+def bgm_files():
+    """MSF_UE_RE_BGMInput.py 가 넣을 파일들 (같은 규칙: 폴더 바로 아래의 .ogg/.wav)."""
+    if not os.path.isdir(BGM_DIR):
+        return []
+    return sorted(f for f in os.listdir(BGM_DIR)
+                  if os.path.splitext(f)[1].lower() in SOUND_EXT and os.path.isfile(os.path.join(BGM_DIR, f)))
+
+
+def preflight(tepc_only):
+    """빌드 전에 없으면 안 되는 것들. 빠진 것을 문장 목록으로 돌려준다."""
+    need = [(BASEMAP, "기본 맵 (python tools\\split_map.py 로 원본에서 만든다)"),
+            (TEPC, "tepc"), (STAT, "stat_txt.tbl")]
+    if not tepc_only:
+        need += [(EUDDRAFT, "euddraft"), (CPLP, "CustomPlibLockProtector.exe"),
+                 (CPLP_PLUGIN, "euddraft 의 [CPLP] 플러그인"), (BGM_MODULE, "음원 플러그인")]
+    missing = ["%s 가 없다: %s" % (what, p) for p, what in need if not os.path.isfile(p)]
+    if not tepc_only and not bgm_files():
+        missing.append("음원 폴더가 없거나 비었다: %s (python tools\\split_map.py)" % BGM_DIR)
+    return missing
 
 
 def regen():
@@ -120,8 +159,8 @@ def scmd_unit_names():
     return out
 
 
-def compile_tepc(work):
-    print("\n=== 1. tepc (main.lua -> %s)" % STAGE1)
+def compile_tepc(work, stage1):
+    print("\n=== 1. tepc (main.lua -> %s)" % stage1)
     os.makedirs(work, exist_ok=True)
     shutil.copy2(TEPC, os.path.join(work, "tepc.exe"))     # tepc 는 제 옆에 임시 chk 를 쓴다
     shutil.copy2(BASEMAP, os.path.join(work, "in.scx"))
@@ -145,7 +184,7 @@ def compile_tepc(work):
     with open(os.path.join(work, "editor.lua"), "w", encoding="utf-8", newline="") as f:
         f.write("\r\n".join(lines))
     print("  SCMDraft 식 유닛 이름 %d개를 ParseUnit 앞에 끼움" % len(names))
-    cmd = [os.path.join(work, "tepc.exe"), "in.scx", "editor.lua", STAGE1,
+    cmd = [os.path.join(work, "tepc.exe"), "in.scx", "editor.lua", stage1,
            "--cflag", "1", "--stat-txt", STAT]
     started = time.time()
     r = subprocess.run(cmd, cwd=work, capture_output=True, timeout=3600)
@@ -166,7 +205,7 @@ def read_manifest(since):
         return json.load(f)
 
 
-def write_eds(src, dst, doc):
+def write_eds(src, dst, doc, stage1):
     """EUD Editor 가 만든 eds 를 이 빌드에 맞게 고친다."""
     addr, death, ch = doc["msqc_addr"], doc["msqc_death"], doc["msqc_channels"]
     msqc = ["Memory(0x%X,AtLeast,1);val, 0x%X: %d" % (addr + 4 * k, addr + 4 * k, death + k)
@@ -193,7 +232,7 @@ def write_eds(src, dst, doc):
             out.append("Path : %s\\Ctemp\\" % EUDDIR)
             continue
         if low.startswith("input:"):
-            out.append("input: " + STAGE1)
+            out.append("input: " + stage1)
             continue
         if low.startswith("output:"):
             out.append("output: " + FINAL)
@@ -204,13 +243,50 @@ def write_eds(src, dst, doc):
         injected = True
     if not injected:
         raise SystemExit("eds 에 [MSQC] 섹션이 없다")
+    # 음원 플러그인(main 이 eds 옆에 복사해 둔다)과 CPLP. 둘 다 e3s 가 만든 eds 에는 없던 섹션이다.
+    out += ["[%s]" % os.path.basename(BGM_MODULE), "Path : %s\\" % BGM_DIR]
+    if not any(l.strip().lower() == "[cplp]" for l in out):
+        out.append("[CPLP]")
     leftovers = [l for l in out if re.search(r"scarchive|scaflexible|scatool", l, re.I)]
     if leftovers:
         raise SystemExit("eds 에 SCA 흔적이 남았다: %s" % leftovers[:3])
     with open(dst, "w", encoding="utf-8", newline="\r\n") as f:
         f.write("\n".join(out) + "\n")
-    print("  eds: 입출력 경로 교체, SCR_DB MSQC 채널 %d개 (0x%X~ -> 데스 %d~%d)"
+    print("  eds: 입출력 경로 교체, SCR_DB MSQC 채널 %d개 (0x%X~ -> 데스 %d~%d), 음원 플러그인, [CPLP]"
           % (ch, addr, death, death + ch - 1))
+
+
+def verify_bgm(path, sounds):
+    """음원이 전부 원래 이름으로, 바이트까지 같게 들어갔는지 본다. 틀린 파일 이름 목록을 돌려준다."""
+    bad = []
+    with mpq.Archive(path) as a:
+        for name in sounds:
+            with open(os.path.join(BGM_DIR, name), "rb") as f:
+                if a.read("staredit\\wav\\" + name) != f.read():
+                    bad.append(name)
+    return bad
+
+
+def run_cplp(since):
+    print("\n=== 3. CPLP")
+    cmd = [CPLP, FINAL]
+    print("  " + " ".join('"%s"' % c if " " in c else c for c in cmd))
+    for attempt in (1, 2):
+        r = subprocess.run(cmd, cwd=EUDDIR, timeout=3600, stdin=subprocess.DEVNULL)
+        print("  rc=%d" % r.returncode)
+        if r.returncode == 0:
+            break
+        if attempt == 1:
+            # DPS 빌드에서 본 것: CPLP 는 가끔 이유 없이 실패하고(rc=3, 0xC0000409) 같은 입력으로
+            # 다시 돌리면 통과한다. euddraft 까지 끝난 빌드를 버리지 않도록 한 번만 다시 해 본다.
+            print("  CPLP 실패. 한 번 다시 시도한다.")
+            time.sleep(1.0)
+    if r.returncode != 0:
+        return r.returncode
+    if not os.path.isfile(FINAL_OUT) or os.path.getmtime(FINAL_OUT) < since:
+        print("CPLP 가 %s 를 새로 만들지 않았다" % FINAL_OUT)
+        return 5
+    return 0
 
 
 def stash_manifest(doc):
@@ -227,13 +303,22 @@ def main():
     ap.add_argument("--regen", action="store_true", help="e3s 에서 build/ 를 다시 만든다 (EUD Editor 3 필요)")
     ap.add_argument("--tepc-only", action="store_true", help="1단계(tepc)만 돌린다")
     args = ap.parse_args()
+    build_started = time.time()
+
+    missing = preflight(args.tepc_only)
+    if missing:
+        print("빌드를 시작할 수 없다:")
+        for m in missing:
+            print("  - " + m)
+        return 1
 
     if args.regen or not os.path.isfile(os.path.join(BUILD, "eudplibData", "EUDEditor.eds")):
         regen()
 
     work = os.path.join(os.environ.get("TEMP", "."), "msf_build")
     shutil.rmtree(work, ignore_errors=True)
-    rc, started = compile_tepc(work)
+    stage1 = os.path.join(work, "stage1.scx")
+    rc, started = compile_tepc(work, stage1)
     if rc != 0:
         return rc
     doc = read_manifest(started)
@@ -245,8 +330,10 @@ def main():
     print("\n=== 2. euddraft")
     stage = os.path.join(work, "eudbuild")
     shutil.copytree(BUILD, stage)
-    eds = os.path.join(stage, "eudplibData", "EUDEditor.eds")
-    write_eds(eds, eds, doc)
+    eds_dir = os.path.join(stage, "eudplibData")
+    shutil.copy2(BGM_MODULE, eds_dir)        # [MSF_UE_RE_BGMInput.py] 는 eds 기준 상대 경로로 찾는다
+    eds = os.path.join(eds_dir, "EUDEditor.eds")
+    write_eds(eds, eds, doc, stage1)
     cmd = [EUDDRAFT, eds]
     print("  " + " ".join('"%s"' % c if " " in c else c for c in cmd))
     # 오류가 나면 euddraft 가 "Press Enter" 로 멈추므로 표준입력을 막아 둔다.
@@ -266,9 +353,20 @@ def main():
         return 3
     else:
         print("  MSQC val 범위 0~%s >= SCR_DB 워드 0~0x%X" % (m.group(1), SCRDB_WORD_MAX))
-    if os.path.isfile(FINAL):
-        print("최종 산출물: %s (%d B)" % (FINAL, os.path.getsize(FINAL)))
+    sounds = bgm_files()
+    bad = verify_bgm(FINAL, sounds)
+    if bad:
+        print("오류: 음원 %d개 중 %d개가 최종 맵에 없거나 다르다: %s" % (len(sounds), len(bad), bad[:5]))
+        return 4
+    print("  음원 %d개가 최종 맵에 원래 이름·내용 그대로 들어감" % len(sounds))
+
+    rc = run_cplp(build_started)
+    if rc != 0:
+        return rc
+    # 맵이 끝까지 만들어졌을 때만 모은다. 중간에 실패한 빌드의 매니페스트는 쓸 맵이 없다.
     stash_manifest(doc)
+    for p in (FINAL, FINAL_OUT):
+        print("최종 산출물: %s (%d B)" % (p, os.path.getsize(p)))
     return 0
 
 
