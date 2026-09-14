@@ -119,6 +119,11 @@ end
 		DoHumanCheck()
 		BGMManager()
 		onInit_EUD() -- onPluginStart
+		-- SCR_DB 오프라인 세이브 (SCA 대체, SCR_DB_MSF.lua). onInit_EUD 가 게임 시작 때 void 를 한 번
+		-- 싹 지운 **뒤**여야 표지 블록이 살아남고, OPTrig(로비) 보다 앞이어야 불러오기 상태(데스 23)가
+		-- 같은 프레임에 로비 화면에 보인다.
+		SCRMSF_Init()
+		SCRMSF_Exec()
 		OPText() -- Opening Text
 		MapPreserves()
 		OPTrig()

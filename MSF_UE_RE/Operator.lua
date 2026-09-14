@@ -152,7 +152,7 @@ function OPTrig()
 	local initStr2 = MakeiStrVoid(20).." \x04: " 
 	local SCAStat1 = "\x07연결 되었습니다!" 
 	local SCAStat2 = "\x07데이터를 불러오는 중..." 
-	local NonSCAStr = "\x10SCA 런쳐\x04와 \x07연결\x04해주세요." 
+	local NonSCAStr = "\x10SCR_DB 런처\x04와 \x07연결\x04해주세요."
 	local SCAInitStr = "\x1F플\x04레이어 : \x07\x0D\x04명. 선택가능 \x1F최대 \x07Level \x04- 0000  / \x1F선택 \x07Level - 0000 "
 	
 	local OPStr, OPStra, OPStrs = SaveiStrArr(FP, MakeiStrVoid(54))

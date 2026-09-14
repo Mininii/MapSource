@@ -185,7 +185,9 @@ function LevelUp()
 
 
 		GetP["fwc"] = true
-		DisplayPrintEr(AllPlayers, {"\x10【 \x04이번 \x07Level\x04에서 얻은 \x19스탯 포인트 \x04: \x07",GetP," \x10】"})
+		-- [SCR_DB 빌드] AllPlayers 는 TEP 상수(표)라 지금 Library 의 DisplayPrintEr 가 받지 못한다
+		-- (2024년 판은 숫자가 아니면 빈 목록으로 조용히 넘어갔다). P1~P7 목록으로 준다.
+		DisplayPrintEr(MapPlayers, {"\x10【 \x04이번 \x07Level\x04에서 얻은 \x19스탯 포인트 \x04: \x07",GetP," \x10】"})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,IdenClear)},
 			{RotatePlayer({DisplayTextX(Id_T6,4),PlayWAVX("staredit\\wav\\Satellite.wav"),PlayWAVX("staredit\\wav\\Satellite.wav")},HumanPlayers,FP),SetCDeaths(FP,Add,1,StoryT3)},{preserved})
 		Trigger2X(FP,{CDeaths(FP,AtMost,0,StoryT3),CDeaths(FP,AtLeast,1,DemClear)},
@@ -319,7 +321,7 @@ function LevelUp()
 	CIf(FP,{CDeaths(FP,AtLeast,1,isBossStage)})
 	local TempNK = CreateVar(FP)
 	CMov(FP,TempNK,_Div(NCCalc,PCheckV))
-	DisplayPrintEr(AllPlayers, {"\x07『 \x04추가 \x08뉴클리어\x04가 \x07",TempNK," 개 \x04지급되었습니다. \x07』"})
+	DisplayPrintEr(MapPlayers, {"\x07『 \x04추가 \x08뉴클리어\x04가 \x07",TempNK," 개 \x04지급되었습니다. \x07』"}) -- [SCR_DB 빌드] AllPlayers -> P1~P7 (위 188행 설명)
 		for i = 0, 6 do
 			CIf(FP,{HumanCheck(i, 1)},{})
 			CAdd(FP,NukesUsage[i+1],TempNK)

@@ -1,0 +1,1395 @@
+/***
+ * @Type
+ * F
+ * @Summary.ko-KR
+ * [loc]에 존재하는 [player]의 [unit]을 반환합니다.
+ *
+ * @param.player.ko-KR
+ * 유닛의 소유 플레이어입니다.
+ *
+ * @param.unit.ko-KR
+ * 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 로케이션입니다.
+***/
+function CountAtLoc(player: TrgPlayer, unit: TrgUnit, loc: TrgLocation) {
+    // made by Artanis[M] & safhfh & Jpoker & trgk;
+    var x = 1700;
+    foreach(i : py_range(10, -1, -1)) {
+        if (x >= py_pow(2, i)) {
+            x -= py_pow(2, i);
+            if (!Bring(player, AtMost, x, unit, loc)) {
+                x += py_pow(2, i);
+            }
+        }
+    }
+    return x;
+}
+
+function __LocOrderBase(
+    epd,
+    order_lsh8,
+    loc: TrgLocation
+) {
+    const loc_epd = loc * 5;
+    DoActions(loc_epd.AddNumber(EPD(0x58DC4C)));
+
+    const x1 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const y1 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const x2 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const y2 = dwread_epd(loc_epd);
+
+    const x = (x1 + x2) / 2;
+    const y = (y1 + y2) << 15;  // = (y1 + y2) / 2 * 65536 
+
+    epd += 0x4D / 4;
+    SetMemoryXEPD(epd, SetTo, order_lsh8, 0xFF00);
+    epd += (0x58 - 0x4C) / 4;
+    SetMemoryEPD(epd, SetTo, y + x);
+}
+
+
+function __PosOrderBase(
+    epd,
+    order_lsh8,
+    x,
+    y
+) {
+    epd += 0x4D / 4;
+    SetMemoryXEPD(epd, SetTo, order_lsh8, 0xFF00);
+    epd += (0x58 - 0x4C) / 4;
+    SetMemoryEPD(epd, SetTo, y * 65536 + x);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [epd]가 프로토스 방식으로 [building]을 짓습니다.(Working모션이 필요하지 않습니다)  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildProbeEPD(epd, loc: TrgLocation, building: TrgUnit) {
+    SetMemoryXEPD(epd + 0x98 / 4, SetTo, building, 0xFFFF);
+    __LocOrderBase(epd, 31 << 8, loc);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [ptr]가 프로토스 방식으로 [building]을 짓습니다.(Working모션이 필요하지 않습니다)  
+ *
+ * @param.ptr.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildProbe(unitPTR, loc: TrgLocation, building: TrgUnit) {
+    BuildProbeEPD(EPD(unitPTR), loc, building);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [epd]가 저그 방식으로 [building]을 짓습니다.(Working모션이 필요하지 않습니다)  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildDroneEPD(epd, loc: TrgLocation, building: TrgUnit) {
+    SetMemoryXEPD(epd + 0x98 / 4, SetTo, building, 0xFFFF);
+    __LocOrderBase(epd, 25 << 8, loc);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [ptr]가 저그 방식으로 [building]을 짓습니다.(Working모션이 필요하지 않습니다)  
+ *
+ * @param.ptr.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildDrone(unitPTR, loc: TrgLocation, building: TrgUnit) {
+    BuildDroneEPD(EPD(unitPTR), loc, building);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [epd]가 테란 방식으로 [building]을 짓습니다.(Working모션이 필요합니다)  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildSCVEPD(epd, loc: TrgLocation, building: TrgUnit) {
+    SetMemoryXEPD(epd + 0x98 / 4, SetTo, building, 0xFFFF);
+    __LocOrderBase(epd, 30 << 8, loc);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [ptr]가 테란 방식으로 [building]을 짓습니다.(Working모션이 필요합니다)  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.building.ko-KR
+ * 지을 건물입니다.
+***/
+function BuildSCV(unitPTR, loc: TrgLocation, building: TrgUnit) {
+    BuildSCVEPD(EPD(unitPTR), loc, building);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [epd]가 [order]을 수행합니다.  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderLocEPD(epd, order, loc: TrgLocation) {
+    __LocOrderBase(epd, order << 8, loc);
+}
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [unitPTR]가 [order]을 수행합니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.loc.ko-KR
+ * 명령을 내릴 위치입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderLoc(unitPTR, order, loc: TrgLocation) {
+    __LocOrderBase(EPD(unitPTR), order << 8, loc);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * 대상 [targetPTR]에게 [unitEPD]가 [order]을 수행합니다.  
+ *
+ * @param.unitEPD.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.targetPTR.ko-KR
+ * 명령의 대상이 될 유닛입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderUnitEPD(unitEPD, order, targetPTR) {
+    bwrite_epd(unitEPD + 0x4D / 4,  1, order);
+    SetMemoryEPD(unitEPD + 0x5C / 4, SetTo, targetPTR);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * 대상 [targetPTR]에게 [unitPTR]가 [order]을 수행합니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.targetPTR.ko-KR
+ * 명령의 대상이 될 유닛입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderUnit(unitPTR, order, targetPTR) {
+    COrderUnitEPD(EPD(unitPTR), order, targetPTR);
+}
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [epd]가 [order]을 수행합니다.  
+ *
+ * @param.epd.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.x.ko-KR
+ * 명령을 내릴 X위치입니다.
+ *
+ * @param.y.ko-KR
+ * 명령을 내릴 Y위치입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderPosEPD(epd, order, x, y) {
+    __PosOrderBase(epd, order << 8, x, y);
+}
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]로 [unitPTR]가 [order]을 수행합니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 명령을 내릴 유닛입니다.
+ *
+ * @param.x.ko-KR
+ * 명령을 내릴 X위치입니다.
+ *
+ * @param.y.ko-KR
+ * 명령을 내릴 Y위치입니다.
+ *
+ * @param.order.ko-KR
+ * 수행할 명령입니다.
+***/
+function COrderPos(unitPTR, order, x, y) {
+    __PosOrderBase(EPD(unitPTR), order << 8, x, y);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [originLoc]를 중심으로 [targetLoc]을 [angle]만큼 회전합니다. 
+ *
+ * @param.targetLoc.ko-KR
+ * 회전 시킬 로케이션입니다.
+ *
+ * @param.originLoc.ko-KR
+ * 중심이 되는 로케이션입니다.
+ *
+ * @param.angle.ko-KR
+ * 회전할 각도입니다.
+***/
+function RotateLocation(targetLoc: TrgLocation, originLoc: TrgLocation, angle) {
+    const locTable = EPD(0x58DC4C);
+    const target = targetLoc * 5;
+    const origin = originLoc * 5;
+    DoActions(list(
+        target.AddNumber(locTable),
+        origin.AddNumber(locTable)
+    ));
+
+    const tx1 = dwread_epd(target);
+    const ox1 = dwread_epd(origin);
+    DoActions(list(
+        target.AddNumber(1),
+        origin.AddNumber(1)
+    ));
+    const ty1 = dwread_epd(target);
+    const oy1 = dwread_epd(origin);
+    DoActions(list(
+        target.AddNumber(1),
+        origin.AddNumber(1)
+    ));
+    const tx2 = dwread_epd(target);
+    const ox2 = dwread_epd(origin);
+    DoActions(list(
+        target.AddNumber(1),
+        origin.AddNumber(1)
+    ));
+    const ty2 = dwread_epd(target);
+    const oy2 = dwread_epd(origin);
+    
+    const tx, ty = (tx1+tx2), (ty1+ty2);
+    const ox, oy = (ox1+ox2), (oy1+oy2);
+    const dx, dy = tx-ox, ty-oy;
+    const theta = atan2(dy, dx);
+    const dx2, dy2 = dx/2, dy/2;
+    const x, y = lengthdir(sqrt(dx2*dx2+dy2*dy2)+1, theta+angle);
+    const rx, ry = x-dx2, y-dy2;
+    dwadd_epd(target, ry);
+    DoActions(target.AddNumber(-1));
+    dwadd_epd(target, rx);
+    DoActions(target.AddNumber(-1));
+    dwadd_epd(target, ry);
+    DoActions(target.AddNumber(-1));
+    dwadd_epd(target, rx);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]의 상태 [flags]를 제거합니다.  
+ *
+ * @param.epd.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.flags.ko-KR
+ * 제거할 상태입니다.
+***/
+function RemoveStatusFlagsEPD(epd, flags /*StatusFlags*/) {
+    epd += 0xDC / 4;
+    SetMemoryXEPD(epd, SetTo, 0, flags);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]의 상태 [flags]를 제거합니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.flags.ko-KR
+ * 제거할 상태입니다.
+***/
+function RemoveStatusFlags(unitPTR, flags /*StatusFlags*/) {
+    RemoveStatusFlagsEPD(EPD(unitPTR), flags);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [Player]의 색을 [Color]로 변경합니다.  
+ *
+ * @param.Player.ko-KR
+ * 대상 플레이어입니다.
+ *
+ * @param.Color.ko-KR
+ * 변경될 색상입니다.
+***/
+function SetPColor(Player: TrgPlayer, Color) {
+    DoActions(Player.AddNumber(0x581DD6));
+    bwrite(Player, Color);
+    //   2 × Player + EPD(0x581D76) = Minimap Color EPD
+    // = 2 ×(Player + 0x581DD6) + 0x3F4F_A2D8
+    // = 2×((Player + 0x581DD6) + 0x1FA7_D16C)
+    VProc(Player, list(
+        Player.AddNumber(0x1FA7D16C),
+        Player.QueueAddTo(Player),
+    ));
+    bwrite_epd(Player, 2, Color);
+}
+
+function __SpawnBase(epd, unit: TrgUnit, newUnit: TrgUnit) {
+    if (
+        MemoryXEPD(epd + 0x64/4, Exactly, unit, 0xFFFF)
+        && MemoryXEPD(epd + 0x4E/4, Exactly, 0, 0xFF0000)
+    ) {
+        SetMemoryXEPD(epd + 0x4D/4, SetTo, (42 << 8) + (1 << 16), 0xFFFF00);
+        SetMemoryXEPD(epd + 0x98/4, SetTo, newUnit, 0xFFFF);
+    }
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]를 [newUnit]으로 Cocoon변태 시킵니다.  
+ *
+ * @param.epd.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function SpawnCocoonEPD(epd, newUnit: TrgUnit) {
+    __SpawnBase(epd, 59, newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]를 [newUnit]으로 Cocoon변태 시킵니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function SpawnCocoon(unitPTR, newUnit: TrgUnit) {
+    __SpawnBase(EPD(unitPTR), 59, newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]를 [newUnit]으로 Egg변태 시킵니다.  
+ *
+ * @param.epd.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function SpawnEggEPD(epd, newUnit: TrgUnit) {
+    __SpawnBase(epd, 36, newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]를 [newUnit]으로 Egg변태 시킵니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function SpawnEgg(unitPTR, newUnit: TrgUnit) {
+    __SpawnBase(EPD(unitPTR), 36, newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]를 [newUnit]으로 Larva변태 시킵니다.  
+ *
+ * @param.epd.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function MorphLarvaEPD(epd, newUnit: TrgUnit) {
+    if (MemoryXEPD(epd + 0x64/4, Exactly, 35, 0xFFFF)) {
+        SetMemoryXEPD(epd + 0x4D/4, SetTo, 42 << 8, 0xFFFF00);
+        SetMemoryXEPD(epd + 0x98/4, SetTo, newUnit, 0xFFFF);
+    }
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]를 [newUnit]으로 Larva변태 시킵니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 변태할 유닛입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 태어날 유닛입니다.
+***/
+function MorphLarva(unitPTR, newUnit: TrgUnit) {
+    MorphLarvaEPD(EPD(unitPTR), newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]에서 [newUnit]을 훈련시킵니다.  
+ *
+ * @param.epd.ko-KR
+ * 훈련되는 건물입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 생성할 유닛입니다.
+***/
+function TrainUnitEPD(epd, newUnit: TrgUnit) {
+    const nU_and_lsh16 = newUnit * 65537;
+    VProc(epd, list(
+        epd.AddNumber(0x98/4),
+        epd.SetDest(EPD(0x6509B0)),
+    ));
+    DoActions(list(
+        SetDeaths(CurrentPlayer, SetTo, nU_and_lsh16, 0),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeaths(CurrentPlayer, SetTo, nU_and_lsh16, 0),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeathsX(CurrentPlayer, SetTo, newUnit, 0, 0xFFFF),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeathsX(CurrentPlayer, SetTo, 38 << 16, 0, 0xFF0000),
+    ));
+    setcurpl2cpcache();
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]에서 [newUnit]을 훈련시킵니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 훈련되는 건물입니다.
+ *
+ * @param.newUnit.ko-KR
+ * 생성할 유닛입니다.
+***/
+function TrainUnit(unitPTR, newUnit: TrgUnit) {
+    TrainUnitEPD(EPD(unitPTR), newUnit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]의 색을 [color]로 바꿉니다.  
+ *
+ * @param.epd.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.color.ko-KR
+ * 변경될 색상입니다.
+***/
+function SetUnitColorEPD(epd, color) {
+    epd += 0x0C/4;
+    const sprite = epdread_epd(epd);
+    DoActions(sprite.AddNumber(0x0A/4));
+    SetMemoryXEPD(sprite, SetTo, color * 65536, 0xFF0000);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]의 색을 [color]로 바꿉니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.color.ko-KR
+ * 변경될 색상입니다.
+***/
+function SetUnitColor(unitPTR, color) {
+    SetUnitColorEPD(EPD(unitPTR), color);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitEPD]에 [location]을 구조오프셋 [CUnitOffsetX], [CUnitOFfsetY]의 값 위치로 보냅니다.  
+ *
+ * @param.unitEPD.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.location.ko-KR
+ * 이동할 로케이션입니다.
+ *
+ * @param.CUnitOffsetX.ko-KR
+ * X좌표로 대입할 구조오프셋입니다.
+ *
+ * @param.CUnitOffsetY.ko-KR
+ * Y좌표로 대입할 구조오프셋입니다.
+***/
+function SetLocationToUnitEPD(location: TrgLocation, unitEPD, CUnitOffsetX, CUnitOffsetY) {
+    if (CUnitOffsetX == CUnitOffsetY) {
+        unitEPD += CUnitOffsetX/4;
+        setloc_epd(location, unitEPD);
+    } else {
+        const x = wread_epd(unitEPD + CUnitOffsetX/4, 0);
+        const y = wread_epd(unitEPD + CUnitOffsetY/4, 2);
+        setloc(location, x, y);
+    }
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]에 [location]을 구조오프셋 [CUnitOffsetX], [CUnitOFfsetY]의 값 위치로 보냅니다.  
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.location.ko-KR
+ * 이동할 로케이션입니다.
+ *
+ * @param.CUnitOffsetX.ko-KR
+ * X좌표로 대입할 구조오프셋입니다.
+ *
+ * @param.CUnitOffsetY.ko-KR
+ * Y좌표로 대입할 구조오프셋입니다.
+***/
+function SetLocationToUnit(location: TrgLocation, unitPTR, CUnitOffsetX, CUnitOffsetY) {
+    SetLocationToUnitEPD(location, EPD(unitPTR), CUnitOffsetX, CUnitOffsetY);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [location]의 좌표를 ([X], [Y])로, 크기를 [width], [height]로 설정합니다.  
+ *
+ * @param.location.ko-KR
+ * 이동할 로케이션입니다.
+ *
+ * @param.X.ko-KR
+ * X좌표입니다.
+ *
+ * @param.Y.ko-KR
+ * Y좌표입니다.
+ *
+ * @param.width.ko-KR
+ * 넓이입니다.
+ *
+ * @param.height.ko-KR
+ * 높이입니다.
+***/
+function SetLocation(location: TrgLocation, X, Y, width, height) {
+    setloc(location, X, Y);
+    dilateloc(location, width/2, height/2);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [Location]의 좌표를 ([X], [Y])만큼 평행이동합니다.  
+ *
+ * @param.location.ko-KR
+ * 이동할 로케이션입니다.
+ *
+ * @param.X.ko-KR
+ * X좌표입니다.
+ *
+ * @param.Y.ko-KR
+ * Y좌표입니다.
+***/
+function EUDMoveLocation(Location: TrgLocation, X, Y) {
+    addloc(Location, X, Y);
+}
+
+// Warning: This function shouldn't be called under desync condition!
+// modified from source: https://cafe.naver.com/edac/91196
+function ScreenShake(x, y, tempLoc: TrgLocation) {
+    // To prevent desync afterward, rand should run for everyone
+    const randX, randY = rand(), rand();
+    if (IsUserCP()) {
+        const SCREEN_X, SCREEN_Y = 0x628448, 0x628470;
+        const rX, rY = (randX % x) - x/2, (randY % y) - y/2;
+        const screenX = dwread(SCREEN_X);
+        const screenY = dwread(SCREEN_Y);
+        VProc(list(rX, rY), list(
+            rX.QueueAddTo(screenX),
+            rY.QueueAddTo(screenY)
+        ));
+        setloc(tempLoc, screenX, screenY);
+        CenterView(64);
+        const chkt = GetChkTokenized();
+        const dim = chkt.getsection("DIM");
+        const mapX, mapY = b2i2(dim) * 16, b2i2(dim, 2) * 16;  // × 32 ÷ 2 (map center)
+        addloc(tempLoc, mapX - dwread(SCREEN_X), mapY - dwread(SCREEN_Y));
+        CenterView(tempLoc);
+    }
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [player]의 [epd]를 부대 [hotkey]의 [slot]으로 지정합니다.  
+ *
+ * @param.player.ko-KR
+ * 대상 플레이어입니다.
+ *
+ * @param.epd.ko-KR
+ * 지정할 유닛입니다.
+ *
+ * @param.hotkey.ko-KR
+ * 부대입니다.
+ *
+ * @param.slot.ko-KR
+ * 슬롯입니다.
+***/
+function hotkeyUnitEPD(epd, player: TrgPlayer, hotkey, slot) {
+    epd += 0xA5 / 4;
+    const tosread_epd = readgen_epd(0xFF00, list(0, py_eval('lambda x: 8*x')));
+    const alphaID = tosread_epd(epd);
+    if (epd == 19025 + 0xA5/4) {
+        DoActions(alphaID.AddNumber(1));
+    } else {
+        const diff = 1701 - (161866 - epd) / 84;
+        VProc(diff, diff.QueueAddTo(alphaID));
+    }
+    SetDeaths(EPD(0x57FE60) + 216 * player + slot, SetTo, alphaID, hotkey);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [player]의 [unitPTR]를 부대 [hotkey]의 [slot]으로 지정합니다.  
+ *
+ * @param.player.ko-KR
+ * 대상 플레이어입니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 지정할 유닛입니다.
+ *
+ * @param.hotkey.ko-KR
+ * 부대입니다.
+ *
+ * @param.slot.ko-KR
+ * 슬롯입니다.
+***/
+function hotkeyUnit(unitPTR, player: TrgPlayer, hotkey, slot) {
+    hotkeyUnitEPD(EPD(unitPTR), player, hotkey, slot);
+}
+
+function __GetLocCoord(loc: TrgLocation) {
+    const loc_epd = loc * 5;
+    DoActions(loc_epd.AddNumber(EPD(0x58DC4C)));
+    const x1 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const y1 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const x2 = dwread_epd(loc_epd);
+    DoActions(loc_epd.AddNumber(1));
+    const y2 = dwread_epd(loc_epd);
+    return x1, y1, x2, y2;
+}
+
+/***
+ * @Type
+ * F
+ * @Summary.ko-KR
+ * [originLoc]로부터 [destLoc]의 동경을 구합니다.  
+ *
+ * @param.originLoc.ko-KR
+ * 대상 로케이션입니다.
+ *
+ * @param.destLoc.ko-KR
+ * 각도를 구할 목표 로케이션입니다.
+***/
+function LocationAngle(originLoc: TrgLocation, destLoc: TrgLocation) {
+    const ox1, oy1, ox2, oy2 = __GetLocCoord(originLoc);
+    const dx1, dy1, dx2, dy2 = __GetLocCoord(destLoc);
+    const x1 = ox1 + ox2;
+    const y1 = oy1 + oy2;
+    const x2 = dx1 + dx2;
+    const y2 = dy1 + dy2;
+    return atan2(x2 - x1, y1 - y2);
+}
+
+// GetAngle and LocationAngle functions are duplicates..
+function GetAngle(originLoc: TrgLocation, destLoc: TrgLocation) {
+    return LocationAngle(originLoc, destLoc);
+}
+
+/***
+ * @Type
+ * F
+ * @Summary.ko-KR
+ * [loc1]로부터 [loc2]가 떨어진 거리를 구합니다.  
+ *
+ * @param.loc1.ko-KR
+ * 대상 로케이션입니다.
+ *
+ * @param.loc2.ko-KR
+ * 거리를 구할 목표 로케이션입니다.
+***/
+function LocationDistance(loc1: TrgLocation, loc2: TrgLocation) {
+    const ox1, oy1, ox2, oy2 = __GetLocCoord(loc1);
+    const dx1, dy1, dx2, dy2 = __GetLocCoord(loc2);
+    const x = dx1 + dx2 - (ox1 + ox2);
+    const y = dy1 + dy2 - (oy1 + oy2);
+    return sqrt(x*x + y*y) / 2;
+}
+
+// LocationDistanceVal actually hasn't written to variable in EE2 TE.
+function LocationDistanceVal(variable, loc1: TrgLocation, loc2: TrgLocation) {
+    return LocationDistance(loc1, loc2);
+}
+
+
+/***
+ * @Type
+ * F
+ * @Summary.ko-KR
+ * [x1], [y1]로부터 [x2], [y2]가 떨어진 거리를 구합니다.  
+ *
+ * @param.x1.ko-KR
+ * x좌표1
+ * 
+ * @param.x2.ko-KR
+ * x좌표2
+ * 
+ * @param.y1.ko-KR
+ * y좌표1
+ * 
+ * @param.y2.ko-KR
+ * y좌표2
+***/
+function Distance(x1, y1, x2, y2) {
+    const x = x2 - x1;
+    const y = y2 - y1;
+    return sqrt(x*x + y*y);
+}
+
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [loc]를 [lenght]만큼 [angle]각도로 이동시킵니다.  
+ *
+ * @param.loc.ko-KR
+ * 이동할 로케이션입니다.
+ *
+ * @param.length.ko-KR
+ * 움직일 거리입니다.
+ *
+ * @param.angle.ko-KR
+ * 이동할 각도입니다.
+***/
+function PolarLocation(loc: TrgLocation, length, angle) {
+    const x, y = lengthdir(length, angle);
+    addloc(loc, x, y);
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitLoc][unitEPD]가 범위 [range]안에서 지면에 [targetLoc][skillOrder]을 사용한 것을 감지합니다. 
+ *
+ * @param.unitLoc.ko-KR
+ * 스킬을 사용한 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitEPD.ko-KR
+ * 스킬을 사용할 유닛입니다.
+ *
+ * @param.range.ko-KR
+ * 스킬을 감지할 범위입니다.
+ *
+ * @param.targetLoc.ko-KR
+ * 스킬이 타격될 위치에 부착될 로케이션입니다.
+ *
+ * @param.skillOrder.ko-KR
+ * 감지할 스킬입니다.
+***/
+function CheckNoneTargetSkillEPD(
+    unitEPD,
+    range,
+    unitLoc: TrgLocation,
+    targetLoc: TrgLocation,
+    skillOrder /*Order*/
+) {
+    unitEPD += 0x4D/4;
+    if (MemoryXEPD(unitEPD, Exactly, skillOrder * 256, 0xFF00)) {
+        unitEPD += -((0x4D - 0x28)/4);
+        const x, y = posread_epd(unitEPD);
+        setloc(unitLoc, x, y);
+        unitEPD += (0x58 - 0x28)/4;
+        setloc_epd(targetLoc, unitEPD);
+
+        if (range > LocationDistance(unitLoc, targetLoc)) {
+            MoveLocation(targetLoc, 227, AllPlayers, targetLoc);
+            unitEPD += -((0x58 - 0x4C)/4);
+            SetMemoryXEPD(unitEPD, SetTo, 0x100, 0xFF00);
+            unitEPD += -((0x4D - 0x10)/4);
+            SetMemoryEPD(unitEPD, SetTo, x + y * 65536);
+            return True;
+        }
+    }
+    return False;
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitLoc][unitPTR]가 범위 [range]안에서 지면에 [targetLoc][skillOrder]을 사용한 것을 감지합니다. 
+ *
+ * @param.unitLoc.ko-KR
+ * 스킬을 사용한 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 스킬을 사용할 유닛입니다.
+ *
+ * @param.range.ko-KR
+ * 스킬을 감지할 범위입니다.
+ *
+ * @param.targetLoc.ko-KR
+ * 스킬이 타격될 위치에 부착될 로케이션입니다.
+ *
+ * @param.skillOrder.ko-KR
+ * 감지할 스킬입니다.
+***/
+function CheckNoneTargetSkill(
+    unitPTR,
+    range,
+    unitLoc: TrgLocation,
+    targetLoc: TrgLocation,
+    skillOrder /*Order*/
+) {
+    return CheckNoneTargetSkillEPD(
+        EPD(unitPTR),
+        range,
+        unitLoc,
+        targetLoc,
+        skillOrder /*Order*/
+    );
+}
+
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [location]을 [unitEPD]에게 구조오프셋 [posX]으로 부착합니다.
+ *
+ * @param.location.ko-KR
+ * 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitEPD.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.posX.ko-KR
+ * 부착될 위치를 결정하는 구조오프셋입니다.
+***/
+function SetLocationToUnitSafeEPD(location: TrgLocation, unitEPD, posX) {
+    unitEPD += posX/4;
+    setloc_epd(location, unitEPD);
+}
+
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [location]을 [unitPTR]에게 구조오프셋 [posX]으로 부착합니다.
+ *
+ * @param.location.ko-KR
+ * 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.posX.ko-KR
+ * 부착될 위치를 결정하는 구조오프셋입니다.
+***/
+function SetLocationToUnitSafe(location: TrgLocation, unitPTR, posX) {
+    SetLocationToUnitSafeEPD(location, EPD(unitPTR), posX);
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitLoc][unitEPD]가 범위 [range]안에서 일정한 대상에게 [targetLoc][skillOrder]을 사용한 것을 감지합니다. 
+ *
+ * @param.unitLoc.ko-KR
+ * 스킬을 사용한 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitEPD.ko-KR
+ * 스킬을 사용할 유닛입니다.
+ *
+ * @param.range.ko-KR
+ * 스킬을 감지할 범위입니다.
+ *
+ * @param.targetLoc.ko-KR
+ * 스킬이 타격될 위치에 부착될 로케이션입니다.
+ *
+ * @param.skillOrder.ko-KR
+ * 감지할 스킬입니다.
+***/
+function CheckTargetSkillEPD(
+    unitEPD,
+    range,
+    unitLoc: TrgLocation,
+    targetLoc: TrgLocation,
+    skillOrder
+) {
+    unitEPD += 19;  // 0x4D orderID
+    if (MemoryXEPD(unitEPD, Exactly, skillOrder * 256, 0xFF00)) {
+        unitEPD += 4;  // 0x5C orderTargetUnit
+        if (MemoryEPD(unitEPD, Exactly, 0)) return False;
+        unitEPD -= 1;  // 0x58 orderTargetPos
+        const tx, ty = posread_epd(unitEPD);
+        unitEPD -= 12;  // 0x28 position
+        const x, y = posread_epd(unitEPD);
+        const dx, dy = tx - x, ty - y;
+        if (dx*dx + dy*dy < range*range) {
+            setloc(unitLoc, x, y);
+            setloc(targetLoc, tx, ty);
+            DoActions(list(
+                unitEPD.SubtractNumber(6),  // 0x10 moveTarget
+                RemoveUnitAt(1, 101, 255, P9),
+            ));
+            SetMemoryEPD(unitEPD, SetTo, x + y * 65536);
+            //unitEPD += 9;  // 0x4D orderID
+            unitEPD += 15;  // 0x4D orderID
+            SetMemoryXEPD(unitEPD, SetTo, 0x100, 0xFF00);
+            return True;
+        }
+    }
+    return False;
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitLoc][unitPTR]가 범위 [range]안에서 일정한 대상에게 [targetLoc][skillOrder]을 사용한 것을 감지합니다. 
+ *
+ * @param.unitLoc.ko-KR
+ * 스킬을 사용한 유닛에게 부착될 로케이션입니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 스킬을 사용할 유닛입니다.
+ *
+ * @param.range.ko-KR
+ * 스킬을 감지할 범위입니다.
+ *
+ * @param.targetLoc.ko-KR
+ * 스킬이 타격될 위치에 부착될 로케이션입니다.
+ *
+ * @param.skillOrder.ko-KR
+ * 감지할 스킬입니다.
+***/
+function CheckTargetSkill(
+    unitPTR,
+    range,
+    unitLoc: TrgLocation,
+    targetLoc: TrgLocation,
+    skillOrder
+) {
+    return CheckTargetSkillEPD(EPD(unitPTR), range, unitLoc, targetLoc, skillOrder);
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitEPD]가 [location]에 존재하는지 판단합니다. [dummyUnit]
+ *
+ * @param.unitEPD.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.location.ko-KR
+ * 대상 로케이션입니다.
+ *
+ * @param.dummyUnit.ko-KR
+ * Bring을 위해 잠시 변경할 유닛ID입니다. 사용하지 않는 UnitID를 사용하세요.
+***/
+function CBringEPD(unitEPD, location: TrgLocation, dummyUnit: TrgUnit) {
+    MoveLocation(location, dummyUnit, AllPlayers, location);
+    const unitType = unitEPD + 0x64/4;
+    const originalUnitType = wread_epd(unitType, 0);
+    SetMemoryXEPD(unitType, SetTo, dummyUnit, 0xFFFF);
+    const ret = l2v(Bring(AllPlayers, AtLeast, 1, dummyUnit, location));
+    SetMemoryXEPD(unitType, SetTo, originalUnitType, 0xFFFF);
+    return ret;
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitPTR]가 [location]에 존재하는지 판단합니다. [dummyUnit]
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.location.ko-KR
+ * 대상 로케이션입니다.
+ *
+ * @param.dummyUnit.ko-KR
+ * Bring을 위해 잠시 변경할 유닛ID입니다. 사용하지 않는 UnitID를 사용하세요.
+***/
+function CBring(unitPTR, location: TrgLocation, dummyUnit: TrgUnit) {
+    return CBringEPD(EPD(unitPTR), location, dummyUnit);
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitEPD]의 생산대기열을 초기화합니다.
+ *
+ * @param.unitEPD.ko-KR
+ * 대상 유닛입니다.
+***/
+function BuildResetEPD(unitEPD) {
+    VProc(unitEPD, list(
+        unitEPD.AddNumber(0x98/4),
+        unitEPD.SetDest(EPD(0x6509B0)),
+    ));
+    setcurpl2cpcache(actions=list(
+        SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeaths(CurrentPlayer, SetTo, 0xE400E4, 0),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeathsX(CurrentPlayer, SetTo, 228, 0, 0xFFFF),
+        SetMemory(0x6509B0, Add, 1),
+        SetDeathsX(CurrentPlayer, SetTo, 2 << 16, 0, 0xFFFF0000),
+    ));
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitPTR]의 생산대기열을 초기화합니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+***/
+function BuildReset(unitPTR) {
+    BuildResetEPD(EPD(unitPTR));
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitEPD]가 [unit]을 생산중인지 확인합니다..
+ *
+ * @param.unitEPD.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.unit.ko-KR
+ * 확인할 유닛입니다.
+***/
+function BuildCheckEPD(unitEPD, unit: TrgUnit) {
+    unitEPD += 0x98 / 4;  // buildQueue
+    if (MemoryXEPD(unitEPD, Exactly, unit, 0xFFFF)) {
+        return True;
+    } else {
+        const mulUnit = unit * 65536;
+        if (MemoryXEPD(unitEPD, Exactly, mulUnit, 0xFFFF0000)) {
+            return True;
+        } else {
+            unitEPD += 1;
+            if (MemoryXEPD(unitEPD, Exactly, unit, 0xFFFF)) {
+                return True;
+            } else if (MemoryXEPD(unitEPD, Exactly, mulUnit, 0xFFFF0000)) {
+                return True;
+            } else {
+                unitEPD += 1;
+                if (MemoryXEPD(unitEPD, Exactly, unit, 0xFFFF)) {
+                    return True;
+                }
+            }
+        }
+    }
+    return False;
+}
+
+/***
+ * @Type
+ * C
+ * @Summary.ko-KR
+ * [unitPTR]가 [unit]을 생산중인지 확인합니다..
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.unit.ko-KR
+ * 확인할 유닛입니다.
+***/
+function BuildCheck(unitPTR, unit: TrgUnit) {
+    return BuildCheckEPD(EPD(unitPTR), unit);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [player]의 [attackLoc]에서 [attackUnit]이 생산되어 [targetLoc]에서 생산된 [targetUnit]을 공격합니다.
+ *
+ * @param.player.ko-KR
+ * 대상 플레이어입니다.
+ *
+ * @param.attackLoc.ko-KR
+ * 공격 유닛이 생산될 로케이션입니다.
+ *
+ * @param.targetLoc.ko-KR
+ * 피격 유닛이 생산될 로케이션입니다.
+ *
+ * @param.attackUnit.ko-KR
+ * 공격 유닛입니다.
+ *
+ * @param.targetUnit.ko-KR
+ * 피격 유닛입니다.
+***/
+function AttackGround(
+    attackLoc: TrgLocation,
+    targetLoc: TrgLocation,
+    attackUnit: TrgUnit,
+    targetUnit: TrgUnit,
+    player: TrgPlayer
+) {
+    if (Memory(0x628438, Exactly, 0)) return;  // avoid EUDError when CCMU
+    const aUnit = cunitepdread_epd(EPD(0x628438))[[1]];
+    CreateUnit(1, attackUnit, attackLoc, player);
+    DoActions(aUnit.AddNumber(0x110 / 4));
+    SetMemoryEPD(aUnit, Add, 2);  // aUnit + 0x110 (CUnit::removeTimer)
+
+    if (Memory(0x628438, Exactly, 0)) return;  // avoid EUDError when CCMU
+    const tunitptr, tunit = cunitepdread_epd(EPD(0x628438));
+    CreateUnit(1, targetUnit, targetLoc, player);
+    DoActions(list(
+        tunit.AddNumber(0x110 / 4),
+        aUnit.AddNumber(-((0x110 - 0x5C) / 4))
+    ));
+    SetMemoryEPD(aUnit, SetTo, tunitptr);  // aUnit + 0x5C (CUnit::targetUnit)
+    SetMemoryEPD(tunit, Add, 2);  // tunit + 0x110 (CUnit::removeTimer)
+
+    DoActions(aUnit.AddNumber(-((0x5C - 0x4C) / 4)));
+    SetMemoryXEPD(aUnit, SetTo, 0xA00, 0xFF00);  // order[10]=attack, 0x4D (CUnit::order)
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [epd]의 상태 [flags]를 활성화합니다.
+ *
+ * @param.epd.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.flags.ko-KR
+ * 활성화할 상태입니다.
+***/
+function AddStatusFlagsEPD(epd, flags /*StatusFlags*/) {
+    epd += 0xDC / 4;
+    SetMemoryXEPD(epd, SetTo, ~0, flags);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [unitPTR]의 상태 [flags]를 활성화합니다.
+ *
+ * @param.unitPTR.ko-KR
+ * 대상 유닛입니다.
+ *
+ * @param.flags.ko-KR
+ * 활성화할 상태입니다.
+***/
+function AddStatusFlags(unitPTR, flags /*StatusFlags*/) {
+    unitPTR += 0xDC;
+    SetMemoryX(unitPTR, SetTo, ~0, flags);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [location]의 넓이를 ([width], [height])만큼 넓힙니다.
+ *
+ * @param.location.ko-KR
+ * 대상 로케이션입니다.
+ *
+ * @param.width.ko-KR
+ * 늘어날 넓이입니다.
+ *
+ * @param.height.ko-KR
+ * 늘어날 높이입니다.
+***/
+function AddSizeLocation(location: TrgLocation, width, height) {
+    dilateloc(location, width, height);
+}
+
+/***
+ * @Type
+ * A
+ * @Summary.ko-KR
+ * [ptr]의 소유권을 [NewOwner]에게 넘깁니다..
+ *
+ * @param.ptr.ko-KR
+ * 유닛의 포인터입니다.
+ *
+ * @param.NewOwner.ko-KR
+ * 플레이어 입니다.
+***/
+function CGive(ptr ,NewOwner: TrgPlayer) {
+    const epd = EPD(ptr);
+    const player = epd + 0x4C / 4;
+    const Owner = bread_epd(player, 0);
+    SetMemoryXEPD(player, SetTo, NewOwner, 0xFF);
+    const prv, nxt = epd + 0x68 / 4, epd + 0x6C / 4;
+    const prev_ptr, prev_epd = cunitepdread_epd(prv);
+    const next_ptr, next_epd = cunitepdread_epd(nxt);
+    if(prev_ptr >= 0x59CCA8) {
+        dwwrite_epd(prev_epd + 0x6C / 4, next_ptr);
+    } else {
+        dwwrite_epd(EPD(0x6283F8) + Owner, next_ptr);
+    }
+    if(next_ptr >= 0x59CCA8) {
+        dwwrite_epd(next_epd + 0x68 / 4, prev_ptr);
+    }
+    const NewHeader = EPD(0x6283F8) + NewOwner;
+    if(MemoryEPD(NewHeader, AtLeast, 0x59CCA8)) {
+        const NewPrevPtr, NewPrevEPD = cunitepdread_epd(NewHeader);
+        const NewPrev_nxt = NewPrevEPD + 0x6C / 4;
+        const NewNextPtr, NewNextEPD = cunitepdread_epd(NewPrev_nxt);
+        dwwrite_epd(NewPrev_nxt, ptr);
+        dwwrite_epd(prv, NewPrevPtr);
+        dwwrite_epd(nxt, NewNextPtr);
+        if(NewNextPtr >= 0x59CCA8) {
+            dwwrite_epd(NewNextEPD + 0x68 / 4, ptr);
+        }
+    } else {
+        dwwrite_epd(NewHeader, ptr);
+        dwwrite_epd(prv, 0);
+        dwwrite_epd(nxt, 0);
+    }
+}

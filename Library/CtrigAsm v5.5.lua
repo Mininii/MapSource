@@ -13486,7 +13486,11 @@ function TMemoryX(Offset,Type,Value,Mask)
 end
 
 function TSetMemoryX(Offset,Type,Value,Mask)
-	if Value == nil or Mask == nil then
+	-- Mask 는 nil 이어도 된다. 끝에서 부르는 SetCtrig1X/SetCtrig2X/SetCtrigX 는 Mask == nil 을
+	-- "마스크 없음 = dword 전체 쓰기" 로 받는다(SetCtrig1X 의 Mflag2 = 0). TSetCDeaths /
+	-- TSetNDeaths 가 바로 그렇게 Mask 없이 부른다. 2026-09-05 에 Mask 까지 nil 검사를 넣었더니
+	-- SetCD(코드, 변수) 를 쓰는 맵(MSF_UE_RE CallTriggers.lua:1027)이 컴파일되지 않았다.
+	if Value == nil then
 		TSetMemoryX_InputData_Error()
 	end
 	local PushLine = 0

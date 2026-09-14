@@ -1,0 +1,19 @@
+import py_pathlib;const bgmlen = [];
+const str = StringBuffer();
+function PlayOGG(bgmindex ,bgmcode, track){
+    SetMemoryEPD(str.epd, SetTo, bgmcode);
+    SetMemoryEPD(str.epd + 1, SetTo, track);
+    str.Play();
+
+    if (MemoryEPD(EPD(bgmlen) + bgmindex, Exactly, track)){
+        return 0;
+    }else{
+        return 1;
+    }
+}
+function loadSound(){
+EUDPlayerLoop()();
+    str.insert(0, '');
+    str.append('@@@@@@@@');
+EUDEndPlayerLoop();
+}

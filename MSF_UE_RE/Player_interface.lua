@@ -74,7 +74,7 @@ function PlayerInterface()
 
 	local InsertKey = {}
 	InsertKey[1] = "\x13\x04이 맵은 각 플레이마다 \x0710레벨 단위로 플레이가 가능하며 \n\x13\x08게임 종료 \x04이후 \x1F다음 게임\x04에서 \x07이어하기\x04를 통한 도전이 가능합니다.\n\x13\x04당신의 한계를 시험해 보세요! \x07이론적으로 제한 없는 단계와 업그레이드\x04를 제공합니다.\n\x13\x04255 업그레이드 완료 시 \x1F0으로 리셋 후 마린 공격력이 그대로 전승됩니다.\n\x13\x04Normal Marine + \x1F25000 Ore \x04= \x1FExCeed Marine\n\x13\x04조합소는 중앙 수정 광산이 있는곳으로 가시면 됩니다.\n\x13\x04PgUp, PgDn 키로 설명서 페이지를 바꿀 수 있습니다.\n\x13\x04――――――――――――――――――――――――― Page 1/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
-	InsertKey[2] = "\x13\x04\x1CSCArchive \x04설명 (문의는 마공카를 찾아주세요.)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 보조 아이템을 사용할 수 있습니다.\n\x13\x07단, \x0F32Bit 환경 \x04스타크래프트에서만 이용하실 수 있으며\n\x13\x07 데이터 로드는 \x1D게임 시작 전\x04에만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
+	InsertKey[2] = "\x13\x04\x1CSCR_DB \x04설명 (SCA 를 대신하는 오프라인 저장)\n\x13\x04현재 저장가능 데이터는 \x11최고기록(Level, Score)\x04과 \x19스탯 포인트 \x04입니다. 그외 \x08저장 불가능합니다.\n\x13\x04스탯 포인트로 다양한 보조 아이템을 사용할 수 있습니다.\n\x13\x07단, \x0FSCR_DB 런처\x04를 켜 두어야 저장과 불러오기가 되며\n\x13\x07 데이터 로드는 \x1D게임 시작 전\x04에만 가능합니다.\n\x13\x04데이터를 불러오지 못했다면 게임 재시작을 권장드립니다.\n\x13\x07데이터 저장\x04은 매 스테이지 클리어마다 \x07자동저장됩니다. \x04또는 \x18수동저장 \x04가능합니다.\n\x13\x04――――――――――――――――――――――――― Page 2/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	InsertKey[3] = "\n\n\n\n\x13\x07구버전 데이터 관련 설명\n\x13\x04구버전의 스탯포인트는 \x1F크리스탈\x04에서 확인 가능하며 환전률은 1:"..P_ExcOldP.." 입니다. \n\x13\x04@칭호 1, 2, 3, 4 등의 명령어로 구버전 레벨, 권한에 따라 부여되는 칭호를 사용할 수 있습니다.\n\x13\x04자세한 칭호 부여 레벨 목록은 마공카에서 확인해주시기 바랍니다.\n\x13\x04――――――――――――――――――――――――― Page 3/3 ―――――――――――――――――――――――――\n\x13\x17ＣＬＯＳＥ　：　ＤＥＬＥＴＥ　ＫＥＹ"
 	local InsertPage = CreateCcode()
 	local KeyToggle = CreateCcode()
@@ -215,6 +215,8 @@ function PlayerInterface()
 	for i = 0, 6 do -- 각플레이어
 		DoActions(FP,SetMemory(0x6509B0,SetTo,i)) -- CP 복구 
 		Trigger2(i, {Switch("Switch 242",Set);Deaths(i,Exactly,0,18)}, {SetDeaths(i, SetTo, 1, 18)}) -- 게임 시작시 레벨0일경우 1로 변경
+		--[==[ [SCR_DB] 데이터 조작 방지(비정상 값 판정 -> BanFlag(데스 149) -> 강퇴)라 이번 버전에서 뺐다.
+		-- 저장 목록에서도 BanFlag 를 뺐다(SCR_DB_MSF.lua). 호스트의 강퇴 기능(BanToken)은 그대로다.
 		Trigger2(i, {Deaths(i,AtLeast,10000000,35)}, {SetDeaths(i, SetTo, 1, 149)}) -- 스탯십만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,10000,6)}, {SetDeaths(i, SetTo, 1, 149)}) -- 구레벨 1만이상 = 비정상 데이터
 		Trigger2(i, {Deaths(i,AtLeast,LvLimit+10,18)}, {SetDeaths(i, SetTo, 1, 149)}) -- 맵 맥스레벨+10 = 비정상 데이터
@@ -228,6 +230,7 @@ function PlayerInterface()
 			SetCtrigX("X",0xFFFD,0x4,0,SetTo,"X",0xFFFD,0x0,0,1); -- ExitDrop
 			SetMemory(0xCDDDCDDC,SetTo,1);
 		})
+		]==]
 		if i ~= 0 then --강퇴트리거는 1플레이어 제외
 		
 		Trigger { -- 강퇴
