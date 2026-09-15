@@ -1,33 +1,29 @@
 #!/usr/bin/env python3
-"""MSF_UE_RE 를 SCR_DB 판(오프라인 세이브)으로 빌드한다. SCMDraft·EUD Editor GUI 없이.
+"""MSF_UE_RE 를 SCR_DB 판(오프라인 세이브)으로 빌드한다. SCMDraft·EUD Editor 3 없이, e3s 도 쓰지 않는다.
 
     build.bat                                          # 더블클릭 = 아래 첫 줄
     python MSF_UE_RE\\tools\\build_scrdb.py            # tepc -> euddraft(+음원) -> CPLP
-    python MSF_UE_RE\\tools\\build_scrdb.py --regen    # e3s 에서 build/ 를 다시 만든 뒤 빌드
     python MSF_UE_RE\\tools\\build_scrdb.py --tepc-only
     python MSF_UE_RE\\tools\\split_map.py              # 원본 맵 -> 기본 맵 + 음원 폴더 (맵을 고쳤을 때)
 
-입력
-  MSF_UE_RE_base.scx                  지형·유닛·로케이션. 음원을 뺀 chk 하나짜리 (split_map.py 가 만든다)
+입력 (전부 이 폴더 안이다. 예전에 EUD Editor 3 가 e3s 에서 만들던 build/ 폴더는 2026-09-15 에 없앴다)
+  MSF_UE_RE_base.scx      지형·유닛·로케이션. 음원을 뺀 chk 하나짜리 (split_map.py 가 만든다)
+  main.lua + *.lua        트리거. EUD Editor 가 하던 dat 패치·버튼셋·요구사항·와이어프레임도 여기 있다
+                          (EUDEditorPort.lua 상단 표)
+  stat_txt.tbl            영어 원본. EUDEditorStatTxt.lua 의 편집분을 tepc 컴파일 중에 합쳐
+                          C:\\euddraft0.9.2.0\\MSF_UE_RE_stat_txt.tbl 로 쓴다 (WriteStatTxtTbl)
+  main_scrdb.eps          TE 메인 (칭호·기부 채팅). PluginVariables.py 와 같이 TriggerEditor\\ 에 싣는다
+  eds_template.eds        euddraft 설정. {{...}} 자리를 이 스크립트가 채운다 (경로, SCR_DB MSQC 채널, 음원)
   C:\\euddraft0.9.2.0\\MSF_UE_RE_BGM\\  음원. MSF_UE_RE_BGMInput.py 가 euddraft 단계에서 넣는다
-                                      (theSeed 의 theSeed_BGM + theSeed_BGMInput.py 와 같은 짝)
 단계
-  0. (--regen 이거나 build/ 가 없으면) EudGen: MSF_UE_RE.e3s -> build/eudplibData
-     EUD Editor 3 의 생성기를 GUI 없이 돌린다(tools/EudGenMsf.cs). SCA 를 끄고 TE 메인 파일을
-     main_scrdb.eps 로 바꾼다. e3s 는 건드리지 않는다.
-  1. tepc: 기본 맵에 main.lua 를 컴파일 -> 1단계 맵(작업 폴더).
-     트리거 본체는 C:\\euddraft0.9.2.0\\Ctemp 의 TRIGP*.chk 로 가고 euddraft 가 넣는다.
-  2. euddraft: build/eudplibData/EUDEditor.eds 를 이 빌드에 맞게 고쳐서 돌린다 -> 최종 맵.
-     입출력 경로, STRCtrig 어셈블러 v5.4 -> v5.5(라이브러리가 v5.5), SCR_DB 전용 MSQC 채널 8줄,
-     음원 플러그인, [CPLP]. 끝나면 음원이 전부 들어갔는지 맵을 열어 바이트까지 확인한다.
+  1. tepc: 기본 맵에 main.lua 를 컴파일 -> 1단계 맵(작업 폴더). 트리거 본체는 C:\\euddraft0.9.2.0\\Ctemp 의
+     TRIGP*.chk 로 가고 euddraft 가 넣는다. stat_txt 합본과 SCR_DB 매니페스트도 이때 써진다.
+  2. euddraft: 작업 폴더에 eds 와 TE 파일을 차려 놓고 돌린다 -> 최종 맵. 끝나면 음원이 전부 들어갔는지
+     맵을 열어 바이트까지 확인한다.
   3. CPLP: 최종 맵을 보호해서 *_out.scx 를 만든다 (DPS 와 같다. eds 가 freeze: 0 이라 호환).
   끝나면 매니페스트를 런처 배포본이 모으는 곳(DPS_Enhance/tools/manifests)에도 넣는다.
-
-예전 GUI 빌드는 SCMDraft(TEP) -> CS_STRConverter -> EUD Editor 3 였다. tepc 는 cflag 1 에서 STRx 로
-쓰므로 CS_STRConverter 는 필요 없다 (이 흐름으로 만든 맵이 인게임에서 돌았다).
 """
 import argparse
-import glob
 import json
 import os
 import re
@@ -44,10 +40,6 @@ import mpq  # noqa: E402
 MSF = os.path.dirname(HERE)
 MAPSOURCE = os.path.dirname(MSF)
 DOCS = os.path.dirname(MAPSOURCE)
-BUILD = os.path.join(MSF, "build")
-E3S = os.path.join(MSF, "MSF_UE_RE.e3s")
-MAIN_EPS = os.path.join(MSF, "main_scrdb.eps")
-EUD_EDITOR = r"C:\Users\USER\Desktop\EUD.Editor.3.0.19.6.0"
 EUDDIR = r"C:\euddraft0.9.2.0"
 EUDDRAFT = os.path.join(EUDDIR, "euddraft.exe")
 CPLP = os.path.join(EUDDIR, "CustomPlibLockProtector.exe")
@@ -59,18 +51,20 @@ BASEMAP = os.path.join(MSF, "MSF_UE_RE_base.scx")
 BGM_DIR = os.path.join(EUDDIR, "MSF_UE_RE_BGM")
 BGM_MODULE = os.path.join(MSF, "MSF_UE_RE_BGMInput.py")
 SOUND_EXT = (".ogg", ".wav")
+EDS_TEMPLATE = os.path.join(MSF, "eds_template.eds")
+TE_MAIN = os.path.join(MSF, "main_scrdb.eps")               # -> TriggerEditor\main.eps
+TE_VARS = os.path.join(MSF, "PluginVariables.py")           # main.eps 가 import 한다 (VChatIndex)
 FINAL = r"C:\Program Files (x86)\StarCraft\Maps\마린키우기_UnLimit_ExceeD_SCR_DB.scx"
 FINAL_OUT = FINAL[:-4] + "_out.scx"      # CPLP 가 새로 쓰는 보호판 = 실제로 플레이할 맵
 TEPC = os.path.join(DOCS, "theSeed", "tools", "tepc_20260905.exe")
-STAT = os.path.join(DOCS, "theSeed", "stat_txt.tbl")
+# tepc 가 유닛 이름을 읽는 영어 원본이자 WriteStatTxtTbl() 의 베이스
+STAT = os.path.join(MSF, "stat_txt.tbl")
+# WriteStatTxtTbl() 이 컴파일 중에 쓰는 합본 (EUDEditorPort.lua 의 StatTxtOutFile 과 같아야 한다)
+STAT_TXT_OUT = os.path.join(EUDDIR, "MSF_UE_RE_stat_txt.tbl")
 MANIFEST = r"C:\Temp\SCR_DB_manifest_MSF_UE_RE.json"
 # SCR_DB MSQC 워드의 최댓값 (레이아웃 7: 토글 비트 18/19 + 꼬리표 16/17 + 페이로드 16비트 = 20비트)
 SCRDB_WORD_MAX = 0xFFFFF
 LAUNCHER_MANIFESTS = os.path.join(DOCS, "DPS_Enhance", "tools", "manifests")
-# EUD Editor 가 GUI 빌드 때 build 폴더로 복사해 넣는 TE 라이브러리. SCA 것은 쓰지 않는다.
-TE_LIB = os.path.join(EUD_EDITOR, "Data", "TriggerEditor")
-SCA_LIBS = {"SCArchive", "SCATool", "SCAFastLoader", "SCAScript", "SCAScriptReturn",
-            "SCALuaWrapper", "SCAWrapper"}
 
 
 def lua_str(s):
@@ -97,46 +91,15 @@ def bgm_files():
 def preflight(tepc_only):
     """빌드 전에 없으면 안 되는 것들. 빠진 것을 문장 목록으로 돌려준다."""
     need = [(BASEMAP, "기본 맵 (python tools\\split_map.py 로 원본에서 만든다)"),
-            (TEPC, "tepc"), (STAT, "stat_txt.tbl")]
+            (TEPC, "tepc"), (STAT, "stat_txt.tbl (영어 원본)")]
     if not tepc_only:
         need += [(EUDDRAFT, "euddraft"), (CPLP, "CustomPlibLockProtector.exe"),
-                 (CPLP_PLUGIN, "euddraft 의 [CPLP] 플러그인"), (BGM_MODULE, "음원 플러그인")]
+                 (CPLP_PLUGIN, "euddraft 의 [CPLP] 플러그인"), (BGM_MODULE, "음원 플러그인"),
+                 (EDS_TEMPLATE, "eds 틀"), (TE_MAIN, "TE 메인 eps"), (TE_VARS, "PluginVariables.py")]
     missing = ["%s 가 없다: %s" % (what, p) for p, what in need if not os.path.isfile(p)]
     if not tepc_only and not bgm_files():
         missing.append("음원 폴더가 없거나 비었다: %s (python tools\\split_map.py)" % BGM_DIR)
     return missing
-
-
-def regen():
-    """e3s -> build/ (eudplibData + temp). EUD Editor 3 이 이 PC 에 있어야 한다."""
-    out = os.path.join(os.environ.get("TEMP", "."), "msf_eudgen")
-    shutil.rmtree(out, ignore_errors=True)
-    os.makedirs(out)
-    cmd = ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
-           os.path.join(HERE, "run_eudgen.ps1"),
-           "-EudDir", EUD_EDITOR, "-E3s", E3S, "-Out", out, "-MainEps", MAIN_EPS,
-           "-Open", BASEMAP, "-Save", os.path.join(EUDDIR, "MSF_UE_RE_eudgen.scx")]
-    print("=== 0. EudGen (e3s -> eudplibData)")
-    r = subprocess.run(cmd, capture_output=True, timeout=600)
-    print(decode(r.stdout + r.stderr).rstrip())
-    found = glob.glob(os.path.join(out, "**", "EUDEditor.eds"), recursive=True)
-    if not found:
-        raise SystemExit("EudGen 이 EUDEditor.eds 를 만들지 못했다 (위 로그 참고)")
-    src = os.path.dirname(os.path.dirname(found[0]))      # .../BuildData_x (eudplibData 의 부모)
-    shutil.rmtree(BUILD, ignore_errors=True)
-    shutil.copytree(src, BUILD, ignore=shutil.ignore_patterns("*.dll"))
-    dst = os.path.join(BUILD, "eudplibData", "TriggerEditor", "TriggerEditor")
-    os.makedirs(dst, exist_ok=True)
-    copied = []
-    for p in sorted(glob.glob(os.path.join(TE_LIB, "*"))):
-        stem = os.path.splitext(os.path.basename(p))[0]
-        if os.path.isfile(p) and stem not in SCA_LIBS:
-            shutil.copy2(p, os.path.join(dst, os.path.basename(p)))
-            copied.append(os.path.basename(p))
-    print("  build/ 새로 채움 (%s). TE 라이브러리 %d개: %s" % (src, len(copied), ", ".join(copied)))
-    scaflex = os.path.join(BUILD, "eudplibData", "TriggerEditor", "SCAFlexible.eps")
-    if os.path.isfile(scaflex) and os.path.getsize(scaflex) == 0:
-        os.remove(scaflex)                             # SCA 를 껐으니 쓰이지 않는 빈 파일
 
 
 def scmd_unit_names():
@@ -205,55 +168,58 @@ def read_manifest(since):
         return json.load(f)
 
 
-def write_eds(src, dst, doc, stage1):
-    """EUD Editor 가 만든 eds 를 이 빌드에 맞게 고친다."""
+def check_stat_txt(since):
+    """WriteStatTxtTbl() 이 이번 컴파일에서 합본을 썼는지. 낡은 파일이 남아 있으면 그걸 싣게 되므로 멈춘다."""
+    if not os.path.isfile(STAT_TXT_OUT) or os.path.getmtime(STAT_TXT_OUT) < since:
+        raise SystemExit("이번 컴파일이 stat_txt 합본을 쓰지 않았다: %s (EUDEditorPort.lua 의 WriteStatTxtTbl)"
+                         % STAT_TXT_OUT)
+    d = open(STAT_TXT_OUT, "rb").read()
+    n = struct.unpack_from("<H", d, 0)[0]
+    print("  stat_txt 합본: %d줄, %d바이트 -> %s" % (n, len(d), STAT_TXT_OUT))
+
+
+def write_eds(dst, doc, stage1):
+    """eds_template.eds 의 {{...}} 자리를 채운다."""
     addr, death, ch = doc["msqc_addr"], doc["msqc_death"], doc["msqc_channels"]
     msqc = ["Memory(0x%X,AtLeast,1);val, 0x%X: %d" % (addr + 4 * k, addr + 4 * k, death + k)
             for k in range(ch)]
-    with open(src, "r", encoding="utf-8", errors="replace") as f:
-        lines = f.read().splitlines()
-    out, section, injected = [], "", False
-    for ln in lines:
-        low = ln.strip().lower()
-        if low.startswith("[") and low.endswith("]"):
-            # [MSQC] 를 빠져나가기 직전에 붙인다. 원래 있던 키 바인딩·val 줄은 건드리지 않는다.
-            if section == "[msqc]" and not injected:
-                out.extend(msqc)
-                injected = True
-            section = low
-            if low.startswith("[strctrig assembler v5.4]"):
-                # 라이브러리(CtrigAsm v5.5)가 만드는 TRIGP 청크는 v5.5 어셈블러가 읽는다.
-                out.append("[STRCtrig Assembler v5.5]")
-                continue
-        if section.startswith("[strctrig assembler") and low.startswith("path"):
-            # tepc 는 TRIGP*.chk 를 <맵 디렉터리>\Ctemp 에 쓰고 v5.5 어셈블러는 Path + 파일명으로 읽는다
-            # (DPS 의 eds 와 같다). e3s 의 Path 는 v5.4 시절 값(euddraft 폴더 바로 아래)이라, 그대로
-            # 두면 그 자리에 남아 있던 2024년 TRIGP 파일을 읽거나 못 찾는다.
-            out.append("Path : %s\\Ctemp\\" % EUDDIR)
-            continue
-        if low.startswith("input:"):
-            out.append("input: " + stage1)
-            continue
-        if low.startswith("output:"):
-            out.append("output: " + FINAL)
-            continue
-        out.append(ln)
-    if section == "[msqc]" and not injected:
-        out.extend(msqc)
-        injected = True
-    if not injected:
-        raise SystemExit("eds 에 [MSQC] 섹션이 없다")
-    # 음원 플러그인(main 이 eds 옆에 복사해 둔다)과 CPLP. 둘 다 e3s 가 만든 eds 에는 없던 섹션이다.
-    out += ["[%s]" % os.path.basename(BGM_MODULE), "Path : %s\\" % BGM_DIR]
-    if not any(l.strip().lower() == "[cplp]" for l in out):
-        out.append("[CPLP]")
-    leftovers = [l for l in out if re.search(r"scarchive|scaflexible|scatool", l, re.I)]
-    if leftovers:
-        raise SystemExit("eds 에 SCA 흔적이 남았다: %s" % leftovers[:3])
+    with open(EDS_TEMPLATE, "r", encoding="utf-8") as f:
+        text = f.read()
+    fill = {
+        "INPUT": stage1,
+        "OUTPUT": FINAL,
+        # eds 의 "키 : 값" 줄은 콜론에서 나뉘어 C:\... 를 못 쓴다 (dataDumper 가 'C' 라는 파일을 찾는다).
+        # stage_euddraft 가 eds 옆에 복사해 둔 이름만 쓴다 - 예전 EUD Editor eds 의 ..\temp\custom_txt.tbl 와 같은 식.
+        "STAT_TXT": os.path.basename(STAT_TXT_OUT),
+        # tepc 는 TRIGP*.chk 를 <맵 디렉터리>\Ctemp 에 쓰고 v5.5 어셈블러는 Path + 파일명으로 읽는다.
+        # euddraft 폴더 바로 아래에는 2024년 TRIGP 파일이 남아 있어 경로를 틀리면 옛 트리거를 읽는다.
+        "CTEMP": EUDDIR + "\\Ctemp\\",
+        "SCRDB_MSQC": "\n".join(msqc),
+        "BGM_MODULE": os.path.basename(BGM_MODULE),   # main 이 eds 옆에 복사해 둔다(상대 경로로 찾는다)
+        "BGM_DIR": BGM_DIR + "\\",
+    }
+    for k, v in fill.items():
+        text = text.replace("{{%s}}" % k, v)
+    left = re.findall(r"\{\{\w+\}\}", text)
+    if left:
+        raise SystemExit("eds 틀에 못 채운 자리가 있다: %s" % left)
     with open(dst, "w", encoding="utf-8", newline="\r\n") as f:
-        f.write("\n".join(out) + "\n")
-    print("  eds: 입출력 경로 교체, SCR_DB MSQC 채널 %d개 (0x%X~ -> 데스 %d~%d), 음원 플러그인, [CPLP]"
+        f.write(text)
+    print("  eds: 입출력 경로, stat_txt 합본, SCR_DB MSQC 채널 %d개 (0x%X~ -> 데스 %d~%d), 음원 플러그인"
           % (ch, addr, death, death + ch - 1))
+
+
+def stage_euddraft(stage, doc, stage1):
+    """euddraft 가 읽을 폴더를 차린다: eds + TriggerEditor\\(main.eps, PluginVariables.py) + 음원 플러그인."""
+    te = os.path.join(stage, "TriggerEditor")
+    os.makedirs(te)
+    shutil.copy2(TE_MAIN, os.path.join(te, "main.eps"))
+    shutil.copy2(TE_VARS, os.path.join(te, "PluginVariables.py"))
+    shutil.copy2(BGM_MODULE, stage)        # [MSF_UE_RE_BGMInput.py] 는 eds 기준 상대 경로로 찾는다
+    shutil.copy2(STAT_TXT_OUT, stage)      # [dataDumper] 도 eds 기준 상대 경로 (write_eds 주석)
+    eds = os.path.join(stage, "MSF_UE_RE.eds")
+    write_eds(eds, doc, stage1)
+    return eds
 
 
 def verify_bgm(path, sounds):
@@ -300,7 +266,6 @@ def stash_manifest(doc):
 
 def main():
     ap = argparse.ArgumentParser(description="MSF_UE_RE SCR_DB 판 헤드리스 빌드")
-    ap.add_argument("--regen", action="store_true", help="e3s 에서 build/ 를 다시 만든다 (EUD Editor 3 필요)")
     ap.add_argument("--tepc-only", action="store_true", help="1단계(tepc)만 돌린다")
     args = ap.parse_args()
     build_started = time.time()
@@ -312,9 +277,6 @@ def main():
             print("  - " + m)
         return 1
 
-    if args.regen or not os.path.isfile(os.path.join(BUILD, "eudplibData", "EUDEditor.eds")):
-        regen()
-
     work = os.path.join(os.environ.get("TEMP", "."), "msf_build")
     shutil.rmtree(work, ignore_errors=True)
     stage1 = os.path.join(work, "stage1.scx")
@@ -324,16 +286,12 @@ def main():
     doc = read_manifest(started)
     print("  매니페스트: 레이아웃 %s, 항목 %d개, 지문 %08X, 표지 0x%X"
           % (doc["layout_version"], len(doc["fields"]), doc["field_hash"], doc["anchor_eud"]))
+    check_stat_txt(started)
     if args.tepc_only:
         return 0
 
     print("\n=== 2. euddraft")
-    stage = os.path.join(work, "eudbuild")
-    shutil.copytree(BUILD, stage)
-    eds_dir = os.path.join(stage, "eudplibData")
-    shutil.copy2(BGM_MODULE, eds_dir)        # [MSF_UE_RE_BGMInput.py] 는 eds 기준 상대 경로로 찾는다
-    eds = os.path.join(eds_dir, "EUDEditor.eds")
-    write_eds(eds, eds, doc, stage1)
+    eds = stage_euddraft(os.path.join(work, "eudbuild"), doc, stage1)
     cmd = [EUDDRAFT, eds]
     print("  " + " ".join('"%s"' % c if " " in c else c for c in cmd))
     # 오류가 나면 euddraft 가 "Press Enter" 로 멈추므로 표준입력을 막아 둔다.

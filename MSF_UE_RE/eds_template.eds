@@ -1,14 +1,11 @@
-
 [main]
-input: ..\..\..\..\..\..\..\..\euddraft0.9.2.0\MSF_UE_RE.scx
-output: ..\..\..\..\..\..\..\..\euddraft0.9.2.0\MSF_UE_RE_eudgen.scx
+input: {{INPUT}}
+output: {{OUTPUT}}
 [dataDumper]
-..\temp\custom_txt.tbl : 0x6D5A30, copy
+{{STAT_TXT}} : 0x6D5A30, copy
 
-[ExtraDataEditor.py]
-[DataEditor.py]
-[STRCtrig Assembler v5.4]
-Path : C:\euddraft0.9.2.0\
+[STRCtrig Assembler v5.5]
+Path : {{CTEMP}}
 [unlimiter]
 [freeze]
 prompt: 1
@@ -54,7 +51,8 @@ Switch("Switch 231",Set);F12 = 226,1
 Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f610 : 150
 Always();val, 0x58f614 : 101
 Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f618 : 152
-Switch("Switch 230",Set);mouse: Location74
+Deaths(CurrentPlayer,AtLeast,1,40);Deaths(CurrentPlayer,AtLeast,1,41);Deaths(CurrentPlayer,AtLeast,1,42);mouse: Location74
+{{SCRDB_MSQC}}
 [chatEvent]
 __addr__ : 0x58D900
 __ptrAddr__ : 0x58D904
@@ -64,10 +62,7 @@ __lenAddr__ : 0x58D90C
 @칭호 2 : 3
 @칭호 3 : 4
 @칭호 4 : 5
-
-
-
-
 [TriggerEditor\main.eps]
-
-
+[{{BGM_MODULE}}]
+Path : {{BGM_DIR}}
+[CPLP]

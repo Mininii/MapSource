@@ -53,6 +53,7 @@ function PlayerInterface()
 	local Nukes = CreateVarArr(7,FP)
 	
 	local MultiStimPack = CreateVarArr(7,FP)
+	local MultiCmdCost = Create_VTable(7,nil,FP) -- 멀티 커맨드 값 = 50 - 이미 산 기능 값 (상점에서 누를 때 계산)
 	MarACMaskRetArr = {}
 	MarACPtrArr = {}
 	for i = 0, 6 do
@@ -311,6 +312,35 @@ function PlayerInterface()
 				PreserveTrigger();
 			},
 		}
+		-- 멀티 커맨드 이동/공격 (2026-09-15): 배럭의 멀티 커맨드 쪽(EUDEditorButtonSets.lua)에서 뽑는 신호 유닛 64/66.
+		-- 목표 = 그 플레이어의 마우스 위치 로케이션 74+i (eds 의 MSQC "mouse: Location74" 가 멀티 커맨드를 가진 사람만 보낸다).
+		-- 대상은 이 플레이어의 마린(MarID)과 노멀 마린(10) - SCV 까지 끌려가지 않게 했다. 정지/홀드/원격스팀은 위아래의 예전 경로 그대로.
+		Trigger { -- 멀티 이동
+			players = {i},
+			conditions = {
+				Label(0);
+				Bring(i,AtLeast,1,64,64);
+			},
+			actions = {
+				RemoveUnitAt(All,64,"Anywhere",i);
+				Order(MarID[i+1],i,64,Move,74+i);
+				Order(10,i,64,Move,74+i);
+				PreserveTrigger();
+			},
+		}
+		Trigger { -- 멀티 공격 (예전엔 테스트 빌드 전용 버튼이었다)
+			players = {i},
+			conditions = {
+				Label(0);
+				Bring(i,AtLeast,1,66,64);
+			},
+			actions = {
+				RemoveUnitAt(All,66,"Anywhere",i);
+				Order(MarID[i+1],i,64,Attack,74+i);
+				Order(10,i,64,Attack,74+i);
+				PreserveTrigger();
+			},
+		}
 		
 		CIf(i,Bring(i,AtLeast,1,19,64))
 		Trigger { -- 보호막 가동
@@ -515,20 +545,7 @@ function PlayerInterface()
 			if Limit == 1 then
 
 				
-			Trigger { -- 버튼 기능
-				players = {i},
-				conditions = {
-					Label(0);
-					Bring(i,AtLeast,1,66,64);
-				},
-				actions = {
-					RemoveUnitAt(1,66,"Anywhere",i);
-					SetCDeaths(FP,Add,1,CUnitFlag);
-					Order("Men",i,64,Attack,74+i);
-					DisplayText("\x07『 \x03TESTMODE OP \x04: \x1C모든 유닛\x04에 \x1D마우스 위치로 공격 명령 \x04을 내립니다. (\x0FAttack\x04) \x07』",4);
-					PreserveTrigger();
-				},
-			}
+			-- (테스트 빌드 전용이던 66 마우스 위치 공격은 멀티 커맨드의 공격으로 옮겼다 - 위 "멀티 공격")
 
 
 			TriggerX(i,{Command(i,AtLeast,1,70);},{
@@ -964,11 +981,14 @@ end
 		--
 		--CIfEnd()
 		end
-		CIfShop(i,42,P_StimCost,"\x07[ \x1B원격 스팀팩 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStimPack[i+1][2],AtMost,0)},{SetCVar(FP,MultiStimPack[i+1][2],SetTo,1)})
-		CIfEnd()
-		CIfShop(i,43,P_MultiStopCost,"\x07[ \x07멀티 스탑 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiHold[i+1][2],AtMost,0)},{SetCVar(FP,MultiHold[i+1][2],SetTo,1)})
-		CIfEnd()
-		CIfShop(i,44,P_MultiHoldCost,"\x07[ \x07멀티 홀드 \x04기능을 구입하였습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CVar(FP,MultiStop[i+1][2],AtMost,0)},{SetCVar(FP,MultiStop[i+1][2],SetTo,1)})
+		-- 멀티 커맨드 (2026-09-15): 원격 스팀팩(42)·멀티 스탑(43)·멀티 홀드(44)를 하나로 합쳤다. 상점 버튼은 42 하나다.
+		-- 가진 것 = 세 변수가 모두 1 (세이브 칸 데스 40/41/42 그대로 - 런처·기존 세이브와 호환). 이미 산 기능 값은 뺀다.
+		-- ※ 변수 이름이 판매 이름과 엇갈려 있다: 옛 '멀티 스탑'(43)이 MultiHold 를, '멀티 홀드'(44)가 MultiStop 을 켰다.
+		CMov(FP,MultiCmdCost[i+1],P_MultiCmdCost)
+		TriggerX(FP,{CV(MultiStimPack[i+1],1,AtLeast)},{SubV(MultiCmdCost[i+1],P_StimCost)},{preserved})
+		TriggerX(FP,{CV(MultiHold[i+1],1,AtLeast)},{SubV(MultiCmdCost[i+1],P_MultiStopCost)},{preserved})
+		TriggerX(FP,{CV(MultiStop[i+1],1,AtLeast)},{SubV(MultiCmdCost[i+1],P_MultiHoldCost)},{preserved})
+		CIfShop(i,42,MultiCmdCost[i+1],{"\x07[ \x1D멀티 \x1B커맨드 \x04기능을 구입하였습니다. (\x1F",MultiCmdCost[i+1],"\x04 포인트) \x07]"},"\x07[ \x08포인트가 부족합니다 \x07]",{CV(MultiCmdCost[i+1],1,AtLeast)},{SetV(MultiStimPack[i+1],1),SetV(MultiHold[i+1],1),SetV(MultiStop[i+1],1)})
 		CIfEnd()
 		CIfShop(i,46,P_AtkExceed,"\x07[ \x17ATK \x04업그레이드 \x1F한계\x04가 돌파되었습니다. \x07]","\x07[ \x08포인트가 부족합니다 \x07]",{CV(AtkExceed[i+1],255,AtMost)},AddV(AtkExceed[i+1],1))
 		CIfEnd()
@@ -1047,12 +1067,6 @@ end
 		TriggerX(FP,CV(ShUp[i+1],54,AtMost),{SetMemoryB(0x57F27C+(228*i)+48,SetTo,1)},{preserved})
 		ItemT = {
 			{Nukes[i+1],{41},1,1},
-			{MultiStimPack[i+1],{42},1,1},
-			{MultiHold[i+1],{43},1,1},
-			{MultiStop[i+1],{44},1,1},
-			{MultiStimPack[i+1],{71},1},
-			{MultiHold[i+1],{65},1},
-			{MultiStop[i+1],{67},1},
 			{MCoolDownP[i+1],{49},10,1},
 			{MSkillP[i+1],{51},10,1},
 			
@@ -1076,14 +1090,20 @@ end
 		TriggerX(FP,{CVar(FP,AtkUpCompCount[2],AtLeast,33)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
 		TriggerX(FP,{CVar(FP,DefUpCompCount[2],AtLeast,33)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
 		TriggerX(FP,{CVar(FP,LevelT[2],AtLeast,2)},{SetMemoryB(0x57F27C+(228*i)+50,SetTo,0)})
-		if Limit == 1 then
-			
-		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+42,SetTo,0)},{preserved})
-		TriggerX(FP,{CD(TestMode,1)},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,1)},{preserved})
-		TriggerX(FP,{CD(TestMode,0)},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,0)},{preserved})
-		else
-			TriggerX(FP,{},{SetMemoryB(0x57F27C+(228*i)+66,SetTo,0)},{preserved})
+		-- 멀티 커맨드 (2026-09-15): 세 변수가 모두 1 이면 가진 것. 가지면 상점 버튼 42 를 숨기고 신호 유닛 5종
+		-- (MultiCmdUnits: 이동 64 / 정지 65 / 공격 66 / 홀드 67 / 원격스팀 71)을 연다. 하나라도 0 이면 반대로 닫는다.
+		-- 배럭의 "멀티 커맨드" 버튼도 64 를 뽑을 수 있는지 보고 나타난다(EUDEditorButtonSets.lua).
+		-- (예전 테스트 빌드의 66 켜기/끄기와 상점 42 숨기기는 이것으로 대신한다)
+		local MultiCmdOn = {SetMemoryB(0x57F27C+(228*i)+42,SetTo,0)}
+		local MultiCmdOff = {SetMemoryB(0x57F27C+(228*i)+42,SetTo,1)}
+		for _, U in ipairs(MultiCmdUnits) do
+			table.insert(MultiCmdOn,SetMemoryB(0x57F27C+(228*i)+U,SetTo,1))
+			table.insert(MultiCmdOff,SetMemoryB(0x57F27C+(228*i)+U,SetTo,0))
 		end
+		TriggerX(FP,{CV(MultiStimPack[i+1],1,AtLeast),CV(MultiHold[i+1],1,AtLeast),CV(MultiStop[i+1],1,AtLeast)},MultiCmdOn,{preserved})
+		TriggerX(FP,{CV(MultiStimPack[i+1],0)},MultiCmdOff,{preserved})
+		TriggerX(FP,{CV(MultiHold[i+1],0)},MultiCmdOff,{preserved})
+		TriggerX(FP,{CV(MultiStop[i+1],0)},MultiCmdOff,{preserved})
 		
 
 		

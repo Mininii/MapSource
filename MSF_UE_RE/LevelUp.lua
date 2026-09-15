@@ -175,11 +175,9 @@ function LevelUp()
 			f_Mul(FP,GetP,4)--추가 포인트 지급
 		CIfEnd()
 
-		CIfX(FP,{CD(SoloNoPointC,1)})
-			f_Div(FP,GetP,_Mov(2))-- 싱글플레이 포인트 절반으로
-		CElseX()
-			f_Mul(FP,GetP,_Mov(2))--싱글아니면 포인트 보너스
-		CIfXEnd()
+		-- 멀티 플레이 포인트 보너스(x2)를 인원수와 무관하게 준다 - 솔로도 멀티와 똑같이 받는다 (2026-09-15).
+		-- 예전에는 1인으로 시작하면(SoloNoPointC, func.lua 의 DoHumanCheck) 절반, 아니면 2배였다.
+		f_Mul(FP,GetP,_Mov(2))
 
 		TriggerX(FP,{CV(GetP,0)},{SetV(GetP,1)},{preserved})--계산된 포인트가 0일 경우 최소 1은 얻게함
 

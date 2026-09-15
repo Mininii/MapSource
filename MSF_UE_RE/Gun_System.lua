@@ -264,13 +264,19 @@ for i = 1, 7 do
 			
 		CIfEnd()
 		CSub(FP,0x6509B0,4)
+
+		-- 공격속도 조절: 마린이 공격 중(위 CIf 의 공격/홀드/인벙커 오더)일 때만 쿨다운을 MCoolDown 으로 줄인다 (2026-09-15).
+		-- 예전에는 이 CIf 바깥에서, 쏜 직후(쿨다운 > 18)면 오더와 상관없이 줄였다.
+		CAdd(FP,0x6509B0,2) -- +0x54: 지상/공중 쿨다운
+		CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)}) -- -> +0x114: 스팀 타이머
+		TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)},{preserved}) -- 스팀 중이면 5틱 더
+		CSub(FP,0x6509B0,50) -- CIf 에 들어올 때 자리(+0x4C, 오더)로
 	CIfEnd()
 	CAdd(FP,0x6509B0,2)
 	
 
 
-	CDoActions(FP,{TSetDeathsX(CurrentPlayer, SetTo, MCoolDown[i], 0, 0xFFFF00),SetMemory(0x6509B0, Add, 48)})
-	TriggerX(FP,{DeathsX(CurrentPlayer,AtLeast,1*256,0,0xFF00)},{SetMemory(0x6509B0, Subtract, 48),SetDeathsX(CurrentPlayer, Subtract, (5*256)+(5*65536), 0, 0xFFFF00)},{preserved})
+	-- (공격속도 조절은 위 공격/홀드/인벙커 CIf 안으로 옮겼다)
 	
 	
 	ClearCalc()

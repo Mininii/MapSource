@@ -77,6 +77,15 @@ SetFixedPlayer(FP)
 Enable_HumanCheck()
 StartCtrig(1,FP,nil,1,"C:\\Temp")
 DP_Start_init(FP,{15,5000},0x4000, 0x6000)
+-- [e3s 없이 빌드] EUD Editor 3 의 플러그인이 하던 일 (EUDEditorPort.lua 상단 표). 3초 대기 CIf 바깥 = 첫 프레임부터.
+EUDEditorInit()          -- 첫 프레임 1회: dat 패치 773줄 + 정보창 함수 + 요구사항 풀
+EUDEditorRequireTables() -- 매 프레임: 요구사항 오프셋 표 5종 (EUDinit.lua 의 PatchArrPrsv 가 3초 뒤부터 그 위를 덮는다)
+EUDEditorButtonJump = def_sIndex()
+CJump(AllPlayers,EUDEditorButtonJump)
+	RegisterButtonSetData() -- 버튼셋 배열을 맵에 싣는다 (선언 전용 구역)
+CJumpEnd(AllPlayers,EUDEditorButtonJump)
+ApplyButtonSetData()     -- 첫 프레임 1회: buttonSetTable 에 연결
+WriteStatTxtTbl()        -- 컴파일 때: stat_txt.tbl + 편집분 -> C:\euddraft0.9.2.0\MSF_UE_RE_stat_txt.tbl ([dataDumper] 가 싣는다)
 NormalTurboSet(P8,214)
 DoActions(P8,SetResources(Force1,Add,-1,Gas),1)
 DoActions(Force1,SetDeaths(CurrentPlayer,SetTo,1,227),1)
@@ -98,6 +107,7 @@ end
 			Include_CtrigPlib(360,"Switch 100")
 			Include_64BitLibrary("Switch 100")
 			Include_CBPaint()
+			Include_Wireframe(0) -- EUDEditorWireframe() 용 (EUD Editor 의 WireFrameDataEditor 대신)
 			DUnitCalc = Install_EXCC(FP,25,1)
 			LHPCunit = Install_EXCC(FP,25)
 			Install_TMemoryBW(FP)
@@ -119,6 +129,7 @@ end
 		DoHumanCheck()
 		BGMManager()
 		onInit_EUD() -- onPluginStart
+		EUDEditorWireframe() -- 유닛 121/211/212 와이어프레임 (Library 포인터가 채워진 뒤여야 해서 3초 대기 안)
 		-- SCR_DB 오프라인 세이브 (SCA 대체, SCR_DB_MSF.lua). onInit_EUD 가 게임 시작 때 void 를 한 번
 		-- 싹 지운 **뒤**여야 표지 블록이 살아남고, OPTrig(로비) 보다 앞이어야 불러오기 상태(데스 23)가
 		-- 같은 프레임에 로비 화면에 보인다.

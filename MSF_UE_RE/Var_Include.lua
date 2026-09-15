@@ -17,6 +17,9 @@ function Objects()
 	P_MultiStopCost = 20
 	P_MultiHoldCost = 20
 	P_StimCost = 10 -- 원격 스팀팩 사용가능
+	-- 멀티 커맨드 (2026-09-15): 원격 스팀팩 + 멀티 스탑 + 멀티 홀드를 합친 기능. 셋을 따로 팔던 값의 합(50).
+	-- 셋 중 일부를 이미 산 세이브는 산 기능 값을 빼고 받는다(Player_interface.lua 의 MultiCmdCost). 위 셋은 그 계산에 쓴다.
+	P_MultiCmdCost = P_StimCost + P_MultiStopCost + P_MultiHoldCost
 	P_ExcOldP = 5000
 	P_AtkExceed = 10
 	P_HPExceed = 25
