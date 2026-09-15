@@ -1,0 +1,43 @@
+[main]
+input: ..\..\..\..\..\..\..\..\..\euddraft0.9.2.0\MSF_Memory2.scx
+output: ..\..\..\..\..\..\..\..\..\Program Files (x86)\StarCraft\Maps\마린키우기_Memory2_Test.scx
+[STRCtrig Assembler v5.5]
+Path : C:\euddraft0.9.2.0\Ctemp\
+[APMCounter]
+Output : 0x58F450, 0x58F454, 0x58F458, 0x58F45C
+Stack : 1, 60, 40, 60, 0.75
+test : 0x58F460, 0x58F464, 0x58F468, 0x58F46C
+debug : 0
+qcmax : 5
+alert : 1
+
+[NSQC]
+ElapsedTime(AtLeast,3) ; val, 0x58F500 : 181
+QCDebug = false
+MemoryX(0x58F45C,Exactly,4,4) : 140, 1
+MemoryX(0x58F45C,Exactly,8,8) : 140, 2
+Switch("Switch 253",Cleared);F12 = 198,1
+Switch("Switch 253",Set);F12 = 199,1
+Switch("Switch 254",Set);F12 = 199,1
+Switch("Switch 254",Set);TAB = 204,1
+Switch("Switch 254",Set);INSERT = 207,1
+Switch("Switch 254",Set);DELETE = 208,1
+Switch("Switch 254",Set);O = 209,1
+Switch("Switch 254",Set);P = 210,1
+Switch("Switch 254",Set);ESC = 203,1
+Switch("Switch 203",Cleared);ESC = 205,1
+Switch("Switch 203",Cleared);TAB = 206,1
+Switch("Switch 254",Set);mouse: ML1
+[freeze]
+freeze: 0
+[unlimiter]
+[CPLP]
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+..\temp\custom_txt.tbl : 0x6D5A30, copy
+
+
+
+
+

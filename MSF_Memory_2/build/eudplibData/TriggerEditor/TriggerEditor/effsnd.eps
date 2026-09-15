@@ -1,0 +1,31 @@
+function GetDeath(player, unit:TrgUnit) {
+    return dwread_epd(EPD(0x58A364 + 48 * unit + 4 * player));
+    // TrgUnit - "Terran Marine"을 0으로 치환, 없으면 유닛 번호로 써야 함
+}
+function SCmp(cp){
+	const value = GetDeath(cp, 3);
+	if(value == 0){PlayWAV("sound\\Misc\\TDrTra01.wav");}
+	else if(value == 1){PlayWAV("staredit\\wav\\savecmp.ogg");}
+}
+function Connect(cp){
+	const value = GetDeath(cp, 3);
+	if(value == 0){PlayWAV("sound\\Misc\\ZRescue.wav");}
+	else if(value == 1){PlayWAV("staredit\\wav\\conn.ogg");}
+}
+
+function Work(cp){
+	const value = GetDeath(cp, 3);
+	if(value == 0){PlayWAV("sound\\glue\\swishin.wav");}
+	else if(value == 1){PlayWAV("staredit\\wav\\work.ogg");}
+}
+function Fail(cp){
+	const value = GetDeath(cp, 3);
+	if(value == 0){PlayWAV("sound\\Misc\\PError.WAV");}
+	else if(value == 1){PlayWAV("staredit\\wav\\fail.ogg");}
+}
+
+function Discon(cp){
+	const value = GetDeath(cp, 3);
+	if(value == 0){PlayWAV("sound\\Bullet\\tscFir00.wav");}
+	else if(value == 1){PlayWAV("staredit\\wav\\discon.ogg");}
+}
