@@ -438,8 +438,8 @@ HPRegenTable = {64}
 
 	CElseX({TSetDeaths(CurrentPlayer,SetTo,TempMarHPRead,0)})
 
-	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtMost,_Add(TempMarHPRead,-256))}, {Set_EXCCX(7,Add,MarHPRegen2)}, {preserved})
-	CTrigger(FP, {CVar(FP,EXCC_TempVarArr[7+1][2],AtLeast,_Add(TempMarHPRead,256))}, {Set_EXCCX(7,SetTo,TempMarHPRead)}, {preserved})
+	CTrigger(FP, {TCVar(FP,EXCC_TempVarArr[7+1][2],AtMost,_Add(TempMarHPRead,-256))}, {Set_EXCCX(7,Add,MarHPRegen2)}, {preserved})
+	CTrigger(FP, {TCVar(FP,EXCC_TempVarArr[7+1][2],AtLeast,_Add(TempMarHPRead,256))}, {Set_EXCCX(7,SetTo,TempMarHPRead)}, {preserved})
 
 	CIfXEnd()
 	CAdd(FP,0x6509B0,17)
@@ -595,6 +595,7 @@ HPRegenTable = {64}
 	ReviveSkill = def_sIndex()
 	CJump(FP,ReviveSkill)
 	NJumpXEnd(FP,WhiteList2)
+	CDoActions(FP,{Set_EXCC2(UnivCunit,CurCunitI2,7,SetTo,0)}) -- 죽은 마린의 보호막 비우기 (같은 자리에 새로 생기는 마린이 물려받지 않게)
 	DoActions(FP,MoveCp(Subtract,6*4))
 	CAdd(FP,0x6509B0,21)
 	CIf(FP,{CV(Level,50,AtLeast)})
@@ -973,7 +974,7 @@ HPRegenTable = {64}
 	TriggerX(FP,{CD(ResNumT[2],1),CD(ResNumT[4],1)},{SetCD(ResNum,1)})
 
 	if AxiomSet == 1 then
-	Trigger2X(FP, {CD(ResNum,1,AtLeast),Command(P6, AtLeast, 1, 189)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[2],1),})
+	Trigger2X(FP, {CD(ResNum,1,AtLeast),Command(P6, AtLeast, 1, 189),CD(Theorist,1,AtLeast)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[2],1),}) -- 다른 Axiom 과 같이 이터널(Theorist 1) 이상에서만
 	end
 	DoActionsX(FP,{
 		SetCD(ResNum,0),

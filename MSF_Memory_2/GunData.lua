@@ -973,7 +973,7 @@ end
 	CAdd(FP,N_R,8)
 	CIfEnd()
 	CDoActions(FP,{TGun_SetLine(9,SetTo,N_R)})
-	CTrigger(FP,{CD(N_Check,0),GCP(6),CD(AxiomCcode[2],0)},{SetCD(AxiomFailCcode[2],1)})
+	CTrigger(FP,{CD(N_Check,0),GCP(5),CD(AxiomCcode[2],0)},{SetCD(AxiomFailCcode[2],1)}) -- Axiom 2 는 P6 의 공명(ResNumT[2] = GCP(5))
 	CTrigger(FP,{CD(N_Check,0)},{Gun_DoSuspend(),AddCD(CellCcode,1)},1)
 	CIfEnd()
 
@@ -1450,6 +1450,14 @@ Ca3DT = {
 }
 end
 
+	--[[ =====================================================================
+	     건작보스 190 《Core of Depth》
+	       특수(tes)  : Axiom 네 개를 다 찾으면 켜지는 AxiomEnable 패턴
+	       일반(ikasu): 그 외
+	     시간 = 8번 줄 (Gun_Line(8)). 틱마다 0x1D(29)씩 오른다.
+	     섹션 주석만 달았다. 트리거 순서는 원래 그대로다
+	     (순서를 바꾸면 같은 틱 안에서 값이 바뀌는 순서가 달라진다).
+	     ===================================================================== ]]
 	CIf_GCase(190)
 	DoActions(FP,{KillUnit(125,Force1)},1)--건작보스 작동시 모든 벙커 폭발
 	
@@ -1458,13 +1466,27 @@ end
 	if Limit == 1 then
 		TriggerX(FP,{CD(TestMode,1)},{SetCD(AxiomEnable,GBossTestMode)})
 	end
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 특수/일반 선택 : GBossTestMode 1 = 테스트(EEggCode 20) / 그 외 = AxiomEnable (Axiom 넷 다 찾음)
 	if GBossTestMode == 1 then
 		CIfX(FP,{CD(EEggCode,20)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
-	elseif GBossTestMode == 0 then
-		CIfX(FP,{Never()},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64),SetCD(AxiomEnable,GBossTestMode)})--testify
 	else
 		CIfX(FP,{CD(AxiomEnable,1,AtLeast)},{SetV(CCA_ShNm,2),SetCD(tesStart,1),SetInvincibility(Enable, 116, Force2, 64)})--testify
 	end
+	-- ┌──────────────────────────────────────────────────────────────────────
+	-- │ [특수 tes] 여기부터 CElseX()--ikasu 까지
+	-- │   0. 준비                            헬퍼 / 배경음·가사·밝기
+	-- │   1.      0 ~   8090  도입 회전       2.   8090 ~  17520  사각 이펙트
+	-- │   3.  17520 ~  55280  가속 회전       4.  55280 ~  76850  탄막·이펙트 순환
+	-- │       배율 제어(RatF/RatFM)           5.  76850 ~  98420  원형 샤딩
+	-- │   6.  98420 ~ 119660  TesLine         7. 119660 ~ 135500  회전·배율 초기화
+	-- │   8. 135500 ~ 163140  무적·HP 소환    9. 163140 ~ 187410  원·타원·배율 펄스
+	-- │  10. 187410 ~ 203590  회전 킥        11. 203590 ~ 끝      수렴·종료
+	-- │   매 틱: 원형 링 → 배율 계산·종료 판정 → 도형 그리기
+	-- │ 구간 숫자는 그 묶음이 주로 다루는 8번 줄 범위다 (앞뒤로 걸친 트리거가 있다).
+	-- └──────────────────────────────────────────────────────────────────────
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 0. 준비 : 무기·유닛 패치, AI, 시간 줄(8·10번) 진행
 	local tesPatchT = {}
 	SetWeaponsDat2X(tesPatchT,123,{RangeMax=224,AttackAngle=16}) -- 스킬유닛무기 재설정
 	SetWeaponsDat2X(tesPatchT,121,{DmgBase=777})--핵배틀딜너프
@@ -1491,9 +1513,13 @@ end
 	DoActions2X(FP,{RotatePlayer({CenterView(64)},HumanPlayers,FP)},1)
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 
-	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D)},1)--CV(Dt,0x2A,AtMost)
+	tesUseCache = 1 -- 1: 도형을 TesPrecompute.lua 로 미리 계산한 표에서 읽어 그린다 / 0: 예전처럼 매 틱 Call_CA_Effect 로 계산
+	tesCache = CreateVar(FP) -- 표 읽는 위치 = 틱 번호 (8번 줄 / 0x1D)
+	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D),AddV(tesCache,1)},1)--CV(Dt,0x2A,AtMost)
 	DoActionsX(FP,{SubV(ExRateV,13),Gun_SetLine(10,Add,100000),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 헬퍼 : 회전 가속(CA_3DAcc 11~13번 / CA_3DAcc2 16~18번), 밝기(SetBright)
 	function CA_3DAcc(Time,XY,YZ,ZX)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{
 			Gun_SetLine(11,Add,XY),
@@ -1511,6 +1537,8 @@ end
 	function SetBright(Time,Value)
 		TriggerX(FP,{Gun_Line(8,AtLeast,Time)},{SetMemory(0x657A9C,SetTo,Value)})
 	end
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 배경음(tes_001~078) · 가사 · 도입 밝기
     GunBGMArr2 = {}
     for i = 1, 78 do
         if i <= 9 then
@@ -1532,6 +1560,8 @@ end
 	end 
 	SetBright(2700,15)
 	SetBright(8090,31)
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 1. 0 ~ 8090 : 도입 — 워프 소환, 도형 회전 시작 (5390 부터 가속)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{29},"ACAS","tes_SF","MAX",198,nil,nil,nil,nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,2700)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D2(),nil,1)
@@ -1552,6 +1582,8 @@ end
 	})
 	CIfEnd()
 	local SWEffArr1 = {}
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 2. 8090 ~ 17520 : 효과 전환(8090) — 원형 이펙트, 사각(TesSquare) 소환 8회
 	local SWEffArr2 = {}
 	for i = 1, 4 do
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],36))
@@ -1602,6 +1634,8 @@ end
 
 	
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 3. 17520 ~ 55280 : 가속 회전(ACCR) + JYD 이펙트 연타 + 소환(34040, 44150)
 	NUGive(17520,21)
 	NUGive(17520,88)
 	CIf(FP,Gun_Line(8,AtLeast,17520))
@@ -1650,6 +1684,8 @@ end
 	--34040
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,34040)},{3,29},"ACAS","tesSh01",8,0,nil,nil,nil,nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,44150)},{65,80},"ACAS","tesSh02",8,0,nil,nil,nil,nil,1)
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 4. 55280 ~ 76850 : tes_Eff 탄막 + 이펙트 순환(CAFF) + 워프(66060)
 	local tesP1 = {55280,55440,55950,56120,56620,56790,57130,57300,57640,57970,58140,58650,58820,59320,59490,59830,60000,60250,60500,55280+5390,55440+5390,55950+5390,56120+5390,56620+5390,56790+5390,57130+5390,57300+5390,57640+5390,57970+5390,58140+5390,58650+5390,58820+5390,59320+5390,59490+5390,59830+5390,60000+5390,60250+5390,60500+5390}
 	local tesP2 = {}
 	for i = 1, 9 do
@@ -1665,7 +1701,7 @@ end
 		table.insert(tesP2,27)
 	end
 	if tesTestmode >= 1 then
-	DoActionsX(FP, {Gun_SetLine(8,SetTo,tesTestmode)},1)
+	DoActionsX(FP, {Gun_SetLine(8,SetTo,tesTestmode),SetV(tesCache,math.floor(tesTestmode/0x1D))},1)
 	CIf(FP,{Gun_Line(8,AtLeast,tesTestmode)})--tesTestmode
 	end
 	
@@ -1821,6 +1857,8 @@ end
 	end
 	TriggerX(FP,{CD(CAFF,8,AtLeast)},{SetCD(CAFF,0)},{preserved})
 	CIfEnd()
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 배율 제어(RatF / RatFM) : 도형 크기. 뒤 구간들이 이 값을 바꾼다
 	CA_Eff_RatF= CreateVar(FP)
 	CA_Eff_RatFM= CreateVar(FP)
 	CA_Eff_RatF2= CreateVar(FP)
@@ -1841,6 +1879,8 @@ end
 	--for j,k in pairs({CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX,CA_Eff_XY2,CA_Eff_YZ2,CA_Eff_ZX2}) do
 	--end
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 5. 76850 ~ 98420 : 원형 샤딩(TesCircle) + 공중 소환(GBAirT)
 	local bit = 674.1573*2
 	local tes_CT = {0,10,13,15,16,17,16,0,0,10,13,15,16,17,16,0}
 	local tes_TT = {76850,78200,}
@@ -1893,6 +1933,8 @@ end
 
 	
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 6. 98420 ~ 119660 : 밝기 파동 + TesLine 소환 + 이펙트
 	local tesLineArr = {98420,98930,99430,99770,100280,100780,101120,101620}
 	local GBLineT = {{98,66},{98,66},{98,66},{57,100},{57,100},{57,100},{29,10},{29,10}}
 	
@@ -1951,6 +1993,8 @@ end
 		table.insert(SWEffArr1,SetV(CA_EffSWArr2[i],1))
 	end
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 7. 119660 ~ 135500 : 회전·배율 초기화(119660) + 이펙트 연타
 	CIfOnce(FP, {Gun_Line(8,AtLeast,119660)},{Order("Any unit", Force2, 64, Attack, 64)})
 	
 	CTrigger(FP,{},{SetV(CA_ACCR,0),
@@ -1986,6 +2030,8 @@ end
 	for j,k in pairs(TesTArr) do
 		CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,k)},{SetV(CA_Create,2000+84),SWEffArr1},1)
 	end
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 8. 135500 ~ 163140 : 무적 구간, HP 소환, 워프, 배율(RatF/RatFM) 변경
 	local TesTArr = {}
 	for i = 0, 6 do
 		table.insert(TesTArr,138870+((bit/4)*i))
@@ -2019,6 +2065,8 @@ end
 	
 
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 9. 163140 ~ 187410 : 원 효과 연속 + 워프 + 타원(tes_EllipseN) 소환 + 배율 펄스
 	TriggerX(FP,{Gun_Line(8,AtLeast,163140)},{SetV(TesCircleDiv,2),SetCD(TesCircleC,8),SetCD(TesEffFlag,0),SetV(TesCircleL,163820),SetV(TesCircleR,164490)})
 	
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,163140)},{84},"ACAS","WarpZ",WarpZ[1]/40,3,nil,"OP",G_CA_Rotate3D(),nil,1)
@@ -2086,6 +2134,8 @@ end
 	
 	
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 10. 187410 ~ 203590 : 회전 킥(+15) + 밝기 계단 + 이펙트 연타
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+7410)},{SetV(CA_ACCR,0),Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+7580)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15)})
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+7920)},{Gun_SetLine(11,Add,15),Gun_SetLine(17-1,Add,15),Gun_SetLine(13-1,Add,15),Gun_SetLine(14-1,Add,15),Gun_SetLine(18-1,Add,15),Gun_SetLine(19-1,Add,15)})
@@ -2159,11 +2209,15 @@ end
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22240)},{SetV(CA_Create,2000+84),SWEffArr1},1)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,(60000*3)+22920)},{SetV(CA_Create,2000+84),SWEffArr1},1)
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 11. 203590 ~ 끝 : 도형 수렴(EffFin 증가). 종료 연출은 아래 '배율 계산' 안
 	CA_EffFin = CreateVar(FP)
 	TriggerX(FP,{Gun_Line(8,AtLeast,(60000*3)+23590)},{AddV(CA_EffFin,2000)},{preserved})
 
 
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 매 틱 : 원형 링 이펙트 (TesCircleL~R 구간, 시작각 무작위)
 	CiSub(FP,N_R,TesCircleL,Var_TempTable[9])
 	CIf(FP,{CV(Var_TempTable[9],TesCircleR,AtMost)})
 	f_iDiv(FP,N_R,TesCircleDiv)
@@ -2203,6 +2257,8 @@ end
 	
 	
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 매 틱 : 도형 배율(CA_Eff_Rat2/3) 계산 + (203590~) 수렴·종료 연출(tesEndt) → Suspend
 	CMov(FP,CA_Eff_Rat,Var_TempTable[11])
 	CAdd(FP,CA_Eff_Rat2,Var_TempTable[15],CA_Eff_Rat)
 	CAdd(FP,CA_Eff_Rat3,Var_TempTable[16],CA_Eff_Rat)
@@ -2240,6 +2296,8 @@ end
 --,
 
 	CIfEnd()
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 매 틱 : 회전각 복사 + 도형 8점 그리기 (tesUseCache 1 = TesPrecompute.lua 표 / 0 = 런타임 계산)
 	CMov(FP,CA_Eff_XY,Var_TempTable[12])
 	CMov(FP,CA_Eff_YZ,Var_TempTable[13])
 	CMov(FP,CA_Eff_ZX,Var_TempTable[14])
@@ -2249,7 +2307,11 @@ end
 	CMov(FP,SHLX,G_CA_CenterX)
 	CMov(FP,SHLY,G_CA_CenterY)
 	--Gun_LineRange(8, 66060, 76850)
-	CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
+	if tesUseCache == 1 then
+		tesDrawFromCache() -- TesPrecompute.lua : 미리 계산한 표를 읽어 8개 점을 찍는다
+	else
+		CallTrigger(FP,Call_CA_Effect,{SetV(CA_Create,0)})
+	end
 	
 	SetBright(120000,25)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,120000)},{SetV(CA_Create,0xFFFFFFFF)},1)
@@ -2259,11 +2321,21 @@ end
 	CSub(FP,CA_Eff_DRat3,CA_Eff_DRat3Dt)
 
 	CElseX()--ikasu
+	-- ┌──────────────────────────────────────────────────────────────────────
+	-- │ [일반 ikasu] 여기부터 CIfXEnd 까지. 400틱 뒤부터 8번 줄이 틱마다 +0x1D
+	-- │   준비 → 배경음 → 소환 타임라인 → 연출 소환(84) → 밝기
+	-- │   → 회전·배율(런타임) → 도형 사전계산(컴파일) → 매 틱 도형 그리기
+	-- │   → 테스트 표시 → 112420 처치 → 소환/이펙트 표(CrEfT) → 186000~ 종료
+	-- └──────────────────────────────────────────────────────────────────────
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 준비 : AI, 도형 소환 루프, 배율·시간 줄
 	TriggerX(FP,{},{RotatePlayer({RunAIScript(P8VON),RunAIScript(P7VON),RunAIScript(P6VON),RunAIScript(P5VON)},MapPlayers,FP)})
 	G_CA_SetSpawn({},{70,57,8,98},"ACAS",{"GB_P1","GB_P3","GB_P4","GB_P2"},1,72,nil,nil,G_CA_LoopTimer(2),nil,1)
 	DoActionsX(FP,{SubV(ExRateV,10),Gun_SetLine(10,Add,25000),KillUnit("Factories",Force2),SetMemory(0x58D718, SetTo, 0x00000000);SetMemory(0x58D71C, SetTo, 0x00000000);},1)
 	Trigger2X(FP,{},{RotatePlayer({PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),PlayWAVX("staredit\\wav\\GBossAct.ogg"),},HumanPlayers,FP)})
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 400틱 뒤부터 : 시간 줄 진행(8·10번 줄, CachePlay +1)
 	CIf(FP,Gun_Line(7,AtLeast,400))
 	CachePlay = CreateVar(FP)
 	CTrigger(FP,{},{TGun_SetLine(10,Add,0x1D),TGun_SetLine(8,Add,0x1D),AddV(CachePlay,1)},1)--CV(Dt,0x2A,AtMost)
@@ -2277,6 +2349,8 @@ end
 	CMov(FP,CA_Eff_ZX,Var_TempTable[14])
 	DoActionsX(FP, SetV(CA_Create,0))
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 배경음(ikasu001~148)
     GunBGMArr = {}
     for i = 1, 148 do
         if i <= 9 then
@@ -2299,6 +2373,8 @@ end
 	--Tier4 = {102,61,67,23,81,30}
 	--Tier5 = {60,68}
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 소환 타임라인 (15780 ~ 174000) : 타원·Hp2·GBAir
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,15780)},{77,88},"ACAS","EllipseMirror1","MAX",0,nil,nil,nil,nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,23360)},{25,21},"ACAS","EllipseMirror1","MAX",0,nil,nil,nil,nil,1)
 	
@@ -2333,6 +2409,8 @@ end
 
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,174000),CD(Theorist,0)},{19,27},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,174000),CD(Theorist,1,AtLeast)},{19,29},"ACAS","Hp2","MAX",0,nil,nil,G_CA_Rotate3D(),nil,1)
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 연출 소환(84) 타임라인 : EllipseMirror1 / HCD2 / Warp1
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,30940)},{84},"ACAS","EllipseMirror1","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,31570)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
 	G_CA_SetSpawn({Gun_Line(8,AtLeast,31650)},{84},"ACAS","HCD2","MAX",3,nil,"OP",G_CA_Rotate3D(),nil,1)
@@ -2368,6 +2446,8 @@ end
 	
 
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 밝기 타임라인
 	SetBright(0,0)
 	SetBright(15780,31)
 	SetBright(23360,15)
@@ -2396,6 +2476,8 @@ end
 	end
 	SetBright(112420,31)
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 회전·배율 (런타임) : 이벤트 소환(GBossCr/GBossEf)이 쓰는 값. 아래 사전계산이 이 트리거들을 흉내 낸다
 	DoActionsX(FP,{
 		Gun_SetLine(11,Add,1),
 		Gun_SetLine(12,Add,1),
@@ -2435,6 +2517,8 @@ end
     TriggerX(FP,{Gun_Line(8,AtLeast,111780)},{SetV(Var_TempTable[11],(110210+(27*(bit)/8))*2)})
     TriggerX(FP,{Gun_Line(8,AtLeast,111780),Gun_Line(8,AtMost,112420)},{SubV(Var_TempTable[11],8500)},{preserved})
     TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{SetV(Var_TempTable[11],112420+25000)})
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 도형 사전계산 (컴파일 때) : 위 회전·배율을 Lua 로 흉내 내 8점 좌표 표(CaTX/CaTY)를 만든다
 	CRat = 25000
 	CXY = 0-1
 	CYZ = 0-1
@@ -2573,6 +2657,8 @@ local Cj = 0
 
 	CJumpEnd(FP,FJump)
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 매 틱 : 표의 CachePlay 번째 좌표를 읽어 8점 이펙트
 	function CreateEffUnitA(Condition,Height,Color)
 		TriggerX(FP,{Condition},{
 			SetMemoryB(0x66321C, SetTo, Height); -- 높이
@@ -2639,6 +2725,8 @@ local Cj = 0
 	CreateEffUnitA({},19,17)
 	CreateEffUnitA({},20,17)
 	CreateEffUnitA({},18,13)
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 테스트(Limit==1) : 게임 회전값 / 표 회전값 비교 출력
 	if Limit == 1 then
 		TempXY = CreateVar(FP)
 		TempYZ = CreateVar(FP)
@@ -2656,6 +2744,8 @@ local Cj = 0
 	end
 
 	
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 112420 처치 + 적 유닛 넘기기(NUGive)
 	TriggerX(FP,{Gun_Line(8,AtLeast,112420)},{KillUnit("Men",Force2)})
 	NUGive(63150,70)
 	NUGive(80210,57)
@@ -2665,6 +2755,8 @@ local Cj = 0
 				--0x0000NPUU 
 
 
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 소환/이펙트 표(CrEfT) : 시간별 GBossCr(유닛) + GBossEf(스캔 이펙트)
 	function GBossCr(Var,UID)
 	CallTriggerX(FP,Call_CA_Effect,{Gun_Line(8,AtLeast,Var)},SetV(CA_Create,UID),1)
 	end
@@ -2888,6 +2980,8 @@ end
 	CMov(FP,SHLX,G_CA_CenterX)
 	CMov(FP,SHLY,G_CA_CenterY)
 	--CallTrigger(FP,EffUnitLoop)
+	-- ──────────────────────────────────────────────────────────────────
+	-- ■ 186000 ~ 끝 : 배율 축소 → 최후의 기억 무적 해제 → Suspend
 	TriggerX(FP,{Gun_Line(8,AtLeast,186000)},{Gun_SetLine(10,Subtract,4000)},{preserved})
 	
 	InvDisable(173,FP,{Gun_Line(8,AtLeast,186000),Gun_Line(10,AtMost,0)},"\x08최후\x04의 \x10기억 \x10"..Conv_HStr("<11>L<19>ost <10>M<19>emory").." \x04의 \x02무적상태\x04가 해제되었습니다.")

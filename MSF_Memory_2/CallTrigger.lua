@@ -411,11 +411,14 @@ function Install_CallTriggers()
 		local CA = CAPlotDataArr
 		local CB = CAPlotCreateArr
 		local PlayerID = CAPlotPlayerID
-		CIf(FP,{CD(AxiomEnable,0)})--ikasu
+		-- 어느 계산을 쓸지는 "지금 도는 보스" 로 고른다. tesStart 는 특수(tes) 분기가 실제로 돌 때만 1 이 된다.
+		-- AxiomEnable 로 고르면 특수 보스가 꺼진 빌드(GBossTestMode 0 = Never)에서 AxiomEnable 만 켜졌을 때
+		-- 일반 보스의 GBossCr/GBossEf 도형이 특수 계산(Rat2/3 = 0)을 타서 가운데 한 점으로 뭉친다.
+		CIf(FP,{CD(tesStart,0)})--ikasu
 		CA_RatioXY(CA_Eff_Rat,186000,CA_Eff_Rat,186000)
 		CA_Rotate3D(CA_Eff_XY,CA_Eff_YZ,CA_Eff_ZX)
 		CIfEnd()
-		CIf(FP,{CD(AxiomEnable,1,AtLeast)})--testify
+		CIf(FP,{CD(tesStart,1,AtLeast)})--testify
 			CIf(FP,{CVar("X",CA[6],AtLeast,1),CVar("X",CA[6],AtMost,4)})
 			CAdd(FP,CA_Eff_RRat2,CA_Eff_DRat2,CA_Eff_Rat2)
 			CA_RatioXY(CA_Eff_RRat2,210600,CA_Eff_RRat2,210600)

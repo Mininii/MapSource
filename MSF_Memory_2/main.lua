@@ -73,7 +73,7 @@ end
 --PushErrorMsg(""..string.byte(ttt, 1, 1).." "..string.byte(ttt, 2, 2).." "..string.byte(ttt, 3, 3).." "..string.byte(tttt, 1, 1))
 TestSet(0)
 	EVFFlag = 0
-	AxiomSet = 0
+	AxiomSet = 1
 	EternalTestMode = 0
 	GBossTestMode = 0
 	AtkSpeedMode = 0
@@ -84,7 +84,7 @@ if Limit == 1 then
 	TheoristTestMode = 0
 	GBossTestMode = 1
 	EEggTestNum = 0
-	AxiomSet = 0
+	AxiomSet = 1
 else
 	CheatEnableFlag = 0
 	EVFFlag = 0
