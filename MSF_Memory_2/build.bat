@@ -8,12 +8,12 @@ REM  No SCMDraft compile and no EUD Editor (e3s) needed:
 REM      0) split    : C:\euddraft0.9.2.0\MSF_Memory2.scx -> MSF_Memory2_base.scx (chk only)
 REM                    + sounds to C:\euddraft0.9.2.0\MSF_Memory2_BGM  (only when the original is newer)
 REM      1) tepc     : main.lua -> triggers  (base map: MSF_Memory2_base.scx)
-REM      2) euddraft : EUD Editor data copied in build\  + sounds (MSF_Memory2_BGMInput.py)
+REM      2) euddraft : eds_template.eds + stat_txt merge + sounds (MSF_Memory2_BGMInput.py)
 REM      3) CPLP     : protector  ->  *_out.scx  (the map to play)
 REM
 REM  Output goes to  C:\Program Files (x86)\StarCraft\Maps\
 REM  Terrain/units changed?   save the map in SCMDraft, then run this again (it re-splits).
-REM  EUD Editor data changed? build once in EUD Editor, then:  build.bat --refresh-data
+REM  Unit stats / buttons / requirements / tbl text live in EUDEditor*.lua now - no EUD Editor.
 REM  Keep this file ASCII-only: the console codepage mangles anything else.
 REM ===========================================================================
 

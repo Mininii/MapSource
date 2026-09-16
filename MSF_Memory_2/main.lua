@@ -109,6 +109,10 @@ StartCtrig(1,FP,nil,1,"C:\\Temp")
 STRxIn(AllPlayers)
 
 DP_Start_init(FP,nil,0x4000, 0x6000)
+-- [e3s 없이 빌드] EUD Editor 3 의 플러그인이 하던 일 (EUDEditorPort.lua 상단 표). init() 보다 앞 = 첫 프레임부터.
+EUDEditorInit()                -- 첫 프레임 1회: dat 패치 1182줄 + 정보창 함수 + 요구사항 풀
+EUDEditorRequireTables(Force1) -- 매 프레임: 요구사항 오프셋 표 5종. Force1 = init() 의 PatchArrPrsv(Force1)가 같은 목록에서 뒤에 덮는다
+WriteStatTxtTbl()              -- 컴파일 때: stat_txt.tbl + 편집분 -> C:\euddraft0.9.2.0\MSF_Memory2_stat_txt.tbl ([dataDumper] 가 싣는다)
 init_func = def_sIndex()
 CJump(AllPlayers,init_func)
 	Var_init()
@@ -136,11 +140,15 @@ CJump(AllPlayers,init_func)
 	Install_CallTriggers()
 	Include_GunData(128,55)
 	
+	Include_Wireframe(0)    -- EUDEditorWireframe() 용 (EUD Editor 의 WireFrameDataEditor 대신)
+	RegisterButtonSetData() -- 버튼셋 배열을 맵에 싣는다 (f_GetFileArrptr = 선언 전용 구역)
 CJumpEnd(AllPlayers,init_func)
+ApplyButtonSetData()        -- 첫 프레임 1회: buttonSetTable 에 연결 (EUD Editor 의 onPluginStart 자리)
 init()
 
 --DoActions2(FP,PatchArrPrsv)
 CIf(AllPlayers,ElapsedTime(AtLeast,3))
+	EUDEditorWireframe() -- 와이어프레임 20줄 (Library 포인터가 채워진 뒤여야 해서 3초 대기 안)
 	IBGM_EPDX(FP,3,Dt,nil,{12,14})
 	init_Start()
 	System()

@@ -1,8 +1,8 @@
 [main]
-input: ..\..\..\..\..\..\..\..\..\euddraft0.9.2.0\MSF_Memory2.scx
-output: ..\..\..\..\..\..\..\..\..\Program Files (x86)\StarCraft\Maps\마린키우기_Memory2_Test.scx
+input: {{INPUT}}
+output: {{OUTPUT}}
 [STRCtrig Assembler v5.5]
-Path : C:\euddraft0.9.2.0\Ctemp\
+Path : {{CTEMP}}
 [APMCounter]
 Output : 0x58F450, 0x58F454, 0x58F458, 0x58F45C
 Stack : 1, 60, 40, 60, 0.75
@@ -32,12 +32,7 @@ Switch("Switch 254",Set);mouse: ML1
 freeze: 0
 [unlimiter]
 [CPLP]
-[DataEditor.py]
-[ExtraDataEditor.py]
 [dataDumper]
-..\temp\custom_txt.tbl : 0x6D5A30, copy
-
-
-
-
-
+{{STAT_TXT}} : 0x6D5A30, copy
+[{{BGM_MODULE}}]
+Path : {{BGM_DIR}}
