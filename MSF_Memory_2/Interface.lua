@@ -794,7 +794,7 @@ end
 CIfEnd()
 
 for i= 1, 4 do
-	CIfOnce(FP,{CD(AxiomCcode[i],1)})
+	CIfOnce(FP,{AxBossOn(i)}) -- 중간보스 이름표를 Axiom 판으로 (기믹이 꺼지면 일반 이름 유지)
 	CS__InputVA(FP,BTblArr[i],0,BStr2[i],BStr2s[i],nil,0,BStr2s[i])
 	CIfEnd()
 end

@@ -74,6 +74,9 @@ end
 TestSet(0)
 	EVFFlag = 0
 	AxiomSet = 1
+	-- Axiom 중간보스 기믹 (BossTrig.lua 의 AxBossOn). 2~4번 도입이 완성될 때까지 출시 빌드는 0.
+	-- 0.ZI 는 이 기믹이 켜진 채 나가서 Axiom 2~4 를 달성하면 중간보스가 안 나와 게임을 끝낼 수 없었다.
+	AxiomBossSet = 0
 	EternalTestMode = 0
 	GBossTestMode = 0
 	AtkSpeedMode = 0
@@ -85,15 +88,16 @@ if Limit == 1 then
 	GBossTestMode = 1
 	EEggTestNum = 0
 	AxiomSet = 1
+	AxiomBossSet = 1
 else
 	CheatEnableFlag = 0
 	EVFFlag = 0
 end
 RedMode = 0
 if RedMode == 1 then
-	VerText = "\x04Ver. 0.ZIR"
+	VerText = "\x04Ver. 0.ZIR_Fix"
 else
-	VerText = "\x04Ver. 0.ZI"
+	VerText = "\x04Ver. 0.ZI_Fix"
 end
 if EVFFlag == 1 then
 	VerText = VerText.." - EVF"

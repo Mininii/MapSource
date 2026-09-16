@@ -1024,14 +1024,35 @@ end
 	DoActionsX(FP,{SetCD(WarpCheck,1),SetInvincibility(Enable,189,Force2,64)})
 
 	for i = 4, 7 do
-		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],0)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴
-		TriggerX(FP,{GCP(i),CD(AxiomCcode[i-3],1)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom 달성시 특수패턴
+		TriggerX(FP,{GCP(i),AxBossOff(i-3)},{SetV(BGMType,6)})--Axiom 미달성시 기본패턴 (AxiomBossSet 0 이면 항상 이쪽)
+		TriggerX(FP,{GCP(i),AxBossOn(i-3)},{SetV(BGMType,13+i-4),Gun_SetLine(30,SetTo,1)})--Axiom 달성시 특수패턴
 	end
 	CIfX(FP,{Gun_Line(30,Exactly,1)})
 
 	CIf(FP,{GCP(4)})--divide
-		
+	--[[ Infinite Divide 도입 (BGM 13 = BO1.ogg). 시간 = 8번 줄(ms, 매 사이클 +Dt)
+		850 부터 박 간격이 반씩 줄어드는 스네어 롤(2분·4분·8분·16분 각 16박) -> 19032 부터 매 사이클 박
+		-> 20240(= 850 + Ibit*16) 드롭에서 31번 줄 -> 아래 공통 블록이 보스를 부르고 이 건작을 끝낸다.
+		반경 N_R : 850 까지 212 -> 0 으로 모이고, 그 뒤 (t-850)/55 로 커져 드롭 때 약 352.
+		이펙트 45점 스파이럴이 박에 맞춰 돌고(아래 "박 반응"), 박마다 카카루 4마리가 원 안에 생겨 중심으로 모인다. 드롭 때 JYD. ]]
 	CrSwitch = CreateCcode()
+
+	-- 스파이럴 설정. 인게임에서 보며 고칠 값은 여기만 만지면 된다.
+	local DivArms = 3              -- 팔 개수
+	local DivArmPts = 15           -- 팔 하나의 점 수 (DivArms x DivArmPts = 이펙트 수, 예전 원과 같은 45)
+	local DivArmSweep = 180        -- 팔 하나가 안쪽에서 바깥까지 감기는 각도(도)
+	local DivArmColors = {10, 13, 16} -- 팔마다 548 이펙트 색 (예전 원은 10 하나)
+	local DivKick = 12             -- 박 하나가 더하는 회전 속도(도/사이클)
+	local DivFriction = 1          -- 매 사이클 줄어드는 회전 속도
+	local DivSpinMax = 20          -- 회전 속도 상한. 팔이 360/DivArms 도 대칭이라 너무 빠르면 거꾸로 도는 것처럼 보인다
+	local DivPulseR = 48           -- 박 순간 반경 증가(px). 0 이면 안 된다 (박 순간 카카루 난수 범위가 0 이 될 수 있다)
+	local DivPulseDecay = 6        -- 매 사이클 줄어드는 반경 증가
+	local DivArmGap = math.floor(360 / DivArms)
+	local DivStepA = math.floor(DivArmSweep / DivArmPts)
+	local DivSpin, DivRot, DivPulse, DivStep = CreateVars(4,FP)
+	local DivArmI, DivArmA, DivPtI, DivPtA, DivPtR = CreateVars(5,FP)
+	local DivSpawnR, DivSpawnA, DivCrossA = CreateVars(3,FP)
+	local N_X2, N_Y2, N_X3, N_Y3 = CreateVars(4,FP)
 	
 	local Ibit = 606.0606*2
 	local InterCrTable = {}
@@ -1058,56 +1079,74 @@ end
 		f_Div(FP,N_R,55)
 		CIfXEnd()
 
-		CMov(FP,N_A,0)
-		TempRand = f_CRandNum(360)
-		local N_A_Rand = CreateVar(FP)
-		CMov(FP,N_A_Rand,TempRand)
-		CWhile(FP,{CVar(FP,N_A[2],AtMost,359)})
-		f_Lengthdir(FP,N_R,_Add(N_A,N_A_Rand),N_X,N_Y)
-		
-		CAdd(FP,N_X,G_CA_CenterX)
-		CAdd(FP,N_Y,G_CA_CenterY)
+		-- ■ 박 반응 : 박이 오면 회전에 힘을 싣고(DivKick) 반경을 순간 부풀린다(DivPulseR). 둘 다 매 사이클 줄어든다.
+		--   박이 드문 앞부분은 박마다 한 번씩 "탁" 돌고, 스네어 롤로 박이 촘촘해지면 힘이 쌓여 드롭까지 점점 빨리 돈다.
+		--   CrSwitch 는 아래 카카루 루프가 비우므로 그보다 먼저 본다.
+		TriggerX(FP,{CD(CrSwitch,1,AtLeast)},{AddV(DivSpin,DivKick),SetV(DivPulse,DivPulseR)},{preserved})
+		TriggerX(FP,{CV(DivSpin,DivSpinMax,AtLeast)},{SetV(DivSpin,DivSpinMax)},{preserved})
+		CAdd(FP,DivRot,DivSpin)
+		TriggerX(FP,{CV(DivRot,360,AtLeast)},{SubV(DivRot,360)},{preserved})
+		CAdd(FP,N_R,DivPulse) -- 박 순간에는 N_R >= DivPulseR 라서 아래 난수 범위가 0 이 되지 않는다
+		DoActionsX(FP,{SubV(DivSpin,DivFriction),SubV(DivPulse,DivPulseDecay)})
 
-		Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
-		CreateEffUnit({CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,10)
-
-		CWhile(FP,{CD(CrSwitch,1,AtLeast)},{SubCD(CrSwitch,1)})
-		
-		CDoActions(FP, {TSetCVar(FP,InputMaxRand[2],SetTo,N_R),TSetCVar(FP,Oprnd[2],SetTo,0)})
-		CallTrigger(FP,CRandNum)
-		N_X2 = CreateVar(FP)
-		N_Y2 = CreateVar(FP)
-		f_Lengthdir(FP,TempRand,_Add(N_A,N_A_Rand),N_X2,N_Y2)
-		CAdd(FP,N_X2,G_CA_CenterX)
-		CAdd(FP,N_Y2,G_CA_CenterY)
-		TempRand = f_CRandNum(360)
-		CFor(FP,0,360,90)
-		CI=CForVariable()
-		N_X3 = CreateVar(FP)
-		N_Y3 = CreateVar(FP)
-		f_Lengthdir(FP,64,_Add(CI,TempRand),N_X3,N_Y3)
-		CAdd(FP,N_X3,N_X2)
-		CAdd(FP,N_Y3,N_Y2)
-		Simple_SetLocX(FP,0,N_X3,N_Y3,N_X3,N_Y3)
-
-		CIf(FP,{Memory(0x628438, AtLeast, 1)})
-
-		f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
-		DoActions(FP,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),SetMemoryB(0x669E28+116, SetTo, 12),CreateUnit(1,84,1,FP),KillUnit(84,FP),SetMemoryB(0x6636B8+94,SetTo,130)})
-		CDoActions(FP,{
-			TSetDeaths(_Add(Nextptrs,13),SetTo,100,0),
-			TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000),
-			TSetDeathsX(_Add(Nextptrs,18),SetTo,100,0,0xFFFF)})
-
-		CIfEnd()
-
-
-		CForEnd()
+		-- ■ 스파이럴 이펙트 : 팔 DivArms 개, 팔마다 점 DivArmPts 개.
+		--   p 번째 점(0부터) = 각도 DivRot + 팔 번호*DivArmGap + p*DivStepA, 반경 (p+1)*N_R/DivArmPts
+		--   각도·반경은 곱하지 않고 한 점씩 더해 간다 (점마다 곱셈/나눗셈 트리거를 돌리지 않으려고).
+		CMov(FP,DivStep,N_R)
+		f_Div(FP,DivStep,DivArmPts)
+		CMov(FP,DivArmA,DivRot)
+		CMov(FP,DivArmI,0)
+		CWhile(FP,{CV(DivArmI,DivArms-1,AtMost)})
+			CMov(FP,DivPtA,DivArmA)
+			CMov(FP,DivPtR,DivStep)
+			CMov(FP,DivPtI,0)
+			CWhile(FP,{CV(DivPtI,DivArmPts-1,AtMost)})
+				f_Lengthdir(FP,DivPtR,DivPtA,N_X,N_Y) -- 각도는 360 이상이어도 f_Lengthdir 가 나머지로 접는다
+				CAdd(FP,N_X,G_CA_CenterX)
+				CAdd(FP,N_Y,G_CA_CenterY)
+				Simple_SetLocX(FP,0,N_X,N_Y,N_X,N_Y)
+				for a = 1, DivArms do
+					CreateEffUnit({CV(DivArmI,a-1),CV(N_X,4095,AtMost),CV(N_Y,4095,AtMost)},20,548,DivArmColors[a])
+				end
+				CAdd(FP,DivPtA,DivStepA)
+				CAdd(FP,DivPtR,DivStep)
+				CAdd(FP,DivPtI,1)
+			CWhileEnd()
+			CAdd(FP,DivArmA,DivArmGap)
+			CAdd(FP,DivArmI,1)
 		CWhileEnd()
-		
 
+		-- ■ 카카루 : 박마다 원 안 무작위 한 점(반경 0 ~ N_R, 방향 무작위)에 4마리 십자(반경 64, 회전 무작위)
+		CWhile(FP,{CD(CrSwitch,1,AtLeast)},{SubCD(CrSwitch,1)})
+			CDoActions(FP, {TSetCVar(FP,InputMaxRand[2],SetTo,N_R),TSetCVar(FP,Oprnd[2],SetTo,0)})
+			CallTrigger(FP,CRandNum)
+			CMov(FP,DivSpawnR,TempRandRet) -- CRandNum 의 출력 (func.lua 의 Include_CRandNum)
+			CMov(FP,DivSpawnA,f_CRandNum(360))
+			f_Lengthdir(FP,DivSpawnR,DivSpawnA,N_X2,N_Y2)
+			CAdd(FP,N_X2,G_CA_CenterX)
+			CAdd(FP,N_Y2,G_CA_CenterY)
+			CMov(FP,DivCrossA,f_CRandNum(360))
+			CFor(FP,0,360,90)
+			CI=CForVariable()
+			f_Lengthdir(FP,64,_Add(CI,DivCrossA),N_X3,N_Y3)
+			CAdd(FP,N_X3,N_X2)
+			CAdd(FP,N_Y3,N_Y2)
+			Simple_SetLocX(FP,0,N_X3,N_Y3,N_X3,N_Y3)
 
-		CAdd(FP,N_A,8)
+			CIf(FP,{Memory(0x628438, AtLeast, 1)})
+
+			f_Read(FP,0x628438,"X",Nextptrs,0xFFFFFF)
+			-- 색(이미지 116 = 인터셉터 그래픽)은 만들기 직전에 바꾸고 바로 되돌린다 (BossTrig.lua 의 하템보스 소환과 같은 순서).
+			-- 예전에는 만든 "뒤"에 12 로 바꾸고 되돌리지 않아서, 첫 마리는 원래 색이고 그 뒤로는 계속 12 였다.
+			DoActions(FP,{SetMemoryB(0x669E28+116, SetTo, 12),CreateUnitWithProperties(1,94,1,P5,{energy=100}),SetMemoryB(0x669E28+116, SetTo, 0),CreateUnit(1,84,1,FP),KillUnit(84,FP),SetMemoryB(0x6636B8+94,SetTo,130)})
+			CDoActions(FP,{
+				TSetDeaths(_Add(Nextptrs,13),SetTo,100,0),
+				TSetDeathsX(_Add(Nextptrs,9),SetTo,0,0,0xFF0000),
+				TSetDeathsX(_Add(Nextptrs,18),SetTo,100,0,0xFFFF)})
+
+			CIfEnd()
+
+			CForEnd()
 		CWhileEnd()
 
 		
@@ -1119,14 +1158,17 @@ end
 
 
 	CIfEnd()
+	-- 2~4번 도입은 아직 없다. 만들 때까지는 곧바로 31번 줄을 켜서 보스를 부른다.
+	-- 비워 두면 보스가 안 나오고 이 건작도 안 끝나서, 최후의 기억 무적이 풀리지 않고 남은 워프 터널도 계속 무적이다 (0.ZI).
 	CIf(FP,{GCP(5)})--tenebris
 		--박자에 맞춰서 원이 심장고동치듯 움직일것. Snare에 맞춰서 일정 각도에서 저글링이 터지는 모션 추가할것.
+		DoActionsX(FP,{Gun_SetLine(31,SetTo,1)}) -- 임시: 도입 없이 보스
 	CIfEnd()
 	CIf(FP,{GCP(6)})--Demication
-		
+		DoActionsX(FP,{Gun_SetLine(31,SetTo,1)}) -- 임시: 도입 없이 보스
 	CIfEnd()
 	CIf(FP,{GCP(7)})--Anomaly
-		
+		DoActionsX(FP,{Gun_SetLine(31,SetTo,1)}) -- 임시: 도입 없이 보스
 	CIfEnd()
 
 

@@ -1,3 +1,16 @@
+--[[ Axiom 중간보스 기믹 스위치 (main.lua 의 AxiomBossSet)
+	1 : Axiom n 을 달성한 채 n번 워프 터널을 부수면 도입 연출(GunData.lua 의 189 케이스) · 보스 패턴 · 이름 · 처치 보상이 바뀐다.
+	0 : Axiom 을 달성해도 중간보스는 일반 흐름이다. Axiom 발견 판정과 건작보스 특수 패턴(AxiomEnable)은 그대로 돈다.
+	중간보스 쪽에서 AxiomCcode 를 볼 때는 CD(AxiomCcode[n],...) 대신 이 둘을 쓴다. ]]
+function AxBossOn(n)
+	if AxiomBossSet == 1 then return CD(AxiomCcode[n],1,AtLeast) end
+	return Never()
+end
+function AxBossOff(n)
+	if AxiomBossSet == 1 then return CD(AxiomCcode[n],0) end
+	return Always()
+end
+
 function BossTrig()
 	B1C = CreateCcodeArr(10)
 	B2C = CreateCcodeArr(10)
@@ -26,30 +39,30 @@ B1Mode = CreateCcode()
 		TriggerX(FP,{CD(Theorist,1,AtLeast)},{SetInvincibility(Enable, 87, P5, 64)})
 		local B1PV = CreateVar(FP)
 		DoActionsX(FP, {SetV(B1PV,100)})
-		TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)},{SetV(B1PV,450)} ,{preserved})
+		TriggerX(FP, {AxBossOn(1)},{SetV(B1PV,450)} ,{preserved})
 		CIf(FP,CD(B1C[1],0))
 		
-			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],15,AtLeast),CD(AxiomCcode[1],0)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
-			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],5,AtLeast),CD(AxiomCcode[1],1,AtLeast)},{SetCD(TC[1],10),SetCD(B1C[2],0)},{preserved})
+			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],15,AtLeast),AxBossOff(1)},{SetCD(TC[1],5),SetCD(B1C[2],0)},{preserved})
+			CTrigger(FP,{TBring(P5,AtMost,B1PV,94,64),CD(B1C[2],5,AtLeast),AxBossOn(1)},{SetCD(TC[1],10),SetCD(B1C[2],0)},{preserved})
 			CWhile(FP,CD(TC[1],1,AtLeast),SubCD(TC[1],1))
 				CMov(FP,TV[1],f_CRandNum(128))
 				CMov(FP,TV[2],f_CRandNum(360))
 				f_Lengthdir(FP,TV[1],TV[2],N_X,N_Y)
 				DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,0)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,1)}, {SetMemoryB(0x669E28+116, SetTo, 16);},{preserved})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,2)}, {SetMemoryB(0x669E28+116, SetTo, 13);},{preserved})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,3)}, {SetMemoryB(0x669E28+116, SetTo, 10);},{preserved})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast),CD(B1Mode,4)}, {SetMemoryB(0x669E28+116, SetTo, 12);},{preserved})
+				TriggerX(FP, {AxBossOn(1),CD(B1Mode,0)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
+				TriggerX(FP, {AxBossOn(1),CD(B1Mode,1)}, {SetMemoryB(0x669E28+116, SetTo, 16);},{preserved})
+				TriggerX(FP, {AxBossOn(1),CD(B1Mode,2)}, {SetMemoryB(0x669E28+116, SetTo, 13);},{preserved})
+				TriggerX(FP, {AxBossOn(1),CD(B1Mode,3)}, {SetMemoryB(0x669E28+116, SetTo, 10);},{preserved})
+				TriggerX(FP, {AxBossOn(1),CD(B1Mode,4)}, {SetMemoryB(0x669E28+116, SetTo, 12);},{preserved})
 				Simple_SetLoc2X(FP,0,N_X,N_Y,N_X,N_Y,{CreateUnitWithProperties(1,94,1,P5,{energy=100}),Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64),SetMemoryB(0x6636B8+94,SetTo,130)})
-				TriggerX(FP, {CD(AxiomCcode[1],1,AtLeast)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
+				TriggerX(FP, {AxBossOn(1)}, {SetMemoryB(0x669E28+116, SetTo, 0);},{preserved})
 			CWhileEnd()
 			DoActions2X(FP,{Simple_SetLoc(0,0,0,64,64),MoveLocation(1,BossUID[1],P5,64)})
 			DoActions(FP,{Order(94,P5,64,Move,1),})
 		CIfEnd()
-		CTrigger(FP,{CD(AxiomCcode[1],0),TBring(P5,AtLeast,B1PV,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
-		CTrigger(FP,{CD(AxiomCcode[1],1,AtLeast),TBring(P5,AtLeast,B1PV,94,64)},{AddCD(B1C[4],1)},{preserved})
-		CTrigger(FP,{CD(AxiomCcode[1],1,AtLeast),CD(B1C[4],300,AtLeast)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
+		CTrigger(FP,{AxBossOff(1),TBring(P5,AtLeast,B1PV,94,64)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
+		CTrigger(FP,{AxBossOn(1),TBring(P5,AtLeast,B1PV,94,64)},{AddCD(B1C[4],1)},{preserved})
+		CTrigger(FP,{AxBossOn(1),CD(B1C[4],300,AtLeast)},{SetCD(B1C[1],1),SetInvincibility(Disable, 87, P5, 64)},{preserved})
 		CIf(FP,CD(B1C[1],1),AddCD(B1C[3],1))
 			CIf(FP,CD(B1C[3],1),{SetMemory(0x6509B0,SetTo,P5),RunAIScriptAt(JYD,64)}) --100~500
 				
@@ -61,14 +74,14 @@ B1Mode = CreateCcode()
 					CIf(FP,DeathsX(CurrentPlayer,Exactly,94,0,0xFF))
 						f_SaveCp()
 						CMov(FP,TV[1],BackupCp,-25)
-						CIfX(FP,{CD(AxiomCcode[1],0)})
+						CIfX(FP,{AxBossOff(1)})
 						CMov(FP,TV[2],f_CRandNum(500,100))
 						CMov(FP,TV[3],TV[2])
 						CElseX()
 						CMov(FP,TV[2],f_CRandNum(7000,450))
 						CMov(FP,TV[3],24)
 						CIfXEnd()
-						CTrigger(FP,{CD(AxiomCcode[1],0)},{TSetDeaths(_Add(TV[1],2),SetTo,_Add(f_CRandNum(100*256),100*256),0),},{preserved})
+						CTrigger(FP,{AxBossOff(1)},{TSetDeaths(_Add(TV[1],2),SetTo,_Add(f_CRandNum(100*256),100*256),0),},{preserved})
 						CDoActions(FP,{
 							TSetDeaths(_Add(TV[1],13),SetTo,TV[2],0),
 							TSetDeathsX(_Add(TV[1],9),SetTo,0,0,0xFF0000),
@@ -79,7 +92,7 @@ B1Mode = CreateCcode()
 				CIfEnd()
 				CAdd(FP,0x6509B0,84)
 			CWhileEnd()
-			CAdd(FP,0x6509B0,FP)
+			CMov(FP,0x6509B0,FP) -- CP 복원
 			
 			CIfEnd()
 			TriggerX(FP,{CD(B1C[3],1,AtLeast)},{AddCD(B1C[3],1)},{preserved})
@@ -88,7 +101,7 @@ B1Mode = CreateCcode()
 			local B1X = CreateVar(FP)
 			local B1A = CreateVar(FP)
 			local B1A2 = CreateVar(FP)
-			CIf(FP,{CD(AxiomCcode[1],1,AtLeast)},{}) -- Axiom 전용 패턴
+			CIf(FP,{AxBossOn(1)},{}) -- Axiom 전용 패턴
 				CIf(FP,{CD(B1C[3],100,AtLeast)})
 					f_Read(FP,_Add(BPtrArr[1],10),CPos)
 					Convert_CPosXY()
@@ -119,7 +132,7 @@ B1Mode = CreateCcode()
 
 
 
-			CIf(FP,{CD(AxiomCcode[1],1,AtLeast)},{SubV(B1X,1),RemoveUnitAt(All, 88, 53, P11),SetBulletSpeed(400)}) -- Axiom 전용 패턴
+			CIf(FP,{AxBossOn(1)},{SubV(B1X,1),RemoveUnitAt(All, 88, 53, P11),SetBulletSpeed(400)}) -- Axiom 전용 패턴
 			TriggerX(FP, {CV(B1X,0)}, {KillUnit(88, P11)}, {preserved})
 			TriggerX(FP, {CV(B1X,90)}, {SetInvincibility(Disable, 88, P11, 64)}, {preserved})
 			CIf(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,10*256,0xFF00),TMemory(_Add(BPtrArr[1],23),AtLeast,1),CV(B1X,0)},{SetV(B1X,100)})--공격중인 상태이며 대상이 있을경우
@@ -156,12 +169,13 @@ B1Mode = CreateCcode()
 			CMov(FP, TempV,_Div(_ReadF(_Add(BPtrArr[1],2)),256))
 			DisplayPrintEr(MapPlayers, {"하템보스체력 : ",TempV})
 
-		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1])},1)
+		-- 사망: Axiom 패턴의 P11 아르타니스(88)도 정리한다. 로케이션 53 제거가 이 보스 블록 안에 있어 보스가 죽으면 남는다 (닼템보스 사망 처리와 같은 방식)
+		CTrigger(FP,{TMemoryX(_Add(BPtrArr[1],19),Exactly,0,0xFF00)},{SetV(BPtrArr[1],0),KillUnit(94,Force2),SetDeaths(4,SetTo,1,BossUID[1]),ModifyUnitEnergy(All, 88, P11, 64, 0),KillUnit(88, P11)},1)
 	CIfEnd()
 
 
 	CIf(FP,CV(BPtrArr[2],1,AtLeast))--닼템보스
-		CIf(FP,{CD(AxiomCcode[2],1,AtLeast)},{AddCD(B2C[2],1),AddCD(B2C[3],1)}) -- Axiom 전용 패턴
+		CIf(FP,{AxBossOn(2)},{AddCD(B2C[2],1),AddCD(B2C[3],1)}) -- Axiom 전용 패턴
 			TriggerX(FP,{CD(B2C[2],500,AtLeast)},{SetMemory(0x657A9C,Add,1),SetCD(B2C[2],0)},{preserved}) -- 일정시간 지난경우 밝기 회복
 			TriggerX(FP,{Memory(0x657A9C,AtLeast,32)},{SetMemory(0x657A9C,SetTo,31)},{preserved})
 			DSkillRetX,DSkillRetY = CreateVars(2, FP)
@@ -345,7 +359,7 @@ B1Mode = CreateCcode()
 	end
 	for i = 4, 7 do
 	InvDisable2(189,i,{
-		CD(AxiomCcode[i-3],0),
+		AxBossOff(i-3),
 		CV(BPtrArr[1],0,AtMost),
 		CV(BPtrArr[2],0,AtMost),
 		CV(BPtrArr[3],0,AtMost),
@@ -353,7 +367,7 @@ B1Mode = CreateCcode()
 		CD(WarpCheck,0),
 		CD(HactCcode[i-3],0,AtMost),CD(LairCcode[i-3],0,AtMost),CD(HiveCcode[i-3],0,AtMost),CD(CenCcode2[i-3],1,AtLeast)})
 	InvDisable2(189,i,{ -- axiom 활성화시에는 브금꺼져야 부술수있음
-		CD(AxiomCcode[i-3],1),
+		AxBossOn(i-3),
 		DeathsX(0,Exactly,0,12,0xFFFFFF),
 		DeathsX(1,Exactly,0,12,0xFFFFFF),
 		DeathsX(2,Exactly,0,12,0xFFFFFF),
