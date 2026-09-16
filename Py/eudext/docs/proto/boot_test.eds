@@ -1,0 +1,14 @@
+[main]
+input: base.scx
+output: out.scx
+
+[boot.py]
+shared : C:\Users\whatd\AppData\Local\Temp\claude\c--Users-whatd-Documents-MSF-Template\3ae10ce7-f379-40ba-95b4-2dbc6ccacb8c\scratchpad\edtest\shared
+
+[late.py]
+shared : C:\Users\whatd\AppData\Local\Temp\claude\c--Users-whatd-Documents-MSF-Template\3ae10ce7-f379-40ba-95b4-2dbc6ccacb8c\scratchpad\edtest\shared
+
+[main.eps]
+
+[freeze]
+freeze : 0

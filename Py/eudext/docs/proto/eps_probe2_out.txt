@@ -1,0 +1,669 @@
+##### mod_call_names: OK
+--- src:
+import eudext.i64 as i64;
+function f(a) {
+  i64.foo(a);
+  i64.f_foo(a);
+  i64.Foo(a);
+  i64.EUDFoo(a);
+  i64.foo_bar(a);
+  const x = i64.CONST;
+  const y = i64.foo;
+  i64.sub.foo(a);
+  i64.obj.method(a);
+  i64.Int64.from_var(a);
+  const z = i64.foo(a) + 1;
+  if (i64.lt(a, 1)) {}
+}
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) function f(a) {
+@EUDFunc
+def f_f(a):
+    # (Line 3) i64.foo(a);
+    i64.f_foo(a)
+    # (Line 4) i64.f_foo(a);
+    i64.f_f_foo(a)
+    # (Line 5) i64.Foo(a);
+    i64.Foo(a)
+    # (Line 6) i64.EUDFoo(a);
+    i64.EUDFoo(a)
+    # (Line 7) i64.foo_bar(a);
+    i64.f_foo_bar(a)
+    # (Line 8) const x = i64.CONST;
+    x = i64.CONST
+    # (Line 9) const y = i64.foo;
+    y = i64.foo
+    # (Line 10) i64.sub.foo(a);
+    i64.sub.foo(a)
+    # (Line 11) i64.obj.method(a);
+    i64.obj.method(a)
+    # (Line 12) i64.Int64.from_var(a);
+    i64.Int64.from_var(a)
+    # (Line 13) const z = i64.foo(a) + 1;
+    z = i64.f_foo(a) + 1
+    # (Line 14) if (i64.lt(a, 1)) {}
+    if EUDIf()(i64.f_lt(a, 1)):
+        # (Line 15) }
+        pass
+    EUDEndIf()
+
+
+##### plain_mod_call: OK
+--- src:
+import mylib;
+function f(a) { mylib.foo(a); mylib.Foo(a); }
+--- out:
+# (Line 1) import mylib;
+import mylib
+# (Line 2) function f(a) { mylib.foo(a); mylib.Foo(a); }
+@EUDFunc
+def f_f(a):
+    mylib.f_foo(a)
+    mylib.Foo(a)
+
+
+##### alias_class: OK
+--- src:
+import eudext.i64 as i64;
+const Int64 = i64.Int64;
+function f(a) { const x = Int64(a, 0); }
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) const Int64 = i64.Int64;
+Int64 = _CGFW(lambda: [i64.Int64], 1)[0]
+# (Line 3) function f(a) { const x = Int64(a, 0); }
+@EUDFunc
+def f_f(a):
+    x = Int64(a, 0)
+
+
+##### alias_class_typed: OK
+--- src:
+import eudext.i64 as i64;
+const Int64 = i64.Int64;
+function f(a: Int64) { return a; }
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) const Int64 = i64.Int64;
+Int64 = _CGFW(lambda: [i64.Int64], 1)[0]
+# (Line 3) function f(a: Int64) { return a; }
+@EUDTypedFunc([Int64])
+def f_f(a):
+    EUDReturn(a)
+
+
+##### alias_func: OK
+--- src:
+import eudext.i64 as i64;
+const add = i64.add;
+function f(a) { add(a, a); }
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) const add = i64.add;
+add = _CGFW(lambda: [i64.add], 1)[0]
+# (Line 3) function f(a) { add(a, a); }
+@EUDFunc
+def f_f(a):
+    add(a, a)
+
+
+##### var_local_obj: OK
+--- src:
+object P { var x; };
+function f() { var p = P(); p.x = 1; }
+--- out:
+# (Line 1) object P { var x; };
+class P(EUDStruct):
+    # (Line 2) function f() { var p = P(); p.x = 1; }
+    _fields_ = [
+        'x',
+    ]
+
+@EUDFunc
+def f_f():
+    p = _LVAR([P()])
+    _ATTW(p, 'x') << (1)
+
+
+##### var_global_obj: OK
+--- src:
+object P { var x; };
+var p = P();
+function f() { p.x = 1; }
+--- out:
+# (Line 1) object P { var x; };
+class P(EUDStruct):
+    # (Line 2) var p = P();
+    _fields_ = [
+        'x',
+    ]
+
+p = _IGVA(1, lambda: [P()])
+# (Line 3) function f() { p.x = 1; }
+@EUDFunc
+def f_f():
+    _ATTW(p, 'x') << (1)
+
+
+##### var_local_modobj: OK
+--- src:
+import eudext.i64 as i64;
+function f(a) { var q = i64.Int64(a, 0); q += a; q = a; }
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) function f(a) { var q = i64.Int64(a, 0); q += a; q = a; }
+@EUDFunc
+def f_f(a):
+    q = _LVAR([i64.Int64(a, 0)])
+    q.__iadd__(a)
+    q << (a)
+
+
+##### var_reassign: OK
+--- src:
+function f(a, b) { var q = a; q = b; q += 1; q -= b; q *= 2; q /= 2; q %= 3; q |= 1; q &= 1; q ^= 1; q >>= 1; }
+--- out:
+# (Line 1) function f(a, b) { var q = a; q = b; q += 1; q -= b; q *= 2; q /= 2; q %= 3; q |= 1; q &= 1; q ^= 1; q >>= 1; }
+@EUDFunc
+def f_f(a, b):
+    q = _LVAR([a])
+    q << (b)
+    q.__iadd__(1)
+    q.__isub__(b)
+    q.__imul__(2)
+    q.__ifloordiv__(2)
+    q.__imod__(3)
+    q.__ior__(1)
+    q.__iand__(1)
+    q.__ixor__(1)
+    q.__irshift__(1)
+
+
+##### const_method_assign: OK
+--- src:
+import eudext.i64 as i64;
+const I = i64.Int64();
+function f(a) { I.assign(a); I.iadd(a); }
+--- out:
+# (Line 1) import eudext.i64 as i64;
+from eudext import i64 as i64
+# (Line 2) const I = i64.Int64();
+I = _CGFW(lambda: [i64.Int64()], 1)[0]
+# (Line 3) function f(a) { I.assign(a); I.iadd(a); }
+@EUDFunc
+def f_f(a):
+    I.assign(a)
+    I.iadd(a)
+
+
+##### str_dq_arg: OK
+--- src:
+function f(a) { f_sprintf(a, "abc {}", a); }
+--- out:
+# (Line 1) function f(a) { f_sprintf(a, "abc {}", a); }
+@EUDFunc
+def f_f(a):
+    f_sprintf(a, "abc {}", a)
+
+
+##### str_const_dq: FAIL(err=2)
+--- src:
+const s = "abc";
+
+##### str_local_dq: FAIL(err=2)
+--- src:
+function f() { const s = "abc"; }
+
+##### str_local_sq: FAIL(err=2)
+--- src:
+function f() { const s = 'abc'; }
+
+##### str_escape: FAIL(err=2)
+--- src:
+const s = "a\nb\x01";
+
+##### str_concat: FAIL(err=3)
+--- src:
+const s = "a" + "b";
+
+##### str_fmt: OK
+--- src:
+function f(a) { const s = py_str("{}").format(1); }
+--- out:
+# (Line 1) function f(a) { const s = py_str("{}").format(1); }
+@EUDFunc
+def f_f(a):
+    s = str("{}").format(1)
+
+
+##### cond_func_neg: OK
+--- src:
+import m;
+function f(a) { if (!m.cond(a)) {} while (!m.cond(a)) {} }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f(a) { if (!m.cond(a)) {} while (!m.cond(a)) {} }
+@EUDFunc
+def f_f(a):
+    if EUDIf()(m.f_cond(a), neg=True):
+        pass
+    EUDEndIf()
+    if EUDWhile()(m.f_cond(a), neg=True):
+        pass
+    EUDEndWhile()
+
+
+##### cond_mixed: OK
+--- src:
+import m;
+function f(a) { if (a < 3 && m.cond(a) || !m.cond2(a)) {} }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f(a) { if (a < 3 && m.cond(a) || !m.cond2(a)) {} }
+@EUDFunc
+def f_f(a):
+    if EUDIf()(EUDSCOr()(EUDSCAnd()(a >= 3, neg=True)(m.f_cond(a))())(m.f_cond2(a), neg=True)()):
+        pass
+    EUDEndIf()
+
+
+##### cond_ternary_call: OK
+--- src:
+import m;
+function f(a) { const z = m.cond(a) ? 1 : 2; }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f(a) { const z = m.cond(a) ? 1 : 2; }
+@EUDFunc
+def f_f(a):
+    z = EUDTernary(m.f_cond(a))(1)(2)
+
+
+##### cond_as_value: OK
+--- src:
+function f(a, b) { const z = (a < b); var w = a == b; }
+--- out:
+# (Line 1) function f(a, b) { const z = (a < b); var w = a == b; }
+@EUDFunc
+def f_f(a, b):
+    z = (EUDNot(a >= b))
+    w = _LVAR([a == b])
+
+
+##### cond_list: OK
+--- src:
+function f(a, b) { if (list(a == 1, b == 2)) {} }
+--- out:
+# (Line 1) function f(a, b) { if (list(a == 1, b == 2)) {} }
+@EUDFunc
+def f_f(a, b):
+    if EUDIf()(FlattenList([a == 1, b == 2])):
+        pass
+    EUDEndIf()
+
+
+##### chunk_py_print: OK
+--- src:
+py_print(1);
+--- out:
+# (Line 1) py_print(1);
+print(1)
+
+
+##### chunk_fcall: OK
+--- src:
+import m;
+m.setup(1);
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) m.setup(1);
+m.f_setup(1)
+
+
+##### chunk_if: FAIL(err=5)
+--- src:
+if (1) {}
+
+##### chunk_const_after_fn: FAIL(err=1)
+--- src:
+function g() {}
+const x = g;
+
+##### chunk_on_start: OK
+--- src:
+function g() {}
+EUDOnStart(py_eval('f_g'));
+--- out:
+# (Line 1) function g() {}
+@EUDFunc
+def f_g():
+    # (Line 2) EUDOnStart(py_eval('f_g'));
+    pass
+
+EUDOnStart(eval('f_g'))
+
+
+##### earray_typed: OK
+--- src:
+function f(a: EUDArray) { a[0] = 1; }
+--- out:
+# (Line 1) function f(a: EUDArray) { a[0] = 1; }
+@EUDTypedFunc([EUDArray])
+def f_f(a):
+    _ARRW(a, 0) << (1)
+
+
+##### vararray_typed: OK
+--- src:
+function f(a: EUDVArray(3)) { a[0] = 1; }
+--- out:
+# (Line 1) function f(a: EUDVArray(3)) { a[0] = 1; }
+@EUDTypedFunc([EUDVArray(3)])
+def f_f(a):
+    _ARRW(a, 0) << (1)
+
+
+##### struct_arr_field: OK
+--- src:
+object P { var x; };
+object Q { var ps: P; };
+function f(q: Q) { q.ps.x = 1; }
+--- out:
+# (Line 1) object P { var x; };
+class P(EUDStruct):
+    # (Line 2) object Q { var ps: P; };
+    _fields_ = [
+        'x',
+    ]
+
+class Q(EUDStruct):
+    # (Line 3) function f(q: Q) { q.ps.x = 1; }
+    _fields_ = [
+        ('ps', P),
+    ]
+
+@EUDTypedFunc([Q])
+def f_f(q):
+    _ATTW(q.ps, 'x') << (1)
+
+
+##### obj_selftype: OK
+--- src:
+object Node { var next: selftype; var v; };
+--- out:
+# (Line 1) object Node { var next: selftype; var v; };
+class Node(EUDStruct):
+    _fields_ = [
+        ('next', selftype),
+        'v',
+    ]
+
+
+##### obj_inherit: OK
+--- src:
+object A { var x; };
+object B extends A { var y; };
+--- out:
+# (Line 1) object A { var x; };
+class A(EUDStruct):
+    # (Line 2) object B extends A { var y; };
+    _fields_ = [
+        'x',
+    ]
+
+class B(A):
+    _fields_ = [
+        'y',
+    ]
+
+
+##### obj_static_method: OK
+--- src:
+object P { var x; function f(a) { this.x = a; } };
+const p = P();
+function g() { p.f(1); }
+--- out:
+# (Line 1) object P { var x; function f(a) { this.x = a; } };
+class P(EUDStruct):
+    @EUDMethod
+    def f(this, a):
+        _ATTW(this, 'x') << (a)
+
+    # (Line 2) const p = P();
+    _fields_ = [
+        'x',
+    ]
+
+p = _CGFW(lambda: [P()], 1)[0]
+# (Line 3) function g() { p.f(1); }
+@EUDFunc
+def f_g():
+    p.f(1)
+
+
+##### obj_setitem: OK
+--- src:
+object P { var x; };
+function g(p: P) { p[0] = 1; }
+--- out:
+# (Line 1) object P { var x; };
+class P(EUDStruct):
+    # (Line 2) function g(p: P) { p[0] = 1; }
+    _fields_ = [
+        'x',
+    ]
+
+@EUDTypedFunc([P])
+def f_g(p):
+    _ARRW(p, 0) << (1)
+
+
+##### fn_rettypes_multi: OK
+--- src:
+function f(a) : TrgUnit, TrgPlayer { return a, a; }
+--- out:
+# (Line 1) function f(a) : TrgUnit, TrgPlayer { return a, a; }
+@EUDTypedFunc([None], [TrgUnit, TrgPlayer])
+def f_f(a):
+    EUDReturn(a, a)
+
+
+##### fn_mixed_types: OK
+--- src:
+object P { var x; };
+function f(a, b: P, c) { }
+--- out:
+# (Line 1) object P { var x; };
+class P(EUDStruct):
+    # (Line 2) function f(a, b: P, c) { }
+    _fields_ = [
+        'x',
+    ]
+
+@EUDTypedFunc([None, P, None])
+def f_f(a, b, c):
+    pass
+
+
+##### fn_return_none: OK
+--- src:
+function f(a) { return; }
+--- out:
+# (Line 1) function f(a) { return; }
+@EUDFunc
+def f_f(a):
+    EUDReturn()
+
+
+##### fn_nested_call_kw: OK
+--- src:
+function f(a) { f_dwwrite(a, 1); }
+--- out:
+# (Line 1) function f(a) { f_dwwrite(a, 1); }
+@EUDFunc
+def f_f(a):
+    f_dwwrite(a, 1)
+
+
+##### setcurpl: OK
+--- src:
+function f(a) { setcurpl(a); const c = getcurpl(); }
+--- out:
+# (Line 1) function f(a) { setcurpl(a); const c = getcurpl(); }
+@EUDFunc
+def f_f(a):
+    f_setcurpl(a)
+    c = f_getcurpl()
+
+
+##### dwread: OK
+--- src:
+function f(a) { const v = dwread_epd(a); }
+--- out:
+# (Line 1) function f(a) { const v = dwread_epd(a); }
+@EUDFunc
+def f_f(a):
+    v = f_dwread_epd(a)
+
+
+##### unknown_fn: FAIL(err=1)
+--- src:
+function f(a) { foo(a); }
+
+##### unknown_Cap_fn: FAIL(err=1)
+--- src:
+function f(a) { Foo(a); }
+
+##### known_eud_class: OK
+--- src:
+function f(a) { const v = EUDVariable(); const u = TrgUnit(a); }
+--- out:
+# (Line 1) function f(a) { const v = EUDVariable(); const u = TrgUnit(a); }
+@EUDFunc
+def f_f(a):
+    v = EUDVariable()
+    u = TrgUnit(a)
+
+
+##### bool_ops: OK
+--- src:
+function f(a, b) { const z = a & b; const w = a | b; const x = a ^ b; }
+--- out:
+# (Line 1) function f(a, b) { const z = a & b; const w = a | b; const x = a ^ b; }
+@EUDFunc
+def f_f(a, b):
+    z = a & b
+    w = a | b
+    x = a ^ b
+
+
+##### compare_result_var: OK
+--- src:
+function f(a, b) { var z = a < b; }
+--- out:
+# (Line 1) function f(a, b) { var z = a < b; }
+@EUDFunc
+def f_f(a, b):
+    z = _LVAR([EUDNot(a >= b)])
+
+
+##### L2V: OK
+--- src:
+function f(a, b) { return a < b; }
+--- out:
+# (Line 1) function f(a, b) { return a < b; }
+@EUDFunc
+def f_f(a, b):
+    EUDReturn(EUDNot(a >= b))
+
+
+##### L2V_eq: OK
+--- src:
+function f(a, b) { return a == b; }
+--- out:
+# (Line 1) function f(a, b) { return a == b; }
+@EUDFunc
+def f_f(a, b):
+    EUDReturn(a == b)
+
+
+##### ret_cond_call: OK
+--- src:
+import m;
+function f(a) { return m.cond(a); }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f(a) { return m.cond(a); }
+@EUDFunc
+def f_f(a):
+    EUDReturn(m.f_cond(a))
+
+
+##### unary_neg_cond: OK
+--- src:
+import m;
+function f(a) { const z = !m.cond(a); }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f(a) { const z = !m.cond(a); }
+@EUDFunc
+def f_f(a):
+    z = EUDNot(m.f_cond(a))
+
+
+##### foreach_py: OK
+--- src:
+import m;
+function f() { foreach (x, y : m.pairs()) {} }
+--- out:
+# (Line 1) import m;
+import m
+# (Line 2) function f() { foreach (x, y : m.pairs()) {} }
+@EUDFunc
+def f_f():
+    for x, y in m.f_pairs():
+        pass
+
+
+##### EUDLoopRange: OK
+--- src:
+function f() { foreach (i : EUDLoopRange(3)) {} }
+--- out:
+# (Line 1) function f() { foreach (i : EUDLoopRange(3)) {} }
+@EUDFunc
+def f_f():
+    for i in EUDLoopRange(3):
+        pass
+
+
+##### array_literal_local: OK
+--- src:
+function f(a) { const arr = [a, 1, 2]; }
+--- out:
+# (Line 1) function f(a) { const arr = [a, 1, 2]; }
+@EUDFunc
+def f_f(a):
+    arr = _ARR(FlattenList([a, 1, 2]))
+
+
+##### list_func: OK
+--- src:
+function f(a) { const arr = list(a, 1); }
+--- out:
+# (Line 1) function f(a) { const arr = list(a, 1); }
+@EUDFunc
+def f_f(a):
+    arr = FlattenList([a, 1])
+

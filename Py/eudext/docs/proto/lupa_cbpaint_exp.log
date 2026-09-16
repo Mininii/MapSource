@@ -1,0 +1,22 @@
+[0] lupa 기본 환경에 없는 것: math.atan2, math.pow, math.log10, math.ldexp, math.cosh, bit32, unpack, loadstring, setfenv, _VERSION=Lua 5.4
+[1] CB Paint v2.5.lua 로드 0.06s
+    전역 함수 수: 391 functions, CS*/CA*/CB* 324
+[2] CSMakeCircle(6,32,0,37,0): n=37, 첫 8점: [(0, 0), (0.0, -32.0), (27.713, -16.0), (27.713, 16.0), (0.0, 32.0), (-27.713, 16.0), (-27.713, -16.0), (0.0, -64.0)]
+    2번째 점(1껍질 첫 점) = (1.959434878635765e-15, -32.0) → (0,-32) 이면 0도=12시, y 아래 방향
+    최대 반지름 = 96.000
+[3] CSMakePolygon(4,40,0,25,0) → n=25, 첫 3점 [(0, 0), (0.0, -40.0), (40.0, 0.0)]
+[3] CSMakeLine(4,30,0,13,1) → n=12, 첫 3점 [(0.0, -30.0), (30.0, 0.0), (0.0, 30.0)]
+[3] CS_Rotate(circle,45) → n=37, 첫 3점 [(0.0, 0.0), (22.63, -22.63), (30.91, 8.28)]
+[3] CS_MoveXY(circle,100,-50) → n=37, 첫 3점 [(100, -50), (100.0, -82.0), (127.71, -66.0)]
+[3] CS_RatioXY(circle,2,0.5) → n=37, 첫 3점 [(0, 0.0), (0.0, -16.0), (55.43, -8.0)]
+[3] CS_FillXY(0,{128,128},16,16) → 오류: CB Paint v2.5.lua:4690: attempt to call a nil value (global 'CS_InputError')
+[4] CSMakeGraphT(문자열 콜백) → n=40, 첫 3점 [(60.0, 0.0), (59.48, 7.85), (57.94, 15.57)]
+[5] CS_ShapeInShape 정의 줄: 15043
+[6] CSMakePath(파이썬 표) → n=3 [(0, 0), (64, 0), (64, 64)]
+    CS_ConnectPath(.,16) → n=35 첫 5점 [(0, 0), (60.24, 0.0), (56.47, 0.0), (52.71, 0.0), (48.94, 0.0)]
+[7] CSMakeSpiral.lua 로드 0.00s
+[7] CS_Addon.lua 로드 0.00s
+    CSMakeSpiral 은 이제 CSMakeSpiral.lua:1 의 정의
+[8] CS_Shuffle 고정 시드 재현: True [(3.91886975727153e-15, -64.0), (32.833933759264205, 90.2104915954472), (-32.00000000000003, -55.42562584220406)]
+[9] CSSaveWithName → 파일: ['exp_circle.txt']
+[10] CSPlot → 예상대로 실패: CB Paint v2.5.lua:7035: attempt to call a nil value (global 'ConvertLocation')
