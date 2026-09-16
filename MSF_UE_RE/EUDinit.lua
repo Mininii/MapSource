@@ -186,7 +186,7 @@ end
 DTypeArr = {
 	27,30,6,129,126
 }
-	UnitEnableX(71,400)
+	UnitEnableX(71) -- 멀티 커맨드 원격 스팀팩 - 쓸 때 미네랄 안 든다 (2026-09-16, 예전 400)
 	UnitEnable2(19)
 
 	for i = 0, 129 do
@@ -374,9 +374,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	UnitEnableX(29)
 	UnitEnableX(70)
 	UnitEnableX(64)
-	UnitEnableX(65,1200)
-	UnitEnableX(66)
-	UnitEnableX(67,1200)
+	UnitEnableX(65) -- 멀티 커맨드 전체 정지 - 쓸 때 미네랄 안 든다 (2026-09-16, 예전 1200)
+	UnitEnableX(66) -- 멀티 커맨드 전체 공격
+	UnitEnableX(67) -- 멀티 커맨드 전체 홀드 (2026-09-16, 예전 1200)
 	UnitEnableX(70)
 	UnitEnableX(68)
 	for i = 37, 52 do
@@ -515,6 +515,7 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			InputTesterID(i,"GALAXY_BURST")
 			InputTesterID(i,"_Mininii")
 			InputTesterID(i,"RonaRonaChan")
+			InputTesterID(i,"Natori_sana")
 			InputTesterID(i,"Azusawa_Kohane")
 			
 			

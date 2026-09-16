@@ -178,11 +178,24 @@ def check_stat_txt(since):
     print("  stat_txt 합본: %d줄, %d바이트 -> %s" % (n, len(d), STAT_TXT_OUT))
 
 
+def multicmd_consts():
+    """멀티 커맨드 쪽 번호와 MSQC 플래그 데스 칸. 원본은 EUDEditorButtonSets.lua 다 (eds 와 어긋나지 않게 읽어 온다)."""
+    src = open(os.path.join(MSF, "EUDEditorButtonSets.lua"), "r", encoding="utf-8").read()
+    out = {}
+    for name in ("MultiCmdButtonSetID", "MultiCmdFlagDeath"):
+        m = re.search(r"^%s\s*=\s*(\d+)" % name, src, re.M)
+        if not m:
+            raise SystemExit("EUDEditorButtonSets.lua 에서 %s 를 못 찾았다 (eds 의 MSQC 줄을 채울 수 없다)" % name)
+        out[name] = m.group(1)
+    return out
+
+
 def write_eds(dst, doc, stage1):
     """eds_template.eds 의 {{...}} 자리를 채운다."""
     addr, death, ch = doc["msqc_addr"], doc["msqc_death"], doc["msqc_channels"]
     msqc = ["Memory(0x%X,AtLeast,1);val, 0x%X: %d" % (addr + 4 * k, addr + 4 * k, death + k)
             for k in range(ch)]
+    mc = multicmd_consts()
     with open(EDS_TEMPLATE, "r", encoding="utf-8") as f:
         text = f.read()
     fill = {
@@ -195,6 +208,9 @@ def write_eds(dst, doc, stage1):
         # euddraft 폴더 바로 아래에는 2024년 TRIGP 파일이 남아 있어 경로를 틀리면 옛 트리거를 읽는다.
         "CTEMP": EUDDIR + "\\Ctemp\\",
         "SCRDB_MSQC": "\n".join(msqc),
+        # 멀티 커맨드 쪽을 보고 있는지(로컬 화면 상태)를 데스값으로 옮기는 줄 (EUDEditorButtonSets.lua 주석)
+        "MULTICMD_SET": mc["MultiCmdButtonSetID"],
+        "MULTICMD_FLAG_DEATH": mc["MultiCmdFlagDeath"],
         "BGM_MODULE": os.path.basename(BGM_MODULE),   # main 이 eds 옆에 복사해 둔다(상대 경로로 찾는다)
         "BGM_DIR": BGM_DIR + "\\",
     }

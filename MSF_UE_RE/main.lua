@@ -61,7 +61,7 @@ end
 
 TestSet(0)
 TestPMul=2
-VerText = "\x04Ver. Beta. 0.96"
+VerText = "\x04Ver. Beta. 0.98"
 if Limit == 1 then
 	VerText = VerText.."T"
 	BossPhaseTestMode = 0

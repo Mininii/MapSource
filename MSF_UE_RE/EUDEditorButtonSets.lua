@@ -61,12 +61,27 @@ BSAct = {
 	버튼은 전부 신호 유닛을 뽑는 Train 이다(MSF_Respect_V 팩토리와 같은 방식). 뽑힌 유닛을 Player_interface.lua 가 잡는다:
 	  이동 64 / 공격 66              -> 그 플레이어의 마우스 위치(로케이션 74+i, eds 의 MSQC "mouse:")로 마린에게 Order
 	  정지 65 / 홀드 67 / 원격스팀 71 -> 예전 배럭 멀티 버튼 그대로 (CUnit 루프, 그 플레이어의 전체 유닛)
-	한 번 쓸 때 미네랄은 EUDinit.lua 의 UnitEnableX 그대로다: 정지·홀드 1200, 원격스팀 400, 이동·공격 0.
+	한 번 쓸 때 미네랄은 EUDinit.lua 의 UnitEnableX 가 정한다: 이동·정지·공격·홀드·원격스팀은 전부 0 이고
+	(2026-09-16 에 정지·홀드 1200, 원격스팀 400 을 없앴다) 같이 옮겨 온 메딕 뽑기만 250~400 이다.
 	신호 유닛 5종(MultiCmdUnits)은 멀티 커맨드를 가진 플레이어에게만 열린다(Player_interface.lua, 0x57F27C).
 	이동·공격은 버튼을 마우스로 누르면 마우스가 콘솔 위에 있어 목표가 엉뚱해진다 - 단축키(M/A)로 쓴다.
 ]]
 MultiCmdButtonSetID = 77
 MultiCmdUnits = {64, 65, 66, 67, 71} -- 이동, 정지, 공격, 홀드, 원격스팀
+
+--[[ 멀티 커맨드 쪽을 열어 둔 채 우클릭(랠리 변경) = 멀티 이동 (2026-09-16)
+	콘솔에 떠 있는 버튼셋 번호는 0x68C14C 에 있다 (EUD Editor 3 의 Data\Lua\TriggerEditor\Selection.lua 의
+	"선택 유닛의 버튼셋 ID" 조건이 EPD(0x68C14C) 를 본다. 유닛별 값은 CUnit+0x94 - BWAPI CUnit.h).
+	그런데 이것은 **클라이언트마다 다른 로컬 화면 상태**라 트리거 조건으로 바로 쓰면 디싱크다.
+	그래서 eds 의 MSQC 한 줄로 공유값(데스)으로 옮긴다:
+	    Memory(0x68C14C,Exactly,<쪽 번호>);val, 0x68C14C : <아래 데스 유닛>
+	MSQC 는 val 로 받은 데스 칸을 **매 사이클 0 으로 지운 뒤** 보내온 값을 SetTo 한다. 그래서 위 한 줄이면
+	그 쪽을 보고 있는 동안 <데스> = 쪽 번호, 아니면 0 이 된다(끄는 줄이 따로 필요 없다).
+	데스 유닛 190 = Warp Gate. 이 맵이 유닛으로도, 데스 칸으로도 안 쓴다(SCR_DB 는 182~189).
+	사람이 가질 일이 없는 특수 건물이라 죽어서 데스가 올라 값이 더러워질 일도 없다.
+	쓰는 곳: Player_interface.lua 의 배럭 랠리 갱신 (핵 발사와 갈라진다). 값은 build_scrdb.py 가 이 파일에서 읽어
+	eds 에 넣으므로 여기만 고치면 된다. ]]
+MultiCmdFlagDeath = 190
 
 ButtonSetDefs = {
 	[0] = { -- 마린
@@ -151,14 +166,15 @@ ButtonSetDefs = {
 		{2,   7, BSReq.CanBuildUnit,       BSAct.Train,            7,   7,  592,  701}, -- f★ 노예 SCV (F) 생산 ★
 		{3,  14, BSReq.CanBuildUnit,       BSAct.Train,           41,  41, 1487, 1294}, -- z『 뉴클리어 1발 장전  (Z) 』
 		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           80,  80, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
-		{4,   4, BSReq.CanBuildUnit,       BSAct.Train,           70,  70, 1497, 1546}, -- ★ 모든 유닛에 자율공격명령 내리기 (X) ★
 		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           88,  88, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
 		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           34,  34, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
 		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,            9,   9, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
+		{4,   4, BSReq.CanBuildUnit,       BSAct.Train,           70,  70, 1497, 1546}, -- ★ 모든 유닛에 자율공격명령 내리기 (X) ★
 		{5, 219, BSReq.CanBuildUnit,       BSAct.Train,           19,  19, 1498,  701}, -- v★ 수정 보호막 사용 (V) ★
 		{6, 286, BSReq.Rally,              BSAct.RallyPoint,       0,   0,  672,    0}, -- Set Rally Point
 		-- 7~9칸에 있던 멀티 버튼(공격 66 / 원격스팀 71 / 정지 65 / 홀드 67)은 멀티 커맨드 쪽으로 옮겼다 (2026-09-15).
-		-- 8칸 = 그 쪽으로 넘어가는 버튼. 64(이동)를 뽑을 수 있을 때 = 멀티 커맨드를 가졌을 때만 보인다.
+		-- 8칸 = 그 쪽으로 넘어가는 버튼. 64(이동)를 뽑을 수 있을 때 = **멀티 커맨드를 산 사람에게만** 보인다.
+		-- 메딕 뽑기는 위 4칸에 그대로 있으므로, 안 산 사람이 이 쪽을 못 열어도 메딕은 배럭에서 쓴다 (2026-09-16, 제작자 지시).
 		{8, 228, BSReq.CanBuildUnit,       BSAct.ChangeButtons,   64, MultiCmdButtonSetID, 1489, 0}, -- ★ 멀티 커맨드 (Q) ★
 		{9, 236, BSReq.IsTraining,         BSAct.CancelTrain,      0, 254,  693,    0}, -- ESC - Cancel Last
 	},
@@ -166,6 +182,12 @@ ButtonSetDefs = {
 		{1, 228, BSReq.CanBuildUnit,       BSAct.Train,           64,  64, 1495,    0}, -- 이동 (M): 마우스 위치로 마린 이동
 		{2, 229, BSReq.CanBuildUnit,       BSAct.Train,           65,  65, 1366,    0}, -- 정지 (S): 전체 유닛
 		{3, 230, BSReq.CanBuildUnit,       BSAct.Train,           66,  66, 1493, 1294}, -- 공격 (A): 마우스 위치로 마린 공격 이동
+		-- 4칸 = 메딕 뽑기. 배럭 4칸과 **같은 줄을 여기에도 둔다** - 두 곳 어디서나 쓴다 (2026-09-16, 제작자 지시).
+		-- 네 줄이 겹쳐 있고 지금 단계 하나만 보이는 것도 배럭과 같다. 값도 그대로 250~400 미네랄.
+		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           80,  80, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
+		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           88,  88, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
+		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,           34,  34, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
+		{4, 365, BSReq.CanBuildUnit,       BSAct.Train,            9,   9, 1290, 1294}, -- c★ 멘탈 힐링하기 (C) ★
 		{5, 255, BSReq.CanBuildUnit,       BSAct.Train,           67,  67, 1365,    0}, -- 홀드 (H): 전체 유닛
 		{7, 237, BSReq.CanBuildUnit,       BSAct.Train,           71,  71, 1364,  701}, -- 원격 스팀팩 (T): 전체 유닛
 		{9, 389, BSReq.Always,             BSAct.ChangeButtons,    0, 111, 1490,    0}, -- 뒤로 (Q): 배럭 본 쪽

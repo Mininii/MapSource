@@ -20,6 +20,10 @@ function PlayerInterface()
 	local SelUID = CreateVar(FP)
 	local BarRally = CreateVarArr(7,FP)
 	local MulCon = CreateVarArr(7,FP)
+	-- 멀티 커맨드 무브컨(따라가기)용 임시값 (2026-09-16). 한 번에 한 플레이어의 블록만 도므로 7명이 같이 쓴다.
+	local MultiCmdTarget = CreateVar(FP)  -- 우클릭한 자리에 있던 유닛의 EPD (0 = 아무것도 없음)
+	local MultiCmdFollow = CreateVar(FP)  -- 그 유닛이 아군 마린이라 따라가기를 걸었는지 (아니면 그냥 이동)
+	local MultiCmdTempPos = CreateVar(FP) -- 따라갈 마린의 현재 좌표 (오더 좌표칸을 채우는 용)
 	local ExchangeP = CreateVar(FP)
 	local DelayMedic = Create_CCTable(7)
 	local ShUsed = Create_CCTable(7)
@@ -600,6 +604,9 @@ function PlayerInterface()
 			CIfXEnd()
 		end
 		--NewAvStat = 따로계산
+		if TestStart == 1 then
+			CMov(FP,NewStat[i+1],1000)
+		end
 		SCA_DeathToV(NewStat[i+1],35,i)
 		SCA_DeathToV(NewUsedStat[i+1],39,i)
 		CMov(FP, NewAvStat[i+1], _Sub(NewStat[i+1],NewUsedStat[i+1]))
@@ -669,7 +676,65 @@ function PlayerInterface()
 		
 		CIf(FP,{TTMemory(_Add(BarrackPtr[i+1],62),NotSame,BarRally[i+1])}) --배럭랠리 갱신
 			f_Read(FP,_Add(BarrackPtr[i+1],62),BarRally[i+1])
-			CIf(FP,{Memory(0x628438,AtLeast,1),CVar(FP,Nukes[i+1][2],AtLeast,1),CDeaths(FP,AtMost,0,NukeCool[1+i])},{SetCVar(FP,Nukes[i+1][2],Subtract,1),SetCDeaths(FP,SetTo,10,NukeCool[i+1])}) -- 배럭랠리 갱신중 핵이 장전되어있을경우 또는 캔낫이아닐경우
+			-- 멀티 커맨드 쪽을 열어 둔 채 우클릭(=랠리 변경)하면 멀티 이동 (2026-09-16).
+			-- 지금 콘솔에 떠 있는 버튼셋(0x68C14C)은 로컬 화면 상태라 조건으로 바로 못 쓴다 - eds 의 MSQC 한 줄이
+			-- 데스 MultiCmdFlagDeath 로 옮겨 준다(그 쪽을 보는 동안만 쪽 번호, 아니면 0. EUDEditorButtonSets.lua 주석).
+			-- 멀티 커맨드를 산 사람만(변수 셋) - 쪽 자체는 메딕 때문에 안 산 사람도 열 수 있기 때문이다.
+			CIf(FP,{Deaths(i,Exactly,MultiCmdButtonSetID,MultiCmdFlagDeath),CVar(FP,BarRally[i+1][2],AtLeast,1),
+				CV(MultiStimPack[i+1],1,AtLeast),CV(MultiHold[i+1],1,AtLeast),CV(MultiStop[i+1],1,AtLeast)})
+				Convert_CPosXY(BarRally[i+1])
+				-- 우클릭한 자리(±9)에 있는 유닛 찾기. CI = CUnit+0x28(좌표)의 EPD, +9 = 0x4C(주인/오더).
+				-- 아래 두 루프는 MSF_Respect_V Interface.lua 의 "랠리로 멀티커맨드" 를 그대로 옮긴 것이다.
+				CMov(FP,MultiCmdTarget,0)
+				CFor(FP, 19025+10, 19025+10+(84*1700), 84)
+				local CI = CForVariable()
+					CTrigger(FP, {
+						TMemoryX(_Add(CI,9), AtLeast, 1*256,0xFF00),
+						TMemoryX(CI, AtLeast, _Sub(CPosX,9),0xFFFF),
+						TMemoryX(CI, AtMost, _Add(CPosX,9),0xFFFF),
+						TMemoryX(CI, AtLeast, _lShift(_Sub(CPosY,9), 16),0xFFFF0000),
+						TMemoryX(CI, AtMost, _lShift(_Add(CPosY,9), 16),0xFFFF0000),
+					}, {SetV(MultiCmdTarget,_Sub(CI,10))},{preserved})
+				CForEnd()
+				-- 찾은 것이 아군 마린이면 무브컨: 오더 49(Follow) - 옆에 적이 와도 공격하지 않고 그 유닛만 따라간다.
+				CMov(FP,MultiCmdFollow,0)
+				CIf(FP,{CV(MultiCmdTarget,1,AtLeast),TTOR({
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,10,0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[1],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[2],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[3],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[4],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[5],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[6],0xFF),
+					_TMemoryX(_Add(MultiCmdTarget,25),Exactly,MarID[7],0xFF),
+				})})
+					CMov(FP,MultiCmdFollow,1)
+					-- 이 플레이어의 마린 전부에게 건다. CI2 = CUnit+0x64(유닛종류)의 EPD.
+					-- -6 = 0x4C(주인/오더), -2 = 0x5C(오더 대상 유닛), -3 = 0x58, -15 = 0x28(좌표), -19 = 0x18, -21 = 0x10.
+					-- 벙커 안(오더 5)과 건작 오더(152)는 건드리지 않는다.
+					CFor(FP, 19025+25, 19025+25+(1700*84), 84)
+					local CI2 = CForVariable()
+					CIf(FP,{TDeathsX(_Sub(CI2,6), Exactly, i, 0,0xFF),TTDeathsX(_Sub(CI2,6), NotSame,5*256, 0,0xFF00),
+						TTDeathsX(_Sub(CI2,6), NotSame,152*256, 0,0xFF00),TDeathsX(_Sub(CI2,6), AtLeast,1*256, 0,0xFF00),
+						TTOR({_TDeathsX(CI2,Exactly,MarID[i+1],0,0xFF),_TDeathsX(CI2,Exactly,10,0,0xFF)})})
+						f_Read(FP,_Sub(CI2,15),MultiCmdTempPos)
+						CDoActions(FP,{
+							TSetDeaths(_Sub(CI2,2),SetTo,_Add(_Mul(MultiCmdTarget,4),0x58A364),0),
+							TSetDeathsX(_Sub(CI2,6),SetTo,49*256,0,0xFF00),
+							TSetDeaths(_Sub(CI2,19),SetTo,MultiCmdTempPos,0),
+							TSetDeaths(_Sub(CI2,3),SetTo,MultiCmdTempPos,0),
+							TSetDeaths(_Sub(CI2,21),SetTo,MultiCmdTempPos,0)})
+					CIfEnd()
+					CForEnd()
+				CIfEnd()
+				-- 마린이 아니거나 아무것도 없던 자리면 그냥 그 좌표로 이동
+				CIf(FP,{CV(MultiCmdFollow,0)})
+					Simple_SetLocX(FP,0,CPosX,CPosY,CPosX,CPosY)
+					DoActions(FP,{Order(MarID[i+1],i,64,Move,1),Order(10,i,64,Move,1)})
+				CIfEnd()
+			CIfEnd()
+			-- 핵은 예전 그대로. 단 멀티 커맨드 쪽을 보고 있을 때는 안 쏜다(그 우클릭은 이동 명령이다).
+			CIf(FP,{Deaths(i,AtMost,0,MultiCmdFlagDeath),Memory(0x628438,AtLeast,1),CVar(FP,Nukes[i+1][2],AtLeast,1),CDeaths(FP,AtMost,0,NukeCool[1+i])},{SetCVar(FP,Nukes[i+1][2],Subtract,1),SetCDeaths(FP,SetTo,10,NukeCool[i+1])}) -- 배럭랠리 갱신중 핵이 장전되어있을경우 또는 캔낫이아닐경우
 				Convert_CPosXY(BarRally[i+1])
 				DoActionsX(FP,SetCDeaths(FP,Add,10,NsW))
 				CWhile(FP,CDeaths(FP,AtLeast,1,NsW),SetCDeaths(FP,Subtract,1,NsW))

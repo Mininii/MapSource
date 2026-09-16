@@ -52,6 +52,7 @@ Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f610 : 150
 Always();val, 0x58f614 : 101
 Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f618 : 152
 Deaths(CurrentPlayer,AtLeast,1,40);Deaths(CurrentPlayer,AtLeast,1,41);Deaths(CurrentPlayer,AtLeast,1,42);mouse: Location74
+Memory(0x68C14C,Exactly,{{MULTICMD_SET}});val, 0x68C14C : {{MULTICMD_FLAG_DEATH}}
 {{SCRDB_MSQC}}
 [chatEvent]
 __addr__ : 0x58D900
