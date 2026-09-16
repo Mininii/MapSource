@@ -410,6 +410,12 @@ end
 Trigger2X(FP, {CD(Ax3,1)}, {AddCD(SpecialEEggCcode,1),SetCD(AxiomCcode[3],1),})
 NJumpEnd(FP, Ax3Jump)
 TriggerX(FP,{Deaths(P7, AtLeast, 1, 60),CD(AxiomCcode[3],0)},{SetCD(AxiomFailCcode[3],1)})
+if AxiomSet == 1 then
+	-- 빛의 기억(조각)을 15개 이상 모으면 Axiom 을 실패했더라도 넷 다 찾은 것으로 친다.
+	-- 개별 AxiomCcode 는 그대로 둔다 - 그쪽은 보스 전용 패턴도 바꾸므로 중간에 켜지면 판이 달라진다.
+	-- 다른 Axiom 과 같이 이론치(Theorist) 1 이상에서만 성립한다.
+	TriggerX(FP,{CD(Theorist,1,AtLeast),CD(EEggCode,15,AtLeast),CD(SpecialEEggCcode,3,AtMost)},{SetCD(SpecialEEggCcode,4)})
+end
 CIfOnce(FP,{Command(FP, AtLeast, 1, 190),CD(Theorist,1,AtLeast),CD(SpecialEEggCcode,4,AtLeast)})--이론치모드 1 이상에서 Axiom of the End 전부 발견시
 local TempRMCalc = CreateVar(FP)
 local TempRMCalc2 = CreateVar(FP)

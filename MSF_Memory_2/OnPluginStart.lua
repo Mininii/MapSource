@@ -354,6 +354,12 @@ end
 	T_HH = 00
 	if Limit == 1 then
 		DoActions(FP,{SetSwitch("Switch 253",Set)})
+		if TestStart == 1 then
+			-- TestStart 빌드는 TestMode 가 처음부터 1 이라 오프닝이 곧바로 끝나고(OPTrig 의 OPCCode 점프)
+			-- Switch 253 이 바로 Clear 된다. 그러면 F12 로 Switch 254 를 켤 틈이 없어
+			-- TAB/ESC/INSERT/DELETE/O/P 테스트 키가 전부 죽는다. 그래서 여기서 대신 켜 둔다.
+			DoActions(FP,{SetSwitch("Switch 254",Set)})
+		end
 		DoActions(FP,{RotatePlayer({SetAllianceStatus(Force2,Ally)}, {P5,P6,P7,P8}, FP)})
 		DoActions2X(FP,{RotatePlayer({DisplayTextX(StrDesignX("\x04현재 "..#G_CAPlot_Shape_InputTable.."개의 도형 데이터가 입력되었습니다."),4)},HumanPlayers,FP)})
 		Trigger2X(FP,{},{RotatePlayer({DisplayTextX("\x13\x04현재 \x07테스트 버전\x04을 이용중입니다.\n\x13\x07테스트에 협조해주셔서 감사합니다. \n\x13\x04테스트맵 이용 가능 기간은 "..T_YY.."년 "..T_MM.."월 "..T_DD.."일 "..T_HH.."시 까지입니다."),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav"),PlayWAVX("staredit\\wav\\button3.wav")},HumanPlayers,FP)})

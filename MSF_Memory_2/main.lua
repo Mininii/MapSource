@@ -91,9 +91,9 @@ else
 end
 RedMode = 1
 if RedMode == 1 then
-	VerText = "\x04Ver. 0.ZHR"
+	VerText = "\x04Ver. 0.ZIR"
 else
-	VerText = "\x04Ver. 0.ZH"
+	VerText = "\x04Ver. 0.ZI"
 end
 if EVFFlag == 1 then
 	VerText = VerText.." - EVF"

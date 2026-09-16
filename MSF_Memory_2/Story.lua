@@ -5,7 +5,7 @@ function InputStory()
     local StoryT2 = CreateCcode()
 
 	if AxiomSet == 1 then
-    TriggerX(FP,{CD(TestMode,0),CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
+    TriggerX(FP,{CD(OPJump,1),CD(Theorist,1,AtLeast),DeathsX(AllPlayers,AtMost,0,12,0xFFFFFF)},{SetCD(StartStoryTelling,1)})
     end
 
     CIf(FP,{CD(StartStoryTelling,1)})
