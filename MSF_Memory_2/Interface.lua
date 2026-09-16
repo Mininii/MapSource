@@ -142,9 +142,17 @@ function Interface()
 	local ExchangeP = CreateVar(FP)
 		ExJump = def_sIndex()
 		CIf(FP,HumanCheck(i,1))
-		-- 환전소 자리(로케이션 17~20)는 "Men"(아무 지상유닛)이 아니라 그 플레이어의 마린만 센다.
-		-- 컴샛 스테이션이 환전소 안에 있어서, 거기서 뽑은 기부 셔틀 같은 유닛까지 "Men" 에 걸려 환전이 됐다.
-		NJump(FP,ExJump,{CD(CheatMode,0),Deaths(i,AtMost,0,"Terran Barracks"),Bring(i,AtMost,0,MarID[i+1],17),Bring(i,AtMost,0,MarID[i+1],18),Bring(i,AtMost,0,MarID[i+1],19),Bring(i,AtMost,0,MarID[i+1],20)})
+		-- 환전소는 네 구역 구석(로케이션 17~20)에 하나씩 있고, 어느 구역 환전소든 자기 마린이 서 있으면 환전된다.
+		-- 예전에는 "Men"(아무 지상유닛)이라 컴샛 스테이션이 환전소 안에 있는 탓에 거기서 뽑은 기부 셔틀까지 걸렸다.
+		-- 마린 계열 = 32 Marine / 20 H Marine / MarID[i+1] (조합·소환으로 나오는 플레이어 마린, 루미아마린도 이 ID).
+		local ExMarUnit = {32, 20, MarID[i+1]}
+		local ExSkipCond = {CD(CheatMode,0),Deaths(i,AtMost,0,"Terran Barracks")}
+		for ExU = 1, #ExMarUnit do
+			for ExLoc = 17, 20 do
+				table.insert(ExSkipCond, Bring(i,AtMost,0,ExMarUnit[ExU],ExLoc))
+			end
+		end
+		NJump(FP,ExJump,ExSkipCond)
 		CIf(FP,Score(i,Kills,AtLeast,1000))
 		CMov(FP,ExchangeP,_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
 --		CAdd(FP,{FP,ExScore[i+1][2],nil,"V"},_Div(_ReadF(0x581F04+(i*4)),_Mov(1000)))
