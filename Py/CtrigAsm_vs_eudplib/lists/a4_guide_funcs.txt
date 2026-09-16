@@ -1,0 +1,1220 @@
+473: 『 D. CtrigAsm 함수목록 』
+513: 『 1장   맵 정보 입력 관련 』
+517: SetForces({Force1},{Force2},{Force3},{Force4},{Allplayers})
+527: SetFixedPlayer(Player)
+536: 『 2장   CtrigAsm 설치 관련 함수 』
+540: StartCtrig(STRX,IncludePlayer,NSQC,STRCTRIG,AbsolutePath,CFunc,CStack,LStack)
+555: EndCtrig()
+564: StartCtrig()
+567: EndCtrig()
+574: 『 3장   기본 내장 조건/액션 함수 (.Py 직접 연동 함수)』
+578: Label(Index)
+585: CtrigX(Player,Index,Address,Next,Type,Value,Mask)
+599: CtrigX(P2,0x1001,0x4,2,AtLeast,0x4000)
+602: CtrigX("X","X",0x20,-1,AtMost,1)
+611: 『 3장   기본 내장 조건/액션 함수 (.Py 직접 연동 함수)』
+615: SetCtrigX(Player1,Index1,Address1,Next1,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+634: SetCtrigX(P1,"X",0x178,0,Add,P2,0x10,0x15C,1,0,0xFFFFFF)
+639: SetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
+655: 『 3장   기본 내장 조건/액션 함수 (.Py 직접 연동 함수)』
+678: 『 4장   기본 오류 체크 함수 (선택) 』
+683: LabelCheck() - Index 중복 사용 체크
+684: ControlCheck() - 제어문 입력 오류(짝 안맞음 등) 체크
+687: PushErrorMsg(Message)
+692: PushRecoverCpMsg(Flag) ※ 고급
+698: PushValueMsg(…)
+712: 『 5장   표준 입출력 및 변환 함수 』
+746: 『 5장   표준 입출력 및 변환 함수 』
+755: Forward(Move) ※ 고급
+762: Struct(Type,Number) ※ 고급
+770: Forward(Struct("CIfX",4)+Struct("DoWhile",1)) → Forward(6) →
+776: Ccode(Index,Line)
+782: V(Index,Player,Next)
+787: V(0x10,P1) → P1의 Index 0x10인 변수를 입력
+788: V(0x10,P1,1) → P1의 Index 0x10인 변수의 다음 변수를 입력
+790: Vi(Index,Deviation,Player,Next)
+800: 『 5장   표준 입출력 및 변환 함수 』
+806: X(Var1) → P1의 label 0x10인 변수를 입력 / [예제 5-5] 참고
+809: Mem(Player,Index,Address,Next,EPDflag)
+818: Mem(P1,0x10,0x158,0,1) → EPD(P1의 Index 0x10인 트리거의 0x158부분의 주소)를 입력 / [예�
+820: _Mem(Variable,Address,Next,EPDflag)
+828: _Mem(V(0x10,P1,1),0x4,2,1) → Mem(P1,0x10,0x4,1+2,1)
+830: _Ccode(Player,Code,EPDflag)
+838: _Ncode(Player,Code,EPDflag)
+850: 『 5장   표준 입출력 및 변환 함수 』
+859: Arr(Arr1,V(0x10),P1) → P1의 Arr1[V(0x10)]의 주소를 반환함
+860: Arr(Arr1,Vi(0x10,12)) → Arr1[V(0x10)+12]의 주소를 반환함
+863: ArrX(Array,Index,Player)
+869: ArrX(Arr1,V(0x10),P1)   ConvertArr 부분 참고
+870: ArrX(Arr1,Vi(0x10,12))   사용불가
+872: ConvertArr(PlayerID,Dest,Source)
+887: 『 5장   표준 입출력 및 변환 함수 』
+896: VArr(VArr1,V(0x10),P1) → P1의 VArr1[V(0x10)]를 반환함
+897: VArr(VArr1,Vi(0x10,12)) → VArr1[V(0x10)+12]를 반환함
+900: VArrX(VArray,Index,Index4,Player)
+907: VArrX(VArr1,V(0x10),V(0x11),P1)   ConvertVArr 부분 참고
+908: VArrX(VArr1,Vi(0x10,12),V(0x11))   ConvertVArr 부분 참고
+910: ConvertVArr(PlayerID,Dest,Dest4,Source,Size)
+924: 『 6장   변수/배열 선언 및 호출 함수 』
+929: CVariable(Player,Index)
+936: CVariable2(Player,Index,Offset,Type,Value,Mask)
+945: CVariable2(P1,0x10,0x58F500,Add,1234,0xFFFF) → P1의 Index 0x10인 변수 선언 - SetMemoryX(0x58F500,
+947: CDb(PlayerID,ByteSize)
+953: CArray(PlayerID,Size)
+964: 『 6장   변수/배열 선언 및 호출 함수 』
+972: GetVArray(Header,Size)
+983: 『 6장   변수/배열 선언 및 호출 함수 』
+991: CallLabel2(Player,Index,Next)
+995: DoActionsX(P1,CallLabel2(P2,0x10)) → P2의 index 0x10인 트리거의 RecoverNext Flag 복구
+999: CallLabelAlways(Player,Index,Next)
+1009: CallVariable(PlayerID,Player,Index,Next,Conditions,Actions)
+1019: CallVariable(P1,P2,0x10,0,{Memory(0x58DC60,AtLeast,1)})
+1027: 『 6장   변수/배열 선언 및 호출 함수 』
+1032: CallLabel2X(Variable)
+1036: CallLabelAlwaysX(Variable)
+1039: CallVariableX(PlayerID,Variable,Conditions,Actions)
+1042: CallLabelAlways2(Player,Index,Next,Player2,Index2,Next2)
+1045: Player(2), Index(2), Next(2)는 모두 CallLabelAlways와 동일
+1047: CallLabelAlways3(Player,Index,Next,Player2,Index2,Next2,Player3,Index3,Next3)
+1050: Player(2,3), Index(2,3), Next(2,3)는 모두 CallLabelAlways와 동일
+1052: CallLabelAlways4(Player,Index,Next,Player2,Index2,Next2,Player3,Index3,Next3,Player4,Index4,Next4)
+1055: Player(2,3,4), Index(2,3,4), Next(2,3,4)는 모두 CallLabelAlways와 동일
+1057: CallLabelAlways2X(Variable,Variable2)
+1060: CallLabelAlways3X(Variable,Variable2,Variable3)
+1063: CallLabelAlways4X(Variable,Variable2,Variable3,Variable4)
+1066: CallLabelAlwaysN(...)
+1076: 『 7장   DoActions류 트리거 생성 함수 』
+1085: DoActions2(PlayerID,Actions,flag)
+1088: Trigger2(Player, Conditions, Actions, Flags)
+1095: DoActionsX(PlayerID,Actions,flag,Index)
+1100: DoActions2X(PlayerID,Actions,flag)
+1110: 『 7장   DoActions류 트리거 생성 함수 』
+1118: Trigger2X(Player, Conditions, Actions, Flags)
+1124: CDoActions(PlayerID,Actions,flag,Index)
+1129: CTrigger(PlayerID, Conditions, Actions, Flags, Index)
+1140: 『 8장   Ctrig 파생 조건/액션 함수 』
+1148: SetNext(0x10,0x11,1) → index 0x10 트리거의 Next를 index 0x11인 트리거의 바로 뒤 트리거
+1150: MemX(Mem,Type,Value,Mask)
+1156: SetMemX(Mem1,Type,Mem2,Mask)
+1168: 『 8장   Ctrig 파생 조건/액션 함수 』
+1180: SetVariableX(Player,Index,Section,Type,Value,Mask)
+1191: Variable(Variable,Section,Type,Value,Mask)
+1197: SetVariable(Variable,Section,Type,Value,Mask)
+1209: 『 8장   Ctrig 파생 조건/액션 함수 』
+1221: SetVArrayX(VArray,Section,Type,Value,Mask)
+1233: CVar(Player,Index,Type,Value,Mask)
+1236: SetCVar(Player,Index,Type,Value,Mask)
+1239: NVar(Variable,Type,Value,Mask)
+1242: SetNVar(Variable,Type,Value,Mask)
+1245: CVAar(VArray,Type,Value,Mask)
+1248: SetCVAar(VArray,Type,Value,Mask)
+1255: 『 8장   Ctrig 파생 조건/액션 함수 』
+1266: CDeathsX(Player,Type,Value,Code,Mask)
+1269: SetCDeaths(Player,Type,Value,Code)
+1275: SetCDeathsX(Player,Type,Value,Code,Mask)
+1278: NDeaths(Player,Type,Value,Code)
+1286: NDeathsX(Player,Type,Value,Code,Mask)
+1289: SetNDeaths(Player,Type,Value,Code)
+1295: SetNDeathsX(Player,Type,Value,Code,Mask)
+1302: 『 9장   Cp트릭 관련 및 CunitCtrig 함수 』
+1306: RecoverCp(PlayerID)
+1311: SetRecoverCp(Cp)
+1317: MoveCp(Type,Value)
+1327: SaveCp(PlayerID,Output,OffsetOutput)
+1334: LoadCp(PlayerID,Cp)
+1343: LoadCpX(PlayerID,Cp)
+1351: 『 9장   Cp트릭 관련 및 CunitCtrig 함수 』
+1358: CunitCtrig_Part2()
+1361: CunitCtrig_Part3(Conditions,Actions)
+1370: CunitCtrig_Part3X()
+1373: CunitCtrig_Part4X(LoopIndex,Conditions,Actions)
+1376: CunitCtrig_End()
+1388: ClearCalc()
+1392: BreakCalc(Conditions,Actions)
+1400: 『 10장   제어문 관련 함수 (CStruct) 』
+1405: SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions,Single)
+1408: SLoopN(PlayerID,Repeat,Conditions,Actions,InitActions)
+1411: SLoopNEnd(Actions)
+1424: Actions(SLoopNEnd)   트리거 단락 반복문 종료 후 실행시킬 액션
+1427: CJump(PlayerID,sIndex)
+1430: CJumpEnd(PlayerID,sIndex)
+1437: SetCJump(sIndex,Status,NewDest) ※ 고급
+1447: 『 10장   제어문 관련 함수 (CStruct) 』
+1452: NJump(PlayerID,sIndex,Conditions,Actions)
+1455: NJumpEnd(PlayerID,sIndex,Actions_Always)
+1464: CJumpX(PlayerID,sIndex)
+1467: CJumpXEnd(PlayerID,sIndex)
+1474: NJumpX(PlayerID,sIndex,Conditions,Actions)
+1477: NJumpXEnd(PlayerID,sIndex,Actions)
+1490: 『 10장   제어문 관련 함수 (CStruct) 』
+1495: CIf(PlayerID, Conditions, Actions)
+1497: CIfEnd(Actions_Always)
+1503: CIfOnce(PlayerID, Conditions, Actions)
+1505: CIfEnd(Actions_Always)
+1509: NIf(PlayerID, Conditions, Actions)
+1511: NIfEnd()
+1523: 『 10장   제어문 관련 함수 (CStruct) 』
+1528: CIfX(PlayerID, Conditions, Actions)
+1530: CElseIfX(Conditions, Actions)
+1532: CElseX(Actions)
+1534: CIfXEnd()
+1542: NIfX(PlayerID, Conditions, Actions)
+1544: NElseIfX(Conditions, Actions)
+1546: NElseX(Actions)
+1548: NIfXEnd()
+1562: 『 10장   제어문 관련 함수 (CStruct) 』
+1567: CWhile(PlayerID, Conditions, Actions)
+1570: CWhileEnd(Actions)
+1579: CLoop(PlayerID,Repeat,Conditions,Actions)
+1582: CWhileEnd(Actions)
+1588: NWhile(PlayerID, Conditions, Actions)
+1591: NWhileEnd(Actions)
+1600: NLoop(PlayerID,Repeat,Conditions,Actions)
+1603: NWhileEnd(Actions)
+1618: 『 10장   제어문 관련 함수 (CStruct) 』
+1623: CWhileX(PlayerID, Conditions, Actions)
+1626: CWhileXEnd(Actions)
+1634: CLoopX(PlayerID,Repeat,Conditions,Actions)
+1637: CWhileXEnd(Actions)
+1641: NWhileX(PlayerID, Conditions, Actions)
+1644: NWhileXEnd(Actions)
+1651: NLoopX(PlayerID,Repeat,Conditions,Actions)
+1654: NWhileXEnd(Actions)
+1665: 『 10장   제어문 관련 함수 (CStruct) 』
+1670: DoWhile(PlayerID, Actions_Always)
+1672: DoWhileEnd(Loop_Conditions, Actions)
+1680: CFor(PlayerID,Init,End,Step,Actions)
+1682: CForEnd(Actions)
+1690: CForVariable(NestingLevel) ※ 고급
+1697: CIf2(), CIf2X(), CElseIfX2(), CElseX2(), NIf2(), NIfX2(), NElseIfX2(), NElseX2(),
+1698: CWhile2(), CLoop2(), CWhileEnd2(), CWhileX2(), CLoopX2(), CWhileXEnd2(),
+1699: NWhile2(), NLoop2(), NWhileEnd2(), NWhileX2(), NLoopX2(), NWhileXEnd2(),
+1700: CFor2(), CForEnd2(), CDoActionX(), CTriggerX(), CDoAction2X(), CTrigger2X()
+1707: 『 11장   SafeRead류 데이터 읽기 관련 함수 』
+1712: SafeReadX(PlayerID,Input,Output,Mask,EPDRead)
+1722: UnitReadX(PlayerID,Player,UnitId,Loc,Output)
+1730: ConvertReadX(PlayerID,Input,Output,Multiplier,Mask,UseCycle)
+1741: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1746: CRead(PlayerID,Dest,Source,Deviation,Mask,EPDRead,Clear)
+1758: CReadX(PlayerID,Dest,Source,Deviation,Mask,Multiplier,Clear)
+1765: CMov(PlayerID,Dest,Source,Deviation,Mask,Clear)
+1775: CMovX(PlayerID,Dest,Source,Mode,Mask)
+1788: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1793: TMem(PlayerID,Dest,Source,Address,Next,OffsetFlag)
+1802: f_Diff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
+1813: CWrite(PlayerID,Dest,Source,Deviation,Mask)
+1827: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1832: CAdd(PlayerID,Dest,Source,Operand,Mask)
+1846: CSub(PlayerID,Dest,Source,Operand,Mask)
+1866: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1871: CiSub(PlayerID,Dest,Source,Operand,Mask)
+1885: CNeg(PlayerID,Dest,Source,Mask)
+1903: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1908: ClShift(PlayerID,Dest,Source,Operand,Mask)
+1922: CMul(PlayerID,Dest,Source,Multiplier,Mask,BitLimit)
+1943: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1948: CDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit)
+1965: CiDiv(PlayerID,Dest,Source,Divisor,Mask,BitLimit)
+1987: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+1992: CMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit)
+2009: CiMod(PlayerID,Dest,Source,Divisor,Mask,BitLimit)
+2030: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+2035: CNot(PlayerID,Dest,Source,Mask)
+2048: CAnd(PlayerID,Dest,Source,Operand,Mask)
+2067: 『 12장   매크로 함수형 최종 연산 함수 (C) 』
+2072: COr(PlayerID,Dest,Source,Operand,Mask)
+2087: CXor(PlayerID,Dest,Source,Operand,Mask)
+2106: 『 13장   함수 호출형 함수 정의 선언 함수 (Include) 』
+2111: Include_CtrigPlib(Cycle,SeedSwitch)
+2114: Include_ArithMetic()
+2115: Include_MatheMatics(Cycle)
+2116: Include_MiscFunctions(SeedSwitch)
+2119: Include_DataTransfer()
+2134: f_byteConvert(PlayerID,DestVA,Source,Size,Distance)
+2135: f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
+2136: f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
+2137: f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
+2138: f_bytecmp(PlayerID,Flag,Dest,SourceVA,Size,Distance)
+2139: f_bytecmpX(PlayerID,Flag,Dest,DestX,SourceVA,Size,Distance)
+2146: 『 13장   함수 호출형 함수 정의 선언 함수 (Include) 』
+2151: Include_ArithMetic()
+2163: Include_MatheMatics(Cycle)
+2173: Include_MiscFunctions(SeedSwitch)
+2189: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2195: f_Read(PlayerID,Input,Output,EPDOutput,Mask,Clear)
+2206: f_ReadX(PlayerID,Input,Output,Multiplier,Mask,Clear)
+2218: f_EPD(PlayerID,Dest,Source)
+2225: f_EPDX(PlayerID,DestX,Source)
+2236: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2242: f_MemcpyEPD(PlayerID,Dest,Source,Size)
+2252: f_Memcpy(PlayerID,Dest,Source,Size)
+2263: f_MemcpyX(PlayerID,Dest,DestX,Source,SourceX,Size)
+2281: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2287: f_ReadcpyEPD(PlayerID,DestVA,Source,Size)
+2297: f_Readcpy(PlayerID,DestVA,Source,Size,InitBytes)
+2309: f_ReadcpyX(PlayerID,DestVA,Source,SourceX,Size,InitBytes)
+2327: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2333: f_MovcpyEPD(PlayerID,Dest,SourceVA,Size,InitBytes)
+2345: f_Movcpy(PlayerID,Dest,SourceVA,Size)
+2361: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2367: f_Abs(PlayerID,Dest,Source,Mask)
+2376: f_Mul(PlayerID,Dest,Source,Multiplier,Mask)
+2386: f_iMul(PlayerID,Dest,Source,Multiplier,Mask)
+2401: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2407: f_Div(PlayerID,Dest,Source,Divisor,Mask)
+2416: f_iDiv(PlayerID,Dest,Source,Divisor,Mask)
+2425: f_Mod(PlayerID,Dest,Source,Divisor,Mask)
+2435: f_iMod(PlayerID,Dest,Source,Divisor,Mask)
+2448: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2454: f_Sqrt(PlayerID,Dest,Source)
+2461: f_Lengthdir(PlayerID,Radius,Angle,CosOutput,SinOutput)
+2472: f_Atan2(PlayerID,DeltaY,DeltaX,AngleOutput)
+2481: f_Log2(PlayerID,Dest,Source)
+2492: 『 14장   함수 호출형 최종 연산 함수 (f_) 』
+2498: f_Rand(PlayerID,Dest,Mask)
+2505: f_GetStrptr(PlayerID,Output,StringId)
+2516: f_GetStrXptr(PlayerID,Output,StringId)
+2527: f_GetTblptr(PlayerID,Output,TBLIndex)
+2538: 『 15장   중간 연산자 관련 함수 (_) 』
+2543: _Mov(Source,Mask)
+2548: _MovX(Source,Mode,Mask)
+2553: _Read(Source,Mask)
+2558: _ReadX(Source,Mask,Multiplier)
+2564: _EPDRead(Source)
+2574: 『 15장   중간 연산자 관련 함수 (_) 』
+2579: _ReadF(Source,Mask)
+2584: _ReadFX(Source,Mask,Multiplier)
+2590: _EPDReadF(Source)
+2595: _EPD(Source)
+2600: _EPDX(Source)
+2604: _TMem(Source,Address,Next,OffsetFlag)
+2615: 『 15장   중간 연산자 관련 함수 (_) 』
+2620: _Add(Source,Operand)
+2625: _Sub(Source,Operand)
+2630: _iSub(Source,Operand)
+2635: _Neg(Source)
+2644: 『 15장   중간 연산자 관련 함수 (_) 』
+2649: _Mul(Source,Operand)
+2654: _MulX(Source,Operand)
+2659: _iMul(Source,Operand)
+2669: 『 15장   중간 연산자 관련 함수 (_) 』
+2674: _Div(Source,Operand)
+2679: _iDiv(Source,Operand)
+2684: _DivX(Source,Operand)
+2689: _iDivX(Source,Operand)
+2699: 『 15장   중간 연산자 관련 함수 (_) 』
+2704: _Mod(Source,Operand)
+2709: _iMod(Source,Operand)
+2714: _ModX(Source,Operand)
+2719: _iModX(Source,Operand)
+2729: 『 15장   중간 연산자 관련 함수 (_) 』
+2734: _Not(Source)
+2738: _Or(Source,Operand)
+2743: _And(Source,Operand)
+2748: _Xor(Source,Operand)
+2754: _lShift(Source,Operand)
+2763: 『 15장   중간 연산자 관련 함수 (_) 』
+2768: _Abs(Source)
+2773: _Sqrt(Source)
+2778: _Lengthdir(Radius,Angle)
+2784: _Atan2(DeltaY,DeltaX)
+2789: _Log2(Source)
+2793: _Rand()
+2801: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2806: TCDeathsX(Player,Type,Value,Code,Mask)
+2807: TCDeaths(Player,Type,Value,Code)
+2808: TSetCDeathsX(Player,Type,Value,Code,Mask)
+2809: TSetCDeaths(Player,Type,Value,Code)
+2813: TNDeathsX(Player,Type,Value,Code,Mask)
+2814: TNDeaths(Player,Type,Value,Code)
+2815: TSetNDeathsX(Player,Type,Value,Code,Mask)
+2816: TSetNDeaths(Player,Type,Value,Code)
+2821: TVariableX(Player,Index,Section,Type,Value,Mask)
+2822: TSetVariableX(Player,Index,Section,Type,Value,Mask)
+2823: TVariable(Variable,Section,Type,Value,Mask)
+2824: TSetVariable(Variable,Section,Type,Value,Mask)
+2825: TVArrayX(VArray,Section,Type,Value,Mask)
+2826: TSetVArrayX(VArray,Section,Type,Value,Mask)
+2830: TCVar(Player,Index,Type,Value,Mask)
+2831: TSetCVar(Player,Index,Type,Value,Mask)
+2832: TNVar(Variable,Type,Value,Mask)
+2833: TSetNVar(Variable,Type,Value,Mask)
+2834: TCVAar(VArray,Type,Value,Mask)
+2835: TSetCVAar(VArray,Type,Value,Mask)
+2842: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2847: TSetCtrig2X(Offset,Type,Player2,Index2,Address2,EPD2,Next2,Mask)
+2848: TSetCtrig1X(Player1,Index1,Address1,Next1,Type,Value,Mask)
+2849: TCtrigX(Player,Index,Address,Next,Type,Value,Mask)
+2853: TDeathsX(Player,Type,Value,UnitId,Mask)
+2854: TDeaths(Player,Type,Value,UnitId)
+2855: TSetDeathsX(Player,Type,Value,UnitId,Mask)
+2856: TSetDeaths(Player,Type,Value,UnitId)
+2861: TMemory(Offset,Type,Value)
+2862: TSetMemory(Offset,Type,Value)
+2863: TMemoryX(Offset,Type,Value,Mask)
+2864: TSetMemoryX(Offset,Type,Value,Mask)
+2880: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2885: TCommand(Player,Type,Value,UnitID)
+2886: TBring(Player,Type,Value,UnitID,Location)
+2890: TAccumulate(Player,Type,Value,ResourceType)
+2894: TCountdownTimer(Type,Value)
+2898: TElapsedTime(Type,Value)
+2902: TKills(Player,Type,Value,UnitId)
+2906: TScore(Player,ScoreType,Type,Value)
+2910: TOpponents(Player,Type,Value)
+2918: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2923: TCreateUnit(Amount,UnitId,Location,Player)
+2924: TCreateUnitWithProperties(Amount,UnitId,Location,Player,Property)
+2929: TKillUnit(UnitId,Player)
+2930: TKillUnitAt(Amount,UnitId,Location,Player)
+2934: TRemoveUnit(UnitId,Player)
+2935: TRemoveUnitAt(Amount,UnitId,Location,Player)
+2939: TGiveUnits(Amount,UnitId,Player,Location,NewPlayer)
+2943: TOrder(UnitId,Player,StartLocation,OrderType,DestLocation)
+2947: TMoveLocation(Location,UnitId,Player,DestLocation)
+2951: TMoveUnit(Amount,UnitId,Player,StartLocation,DestLocation)
+2958: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2963: TModifyUnitEnergy(Amount,UnitId,Player,Location,Value)
+2967: TModifyUnitHangarCount(Value,Amount,UnitId,Player,Location)
+2971: TModifyUnitHitPoints(Amount,UnitId,Player,Location,Value)
+2975: TModifyUnitResourceAmount(Amount,Player,Location,Value)
+2979: TModifyUnitShields(Amount,UnitId,Player,Location,Value)
+2983: TSetCountdownTimer(Type,Time)
+2991: 『 16장   변수 삽입형 조건/액션 함수 (T) 』
+2996: TSetResources(Player,Type,Value,ResourceType)
+3000: TSetScore(Player,Type,Value,ScoreType)
+3004: TWait(Time)
+3008: TSetDoodadState(State,UnitId,Player,Location)
+3012: TSetInvincibility(State,UnitId,Player,Location)
+3016: TSetAllianceStatus(Player,Status)
+3020: TDisplayText(Text,AlwaysDisplay)
+3024: TPlayWAV(WAVName)
+3029: TSetMissionObjectives(Text)
+3037: 『 17장   특수 조건 관련 함수 (TT) 』
+3041: TTOR(OR_Conditions) ※ 구 함수
+3046: TTAND(AND_Conditions) ※ 구 함수
+3052: TTCDeathsX(Player,Type,Value,Code,Mask)
+3053: TTCDeaths(Player,Type,Value,Code)
+3058: TTNDeathsX(Player,Type,Value,Code,Mask)
+3059: TTNDeaths(Player,Type,Value,Code)
+3068: 『 17장   특수 조건 관련 함수 (TT) 』
+3072: TTVariableX(Player,Index,Section,Type,Value,Mask)
+3073: TTVariable(Variable,Section,Type,Value,Mask)
+3074: TTVArrayX(VArray,Section,Type,Value,Mask)
+3079: TTCVar(Player,Index,Type,Value,Mask)
+3080: TTNVar(Variable,Type,Value,Mask)
+3081: TTCVAar(VArray,Type,Value,Mask)
+3086: TTCtrigX(Player,Index,Address,Next,Type,Value,Mask)
+3091: TTDeathsX(Player,Type,Value,UnitId,Mask)
+3092: TTDeaths(Player,Type,Value,UnitId)
+3097: TTMemory(Offset,Type,Value)
+3098: TTMemoryX(Offset,Type,Value,Mask)
+3109: 『 17장   특수 조건 관련 함수 (TT) 』
+3113: TTCommand(Player,Type,Value,UnitID)
+3114: TTBring(Player,Type,Value,UnitID,Location)
+3119: TTAccumulate(Player,Type,Value,ResourceType)
+3123: TTCountdownTimer(Type,Value)
+3127: TTElapsedTime(Type,Value)
+3131: TTKills(Player,Type,Value,UnitId)
+3135: TTScore(Player,ScoreType,Type,Value)
+3139: TTOpponents(Player,Type,Value)
+3147: 『 18장   기타 편의기능 관련 함수 』
+3153: Loc(LocationId,Direction,Type,Value)
+3161: LocX(LocationId,Direction,Type,Value)
+3164: SetLoc(LocationId,Direction,Type,Value)
+3176: SetLocX(LocationId,Direction,Type,Value)
+3185: 『 18장   기타 편의기능 관련 함수 』
+3191: SetMemoryW(Offset,Type,Value)
+3196: MemoryB(Offset,Type,Value)
+3200: SetMemoryB(Offset,Type,Value)
+3207: NoAirCollision(PlayerID)
+3210: NoAirCollisionX(PlayerID)
+3215: EPDX(Offset)
+3223: 『 18장   기타 편의기능 관련 함수 』
+3229: PlayerCheck(Player,Status)
+3234: _Void(Number)
+3237: Void(Number,Type,Value)
+3240: SetVoid(Number,Type,Value)
+3243: VoidX(Number,Type,Value,Mask)
+3246: SetVoidX(Number,Type,Value,Mask)
+3249: SetCp(Number)
+3252: I64Zero(Number,Digit)
+3262: 『 18장   기타 편의기능 관련 함수 』
+3270: FMemory(offset, comparison, number)
+3273: FMemoryX(offset, comparison, number, mask)
+3276: FSetMemoryX(offset, modtype, number, mask)
+3279: FSetMemory(offset, modtype, number)
+3289: 『 18장   기타 편의기능 관련 함수 』
+3294: SetPlayerColor(Player,Type,Value)
+3298: MinimapColor(Player,Type,Value)
+3301: SetMinimapColor(Player,Type,Value)
+3304: Speed(Type,Value)
+3307: SetSpeed(Type,Value)
+3313: LocalPlayerID(Player,Type,Value)
+3317: UnixTime(Type,Date)
+3327: 『 18장   기타 편의기능 관련 함수 』
+3330: TSetKills(Player, Modifier, Number, Unit) ※ 변수 삽입형 액션
+3337: KtoA(Player,UnitId)
+3343: f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) 방식으로 읽음
+3351: _SHRead(Source,Mask)
+3360: 『 18장   기타 편의기능 관련 함수 』
+3363: TBwrite(Offset,Type,Value)
+3364: TTBread(Offset,Type,Value) - 특수 조건 삽입 가능
+3371: TWread(Offset,Type,Value)
+3372: TWwrite(Offset,Type,Value)
+3373: TTWread(Offset,Type,Value) - 특수 조건 삽입 가능
+3381: TMemoryB(Base,Index,Type,Value)
+3382: TSetMemoryB(Base,Index,Type,Value)
+3383: TTMemoryBX(Base,Index,Type,Value) - 특수 조건 삽입 가능
+3402: 『 18장   기타 편의기능 관련 함수 』
+3405: TSetMemoryW(Base,Index,Type,Value)
+3406: TTMemoryWX(Base,Index,Type,Value) - 특수 조건 삽입 가능
+3420: TMemoryDw(Base,Index,Type,Value,Mask)
+3421: TSetMemoryDw(Base,Index,Type,Value,Mask)
+3422: TTMemoryDw(Base,Index,Type,Value,Mask) - 특수 조건 삽입 가능
+3442: 『 18장   기타 편의기능 관련 함수 』
+3445: f_BreadX(PlayerID,Base,Index,Output,Multiplier) - DatEdit 오프셋 전용
+3453: f_Wread(PlayerID,Offset,Output,Multiplier)
+3454: f_WreadX(PlayerID,Base,Index,Output,Multiplier) - DatEdit 오프셋 전용
+3465: f_Bwrite(PlayerID,Offset,Type,Value)
+3467: f_BwriteX(PlayerID,Base,Index,Type,Value)
+3469: f_Wwrite(PlayerID,Offset,Type,Value)
+3471: f_WwriteX(PlayerID,Base,Index,Type,Value)
+3473: f_Dwwrite(PlayerID,Offset,Type,Value,Mask)
+3476: f_DwwriteX(PlayerID,Base,Index,Type,Value,Mask)
+3483: 『 18장   기타 편의기능 관련 함수 』
+3491: _ParseW(Number)
+3497: Timer(PlayerID,Index,Init,Start,End,Step,Order
+3524: 『 18장   기타 편의기능 관련 함수 』
+3555: Stage(PlayerID,Step,StageData)
+3569: 『 18장   기타 편의기능 관련 함수 』
+3572: TSetMapSize(Value,Mask) -- 변수 삽입형 액션
+3577: PlayerState(Player,State) -- 조건
+3578: SetPlayerState(Player,State) -- 액션
+3584: PauseCount(Player,Type,Value) -- 조건
+3585: SetPauseCount(Player,Type,Value) -- 액션
+3589: DropTimer(Type,Value) -- 조건
+3590: SetDropTimer(Type,Value) -- 액션
+3595: DropWindow(Type,Value) -- 조건
+3596: SetDropWindow(Type,Value) -- 액션
+3601: VisionTurbo(PlayerID)
+3609: 『 18장   기타 편의기능 관련 함수 』
+3615: FindSD(PlayerID,TargetPlayer,Location,Output,Preserve)
+3631: CMotion(PlayerID,Displacement,Velocity,Acceleration,Time)
+3648: 『 18장   기타 편의기능 관련 함수 』
+3661: IBGM_EPDX(PlayerID,TargetPlayer,Input,WAVData,AlertWav)
+3673: NPA5(PlayerID,Pointer,Fileptr,Size,DestDistance,SourceDistance)
+3688: 『 18장   기타 편의기능 관련 함수 』
+3699: IsTyping()
+3701: NotTyping()
+3703: KeyPress(KeyName,Status)
+3707: TTKeyPress(KeyName,Status)
+3713: MousePress(KeyName,Status)
+3717: TTMousePress(KeyName,Status)
+3729: 『 18장   기타 편의기능 관련 함수 』
+3738: f_EPDToAlphaID(PlayerID,Input,Output)
+3744: f_AlphaIDToCunit(PlayerID,Input,Output,EPDOutput)
+3752: _HotKeyUnit(Player,Group,Index)
+3757: HotkeyUnit(Player,Group,Index,Type,Value) - 조건
+3758: SetHotkeyUnit(Player,Group,Index,Type,Value) - 액션
+3771: 『 18장   기타 편의기능 관련 함수 』
+3774: TSetHotkeyUnit(Player,Group,Index,Type,Value) - 액션
+3775: TTHotKeyUnit(Player,Group,Index,Type,Value) - 특수 조건
+3785: SetUnitName(UnitId,StringId)
+3797: 『 19장   기타 스트링 관련 함수 』
+3803: print_utf8(line, offset, string)
+3810: check_utf8(line, offset, string)
+3820: 『 19장   기타 스트링 관련 함수 』
+3825: Print_String(PlayerID, Dest, String, InitBytes)
+3833: Print_StringX(PlayerID, DestVA, String, InitBytes)
+3841: Print_13(PlayerID,DisplayPlayer,String)
+3852: 『 19장   기타 스트링 관련 함수 』
+3857: GetStrSize(cp949flag,String,Null)
+3865: GetStrArr(cp949flag,String,Null)
+3874: GetStrId(String)
+3879: SaveStrArr(Dest,StrArr,Distance)
+3890: 『 19장   기타 스트링 관련 함수 』
+3895: GetPlayerName(PlayerID,TargetPlayer,OutputVA,InitBytes)
+3904: GetPlayerLength(PlayerID,TargetPlayer,Output,Multiplier)
+3910: ItoName(PlayerID,TargetPlayer,OutputVA,Color)
+3919: ItoX(PlayerID,Input,OutputVA,Color)
+3933: 『 19장   기타 스트링 관련 함수 』
+3938: ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin)
+3954: ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin)
+3974: 『 19장   기타 스트링 관련 함수 』
+3979: ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin)
+3995: ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin)
+4015: 『 19장   기타 스트링 관련 함수 』
+4020: GetHostPlayerID(PlayerID,Output))
+4024: GetHostName(PlayerID,OutputVA,InitBytes)
+4029: GetHostLength(PlayerID,Output,Multiplier)
+4033: ItoHost(PlayerID,OutputVA,Color)
+4038: HostName(Name,Length)
+4043: PlayerName(TargetPlayer,Name,Length)
+4053: 『 20장   CreateUnitShape.lua 함수 』
+4057: CreateUnitPolygon(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit
+4076: CreateUnitPolygonWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY
+4081: CreateUnitPolygonSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit
+4084: CreateUnitPolygonSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit
+4093: 『 20장   CreateUnitShape.lua 함수 』
+4097: CreateUnitLine(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,
+4100: CreateUnitLineWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY
+4105: CreateUnitLineSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,
+4108: CreateUnitLineSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,
+4112: CreateUnitStar(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,
+4117: CreateUnitStarWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,
+4121: CreateUnitStarSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,
+4125: CreateUnitStarSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,
+4135: 『 20장   CreateUnitShape.lua 함수 』
+4139: CreateUnitFlower(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,PerUnit,
+4152: CreateUnitFlowerWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,LocX,LocY,
+4157: CreateUnitFlowerSafe(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,SizeofLoc,
+4162: CreateUnitFlowerSafeWithProperties(PlayerID,Condition,Number,UnitId,LocId,ForPlayer,PerUnit,
+4173: 『 21장   사용자 정의 추가 함수 』
+4176: DisplayTextX(Text,AlwaysDisplay)
+4177: PlayWAVX(WAVName)
+4178: SetMissionObjectivesX(Text)
+4180: TransmissionX(Unit,Where,WAVName,TimeModifier,Time,Text,AlwaysDisplay)
+4181: LeaderBoardKillsX(Unit,Label)
+4182: LeaderBoardScoreX(ScoreType,Label)
+4183: LeaderBoardResourcesX(ResourceType,Label)
+4184: LeaderBoardControlX(Unit,Label)
+4185: LeaderBoardControlAtX(Unit,Location,Label)
+4186: LeaderBoardGoalScoreX(Goal,ScoreType,Label)
+4187: LeaderBoardGoalKillsX(Goal,Unit,Label)
+4189: LeaderBoardGoalResourcesX(Goal,ReesourceType,Label)
+4190: LeaderBoardGoalControlX(Goal,Unit,Label)
+4191: LeaderBoardGoalControlAtX(Goal,Unit,Location,Label)
+4193: CopyCpAction(X)에 CpActions칸에 {액션1,액션2,…} 형식으로 삽입
+4195: CopyCpAction(CpActions,Player,CurrentCp)
+4196: CopyCpActionX(CpActions,Player,CurrentCp)
+4214: 『 21장   사용자 정의 추가 함수 』
+4217: __SetFuncAlloc(Start,End) ※ 고급
+4222: __SetIndexAlloc(Start,End) ※ 고급
+4226: __SetJumpAlloc(Start,End) ※ 고급
+4233: __SetVoidArea(Start,End) ※ 고급
+4237: __SetFlagAlloc(Start,End) ※ 고급
+4247: 『 21장   사용자 정의 추가 함수 』
+4250: __SetCAPlotJumpAlloc(Start,End) ※ 고급
+4254: __SetCAPlotVarAlloc(Start,End) ※ 고급
+4258: __SetCAPrintVarAlloc(Start,End) ※ 고급
+4263: __SetCreateVarIndex(Init,Max,Ccode,NCode) ※ 고급
+4274: 『 21장   사용자 정의 추가 함수 』
+4277: CreateVar(PlayerID)
+4282: CreateVar2(PlayerID,Offset,Type,Value,Mask)
+4286: CreateVars(Number,PlayerID)
+4291: CreateVarArr(Number,PlayerID)
+4306: 『 21장   사용자 정의 추가 함수 』
+4309: CreateVArr(Size,PlayerID)
+4315: CreateVArrs(Number,Size,PlayerID)
+4321: CreateVArrArr(Number,Size,PlayerID)
+4333: 『 21장   사용자 정의 추가 함수 』
+4336: CreateArr(Size,PlayerID)
+4342: CreateArrs(Number,Size,PlayerID)
+4348: CreateArrArr(Number,Size,PlayerID)
+4356: CreateDb(ByteSize,PlayerID)
+4359: CreateDbs(Number,ByteSize,PlayerID)
+4362: CreateDbArr(Number,ByteSize,PlayerID)
+4370: 『 21장   사용자 정의 추가 함수 』
+4373: CreateCcode()
+4376: CreateCcodes(Number)
+4380: CreateCcodeArr(Number)
+4384: CreateNcode()
+4388: CreateNcodes(Number)
+4392: CreateNcodeArr(Number)
+4402: 『 21장   사용자 정의 추가 함수 』
+4405: CreateWar(PlayerID)
+4410: CreateWar2(PlayerID,Offset,Type,Value,Mask)
+4414: CreateWars(Number,PlayerID)
+4419: CreateWarArr(Number,PlayerID)
+4431: 『 21장   사용자 정의 추가 함수 』
+4434: CreateWArr(Size,PlayerID)
+4440: CreateWArrs(Number,Size,PlayerID)
+4446: CreateWArrArr(Number,Size,PlayerID)
+4458: 『 21장   사용자 정의 추가 함수 』
+4461: CreateLArr(Size,PlayerID)
+4467: CreateLArrs(Number,Size,PlayerID)
+4473: CreateLArrArr(Number,Size,PlayerID)
+4481: CreateLDb(ByteSize,PlayerID)
+4484: CreateLDbs(Number,ByteSize,PlayerID)
+4487: CreateLDbArr(Number,ByteSize,PlayerID)
+4495: 『 21장   사용자 정의 추가 함수 』
+4498: CreateSVar(Size,PlayerID)
+4505: CreateSVar2(Size,PlayerID,Offset,Type,Value,Mask)
+4511: CreateSVars(Size,Number,PlayerID)
+4517: CreateSVarArr(Size,Number,PlayerID)
+4530: 『 21장   사용자 정의 추가 함수 』
+4533: CreateSVArr(Number,Size,PlayerID)
+4540: CreateSVArrs(Numbers,Number,Size,PlayerID)
+4547: CreateSVArrArr(Numbers,Number,Size,PlayerID)
+4561: 『 21장   사용자 정의 추가 함수 』
+4564: CreateVoid()
+4567: CreateVoids(Number)
+4570: CreateVoidArr(Number)
+4579: 『 21장   사용자 정의 추가 함수 』
+4582: CreateVar2s(Number,Value,PlayerID)
+4586: CreateVarArr2(Number,Value,PlayerID)
+4589: CreateWar2s(Number,Value,PlayerID)
+4592: CreateWarArr2(Number,Value,PlayerID)
+4595: CreateVArr2(Size,Value,PlayerID)
+4598: CreateVArr2s(Number,Size,Value,PlayerID)
+4601: CreateVArrArr2(Number,Size,Value,PlayerID)
+4604: CreateWArr2(Size,Value,PlayerID)
+4607: CreateWArrArr2(Number,Size,Value,PlayerID)
+4612: CreateWArr2s(Number,Size,Value,PlayerID)
+4622: 『 21장   사용자 정의 추가 함수 』
+4627: CunPack(CPack) # 내부함수 (함수 만들 때 참고용)
+4635: CDoActionsX(PlayerID,Actions,Flags,Index)
+4644: CTriggerX(PlayerID, Conditions, Actions, Flags, Index)
+4652: CDoActions2X(PlayerID,Actions,Flags)
+4656: CTrigger2X(PlayerID, Conditions, Actions, Flags)
+4666: 『 21장   사용자 정의 추가 함수 』
+4669: CPush(PlayerID,Parameter)
+4674: CPop(PlayerID,Return)
+4679: LPush(PlayerID,Parameter)
+4683: LPop(PlayerID,Return)
+4696: 『 21장   사용자 정의 추가 함수 』
+4699: InitCFunc(PlayerID)
+4705: CFunc(CFunction)
+4711: CFuncEnd()
+4714: CFuncReturn(Return)
+4718: CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once)
+4734: 『 21장   사용자 정의 추가 함수 』
+4737: CallCFuncX(PlayerID,CFunction,Parameter,Return)
+4744: _Func(CFunction,Parameter)
+4750: TTFunc(CFunction,Parameter,flag)
+4762: 『 21장   사용자 정의 추가 함수 』
+4765: CMathFunc(PlayerID,Func,Start,End,Exception,T,TException,Magnificent) # StrCtrig 필수
+4775: TriggerX({Nvar(x,iAtLeast,조건1값), Nvar(x,iAtMost,조건2값)},SetNVar(x,SetTo,액션값))의 트리
+4786: F(x)(함수값)을 리턴함 (Magnificient 입력시 두번째 인자로 결과값에 곱할 크기값�
+4793: 『 21장   사용자 정의 추가 함수 』
+4796: CMathFunc2(PlayerID,Func,Start,End,Exception,T,TException,Magnificent) # StrCtrig 필수
+4833: 『 21장   사용자 정의 추가 함수 』
+4836: InitVFunc(PlayerID,CFunction,Wariable,Conditions,Actions,Once)
+4847: VFunc(CFunction,Wariable)
+4852: CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once)
+4868: 『 21장   사용자 정의 추가 함수 』
+4871: CallVFuncX(PlayerID,Wariable,Parameter,Return)
+4878: _VFunc(Wariable,Parameter)
+4884: TTVFunc(Wariable,Parameter,flag)
+4896: 『 22장   64비트 변수 연산 함수 (W) 』
+4901: W(Index,Player,Next)
+4906: W(0x10,P1) → P1의 Index 0x10인 변수를 입력
+4907: W(0x10,P1,1) → P1의 Index 0x10인 변수의 다음 변수를 입력
+4908: Wi(Index,Deviation,Player,Next)
+4913: LMem(Player,Index,Address,Next,EPDflag)
+4918: _LMem(Wariable,Address,Next,EPDflag)
+4930: _LMem(W(0x10),0x4,2,1) → Mem(P1,0x10,0x4,2,1)
+4931: _LMem(W(0x10),{0x158,0x198},1) → {Mem(P1,0x10,0x158,1,0),Mem(P1,0x10,0x198,1,0)}
+4932: _LMem(W(0x10),{0x24,{0x14}}) → {Mem(P1,0x10,0x24,0,0),Mem(P1,0x10,0x24+0x14,0,0)}
+4939: 『 22장   64비트 변수 연산 함수 (W) 』
+4942: WArr(WArray,Index,Player)
+4949: WArr(WArr1,W(0x10),P1) → P1의 WArr1[W(0x10)]를 반환함
+4950: WArr(WArr1,Wi(0x10,12)) → WArr1[W(0x10)+12]를 반환함
+4951: WArrX(WArray,Index,Index4,Player)
+4959: WArrX(WArr1,W(0x10),W(0x11),P1) → P1의 WArr1[W(0x10)]를 반환함
+4960: WArrX(WArr1,Wi(0x10,12),W(0x11)) → WArr1[W(0x10)+12]를 반환함
+4963: ConvertWArr(PlayerID,Dest,Dest4,Source,Size)
+4979: 『 22장   64비트 변수 연산 함수 (W) 』
+4982: LArr(LArray,Index,Player)
+4992: LArr({LArr1,0},V(0x10),P1) → P1의 LArr1[V(0x10)]의 주소를 반환함 (32비트, A타입)
+4993: LArr({LArr1,1},Vi(0x10,12)) → LArr1[V(0x10)+12]의 주소를 반환함 (32비트, A타입)
+4994: LArr({LArr1,8},2) → LArr1[2]의 주소를 반환함 (64비트, {Mem,Mem})
+4995: LArr({LArr1,8},V(0x10)) → LArr1[V(0x10)]의 주소를 반환함 (64비트, LA타입)
+4997: LArr({LArr1,8},W(0x10)) → LArr1[W(0x10)]의 주소를 반환함 (64비트, LA타입)
+5001: LArrX(LArray,Index,Player)
+5007: ConvertLArr(PlayerID,Dest,Source,Mode)
+5022: 『 22장   64비트 변수 연산 함수 (W) 』
+5025: CWariable(Player,Index)
+5031: CWariable2(Player,Index,Offset,Type,Value,Mask)
+5041: CVariable2(P1,0x10,0x58F500,Add,1234,0xFFFF)
+5044: CWArray(PlayerID,Size)
+5050: GetWArray(Header,Size)
+5064: 『 22장   64비트 변수 연산 함수 (W) 』
+5067: LArray(PlayerID,Size)
+5073: LDb(PlayerID,ByteSize)
+5079: LCallLabel1(Player,Index,Next)
+5084: LCallLabel2(Player,Index,Next)
+5088: DoActionsX(P1,LCallLabel2(P2,0x10)) → P2의 index 0x10인 64비트 변수의 RecoverNext Flag 복구
+5092: LCallLabel1X(Wariable)
+5094: LCallLabel2X(Wariable)
+5100: 『 22장   64비트 변수 연산 함수 (W) 』
+5103: CallWariable(PlayerID,Player,Index,Next,Conditions,Actions)
+5114: CallVariable(P1,P2,0x10,0,{Memory(0x58DC60,AtLeast,1)})
+5116: CallWariableX(PlayerID,Wariable,Conditions,Actions)
+5127: 『 22장   64비트 변수 연산 함수 (W) 』
+5130: WariableX(Player,Index,Section,Type,Value,Mask)
+5149: SetWariableX(Player,Index,Section,Type,Value,Mask)
+5174: 『 22장   64비트 변수 연산 함수 (W) 』
+5177: Wariable(Wariable,Section,Type,Value,Mask)
+5179: SetWariable(Wariable,Section,Type,Value,Mask)
+5182: WArrayX(WArray,Section,Type,Value,Mask)
+5187: SetWArrayX(WArray,Section,Type,Value,Mask)
+5192: CWar(Player,Index,Type,Value,Mask)
+5199: SetCWar(Player,Index,Type,Value,Mask)
+5211: 『 22장   64비트 변수 연산 함수 (W) 』
+5214: NWar(Wariable,Type,Value,Mask)
+5216: SetNWar(Wariable,Type,Value,Mask)
+5218: CWAar(WArray,Type,Value,Mask)
+5224: SetCWAar(WArray,Type,Value,Mask)
+5230: LMemX(LMem,Type,Value,Mask)
+5236: SetLMemX(LMem1,Type,LMem2,Mask)
+5248: 『 22장   64비트 변수 연산 함수 (W) 』
+5251: TWariableX(Player,Index,Section,Type,Value,Mask)
+5252: TSetWariableX(Player,Index,Section,Type,Value,Mask)
+5253: TWariable(Wariable,Section,Type,Value,Mask)
+5255: TSetWariable(Wariable,Section,Type,Value,Mask)
+5256: TWArrayX(WArray,Section,Type,Value,Mask)
+5257: TSetWArrayX(WArray,Section,Type,Value,Mask)
+5261: TCWar(Player,Index,Type,Value,Mask)
+5262: TSetCWar(Player,Index,Type,Value,Mask)
+5263: TNWar(Wariable,Type,Value,Mask)
+5264: TSetNWar(Wariable,Type,Value,Mask)
+5265: TCWAar(WArray,Type,Value,Mask)
+5266: TSetCWAar(WArray,Type,Value,Mask)
+5277: 『 22장   64비트 변수 연산 함수 (W) 』
+5280: TTLMemory(Offset,Type,Value)
+5281: TTLMemoryX(Offset,Type,Value,Mask)
+5293: TTWariableX(Player,Index,Section,Type,Value,Mask)
+5294: TTWariable(Wariable,Section,Type,Value,Mask)
+5295: TTWArrayX(WArray,Section,Type,Value,Mask)
+5301: TTCWar(Player,Index,Type,Value,Mask)
+5302: TTNWar(Wariable,Type,Value,Mask)
+5303: TTCWAar(WArray,Type,Value,Mask)
+5314: 『 22장   64비트 변수 연산 함수 (W) 』
+5317: Include_64BitLibrary(SeedSwitch)
+5322: f_LRead(PlayerID,Input,Output,Mask,Clear)
+5335: f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear)
+5342: f_LWrite(PlayerID,Dest,Source,Deviation,Mask) ※ 매크로형
+5347: W(WA) / {V(VA), V(VA)}
+5361: 『 22장   64비트 변수 연산 함수 (W) 』
+5364: f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) ※ 매크로형
+5379: f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) ※ 매크로형
+5385: X(→{X,X+4}, 스트링, W(WA), LA, {X/V/Mem, X/V/Mem}, {X/Mem,{Y}}→{X/Mem,X/Mem+Y} << WA
+5398: 『 22장   64비트 변수 연산 함수 (W) 』
+5401: TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) ※ 매크로형
+5415: f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) ※ 매크로형
+5425: f_LRand(PlayerID,Dest,Mask)
+5440: 『 22장   64비트 변수 연산 함수 (W) 』
+5443: f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) ※ 매크로형
+5449: V(A) → W(A)   Dest = W(A) → WA(A) << V(A) (앞, 뒤 모두 V(A)를 복사)
+5450: W(A) → V(A)   Dest = {V(A),0} → V(A) << 앞 4바이트, {V(A),1} → V(A) << 뒤 4바이트
+5456: f_iCast(PlayerID,Dest,Source) ※ 매크로형
+5461: V(A) → W(A) / W(A) → V(A)
+5470: 『 22장   64비트 변수 연산 함수 (W) 』
+5473: f_LAdd(PlayerID,Dest,Source,Operand,Mask)
+5488: f_LSub(PlayerID,Dest,Source,Operand,Mask)
+5492: f_LiSub(PlayerID,Dest,Source,Operand,Mask)
+5496: f_LNeg(PlayerID,Dest,Source,Mask)
+5500: f_LAbs(PlayerID,Dest,Source,Mask)
+5508: 『 22장   64비트 변수 연산 함수 (W) 』
+5511: f_LMul(PlayerID,Dest,Source,Operand,Mask)
+5516: f_LiMul(PlayerID,Dest,Source,Operand,Mask)
+5522: f_LDiv(PlayerID,Dest,Source,Operand,Mask)
+5526: f_LiDiv(PlayerID,Dest,Source,Operand,Mask)
+5531: f_LMod(PlayerID,Dest,Source,Operand,Mask)
+5535: f_LiMod(PlayerID,Dest,Source,Operand,Mask)
+5544: 『 22장   64비트 변수 연산 함수 (W) 』
+5547: f_LlShift(PlayerID,Dest,Source,Operand,Mask)
+5552: f_LAnd(PlayerID,Dest,Source,Operand,Mask)
+5556: f_LOr(PlayerID,Dest,Source,Operand,Mask)
+5560: f_LXor(PlayerID,Dest,Source,Operand,Mask)
+5565: f_LNot(PlayerID,Dest,Source,Mask)
+5574: 『 22장   64비트 변수 연산 함수 (W) 』
+5577: _LRead(Source,Mask)
+5583: _LReadX(Source,Multiplier,Mask)
+5587: _LMov(Source,Mask,Deviation)
+5594: _LMovX(Source,Mode,Mask,Deviation)
+5606: 『 22장   64비트 변수 연산 함수 (W) 』
+5609: _TLMem(Source,Address,Next,OffsetFlag)
+5619: _LRand()
+5623: _Cast(Dest,Source,Deviation,Mask)
+5630: _CastW(Source,Deviation,Mask)
+5636: _iCast(Source)
+5639: _iCastW(Source)
+5647: 『 22장   64비트 변수 연산 함수 (W) 』
+5650: _LAdd(Source,Operand)
+5657: _LSub(Source,Operand)
+5660: _LiSub(Source,Operand)
+5663: _LNeg(Source)
+5666: _LAbs(Source)
+5669: _LMul(Source,Operand)
+5672: _LiMul(Source,Operand)
+5680: 『 22장   64비트 변수 연산 함수 (W) 』
+5683: _LDiv(Source,Operand)
+5686: _LiDiv(Source,Operand)
+5689: _LMod(Source,Operand)
+5692: _LiMod(Source,Operand)
+5695: _LlShift(Source,Operand)
+5699: _LAnd(Source,Operand)
+5702: _LOr(Source,Operand)
+5706: _LXor(Source,Operand)
+5709: _LNot(Source)
+5717: 『 23장   구조체 변수 연산 함수 (SV) 』
+5720: SV(SVariable,Line,Player,Next)
+5729: _SMem(SVData,Address,Next,EPDflag)
+5751: 『 23장   구조체 변수 연산 함수 (SV) 』
+5754: SVArr(SVArray,Index,Line,Player)
+5763: SVArrX(SVArray,Index,Index4,Line,Player)
+5768: ConvertSVArr(PlayerID,Dest,Dest4,Source,Size)
+5782: 『 23장   구조체 변수 연산 함수 (SV) 』
+5785: CSVariable(Player,Index,Number)
+5793: CSVariable2(Player,Index,Number,Offset,Type,Value,Mask)
+5805: SVArray(PlayerID,Size,Number)
+5812: GetSVArray(Header,Size)
+5826: 『 23장   구조체 변수 연산 함수 (SV) 』
+5829: SCallLabel1(Player,SVariable,Next)
+5835: SCallLabel2(Player,SVariable,Next)
+5839: DoActionsX(P1,SCallLabel2(P2,0x10)) → P2의 index 0x10인 구조체 변수의 RecoverNext Flag 복구
+5843: SCallLabel1X(SVData)
+5845: SCallLabel2X(SVData)
+5847: CallSVariable(PlayerID,Player,SVariable,Next,Conditions,Actions)
+5855: CallSVariableX(PlayerID,SVData,Conditions,Actions)
+5865: 『 23장   구조체 변수 연산 함수 (SV) 』
+5868: SVariableX(Player,SVariable,Line,Section,Type,Value,Mask)
+5878: SetSVariableX(Player,SVariable,Line,Section,Type,Value,Mask)
+5889: SVariable(SVData,Section,Type,Value,Mask)
+5891: SetSVariable(SVData,Section,Type,Value,Mask)
+5898: 『 23장   구조체 변수 연산 함수 (SV) 』
+5901: SVArrayX(SVArray,Section,Type,Value,Mask)
+5906: SetSVArrayX(SVArray,Section,Type,Value,Mask)
+5910: CSVar(Player,SVariable,Line,Type,Value,Mask)
+5913: SetCSVar(Player,SVariable,Line,Type,Value,Mask)
+5917: NSVar(SVData,Type,Value,Mask)
+5919: SetNSVar(SVData,Type,Value,Mask)
+5921: CSVAar(SVArray,Type,Value,Mask)
+5924: SetCSVAar(SVArray,Type,Value,Mask)
+5933: 『 23장   구조체 변수 연산 함수 (SV) 』
+5936: TSVariableX(Player,SVariable,Line,Section,Type,Value,Mask)
+5937: TSetSVariableX(Player,SVariable,Line,Section,Type,Value,Mask)
+5938: TSVariable(SVData,Section,Type,Value,Mask)
+5940: TSetSVariable(SVData,Section,Type,Value,Mask)
+5941: TSVArrayX(SVArray,Section,Type,Value,Mask)
+5942: TSetSVArrayX(SVArray,Section,Type,Value,Mask)
+5945: TCSVar(Player,SVariable,Line,Type,Value,Mask)
+5946: TSetCSVar(Player,SVariable,Line,Type,Value,Mask)
+5947: TNSVar(SVData,Type,Value,Mask)
+5948: TSetNSVar(SVData,Type,Value,Mask)
+5949: TCSVAar(SVArray,Type,Value,Mask)
+5950: TSetCSVAar(SVArray,Type,Value,Mask)
+5959: 『 23장   구조체 변수 연산 함수 (SV) 』
+5962: TTSVariableX(Player,SVariable,Line,Section,Type,Value,Mask)
+5963: TTSVariable(SVData,Section,Type,Value,Mask)
+5964: TTSVArrayX(SVArray,Section,Type,Value,Mask)
+5968: TTCSVar(Player,SVariable,Line,Type,Value,Mask)
+5969: TTNSVar(SVData,Type,Value,Mask)
+5970: TTCSVAar(SVArray,Type,Value,Mask)
+5979: 『 23장   구조체 변수 연산 함수 (SV) 』
+5982: SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear)
+5987: SV(SVA) / {X1/V1(VA1)/Mem1(A1), X2/V2(VA2)/Mem2(A2),…}, Line 미입력시 1~Number 까지로 입력됨
+5990: SV(SVA) / {X1/V1(VA1), X2/V2(VA2),…}, Line 미입력시 1~Number 까지로 입력됨
+5998: MovS(PlayerID,Dest,Source,Mode,Mask,Clear) ※ 내부함수
+6010: TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag)
+6025: 『 23장   구조체 변수 연산 함수 (SV) 』
+6028: f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init)
+6039: SCast(PlayerID,Dest,Source,Deviation,Mask,Clear)
+6044: V(A) → SV(A) / SV(A) → V(A) (Line에 복사할 값이 들어있는 줄 수를 입력)
+6051: SCopy(PlayerID,SVData,DestLine,SourceLine)
+6065: 『 23장   구조체 변수 연산 함수 (SV) 』
+6068: _SMov(Number,Source,Mode,Deviation,Mask)
+6073: SV(SVA) / {X1/V1(VA1), X2/V2(VA2),…}
+6079: _MovS(Number,Source,Mode,Mask) ※ 내부함수
+6086: _TSMem(Source,Address,Next,OffsetFlag)
+6093: _SCast(Source,Deviation,Mask)
+6099: _CastS(Number,Source,Deviation,Mask)
+6109: 『 23장   구조체 변수 연산 함수 (SV) 』
+6112: _SCopy(SVData,DestLine,SourceLine)
+6126: 『 24장   논리 조건 연산 함수 (_T) 』
+6129: _TP(...)
+6132: _TC(...)
+6135: _TB(...)
+6138: _TNOT(...)
+6141: _TOR(...)
+6145: _TAND(...)
+6156: 『 25장   바이트 단위 R/W 함수 (byte) 』
+6159: CbyteConvert(PlayerID,DestVA,Source)
+6168: f_byteConvert(PlayerID,DestVA,Source,Size,Distance)
+6177: f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance)
+6191: 『 25장   바이트 단위 R/W 함수 (byte) 』
+6194: f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance)
+6203: f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance)
+6208: f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance)
+6219: f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance)
+6229: 『 25장   바이트 단위 R/W 함수 (byte) 』
+6232: TTbytecmp(Dest,SourceVA,Size,Distance)
+6235: TTbytecmpX(Dest,DestX,SourceVA,Size,Distance)
+6239: _byteConvert(Source)
+6244: _byteConvertF(Source,Size,Distance)
+6252: _byteConvertFX(Source,SourceX,Size,Distance)
+6266: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6270: GetiStrArr(cp949flag,String)
+6277: GetiStrSize(cp949flag,String)
+6282: GetiStrId(PlayerId,String)
+6291: SaveiStrArr(PlayerID,String,SVA32)
+6300: SaveiStrptr(PlayerID,String,SVA32) - ＃STRCtrig 필수 & 반드시 CJump 사이에서만 사용해야�
+6313: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6317: CreateSVA32(iStrArr,Size,PlayerID)
+6325: MakeiStrVoid(Size,flag)
+6331: MakeiStrLetter(Letter,Size,flag)
+6338: MakeiStrWord(String,Size)
+6344: FixText(PlayerID,Preset)
+6355: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6359: CSPrint(iStrid,SVA32,DisplayPlayer,FixText,PlayerID,Condition,CpAction,Action,Preserve)
+6374: f_GetiStrptr(PlayerID,Output,StringId)
+6382: f_GetiStrXepd(PlayerID,Output,StringId)
+6395: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6399: CreateSVA1(iStrArr,Size,PlayerID)
+6406: SVA1(SVA1,Index)
+6415: TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag)
+6423: MakeiStrData(Letter,Fill)
+6429: MakeiStrDiff(Start,End)
+6440: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6443: CSVA1(SVA1,Type,Value,Mask)
+6448: SetCSVA1(SVA1,Type,Value,Mask)
+6455: TCSVA1(SVA1,Type,Value,Mask)
+6456: TSetCSVA1(SVA1,Type,Value,Mask)
+6460: TTCSVA1(SVA1,Type,Value,Mask)
+6469: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6473: CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction,CpAction,Action)
+6514: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6519: CA__InputVA(Index,SVA1,Size,Mask,Start,End,SourceDistance)
+6530: CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceDistance)
+6543: CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistance,SourceDistance)
+6551: CA__OverWrite(SVA32,Index,Null,Preserve)
+6563: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6567: CA__Input(Input,SVA1,Mask)
+6574: CA__SetMask(SVA1,Mask,Start,End,Preserve)
+6582: CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve)
+6594: CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
+6613: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6616: CA__SetValue(SVA1,String,Mask,Index,Preserve,utf8flag)
+6625: CA__Mov(SVA1,Output,Mask,RecoverMask)
+6632: CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance)
+6643: CA__Read(Index,Output,Mask)
+6653: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6656: CA__ReadX(Index,Output,Multiplier,Mask)
+6663: CA__SetMemoryX(index,Value,Mask,utf8flag)
+6671: CA__SetColor(index,ColorCode)
+6677: CA__SetLetter(index,Letter,utf8flag)
+6684: CA__Encode(Dest,Source,Size,cp949flag) - ＃STRCtrig 필수
+6700: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6703: CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End)
+6714: CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag)
+6732: CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
+6745: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6748: CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,utf8flag)
+6774: CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,utf8flag)
+6785: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6788: CA__GetName(SVA1,TargetPlayer,Output)
+6795: CA__epdcpy(SVA1,Value,Mask,Start,End,Preserve)
+6805: CA__epdcmp(Dest,Source,Size,Mask,CFlag)
+6816: TTepdcmp(Dest,Source,Size,Mask)
+6824: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6827: MakeiTblString(TBLIndex,Type,Hotkey,String,Name,Hexflag)
+6839: GetiTblId(PlayerId,TBLIndex,Size)
+6848: MakeButtonTypeValue(String)
+6854: MakeHotkeyValue(String)
+6869: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6873: CBPrint(iTblId,Preset,CBfunc,PlayerID,Condition,PerAction,Action)
+6917: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6920: CB__SetButtonType(Value)
+6927: CB__SetHotkey(Value)
+6947: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6951: CreateSVA32X(iStrArr,Size,PlayerID)
+6957: SaveiStrArrX(PlayerID,String,SVA32)
+6965: SaveiStrptrX(PlayerID,String,SVA32) - ＃STRCtrig 필수 & 반드시 CJump 사이에서만 사용해야�
+6972: MakeiStrDataX(Letter,Fill)
+6978: MakeiStrDiffX(Start,End)
+6989: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+6993: Display(Line,Status)
+6998: TTDisplay(Line,Status)
+7005: DisplayX(Line,Index,Value,Mask)
+7012: TTDisplayX(Line,Index,Type,Value,Mask)
+7027: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7031: f_Strlen(PlayerID,Line,Output,EPDXOutput)
+7040: MakeChatOffset(Line,Offset)
+7046: f_ChatOffset(PlayerID,Line,Offset,Output)
+7053: _Chat(Line,Offset)
+7064: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7070: CDPrint(Line,Size,Init,DisplayPlayer,Preset,CDfunc,PlayerID,Condition,PerAction,Action)
+7118: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7122: CDPrint(Line,Size,ClearLetter,DisplayPlayer,Preset,CDfunc,PlayerID,Condition,PerAction,Action)
+7156: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7159: CD__GetDisplayLine(Line,Output)
+7164: CD__GetLine(DisplayLine,Output)
+7168: CD__GetIndex(Index,Output)
+7172: CD__GetIndex2(Line,Index,Output)
+7177: _GIndex(Index)
+7181: _GIndex2(Line,Index)
+7191: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7194: CD__GetMask(Index,Output)
+7197: CD__GetMask2(Line,Index,Output)
+7200: _MIndex(Index)
+7204: _MIndex2(Line,Index)
+7208: CD__SetMaskX(index,Mask)
+7218: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7221: CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance)
+7235: CD__InputMask(Line,Mask,Start,End)
+7243: CD__Resize(Line,Status)
+7255: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7258: CD__ScanV(SVA1,Size,Variable,Output,Base,Sign)
+7269: CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign)
+7279: CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit)
+7300: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7304: CreateSV54(PlayerID,String)
+7309: C13Print(SV54,DisplayPlayer,Preset,C13func,PlayerID,Condition,PerAction,CpAction,Action)
+7349: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7352: CS__InputVA(PlayerID,iStrid,Index,SVA1,Size,Mask,Start,End,SourceDistance)
+7358: CS__InputSVA1(PlayerID,Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceDistance)
+7363: CS__InputSVA1X(PlayerID,Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistance,SourceDistance)
+7367: CS__OverWrite(PlayerID,iStrid,SVA32,Index,Null,Preserve)
+7373: CS__Input(PlayerID,Input,SVA1,Mask)
+7378: CS__SetMask(PlayerID,SVA1,Mask,Start,End,Preserve)
+7387: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7390: CS__SetNext(PlayerID,SVA1,DestDistance,Mode,Start,End,Preserve)
+7394: CS__MoveXY(PlayerID,SVA1,Line,Mul,Mode,Fix,PathData,Preserve)
+7398: CS__SetValue(PlayerID,SVA1,String,Mask,Index,Preserve,utf8flag)
+7402: CS__Mov(PlayerID,SVA1,Output,Mask,RecoverMask)
+7406: CS__Movcpy(PlayerID,SVA1,Output,Size,Mask,RecoverMask,DestDistance)
+7410: CS__Read(PlayerID,iStrid,Index,Output,Mask)
+7417: CS__ReadX(PlayerID,iStrid,Index,Output,Multiplier,Mask)
+7428: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7431: CS__SetMemoryX(PlayerID,iStrid,index,Value,Mask,utf8flag)
+7437: CS__SetColor(PlayerID,iStrid,index,ColorCode)
+7443: CS__SetLetter(PlayerID,iStrid,index,Letter,utf8flag)
+7449: CS__Encode(PlayerID,Dest,Source,Size,cp949flag) - ＃STRCtrig 필수
+7453: CS__ConvertColor(PlayerID,SVA1,ConvertData,MaskData,Start,End)
+7458: CS__ConvertLetter(PlayerID,SVA1,ConvertData,MaskData,Start,End,utf8flag)
+7467: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7470: CS__ItoName(PlayerID,SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag)
+7474: CS__ItoCustom(PlayerID,SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,u
+7481: CS__lItoCustom(PlayerID,SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,
+7486: CS__SetHotkey(PlayerID,iTBLid,Value)
+7491: CS__SetButtonType(PlayerID,iTBLid,Value)
+7502: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7505: CS__GetDisplayLine(PlayerID,Line,Output)
+7509: CS__GetLine(PlayerID,DisplayLine,Output)
+7513: CS__GetIndex(PlayerID,Index,Output)
+7517: CS__GetIndex2(PlayerID,Line,Index,Output)
+7521: CS__GetMask(PlayerID,Index,Output)
+7525: CS__GetMask2(PlayerID,Line,Index,Output)
+7535: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7538: CS__InputVAX(PlayerID,SV54,Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance)
+7543: CS__InputMask(PlayerID,SV54,Line,Mask,Start,End)
+7549: CS__Resize(PlayerID,SV54,Line,Status)
+7554: CS__ScanChat(PlayerID,SVA1,Offset,Size,Output,SkipInit)
+7558: CS__ScanV(PlayerID,SVA1,Size,Variable,Output,Base,Sign)
+7563: CS__ScanW(PlayerID,SVA1,Size,Variable,Output,Base,Sign)
+7572: 『 26장   이상 스트링 편집 및 출력 함수 (CAPrint) 』
+7575: CS__epdcpy(PlayerID,SVA1,Value,Mask,Start,End,Preserve)
+7579: CS__epdcmp(PlayerID,Dest,Source,Size,Mask,CFlag)
+7583: CS__GetName(PlayerID,SVA1,TargetPlayer,Output)
+7587: CS__SetMaskX(PlayerID,SV54,index,Mask)
+7597: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7618: MemoryX(주소,연산자,값1,마스크)   [UnitID/유닛이름], 값2
+7630: KeyUp(키)   키를 떼는 순간 1회 인식
+7631: KeyPress(키)   키를 누르는 동안 계속 인식
+7638: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7646: MouseDown(키)   마우스 키를 누른 순간 1회 인식
+7647: MouseUp(키)   마우스 키를 떼는 순간 1회 인식
+7648: MousePress(키)   마우스 키를 누르는 동안 계속 인식
+7682: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7689: SetDeaths(해당하는 사람,Add,값,UnitID); 실행
+7726: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7763: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7787: Memory(0x58F450,Exactly,0)이고 X키를 누를경우 SetDeaths(두 조건을 만족한 사람,Add,1,0);
+7797: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7824: 『 27장   비공유 데이터 전송 함수 (NSQC.py) 』
+7833: NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAct)
+7845: NSQCReceive(PlayerID,DestVA,Size,TargetPlayer,NSQCIndex,ErrorCode,ErrorCheck,ResetCond,ResetAct)
+7868: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+7871: ScanInitSetting(PlayerID,Preserve)
+7877: ScanSprite(PlayerID,Number,Owner,RemoveScan,Location,Conditions,Actions,Preserve)
+7891: UnitSprite(PlayerID,Owner,UnitId,Height,Time,Location,Conditions,Actions,Preserve)
+7910: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+7913: RecallSprite(PlayerID,Owner,UnitId,Location,X,Y,Conditions,Actions,Preserve)
+7927: BulletInitSetting(PlayerID,UnitId,Weapon,Flingy,Sprite,Image,Script,Color,Damage,DamageUp,UpgradeID
+7953: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+7956: CreateBullet(PlayerID,Owner,UnitId,Height,Angle,Speed,Time,Location,Conditions,Actions,Preserve)
+7974: CreateBulletTarget(PlayerID,Owner,UnitId,Height,Angle,Speed,Time,Location,X,Y,Conditions,Actions1,Action
+8000: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+8003: CreateStorm(PlayerID,Owner,UnitId,Height,Angle,ImageID,Time,Location,Conditions,Actions,Preserve)
+8021: CreateSprite(PlayerID,Owner,UnitId,Height,Angle,Speed,Location,Conditions,Actions,Preserve)
+8045: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+8048: TSetImageColor(ImageID,Code) - 변수 삽입 가능
+8053: SetImageScript(ImageID,ScriptID)
+8054: TSetImageScript(ImageID,ScriptID) - 변수 삽입 가능
+8058: SetImageAllScript(ImageID,Value)
+8059: TSetImageAllScript(ImageID,Value) - 변수 삽입 가능
+8063: SetRecallImage(ImageID)
+8064: TSetRecallImage(ImageID) - 변수 삽입 가능
+8068: SetScanImage(ImageID)
+8069: TSetScanImage(ImageID) - 변수 삽입 가능
+8072: SetSpriteImage(SpriteID,ImageID)
+8073: TSetSpriteImage(SpriteID,ImageID) - 변수 삽입 가능
+8083: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+8086: TSetBulletDamage(WeaponID,Type,Damage) - 변수 삽입 가능
+8092: SetBulletDamageUp(WeaponID,Type,Damage)
+8093: TSetBulletDamageUp(WeaponID,Type,Damage) - 변수 삽입 가능
+8098: SetBulletNumber(WeaponID,Number)
+8099: TSetBulletNumber(WeaponID,Number) - 변수 삽입 가능
+8103: SetBulletUpgrade(WeaponID,UpgradeID)
+8104: TSetBulletUpgrade(WeaponID,UpgradeID) - 변수 삽입 가능
+8109: SetBulletDamageType(WeaponID,DamageType)
+8110: TSetBulletDamageType(WeaponID,DamageType) - 변수 삽입 가능
+8114: SetBulletDamageSpecial(WeaponID,DamageSpecial)
+8115: TSetBulletDamageSpecial(WeaponID,DamageSpecial) - 변수 삽입 가능
+8123: 『 28장   순수 총알생성 함수 (언리미터 필요) 』
+8126: TSetBulletSpin(WeaponID,Type,Angle) - 변수 삽입 가능
+8132: SetBulletSplash100(WeaponID,Type,Radius)
+8133: TSetBulletSplash100(WeaponID,Type,Radius) - 변수 삽입 가능
+8138: SetBulletSplash50(WeaponID,Type,Radius)
+8139: TSetBulletSplash50(WeaponID,Type,Radius) - 변수 삽입 가능
+8144: SetBulletSplash25(WeaponID,Type,Radius)
+8145: TSetBulletSplash25(WeaponID,Type,Radius) - 변수 삽입 가능
+8151: SetDimension(UnitId,Value)
+8152: TSetDimension(UnitId,Value) - 변수 삽입 가능
+8161: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8164: f_GetVArrptr(PlayerID,Size) - ＃STRCtrig 필수
+8170: f_GetWArrptr(PlayerID,Size) - ＃STRCtrig 필수
+8176: f_GetSVArrptr(PlayerID,Size,Number) - ＃STRCtrig 필수
+8183: f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수
+8197: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8200: f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수
+8209: f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadCheck) - ＃STRCtrig 필수
+8218: FArr(Fileptr,Index,Player)
+8224: FArr(Arr1,V(0x10),P1) → P1의 FArr1[V(0x10)]의 주소를 반환함
+8231: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8234: f_GetVoidptr(PlayerID,Size) - ＃STRCtrig 필수
+8240: f_GetFileptr(PlayerID,FileName,LoadCheck) - ＃STRCtrig 필수
+8246: f_GetFileptrN(PlayerID,FileName,Repeat,LoadCheck) - ＃STRCtrig 필수
+8258: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8261: SaveFileArr(FileArray,ElementSize,FileName)
+8267: f_GetFileArrptr(PlayerID,FileArray,ElementSize,LoadCheck) - ＃STRCtrig 필수
+8275: f_GetFileArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수
+8289: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8292: f_GetFileSize(FileName)
+8297: f_GetTRIGptrN(PlayerID,FileName,Repeat,LoadCheck) - ＃STRCtrig 필수
+8312: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8350: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8382: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8422: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8476: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8529: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8544: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8574: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8620: 『 29장   파일 I/O 및 CGRP 삽입 함수 』
+8646: 『 #   부록 설명 』
+8826: 『 #   부록 설명 』
+8863: 『 #   부록 설명 』
+8875: Main(i) 조건 만족시   Main(0) → ... → Main(i) → Selector → NJump_1 → ...
+8890: STPopTrigArr() 함수에 전달받은 해당 데이터를 처리하는 단락을 추가하면 된다. (�
+8897: PopTrigArr() 함수에서 저장된 변수 삽입 트리거 생성 정보를 처리한다.
+8910: 『 #   부록 설명 』
+8946: 『 #   부록 설명 』
+8952: ConvertArr(), ConvertVArr(), SafeRead류(Input만), ItoDec(X), ItoHex(X)(Input만), Print_String(X)(Inpu
+8959: Arr(변수) → (지원O)   그대로 사용시 변수 입력 / (지원X)   _TMem() 사용시 변수 입
+8960: VArr(변수) → (지원O)   그대로 사용시 변수 출력 / (지원X)   _MovX() 사용시 변수 �
+8964: MovX(PlayerID,[VArr()/Arr()],_연산함수())를 사용하거나, 연산함수 바로 뒤에
+8965: MovX(PlayerID,[VArr()/Arr()],임시변수)를 사용
+8971: 『 #   부록 설명 』

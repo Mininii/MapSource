@@ -1,0 +1,603 @@
+2543: _Mov(Source,Mask) ## : CMov의 중간 연산자 함수, V << Source
+2548: _MovX(Source,Mode,Mask) ## : CMovX의 중간 연산자 함수, VA → V(변수 출력) 타입 변환시 사용
+2553: _Read(Source,Mask) ## : CRead의 중간 연산자 함수, V << f_maskread(Source,Mask)
+2558: _ReadX(Source,Mask,Multiplier) ## : CReadX의 중간 연산자 함수, V << f_maskread(Source,Mask) * Multiplier
+2564: _EPDRead(Source) ## : CRead의 중간 연산자 함수(EPD 읽기모드), V << EPD(f_maskread(Source,Mask))
+2579: _ReadF(Source,Mask) ## : f_Read의 중간 연산자 함수, V << f_maskread(Source,Mask)
+2584: _ReadFX(Source,Mask,Multiplier) ## : f_ReadX의 중간 연산자 함수, V << f_maskread(Source,Mask) * Multiplier
+2590: _EPDReadF(Source) ## : f_Read의 중간 연산자 함수(EPD 읽기모드), V << EPD(f_maskread(Source,Mask))
+2595: _EPD(Source) ## : f_EPD의 중간 연산자 함수, V << EPD(Source)
+2600: _EPDX(Source) ## : f_EPDX의 중간 연산자 함수, V << Source%4
+2604: _TMem(Source,Address,Next,OffsetFlag) ## : TMem의 중간 연산자 함수, VA,A → V(변수 입력) 타입 변환시 사용
+2620: _Add(Source,Operand) ## : CAdd의 중간 연산자 함수, V << Source + Operand
+2625: _Sub(Source,Operand) ## : CSub의 중간 연산자 함수, V << Source - Operand (순환X)
+2630: _iSub(Source,Operand) ## : CiSub의 중간 연산자 함수, V << Source - Operand (순환O)
+2635: _Neg(Source) ## : CNeg의 중간 연산자 함수, V << -Source
+2649: _Mul(Source,Operand) ## : CMul/f_Mul의 중간 연산자 함수, V << Source * Operand
+2654: _MulX(Source,Operand) ## : CMul/f_Mul의 중간 연산자 함수, V << Source * Operand
+2659: _iMul(Source,Operand) ## : f_iMul의 중간 연산자 함수, V << Source * Operand
+2674: _Div(Source,Operand) ## : CDiv/f_Div의 중간 연산자 함수, V << Source / Operand (Unsigned)
+2679: _iDiv(Source,Operand) ## : CiDiv/f_iDiv의 중간 연산자 함수, V << Source / Operand (Signed)
+2684: _DivX(Source,Operand) ## : CDiv/f_Div의 중간 연산자 함수, V << Source / Operand (Unsigned)
+2689: _iDivX(Source,Operand) ## : CiDiv/f_iDiv의 중간 연산자 함수, V << Source / Operand (Signed)
+2704: _Mod(Source,Operand) ## : CMod/f_Mod의 중간 연산자 함수, V << Source % Operand (Unsigned)
+2709: _iMod(Source,Operand) ## : CiMod/f_iMod의 중간 연산자 함수, V << Source % Operand (Signed)
+2714: _ModX(Source,Operand) ## : CMod/f_Mod의 중간 연산자 함수, V << Source % Operand (Unsigned)
+2719: _iModX(Source,Operand) ## : CiMod/f_iMod의 중간 연산자 함수, V << Source % Operand (Signed)
+2734: _Not(Source) ## : CNot의 중간 연산자 함수, V << ~Source
+2738: _Or(Source,Operand) ## : COr의 중간 연산자 함수, V << Source | Operand
+2743: _And(Source,Operand) ## : CAnd의 중간 연산자 함수, V << Source & Operand
+2748: _Xor(Source,Operand) ## : CXor의 중간 연산자 함수, V << Source ^ Operand
+2754: _lShift(Source,Operand) ## : ClShift의 중간 연산자 함수, V = Source << Operand
+2768: _Abs(Source) ## : f_Abs의 중간 연산자 함수, V << |Source|
+2773: _Sqrt(Source) ## : f_Sqrt의 중간 연산자 함수, V << √(Source)
+2778: _Lengthdir(Radius,Angle) ## : f_Lengthdir의 중간 연산자 함수, W << R*CosA, R*SinA
+2784: _Atan2(DeltaY,DeltaX) ## : f_Atan2의 중간 연산자 함수, V << Atan2(ΔY/ΔX)
+2789: _Log2(Source) ## : f_Log2의 중간 연산자 함수, V << log2(Source) (밑 = 2)
+2793: _Rand() ## : f_Rand의 중간 연산자 함수, V << 32비트 랜덤난수
+2809: TSetCDeaths(Player,Type,Value,Code) ## : C(Set)Deaths(X) 조건/액션의 변수 삽입형 함수
+2816: TSetNDeaths(Player,Type,Value,Code) ## : N(Set)Deaths(X) 조건/액션의 변수 삽입형 함수
+2826: TSetVArrayX(VArray,Section,Type,Value,Mask) ## : (Set)[Variable/VArray](X) 조건/액션의 변수 삽입형 함수
+2835: TSetCVAar(VArray,Type,Value,Mask) ## : (Set)[C/N][Var/VAar] 조건/액션의 변수 삽입형 함수
+2849: TCtrigX(Player,Index,Address,Next,Type,Value,Mask) ## : (Set)Ctrig(1/2)X 조건/액션의 변수 삽입형 함수
+2856: TSetDeaths(Player,Type,Value,UnitId) ## : (Set)Deaths(X) 조건/액션의 변수 삽입형 함수
+2864: TSetMemoryX(Offset,Type,Value,Mask) ## : (Set)Deaths(X) 조건/액션의 변수 삽입형 함수
+2886: TBring(Player,Type,Value,UnitID,Location) ## : Command/Bring 조건의 변수 삽입형 함수
+2890: TAccumulate(Player,Type,Value,ResourceType) ## : Accumulate 조건의 변수 삽입형 함수
+2894: TCountdownTimer(Type,Value) ## : CountdownTimer 조건의 변수 삽입형 함수
+2898: TElapsedTime(Type,Value) ## : ElapsedTime 조건의 변수 삽입형 함수
+2902: TKills(Player,Type,Value,UnitId) ## : Kills 조건의 변수 삽입형 함수
+2906: TScore(Player,ScoreType,Type,Value) ## : Score 조건의 변수 삽입형 함수
+2910: TOpponents(Player,Type,Value) ## : Opponents 조건의 변수 삽입형 함수
+2924: TCreateUnitWithProperties(Amount,UnitId,Location,Player,Property) ## : CreateUnit(WithProperties) 액션의 변수 삽입형 함수
+2930: TKillUnitAt(Amount,UnitId,Location,Player) ## : KillUnit(At) 액션의 변수 삽입형 함수
+2935: TRemoveUnitAt(Amount,UnitId,Location,Player) ## : RemoveUnit(At) 액션의 변수 삽입형 함수
+2939: TGiveUnits(Amount,UnitId,Player,Location,NewPlayer) ## : GiveUnits 액션의 변수 삽입형 함수
+2943: TOrder(UnitId,Player,StartLocation,OrderType,DestLocation) ## : Order 액션의 변수 삽입형 함수
+2947: TMoveLocation(Location,UnitId,Player,DestLocation) ## : MoveLocation 액션의 변수 삽입형 함수
+2951: TMoveUnit(Amount,UnitId,Player,StartLocation,DestLocation) ## : MoveUnit 액션의 변수 삽입형 함수
+2963: TModifyUnitEnergy(Amount,UnitId,Player,Location,Value) ## : ModifyUnitEnergy 액션의 변수 삽입형 함수
+2967: TModifyUnitHangarCount(Value,Amount,UnitId,Player,Location) ## : ModifyUnitHangarCount 액션의 변수 삽입형 함수
+2971: TModifyUnitHitPoints(Amount,UnitId,Player,Location,Value) ## : ModifyUnitHitPoints 액션의 변수 삽입형 함수
+2975: TModifyUnitResourceAmount(Amount,Player,Location,Value) ## : ModifyUnitResourceAmount 액션의 변수 삽입형 함수
+2979: TModifyUnitShields(Amount,UnitId,Player,Location,Value) ## : ModifyUnitShields 액션의 변수 삽입형 함수
+2983: TSetCountdownTimer(Type,Time) ## : SetCountdownTimer 액션의 변수 삽입형 함수
+2996: TSetResources(Player,Type,Value,ResourceType) ## : SetResources 액션의 변수 삽입형 함수
+3000: TSetScore(Player,Type,Value,ScoreType) ## : SetScore 액션의 변수 삽입형 함수
+3004: TWait(Time) ## : Wait 액션의 변수 삽입형 함수
+3008: TSetDoodadState(State,UnitId,Player,Location) ## : SetDoodadState 액션의 변수 삽입형 함수
+3012: TSetInvincibility(State,UnitId,Player,Location) ## : SetInvincibility 액션의 변수 삽입형 함수
+3016: TSetAllianceStatus(Player,Status) ## : SetAllianceStatus 액션의 변수 삽입형 함수
+3020: TDisplayText(Text,AlwaysDisplay) ## : DisplayText 액션의 변수 삽입형 함수
+3024: TPlayWAV(WAVName) ## : PlayWav 액션의 변수 삽입형 함수
+3029: TSetMissionObjectives(Text) ## : SetMissionObjectives 액션의 변수 삽입형 함수
+3041: TTOR(OR_Conditions) ※ 구 함수 ## : EUDOr 조건삽입 함수 / OR_Conditions에 {조건1,조건2,...} 형태로 입력
+3046: TTAND(AND_Conditions) ※ 구 함수 ## : TTOR 내부에 AND 조건을 삽입할때 사용 / AND_Conditions에 {조건1,조건2,...} 형태로 입력
+3053: TTCDeaths(Player,Type,Value,Code) ## : CDeaths(X) 조건의 특수조건/변수 삽입형 함수
+3059: TTNDeaths(Player,Type,Value,Code) ## : NDeaths(X) 조건의 특수조건/변수 삽입형 함수
+3074: TTVArrayX(VArray,Section,Type,Value,Mask) ## : [Variable/VArray](X) 조건의 특수조건/변수 삽입형 함수
+3081: TTCVAar(VArray,Type,Value,Mask) ## : [C/N][Var/VAar] 조건의 특수조건/변수 삽입형 함수
+3086: TTCtrigX(Player,Index,Address,Next,Type,Value,Mask) ## : CtrigX조건의 특수조건/변수 삽입형 함수
+3092: TTDeaths(Player,Type,Value,UnitId) ## : Deaths(X)조건의 특수조건/변수 삽입형 함수
+3098: TTMemoryX(Offset,Type,Value,Mask) ## : Memory(X)조건의 특수조건/변수 삽입형 함수
+3114: TTBring(Player,Type,Value,UnitID,Location) ## : Command/Bring 조건의 특수조건/변수 삽입형 함수
+3119: TTAccumulate(Player,Type,Value,ResourceType) ## : Accumulate 조건의 특수조건/변수 삽입형 함수
+3123: TTCountdownTimer(Type,Value) ## : CountdownTimer 조건의 특수조건/변수 삽입형 함수
+3127: TTElapsedTime(Type,Value) ## : ElapsedTime 조건의 특수조건/변수 삽입형 함수
+3131: TTKills(Player,Type,Value,UnitId) ## : Kills 조건의 특수조건/변수 삽입형 함수
+3135: TTScore(Player,ScoreType,Type,Value) ## : Score 조건의 특수조건/변수 삽입형 함수
+3139: TTOpponents(Player,Type,Value) ## : Opponents 조건의 특수조건/변수 삽입형 함수
+3149: -----------------------------------------------------------------------------------------EUDTurbo(PlayerID) ## : EUD터보를 실행하는 함수. / PlayerID : 생성 트리거의 체크 플레이어
+3153: Loc(LocationId,Direction,Type,Value) ## : 로케이션 좌표 조건 생성 함수
+3161: LocX(LocationId,Direction,Type,Value) ## : Loc의 eudx 버전 / Mask : 조건 비트마스크
+3164: SetLoc(LocationId,Direction,Type,Value) ## : 로케이션 좌표 액션 생성 함수
+3176: SetLocX(LocationId,Direction,Type,Value) ## : SetLoc의 eudx 버전 / Mask : 조건 비트마스크
+3187: -----------------------------------------------------------------------------------------MemoryW(Offset,Type,Value) ## : 2바이트 단위 메모리 조건 생성 함수 (Value와 Mask가 Offset 값에 맞게 채워짐)
+3191: SetMemoryW(Offset,Type,Value) ## : 2바이트 단위 메모리 조건 생성 함수 (Value와 Mask가 Offset 값에 맞게 채워짐)
+3196: MemoryB(Offset,Type,Value) ## : 1바이트 단위 메모리 조건 생성 함수 (Value와 Mask가 Offset 값에 맞게 채워짐)
+3200: SetMemoryB(Offset,Type,Value) ## : 1바이트 단위 메모리 조건 생성 함수 (Value와 Mask가 Offset 값에 맞게 채워짐)
+3207: NoAirCollision(PlayerID) ## : 공중유닛 밀림 방지를 적용합니다. / PlayerID : 생성 트리거의 체크 플레이어 - Ctrig 미사용 버전
+3210: NoAirCollisionX(PlayerID) ## : 공중유닛 밀림 방지를 적용합니다. / PlayerID : 생성 트리거의 체크 플레이어 - Ctrig 사용 버전
+3215: EPDX(Offset) ## : Offset을 4로 나눈 나머지를 구합니다. / Offset : 나머지 값을 구할 오프셋
+3225: -----------------------------------------------------------------------------------------Enable_PlayerCheck(Offset) ※ 삭제됨 (구버전 호환용 함수) ## : PlayerCheck 함수를 활성화시키는 함수
+3229: PlayerCheck(Player,Status) ## : f_PlayerExist 최적화버전 (0x51A284 + 12*Player 부분을 읽어서 감지함)
+3234: _Void(Number) ## : 공메모리 영역 (0x58F500+4*Number)의 Offset을 반환합니다.
+3237: Void(Number,Type,Value) ## : 공메모리 영역의 Memory 조건 (=Memory(0x58F500+4*Number,Type,Value))
+3240: SetVoid(Number,Type,Value) ## : 공메모리 영역의 SetMemory 액션 (=SetMemory(0x58F500+4*Number,Type,Value))
+3243: VoidX(Number,Type,Value,Mask) ## : 공메모리 영역의 MemoryX 조건 (=MemoryX(0x58F500+4*Number,Type,Value,Mask))
+3246: SetVoidX(Number,Type,Value,Mask) ## : 공메모리 영역의 SetMemoryX 액션 (=SetMemoryX(0x58F500+4*Number,Type,Value,Mask))
+3249: SetCp(Number) ## : Cp값을 조정하는 액션 (=SetMemory(0x6509B0,SetTo,Number))
+3252: I64Zero(Number,Digit) ## : 스트링 형식으로 숫자를 입력할때 설정한 자릿수만큼 0을 채워주는 함수
+3264: -----------------------------------------------------------------------------------------EPDF(Offset) ## : EPD(Offset)의 값을 정수화 시킵니다. / Offset : 입력할 오프셋
+3270: FMemory(offset, comparison, number) ## : EPD형식으로 Memory조건을 입력합니다. (Death(EPDF(Offset)) 사용)
+3273: FMemoryX(offset, comparison, number, mask) ## : EPD형식으로 MemoryX조건을 입력합니다. (DeathX(EPDF(Offset)) 사용)
+3276: FSetMemoryX(offset, modtype, number, mask) ## : EPD형식으로 SetMemory액션을 입력합니다. (SetDeath(EPDF(Offset)) 사용)
+3279: FSetMemory(offset, modtype, number) ## : EPD형식으로 SetMemoryX액션을 입력합니다. (SetDeathX(EPDF(Offset)) 사용)
+3291: -----------------------------------------------------------------------------------------PlayerColor(Player,Type,Value) ## : 플레이어 컬러 조건 생성 함수
+3294: SetPlayerColor(Player,Type,Value) ## : 플레이어 컬러 액션 생성 함수
+3298: MinimapColor(Player,Type,Value) ## : 플레이어 미니맵 컬러 조건 생성 함수
+3301: SetMinimapColor(Player,Type,Value) ## : 플레이어 미니맵 컬러 액션 생성 함수
+3304: Speed(Type,Value) ## : 배속 조건 생성 함수
+3307: SetSpeed(Type,Value) ## : 배속 액션 생성 함수
+3313: LocalPlayerID(Player,Type,Value) ## : 해당 플레이어에게만 만족하는 조건 생성 함수 (비공유 조건용)
+3317: UnixTime(Type,Date) ## : 맵 실행 시작시간 조건 생성 함수 (맵 유통기한 조건용)
+3330: TSetKills(Player, Modifier, Number, Unit) ※ 변수 삽입형 액션 ## : 각 플레이어의 킬 수 변경 액션 생성 함수
+3337: KtoA(Player,UnitId) ## : 플레이어의 킬 수 부분의 오프셋을 구하는 함수
+3343: f_SHRead(PlayerID,Input,Output,Mask,Clear) -- (CPRead) 방식으로 읽음 ## : Input을 Signed Short형식으로 읽어서 Output에 값을 복사하는 함수
+3351: _SHRead(Source,Mask) ## : f_SHRead의 중간 연산자 함수
+3364: TTBread(Offset,Type,Value) - 특수 조건 삽입 가능 ## : Byte단위 연산 조건/액션 생성 함수 (변수 삽입 가능 항목 : Offset, Value)
+3383: TTMemoryBX(Base,Index,Type,Value) - 특수 조건 삽입 가능 ## : Byte단위 연산 조건/액션 생성 함수 (DatEdit 오프셋 전용, 변수 삽입 가능 항목 : Index, Value)
+3406: TTMemoryWX(Base,Index,Type,Value) - 특수 조건 삽입 가능 ## : Word단위 연산 조건/액션 생성 함수 (DatEdit 오프셋 전용, 변수 삽입 가능 항목 : Index, Value)
+3422: TTMemoryDw(Base,Index,Type,Value,Mask) - 특수 조건 삽입 가능 ## : Dword단위 연산 조건/액션 생성 함수 (DatEdit 오프셋 전용, 변수 삽입 가능 항목 : Index, Value)
+3445: f_BreadX(PlayerID,Base,Index,Output,Multiplier) - DatEdit 오프셋 전용 ## : Byte단위 Read함수 (Output << byte(0~0xFF) * Multiplier)
+3454: f_WreadX(PlayerID,Base,Index,Output,Multiplier) - DatEdit 오프셋 전용 ## : Word단위 Read함수 (Output << word(0~0xFFFF) * Multiplier)
+3465: f_Bwrite(PlayerID,Offset,Type,Value) ## : CDoActions(PlayerID,{TBwrite(Offset,Type,Value)}) 방식으로 byte 단위로 값을 씀
+3467: f_BwriteX(PlayerID,Base,Index,Type,Value) ## : CDoActions(PlayerID,{TSetMemoryB(Base,Index,Type,Value)}) 방식으로 byte 단위로 값을 씀
+3469: f_Wwrite(PlayerID,Offset,Type,Value) ## : CDoActions(PlayerID,{TWwrite(Offset,Type,Value)}) 방식으로 word 단위로 값을 씀
+3471: f_WwriteX(PlayerID,Base,Index,Type,Value) ## : CDoActions(PlayerID,{TSetMemoryW(Base,Index,Type,Value)}) 방식으로 word 단위로 값을 씀
+3473: f_Dwwrite(PlayerID,Offset,Type,Value,Mask) ## : CDoActions(PlayerID,{TSetMemoryX(_EPD(Offset),Type,Value,Mask)}) 방식으로 dword 단위로 값을 씀
+3476: f_DwwriteX(PlayerID,Base,Index,Type,Value,Mask) ## : CDoActions(PlayerID,{TSetMemoryDw(Base,Index,Type,Value,Mask)}) 방식으로 dword 단위로 값을
+3485: -----------------------------------------------------------------------------------------_ParseDw(Number) ## : Number(dword)를 바이트 단위로 자르는 함수
+3491: _ParseW(Number) ## : Number(word)를 바이트 단위로 자르는 함수
+3498: ,InitAction,StepCondition,StepAction,ResetCondtion,ResetAction) ## : 타이머 트리거를 자동으로 생성하는 함수 (정수 시간 간격)
+3527: InitAction,ResetCondtion,ResetAction,StepCondition,StepAction) ## : 타이머 트리거를 자동으로 생성하는 함수 (유리수 시간 간격)
+3555: Stage(PlayerID,Step,StageData) ## : 단계별 실행 트리거를 자동으로 생성하는 함수
+3572: TSetMapSize(Value,Mask) -- 변수 삽입형 액션 ## : 맵의 크기를 변경하는 액션 (0xFFFF : X크기/0xFFFF0000 : Y크기)
+3578: SetPlayerState(Player,State) -- 액션 ## : 플레이어의 현재 상태를 변경하는 조건/액션
+3585: SetPauseCount(Player,Type,Value) -- 액션 ## : 플레이어의 남은 퍼즈 개수를 변경하는 조건/액션
+3596: SetDropWindow(Type,Value) -- 액션 ## : 드랍창의 남은 표시 시간을 변경하는 조건/액션
+3601: VisionTurbo(PlayerID) ## : 터보시야 (0x51CE98)의 값을 1로 고정 시키는 트리거 (0으로 고정시 시야가 꺼지지 않음)
+3611: -----------------------------------------------------------------------------------------SaveValueMsg(String,FileName) ## : String의 내용을 AbsolutePath에 파일로 저장하는 함수
+3625: ExitDrop(PlayerID,DropPlayer) ＃STRCtrig 필수 ## : 대상 플레이어를 맵에 감금시킵니다. (어떠한 방법으로도 나갈시 무한루프 형식으로 스타 크래쉬)
+3650: -----------------------------------------------------------------------------------------IBGM_EPD(PlayerID,TargetPlayer,Input,WAVData,AlertWav) ## : 끊김 없는 BGM 재생을 실행하는 함수
+3661: IBGM_EPDX(PlayerID,TargetPlayer,Input,WAVData,AlertWav) ## : 끊김 없는 BGM 재생을 실행하는 함수 (연속 재생 탑재)
+3690: -----------------------------------------------------------------------------------------f_CGive(PlayerID,UnitEPD,UnitPtr,NewOwner,PrevOwner) ## : 구조오프셋으로 유닛을 NewOwner에게 Give하는 함수 (서브유닛 존재시 2회 실행됨)
+3699: IsTyping() ## : 채팅을 치고 있을 경우 참인 조건 (비공유 조건)
+3701: NotTyping() ## : 채팅을 치고 있지 않을 경우 참인 조건 (비공유 조건)
+3703: KeyPress(KeyName,Status) ## : 키보드 키를 누를 때를 인식하는 조건 (비공유 조건)
+3707: TTKeyPress(KeyName,Status) ## : 키보드 키를 누를 때를 인식하는 조건 (비공유 조건, 특수 조건형 함수)
+3713: MousePress(KeyName,Status) ## : 마우스 버튼을 누를 때를 인식하는 조건 (비공유 조건)
+3731: -----------------------------------------------------------------------------------------f_OffsetToAlphaID(PlayerID,Input,Output) ## : 구조오프셋의 알파ID를 구하는 함수 (Offset 값 입력)
+3738: f_EPDToAlphaID(PlayerID,Input,Output) ## : 구조오프셋의 알파ID를 구하는 함수 (EPD 값 입력)
+3752: _HotKeyUnit(Player,Group,Index) ## : 부대지정 오프셋의 주소를 구하는 함수 (오프셋 값을 리턴함)
+3758: SetHotkeyUnit(Player,Group,Index,Type,Value) - 액션 ## : 대상 플레이어의 부대지정된 유닛을 변경하는 조건 및 액션
+3775: TTHotKeyUnit(Player,Group,Index,Type,Value) - 특수 조건 ## : 대상 플레이어의 부대지정된 유닛을 변경하는 조건 및 액션 (변수 삽입형 조건 및 액션)
+3785: SetUnitName(UnitId,StringId) ## : 유닛의 이름에 연결된 스트링을 바꾸는 액션
+3803: print_utf8(line, offset, string) ## : line번째 줄의 Offset(시작위치)에 String내용을 출력함
+3810: check_utf8(line, offset, string) ## : line번째 줄의 Offset(시작위치)에 String내용을 체크함
+3825: Print_String(PlayerID, Dest, String, InitBytes) ## : Dest에 String내용을 출력함 (InitBytes만큼 밀어서 출력)
+3833: Print_StringX(PlayerID, DestVA, String, InitBytes) ## : DestVA에 String내용을 출력함 (InitBytes만큼 밀어서 출력)
+3841: Print_13(PlayerID,DisplayPlayer,String) ## : 원하는 플레이어에게 13번째 줄에 String을 출력하는 함수
+3857: GetStrSize(cp949flag,String,Null) ## : 입력한 문자열의 길이(Size)를 반환하는 함수
+3865: GetStrArr(cp949flag,String,Null) ## : 입력한 문자열을 char형 배열로 변환하는 함수 (1바이트씩 분할)
+3879: SaveStrArr(Dest,StrArr,Distance) ## : 입력한 문자열 배열(GetStrArr의 반환값)을 메모리에 저장하는 함수
+3895: GetPlayerName(PlayerID,TargetPlayer,OutputVA,InitBytes) ## : 원하는 플레이어의 ID를 스트링 형식으로 가져옴
+3904: GetPlayerLength(PlayerID,TargetPlayer,Output,Multiplier) ## : 원하는 플레이어의 ID의 길이를 저장함 (3~15글자)
+3910: ItoName(PlayerID,TargetPlayer,OutputVA,Color) ## : 원하는 플레이어의 ID를 스트링 형식으로 저장함 (완충영역O)
+3919: ItoX(PlayerID,Input,OutputVA,Color) ## : 변수의 값을 전각문자로 변환함 (완충영역X) - 1234 → １２３４
+3938: ItoDec(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) ## : 변수의 값을 10진법 스트링 형식으로 저장함 (완충영역O)
+3954: ItoHex(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) ## : 변수의 값을 16진법 스트링 형식으로 저장함 (완충영역O)
+3979: ItoDecX(PlayerID,Input,OutputVA,ZeroMode,Color,Sign,DigitMax,DigitMin) ## : 변수의 값을 10진법 특수 스트링(１２３４）형식으로 저장함 (완충영역O)
+3995: ItoHexX(PlayerID,Input,OutputVA,ZeroMode,Color,Case,DigitMax,DigitMin) ## : 변수의 값을 16진법 특수 스트링(１２３４）형식으로 저장함 (완충영역O)
+4020: GetHostPlayerID(PlayerID,Output)) ## : 방장 플레이어의 플레이어ID를 구함
+4024: GetHostName(PlayerID,OutputVA,InitBytes) ## : 방장 플레이어의ID를 스트링 형식으로 가져옴
+4029: GetHostLength(PlayerID,Output,Multiplier) ## : 방장 플레이어의 ID의 길이를 저장함 (3~15글자)
+4033: ItoHost(PlayerID,OutputVA,Color) ## : 방장 플레이어의 ID를 스트링 형식으로 저장함 (완충영역O)
+4038: HostName(Name,Length) ## : 방장의 ID를 Name과 비교하는 조건을 생성함
+4043: PlayerName(TargetPlayer,Name,Length) ## : 원하는 플레이어의 ID를 Name과 비교하는 조건을 생성함
+4058: ,SizeofLoc,Radius,Angle,Points,Preserve) ## : 정다각형 모양으로 유닛을 생성하는 함수
+4082: ,SizeofLoc,Radius,Angle,Points,Preserve) ## : CreateUnitPolygon에서 고정 좌표 대신 로케이션을 중심으로 생성함
+4085: ,SizeofLoc,Radius,Angle,Points,Preserve,Properties) ## : CreateUnitPolygonSafe의 Properties 삽입 가능 버전
+4098: SizeofLoc,Radius,Angle,Points,Preserve) ## : 직선 모양으로 유닛을 생성하는 함수 (Points에 1입력시 반직선으로 생성함)
+4102: ,PerUnit,SizeofLoc,Radius,Angle,Points,Preserve,Properties) ## : CreateUnitLine의 Properties 삽입 가능 버전
+4106: SizeofLoc,Radius,Angle,Points,Preserve) ## : CreateUnitLine에서 고정 좌표 대신 로케이션을 중심으로 생성함
+4109: SizeofLoc,Radius,Angle,Points,Preserve,Properties) ## : CreateUnitLineSafe의 Properties 삽입 가능 버전
+4113: SizeofLoc,Radius,Angle,Points,StarAngle,Preserve) ## : 별 모양으로 유닛을 생성하는 함수
+4118: PerUnit,SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties) ## : CreateUnitStar의 Properties 삽입 가능 버젼
+4122: SizeofLoc,Radius,Angle,Points,StarAngle,Preserve) ## : CreateUnitStar에서 고정 좌표 대신 로케이션을 중심으로 생성함
+4126: SizeofLoc,Radius,Angle,Points,StarAngle,Preserve,Properties) ## : CreateUnitStarSafe의 Properties 삽입 가능 버전
+4141: CenterPoint,Halfdomain,Preserve) ## : 꽃 모양(극좌표 그래프 개형)으로 유닛을 생성하는 함수
+4154: ,RadiusConstant,CenterPoint,Halfdomain,Preserve,Properties) ## : CreateUnitFlower의 Properties 삽입 가능 버전
+4160: CenterPoint,Halfdomain,Preserve) ## : CreateUnitFlower에서 고정 좌표 대신 로케이션을 중심으로 생성함
+4164: CenterPoint,Halfdomain,Preserve,Properties) ## : CreateUnitFlowerSafe의 Properties 삽입 가능 버전
+4191: LeaderBoardGoalControlAtX(Goal,Unit,Location,Label) ## : CopyCpAction 전용 함수 (각 액션의 인자는 원본 액션과 동일, 원본 액션에 X를 붙이면 사용가능)
+4196: CopyCpActionX(CpActions,Player,CurrentCp) ## : 한 트리거 내에서 Cp변경을 사용해 여러 플레이어에게 String인자가 포함된 액션을 사용할 때
+4217: __SetFuncAlloc(Start,End) ※ 고급 ## : FuncAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4222: __SetIndexAlloc(Start,End) ※ 고급 ## : IndexAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4226: __SetJumpAlloc(Start,End) ※ 고급 ## : [C/N]Jump(X)의 sIndex 할당영역을 설정하는 함수 (부족한 경우 사용)
+4233: __SetVoidArea(Start,End) ※ 고급 ## : VoidAreaAlloc의 공메모리 오프셋 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4237: __SetFlagAlloc(Start,End) ※ 고급 ## : FlagAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4250: __SetCAPlotJumpAlloc(Start,End) ※ 고급 ## : CAPlotJumpAlloc의 sIndex 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4254: __SetCAPlotVarAlloc(Start,End) ※ 고급 ## : CAPlotVarAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4258: __SetCAPrintVarAlloc(Start,End) ※ 고급 ## : CAPrintVarAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4263: __SetCreateVarIndex(Init,Max,Ccode,NCode) ※ 고급 ## : CreateVarXAlloc의 Index 자동 할당영역을 설정하는 함수 (부족한 경우 사용)
+4277: CreateVar(PlayerID) ## : CVariable() 자동할당 함수, (A = CreateVar() 형식으로 사용, Index = A[2])
+4282: CreateVar2(PlayerID,Offset,Type,Value,Mask) ## : CVariable2() 자동할당 함수, (A = CreateVar() 형식으로 사용, Index = A[2])
+4286: CreateVars(Number,PlayerID) ## : CVariable() 다중 자동할당 함수, (A, B = CreateVars(2) 형식으로 사용)
+4291: CreateVarArr(Number,PlayerID) ## : CVariable() 다중 자동할당 함수, (Arr = CreateVarArr(2) 형식으로 사용)
+4309: CreateVArr(Size,PlayerID) ## : CVArray() 자동할당 함수, (A = CreateVArr() 형식으로 사용, Index = A[2])
+4315: CreateVArrs(Number,Size,PlayerID) ## : CVArray() 다중 자동할당 함수, (A, B = CreateVArrs(2) 형식으로 사용)
+4321: CreateVArrArr(Number,Size,PlayerID) ## : CVArray() 다중 자동할당 함수, (Arr = CreateVArrArr(2) 형식으로 사용)
+4336: CreateArr(Size,PlayerID) ## : CArray() 자동할당 함수, (A = CreateArr() 형식으로 사용, Index = A[2])
+4342: CreateArrs(Number,Size,PlayerID) ## : CArray() 다중 자동할당 함수, (A, B = CreateArrs(2) 형식으로 사용)
+4348: CreateArrArr(Number,Size,PlayerID) ## : CArray() 다중 자동할당 함수, (Arr = CreateArrArr(2) 형식으로 사용)
+4356: CreateDb(ByteSize,PlayerID) ## : CreateArr()의 Db버전 함수
+4359: CreateDbs(Number,ByteSize,PlayerID) ## : CreateArrs()의 Db버전 함수
+4362: CreateDbArr(Number,ByteSize,PlayerID) ## : CreateArrArr()의 Db버전 함수
+4373: CreateCcode() ## : Ccode() 자동할당 함수, (A = CreateCcode() 형식으로 사용)
+4376: CreateCcodes(Number) ## : Ccode() 다중 자동할당 함수, (A, B = CreateCcodes(2) 형식으로 사용)
+4380: CreateCcodeArr(Number) ## : Ccode() 다중 자동할당 함수, (Arr = CreateCcodeArr(2) 형식으로 사용)
+4384: CreateNcode() ## : Ncode() 자동할당 함수, (A = CreateNcode() 형식으로 사용)
+4388: CreateNcodes(Number) ## : Ncode() 다중 자동할당 함수, (A, B = CreateNcodes(2) 형식으로 사용)
+4392: CreateNcodeArr(Number) ## : Ncode() 다중 자동할당 함수, (Arr = CreateNcodeArr(2) 형식으로 사용)
+4405: CreateWar(PlayerID) ## : CWariable() 자동할당 함수, (A = CreateWar() 형식으로 사용, Index = A[2])
+4410: CreateWar2(PlayerID,Offset,Type,Value,Mask) ## : CWariable2() 자동할당 함수, (A = CreateWar() 형식으로 사용, Index = A[2])
+4414: CreateWars(Number,PlayerID) ## : CWariable() 다중 자동할당 함수, (A, B = CreateWars(2) 형식으로 사용)
+4419: CreateWarArr(Number,PlayerID) ## : CWariable() 다중 자동할당 함수, (Arr = CreateWarArr(2) 형식으로 사용)
+4434: CreateWArr(Size,PlayerID) ## : CWArray() 자동할당 함수, (A = CreateWArr() 형식으로 사용, Index = A[2])
+4440: CreateWArrs(Number,Size,PlayerID) ## : CWArray() 다중 자동할당 함수, (A, B = CreateWArrs(2) 형식으로 사용)
+4446: CreateWArrArr(Number,Size,PlayerID) ## : CWArray() 다중 자동할당 함수, (Arr = CreateWArrArr(2) 형식으로 사용)
+4461: CreateLArr(Size,PlayerID) ## : LArray() 자동할당 함수, (A = CreateLArr() 형식으로 사용, Index = A[2])
+4467: CreateLArrs(Number,Size,PlayerID) ## : LArray() 다중 자동할당 함수, (A, B = CreateLArrs(2) 형식으로 사용)
+4473: CreateLArrArr(Number,Size,PlayerID) ## : LArray() 다중 자동할당 함수, (Arr = CreateLArrArr(2) 형식으로 사용)
+4481: CreateLDb(ByteSize,PlayerID) ## : CreateLArr()의 Db버전 함수
+4484: CreateLDbs(Number,ByteSize,PlayerID) ## : CreateLArrs()의 Db버전 함수
+4487: CreateLDbArr(Number,ByteSize,PlayerID) ## : CreateLArrArr()의 Db버전 함수
+4498: CreateSVar(Size,PlayerID) ## : CSVariable() 자동할당 함수, (A = CreateSVar() 형식으로 사용, Index = A[2])
+4505: CreateSVar2(Size,PlayerID,Offset,Type,Value,Mask) ## : CSVariable2() 자동할당 함수, (A = CreateSVar() 형식으로 사용, Index = A[2])
+4511: CreateSVars(Size,Number,PlayerID) ## : CSVariable() 다중 자동할당 함수, (A, B = CreateSVars(Size,2) 형식으로 사용)
+4517: CreateSVarArr(Size,Number,PlayerID) ## : CSVariable() 다중 자동할당 함수, (Arr = CreateSVarArr(Size,2) 형식으로 사용)
+4533: CreateSVArr(Number,Size,PlayerID) ## : SVArray() 자동할당 함수, (A = CreateSVArr() 형식으로 사용, Index = A[2])
+4540: CreateSVArrs(Numbers,Number,Size,PlayerID) ## : SVArray() 다중 자동할당 함수, (A, B = CreateSVArrs(2) 형식으로 사용)
+4547: CreateSVArrArr(Numbers,Number,Size,PlayerID) ## : SVArray() 다중 자동할당 함수, (Arr = CreateSVArrArr(2) 형식으로 사용)
+4564: CreateVoid() ## : 공메모리 영역 자동할당 편의 함수, (A = CreateVoid() 형식으로 사용, EPD = EPD(A))
+4567: CreateVoids(Number) ## : 공메모리 영역 다중 자동할당 편의 함수, (A, B = CreateVoids(2) 형식으로 사용)
+4570: CreateVoidArr(Number) ## : 공메모리 영역 다중 자동할당 편의 함수, (Arr = CreateVoidArr(2) 형식으로 사용)
+4582: CreateVar2s(Number,Value,PlayerID) ## : CreateVar2() 다중 자동할당 함수
+4586: CreateVarArr2(Number,Value,PlayerID) ## : CreateVarArr() 초기값 설정 가능 함수
+4589: CreateWar2s(Number,Value,PlayerID) ## : CreateWar2() 다중 자동할당 함수
+4592: CreateWarArr2(Number,Value,PlayerID) ## : CreateWarArr() 초기값 설정 가능 함수
+4595: CreateVArr2(Size,Value,PlayerID) ## : CreateVarArr() 초기값 설정 가능 함수
+4598: CreateVArr2s(Number,Size,Value,PlayerID) ## : CreateVarArr2() 다중 자동할당 함수
+4601: CreateVArrArr2(Number,Size,Value,PlayerID) ## : CreateVArrArr() 초기값 설정 가능 함수
+4604: CreateWArr2(Size,Value,PlayerID) ## : CreateWarArr() 초기값 설정 가능 함수
+4612: CreateWArr2s(Number,Size,Value,PlayerID) ## : CreateWarArr2() 다중 자동할당 함수
+4627: CunPack(CPack) # 내부함수 (함수 만들 때 참고용) ## : CTrigger, CDoActions를 함수 내부에 2개 이상 입력받을때 사용하는 함수
+4635: CDoActionsX(PlayerID,Actions,Flags,Index) ## : CDoActions와 동일하나, CunPack 적용됨 (CStruct)
+4644: CTriggerX(PlayerID, Conditions, Actions, Flags, Index) ## : TriggerX와 동일하나, CunPack 적용됨 (CStruct)
+4652: CDoActions2X(PlayerID,Actions,Flags) ## : CDoActionsX() 에서 액션 갯수의 제한이 없는 함수
+4656: CTrigger2X(PlayerID, Conditions, Actions, Flags) ## : CTriggerX() 에서 액션 갯수의 제한이 없는 함수
+4669: CPush(PlayerID,Parameter) ## : V를 CStack에 Push하는 함수 (Stack의 최댓값은 StartCtrig의 CStack인자로 조절가능)
+4674: CPop(PlayerID,Return) ## : CStack에서 V를 Pop하는 함수 (Push된 V의 수 보다 많이 Pop하면 오류 발생함)
+4679: LPush(PlayerID,Parameter) ## : W를 LStack에 Push하는 함수 (Stack의 최댓값은 StartCtrig의 LStack인자로 조절가능)
+4683: LPop(PlayerID,Return) ## : LStack에서 W를 Pop하는 함수 (Push된 W의 수 보다 많이 Pop하면 오류 발생함)
+4699: InitCFunc(PlayerID) ## : CFunc을 생성하는 함수 (CFunc의 헤더 Index 할당)
+4705: CFunc(CFunction) ## : CFunc을 현재 위치에서 시작하는 함수
+4711: CFuncEnd() ## : CFunc을 현재 위치에서 끝내는 함수
+4714: CFuncReturn(Return) ## : CFunc에서 결과값을 리턴하는 함수 (리턴시 해당 함수를 탈출함)
+4718: CallCFunc(CFunction,Parameter,Return,PlayerID,Conditions,Actions,Once) ## : Cfunction을 호출하는 함수 (Parameter를 인자로 받고, Return을 리턴함)
+4737: CallCFuncX(PlayerID,CFunction,Parameter,Return) ## : Cfunction을 호출하는 함수 (If문 미사용, 항상 호출함)
+4744: _Func(CFunction,Parameter) ## : Cfunction을 중간연산자 형태로 호출하는 함수
+4750: TTFunc(CFunction,Parameter,flag) ## : Cfunction을 조건 연산자 형태로 호출하는 함수
+4765: CMathFunc(PlayerID,Func,Start,End,Exception,T,TException,Magnificent) # StrCtrig 필수 ## : Cfunction으로 사용자 정의 수학 함수를 생성함 (매개변수 1개인 함수)
+4796: CMathFunc2(PlayerID,Func,Start,End,Exception,T,TException,Magnificent) # StrCtrig 필수 ## : Cfunction으로 사용자 정의 수학 함수를 생성함 (매개변수 2개인 함수)
+4836: InitVFunc(PlayerID,CFunction,Wariable,Conditions,Actions,Once) ## : VFunc을 생성하는 함수 (Wariable에 CFunc의 주소값 저장)
+4847: VFunc(CFunction,Wariable) ## : VFunc을 생성하는 액션 (Wariable에 CFunc의 주소값 저장, 액션2개짜리 배열)
+4852: CallVFunc(Wariable,Parameter,Return,PlayerID,Conditions,Actions,Once) ## : Vfunc을 호출하는 함수 (W를 함수포인터로 사용해 저장된 주소로 Cfunc을 호출함)
+4871: CallVFuncX(PlayerID,Wariable,Parameter,Return) ## : Vfunc을 호출하는 함수 (W를 함수포인터로 사용해 저장된 주소로 Cfunc을 호출함, 항상 호출함)
+4878: _VFunc(Wariable,Parameter) ## : Vfunc을 중간연산자 형태로 호출하는 함수
+4884: TTVFunc(Wariable,Parameter,flag) ## : VFunc을 조건 연산자 형태로 호출하는 함수
+4901: W(Index,Player,Next) ## : 64비트 변수 정보를 입력하는 함수
+4908: Wi(Index,Deviation,Player,Next) ## : 64비트 변수 정보 + 편차값(64비트)을 입력하는 함수
+4913: LMem(Player,Index,Address,Next,EPDflag) ## : Ctrig메모리의 주소를 입력하는 함수 (64비트 메모리)
+4918: _LMem(Wariable,Address,Next,EPDflag) ## : 64비트 변수 데이터를 Ctrig메모리 데이터(배열)로 변환하는 함수
+4942: WArr(WArray,Index,Player) ## : 64비트 변수 배열을 입력하는 함수
+4963: ConvertWArr(PlayerID,Dest,Dest4,Source,Size) ## : WArr, WArrX용 인덱스값 변환 함수
+4982: LArr(LArray,Index,Player) ## : 64비트 배열을 입력하는 함수
+5001: LArrX(LArray,Index,Player) ## : LArr()의 최적화용 함수
+5007: ConvertLArr(PlayerID,Dest,Source,Mode) ## : LArr, LArrX용 인덱스값 변환 함수
+5025: CWariable(Player,Index) ## : 64비트 변수 선언 함수
+5031: CWariable2(Player,Index,Offset,Type,Value,Mask) ## : CWariable()에서 초기값을 설정할 수 있는 함수
+5044: CWArray(PlayerID,Size) ## : Size 만큼의 크기를 갖는 CWArray를 선언하는 함수
+5067: LArray(PlayerID,Size) ## : Size 만큼의 크기를 갖는 LArray를 선언하는 함수
+5073: LDb(PlayerID,ByteSize) ## : ByteSize 만큼의 LArray를 할당해주는 함수
+5079: LCallLabel1(Player,Index,Next) ## : 특정 플레이어의 Label이 Index인 64비트 변수를 호출할 때 사용 (액션5개, RecoverNext 사용)
+5084: LCallLabel2(Player,Index,Next) ## : LCallLabel1과 함께 사용하는 함수 (바로 다음 트리거에 삽입) (액션1개)
+5092: LCallLabel1X(Wariable) ## : LCallLabel1의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5094: LCallLabel2X(Wariable) ## : LCallLabel2의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 136
+5103: CallWariable(PlayerID,Player,Index,Next,Conditions,Actions) ## : 64비트 변수를 호출하는 트리거 생성 함수
+5116: CallWariableX(PlayerID,Wariable,Conditions,Actions) ## : CallWariable의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5130: WariableX(Player,Index,Section,Type,Value,Mask) ## : 64비트 변수 전용 CtrigX 조건
+5149: SetWariableX(Player,Index,Section,Type,Value,Mask) ## : 64비트 변수 전용 SetCtrigX 액션
+5177: Wariable(Wariable,Section,Type,Value,Mask) ## : WariableX의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5179: SetWariable(Wariable,Section,Type,Value,Mask) ## : SetWariableX의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5182: WArrayX(WArray,Section,Type,Value,Mask) ## : 64비트 변수배열 상수인덱스 전용 CtrigX 조건
+5187: SetWArrayX(WArray,Section,Type,Value,Mask) ## : 64비트 변수배열 상수인덱스 전용 CtrigX 액션
+5192: CWar(Player,Index,Type,Value,Mask) ## : WariableX에서 Section이 "Value(1,2)"(0x15C/0x19C)로 설정된 버전
+5199: SetCWar(Player,Index,Type,Value,Mask) ## : SetWariableX에서 Section이 "Value(1,2)"(0x15C/0x19C)로 설정된 버전
+5214: NWar(Wariable,Type,Value,Mask) ## : CWar의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5216: SetNWar(Wariable,Type,Value,Mask) ## : SetCWar의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / Wariable에 W()를 입력
+5218: CWAar(WArray,Type,Value,Mask) ## : WArrayX에서 Section이 "Value(1,2)"(0x15C/0x19C)로 설정된 버전
+5224: SetCWAar(WArray,Type,Value,Mask) ## : SetWArrayX에서 Section이 "Value(1,2)"(0x15C/0x19C)로 설정된 버전
+5230: LMemX(LMem,Type,Value,Mask) ## : LMem 타입 전용 CtrigX 조건
+5236: SetLMemX(LMem1,Type,LMem2,Mask) ## : LMem 타입 전용 CtrigX 액션
+5257: TSetWArrayX(WArray,Section,Type,Value,Mask) ## : (Set)[Wariable/WArray](X) 조건/액션의 변수 삽입형 함수 (32비트 모드만 사용가능)
+5266: TSetCWAar(WArray,Type,Value,Mask) ## : (Set)[C/N][War/WAar] 조건/액션의 변수 삽입형 함수 (32비트 모드만 사용가능)
+5281: TTLMemoryX(Offset,Type,Value,Mask) ## : 64비트 Memory(X)조건의 특수조건/변수 삽입형 함수
+5295: TTWArrayX(WArray,Section,Type,Value,Mask) ## : [Wariable/WArray](X) 조건/액션의 특수조건/변수 삽입형 함수 (64비트 모드)
+5303: TTCWAar(WArray,Type,Value,Mask) ## : (Set)[C/N][War/WAar] 조건/액션의 특수조건/변수 삽입형 함수 (64비트 모드)
+5317: Include_64BitLibrary(SeedSwitch) ## : 어셈블러가 지원하는 모든 64비트 호출형 함수를 Include 합니다.
+5322: f_LRead(PlayerID,Input,Output,Mask,Clear) ## : f_maskread 방식으로 값을 읽어들임
+5335: f_LReadX(PlayerID,Input,Output,Multiplier,Mask,Clear) ## : f_LRead에서 ConvertX 기능을 추가한 함수
+5342: f_LWrite(PlayerID,Dest,Source,Deviation,Mask) ※ 매크로형 ## : SetMemoryX(W(Dest),SetTo,W(Source),Mask) 방식으로 값을 씀
+5364: f_LMov(PlayerID,Dest,Source,Deviation,Mask,Clear) ※ 매크로형 ## : 변수에서 값을 출력해서 대입함, Dest << Source + Deviation
+5379: f_LMovX(PlayerID,Dest,Source,Mode,Mask,Deviation,Clear) ※ 매크로형 ## : 변수배열에 값을 대입하거나 변수배열의 값을 출력함, Dest << Source + Deviation
+5401: TLMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) ※ 매크로형 ## : Dest(W)에 Source의 주소값(epd/Offset)값을 저장함
+5415: f_LDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) ※ 매크로형 ## : Dest에 Source의 Time 동안의 변화량 값을 구함, Dest << W - prevW → prevW << W
+5425: f_LRand(PlayerID,Dest,Mask) ## : Dest에 64비트 랜덤 난수를 저장하는 함수
+5443: f_Cast(PlayerID,Dest,Source,Deviation,Mask,Clear) ※ 매크로형 ## : 변수 타입을 변환함 (64비트 변수 W(A) ↔ 32비트 변수 V(A))
+5456: f_iCast(PlayerID,Dest,Source) ※ 매크로형 ## : 변수 타입을 부호를 고려하여 변환함 (64비트 변수 W(A) ↔ 32비트 변수 V(A))
+5473: f_LAdd(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 덧셈 연산을 수행함, Dest << Source + Operand
+5488: f_LSub(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 뺄셈 연산을 수행함, Dest << Source - Operand
+5492: f_LiSub(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 부호 있는 뺄셈 연산을 수행함, Dest << Source - Operand (signed 연산)
+5496: f_LNeg(PlayerID,Dest,Source,Mask) ## : 변수의 부호를 바꾸는 연산을 수행함, Dest << -Source
+5500: f_LAbs(PlayerID,Dest,Source,Mask) ## : 변수에 절댓값 연산을 수행함, Dest << |Source|
+5511: f_LMul(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 곱셈 연산을 수행함, Dest << Source * Operand
+5516: f_LiMul(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 곱셈 연산을 수행함, Dest << Source * Operand
+5522: f_LDiv(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 나눗셈 연산을 수행함, Dest << Source / Operand
+5526: f_LiDiv(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 부호 있는 뺄셈 연산을 수행함, Dest << Source / Operand (signed 연산)
+5531: f_LMod(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 나머지 연산을 수행함, Dest << Source % Operand
+5535: f_LiMod(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 부호 있는 나머지 연산을 수행함, Dest << Source % Operand (signed 연산)
+5547: f_LlShift(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 lShift 연산을 수행함, Dest << Source << Operand
+5552: f_LAnd(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 And 연산을 수행함, Dest << Source & Operand
+5556: f_LOr(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 Or 연산을 수행함, Dest << Source | Operand
+5560: f_LXor(PlayerID,Dest,Source,Operand,Mask) ## : 변수에 Xor 연산을 수행함, Dest << Source ^ Operand
+5565: f_LNot(PlayerID,Dest,Source,Mask) ## : 변수에 Not 연산을 수행함, Dest << ~ Source
+5577: _LRead(Source,Mask) ## : f_LRead의 중간 연산자 함수, W << f_maskread(Source)
+5583: _LReadX(Source,Multiplier,Mask) ## : f_LReadX의 중간 연산자 함수, W << f_maskread(Source) * Multiplier
+5587: _LMov(Source,Mask,Deviation) ## : f_LMov의 중간 연산자 함수, W << Source + Deviation
+5594: _LMovX(Source,Mode,Mask,Deviation) ## : f_LMovX의 중간 연산자 함수, W << Source + Deviation
+5609: _TLMem(Source,Address,Next,OffsetFlag) ## : TLMem의 중간 연산자 함수, W << 주소값(epd/Offset)
+5623: _Cast(Dest,Source,Deviation,Mask) ## : f_Cast의 중간 연산자 함수, W(A) → V 전용
+5630: _CastW(Source,Deviation,Mask) ## : f_Cast의 중간 연산자 함수, V(A) → W 전용
+5636: _iCast(Source) ## : f_iCast의 중간 연산자 함수, W(A) → V 전용
+5639: _iCastW(Source) ## : f_iCast의 중간 연산자 함수, V(A) → W 전용
+5650: _LAdd(Source,Operand) ## : f_LAdd의 중간 연산자 함수, W << Source + Operand
+5657: _LSub(Source,Operand) ## : f_LSub의 중간 연산자 함수, W << Source - Operand
+5660: _LiSub(Source,Operand) ## : f_LiSub의 중간 연산자 함수, W << Source - Operand (signed 연산)
+5663: _LNeg(Source) ## : f_LNeg의 중간 연산자 함수, W << -Source
+5666: _LAbs(Source) ## : f_LAbs의 중간 연산자 함수, W << |Source|
+5669: _LMul(Source,Operand) ## : f_LMul의 중간 연산자 함수, W << Source * Operand
+5672: _LiMul(Source,Operand) ## : f_LiMul의 중간 연산자 함수, W << Source * Operand
+5683: _LDiv(Source,Operand) ## : f_LDiv의 중간 연산자 함수, W << Source / Operand
+5686: _LiDiv(Source,Operand) ## : f_LiDiv의 중간 연산자 함수, W << Source / Operand (signed 연산)
+5689: _LMod(Source,Operand) ## : f_LMod의 중간 연산자 함수, W << Source % Operand
+5692: _LiMod(Source,Operand) ## : f_LiMod의 중간 연산자 함수, W << Source % Operand (signed 연산)
+5695: _LlShift(Source,Operand) ## : f_LlShift의 중간 연산자 함수, W << Source << Operand
+5699: _LAnd(Source,Operand) ## : f_LAnd의 중간 연산자 함수, W << Source & Operand
+5702: _LOr(Source,Operand) ## : f_LOr의 중간 연산자 함수, W << Source | Operand
+5706: _LXor(Source,Operand) ## : f_LXor의 중간 연산자 함수, W << Source ^ Operand
+5709: _LNot(Source) ## : f_LNot의 중간 연산자 함수, W << ~ Source
+5720: SV(SVariable,Line,Player,Next) ## : 구조체 변수 정보를 입력하는 함수 (SV타입 리턴 → SVData)
+5729: _SMem(SVData,Address,Next,EPDflag) ## : 구조체 변수 데이터를 Ctrig메모리 데이터(배열)로 변환하는 함수
+5754: SVArr(SVArray,Index,Line,Player) ## : 구조체 변수 배열을 입력하는 함수 (SV타입 리턴 → SVData / SVA타입 리턴)
+5763: SVArrX(SVArray,Index,Index4,Line,Player) ## : SVArr()의 최적화용 함수 (SV타입 리턴 → SVData / SVA타입 리턴)
+5768: ConvertSVArr(PlayerID,Dest,Dest4,Source,Size) ## : SVArr, SVArrX용 인덱스값 변환 함수
+5785: CSVariable(Player,Index,Number) ## : 구조체 변수 선언 함수 (S타입 리턴 → SVariable)
+5793: CSVariable2(Player,Index,Number,Offset,Type,Value,Mask) ## : CWariable()에서 초기값을 설정할 수 있는 함수 (S타입 리턴 → SVariable)
+5805: SVArray(PlayerID,Size,Number) ## : Size 만큼의 크기를 갖는 SVArray를 선언하는 함수 (SA타입 리턴 → SVArray)
+5812: GetSVArray(Header,Size) ## : 연속된 CSVariable을 SVArray로 묶어주는 함수
+5829: SCallLabel1(Player,SVariable,Next) ## : 특정 플레이어의 Label이 Index인 구조체 변수를 호출할 때 사용 (액션5개, RecoverNext 사용)
+5835: SCallLabel2(Player,SVariable,Next) ## : SCallLabel1과 함께 사용하는 함수 (바로 다음 트리거에 삽입) (액션1개)
+5843: SCallLabel1X(SVData) ## : SCallLabel1의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5845: SCallLabel2X(SVData) ## : SCallLabel2의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5847: CallSVariable(PlayerID,Player,SVariable,Next,Conditions,Actions) ## : 구조체 변수를 호출하는 트리거 생성 함수
+5855: CallSVariableX(PlayerID,SVData,Conditions,Actions) ## : CallSVariable의 호출할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5868: SVariableX(Player,SVariable,Line,Section,Type,Value,Mask) ## : 구조체 변수 전용 CtrigX 조건
+5878: SetSVariableX(Player,SVariable,Line,Section,Type,Value,Mask) ## : 구조체 변수 전용 CtrigX 액션
+5889: SVariable(SVData,Section,Type,Value,Mask) ## : SVariableX의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5891: SetSVariable(SVData,Section,Type,Value,Mask) ## : SetSVariableX의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5901: SVArrayX(SVArray,Section,Type,Value,Mask) ## : 구조체 변수배열 상수인덱스 전용 CtrigX 조건
+5906: SetSVArrayX(SVArray,Section,Type,Value,Mask) ## : 구조체 변수배열 상수인덱스 전용 CtrigX 액션
+5910: CSVar(Player,SVariable,Line,Type,Value,Mask) ## : SVariableX에서 Section이 "Value"로 설정된 버전
+5913: SetCSVar(Player,SVariable,Line,Type,Value,Mask) ## : SetSVariableX에서 Section이 "Value"로 설정된 버전
+5917: NSVar(SVData,Type,Value,Mask) ## : CSVar의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5919: SetNSVar(SVData,Type,Value,Mask) ## : SetCSVar의 입력할 변수 정보를 변수 데이터로 입력받는 버전 / SVData에 SV()를 입력
+5921: CSVAar(SVArray,Type,Value,Mask) ## : SVArrayX에서 Section이 "Value"로 설정된 버전
+5924: SetCSVAar(SVArray,Type,Value,Mask) ## : SetSVArrayX에서 Section이 "Value"로 설정된 버전
+5942: TSetSVArrayX(SVArray,Section,Type,Value,Mask) ## : (Set)[SVariable/SVArray](X) 조건/액션의 변수 삽입형 함수
+5950: TSetCSVAar(SVArray,Type,Value,Mask) ## : (Set)[C/N]S[Var/VAar] 조건/액션의 변수 삽입형 함수
+5970: TTCSVAar(SVArray,Type,Value,Mask) ## : (Set)[C/N]S[Var/VAar] 조건/액션의 특수조건/변수 삽입형 함수
+5982: SMov(PlayerID,Dest,Source,Mode,Deviation,Mask,Clear) ## : 변수에서 값을 출력해서 대입함, Dest << Source + Deviation
+5998: MovS(PlayerID,Dest,Source,Mode,Mask,Clear) ※ 내부함수 ## : 변수배열에 값을 대입하거나 변수배열의 값을 출력함, Dest << Source + Deviation
+6010: TSMem(PlayerID,Dest,Source,Address,Next,OffsetFlag) ## : Dest(V)에 Source(SV/SVA)의 주소값(epd/Offset)값을 저장함
+6028: f_SDiff(PlayerID,Dest,Source,Mask,Time,Delay,Init) ## : Dest에 Source의 Time 동안의 변화량 값을 구함, Dest << SV - prevSV → prevSV << SV
+6039: SCast(PlayerID,Dest,Source,Deviation,Mask,Clear) ## : 변수 타입을 변환함 (구조체 변수 SV(A) ↔ 32비트 변수 V(A))
+6051: SCopy(PlayerID,SVData,DestLine,SourceLine) ## : 구조체 변수 내부의 변수 값을 다른 내부 변수에 복사시킴
+6068: _SMov(Number,Source,Mode,Deviation,Mask) ## : SMov의 중간 연산자 함수, SV << Source + Deviation
+6079: _MovS(Number,Source,Mode,Mask) ※ 내부함수 ## : MovS의 중간 연산자 함수, SV << Source
+6086: _TSMem(Source,Address,Next,OffsetFlag) ## : TSMem의 중간 연산자 함수, V << 주소값(epd/Offset)
+6093: _SCast(Source,Deviation,Mask) ## : SCast의 중간 연산자 함수, SV(A) → V 전용
+6099: _CastS(Number,Source,Deviation,Mask) ## : SCast의 중간 연산자 함수, V(A) → SV 전용
+6112: _SCopy(SVData,DestLine,SourceLine) ## : SCopy의 중간 연산자 함수
+6129: _TP(...) ## : 논리 조건 연산 함수를 사용하기 위한 조건 단락 입력 함수 (TTOR과 함께 사용 불가)
+6132: _TC(...) ## : 일반 조건을 논리 조건 연산 함수로 변환함
+6135: _TB(...) ## : 여러 조건들을 한 Ctrigger로 묶어서 처리할 때 사용함 (최적화용)
+6138: _TNOT(...) ## : 조건에 Not 논리 연산을 수행함, Condition = ~조건
+6141: _TOR(...) ## : 조건에 Or 논리 연산을 수행함, Condition = 조건1||조건2||…
+6145: _TAND(...) ## : 조건에 And 논리 연산을 수행함, Condition = 조건1&&조건2&&…
+6159: CbyteConvert(PlayerID,DestVA,Source) ## : 상수 배열을 f_byte[cpy/cmp](X) 전용 데이터 배열로 변환 후 저장함
+6168: f_byteConvert(PlayerID,DestVA,Source,Size,Distance) ## : 데이터 배열을 f_byte[cpy/cmp](X) 전용 데이터 배열로 변환 후 저장함
+6177: f_byteConvertX(PlayerID,DestVA,Source,SourceX,Size,Distance) ## : f_byteConvert에서 Source의 주소를 epd로 입력받는 버전 (최적화용)
+6194: f_bytecpy(PlayerID,Dest,SourceVA,Size,Distance) ## : f_byte 형식의 데이터 배열을 바이트 단위로 Dest에 Size만큼 복사함
+6203: f_bytecpyX(PlayerID,Dest,DestX,SourceVA,Size,Distance) ## : f_bytecpy에서 Dest의 주소를 epd로 입력받는 버전 (최적화용)
+6208: f_bytecmp(PlayerID,CFlag,Dest,SourceVA,Size,Distance) ## : f_byte 형식의 데이터 배열을 바이트 단위로 Dest에 Size만큼 비교함
+6219: f_bytecmpX(PlayerID,CFlag,Dest,DestX,SourceVA,Size,Distance) ## : f_bytecmp에서 Dest의 주소를 epd로 입력받는 버전 (최적화용)
+6232: TTbytecmp(Dest,SourceVA,Size,Distance) ## : f_bytecmp를 TT조건 형태로 만든 함수 (CFlag 자동 할당됨, CStruct 조건에서 사용가능)
+6235: TTbytecmpX(Dest,DestX,SourceVA,Size,Distance) ## : f_bytecmpX를 TT조건 형태로 만든 함수 (CFlag 자동 할당됨 , CStruct 조건에서 사용가능)
+6239: _byteConvert(Source) ## : CbyteConvert의 중간 연산자 함수 (임시 VA를 할당함)
+6244: _byteConvertF(Source,Size,Distance) ## : f_byteConvert의 중간 연산자 함수 (임시 VA를 할당함)
+6252: _byteConvertFX(Source,SourceX,Size,Distance) ## : f_byteConvertX의 중간 연산자 함수 (임시 VA를 할당함)
+6270: GetiStrArr(cp949flag,String) ## : 입력받은 스트링을 iStr로 변환하는 함수
+6277: GetiStrSize(cp949flag,String) ## : 입력받은 스트링을 iStr로 변환 후의 길이를 반환하는 함수
+6282: GetiStrId(PlayerId,String) ## : 입력받은 스트링을 iStr로 변환 후 등록하는 함수 (STR단락 공간 할당용)
+6291: SaveiStrArr(PlayerID,String,SVA32) ## : 입력받은 스트링을 iStr로 변환 후 변수에 저장하는 함수
+6300: SaveiStrptr(PlayerID,String,SVA32) - ＃STRCtrig 필수 & 반드시 CJump 사이에서만 사용해야함 ## : 입력받은 스트링을 iStr로 변환 후 변수에 저장하는 함수 (파일로 저장함)
+6317: CreateSVA32(iStrArr,Size,PlayerID) ## : 입력받은 iStr을 SVA32 변수에 저장하는 함수
+6325: MakeiStrVoid(Size,flag) ## : 공백문자(0xD)로 채워진 스트링을 만드는 함수 (리턴값은 배열이 아닌 string타입)
+6331: MakeiStrLetter(Letter,Size,flag) ## : 특정 글자로 채워진 스트링을 만드는 함수 (리턴값은 배열이 아닌 string타입)
+6338: MakeiStrWord(String,Size) ## : 특정 문자열로 채워진 스트링을 만드는 함수 (리턴값은 배열이 아닌 string타입)
+6344: FixText(PlayerID,Preset) ## : 출력된 텍스트의 위치를 고정시키는 함수 (맨 위에서부터 순서대로 고정됨)
+6359: CSPrint(iStrid,SVA32,DisplayPlayer,FixText,PlayerID,Condition,CpAction,Action,Preserve) ## : SVA32에 저장된 iStr을 출력하는 함수 (iStrId에 SVA32의 iStr을 덮어씀)
+6374: f_GetiStrptr(PlayerID,Output,StringId) ## : StringId에 해당하는 스트링의 Offset을 Output에 저장하는 함수
+6382: f_GetiStrXepd(PlayerID,Output,StringId) ## : StringId에 해당하는 스트링의 EPD를 Output에 저장하는 함수
+6399: CreateSVA1(iStrArr,Size,PlayerID) ## : 입력받은 iStr을 SVA1 변수에 저장하는 함수
+6406: SVA1(SVA1,Index) ## : SVA1타입 변수 정보를 입력하는 함수 (주로 CA__함수 등에서 사용)
+6415: TSVA1Mem(PlayerID,Dest,SVA1,Address,OffsetFlag) ## : Dest(V)에 Source(SVA1)의 주소값(epd/Offset)값을 저장함
+6423: MakeiStrData(Letter,Fill) ## : 입력한 문자의 헥스값을 구하는 함수
+6429: MakeiStrDiff(Start,End) ## : 입력한 문자들의 헥스값의 차를 구하는 함수
+6443: CSVA1(SVA1,Type,Value,Mask) ## : SVA1타입 변수 전용 CtrigX 조건
+6448: SetCSVA1(SVA1,Type,Value,Mask) ## : SVA1타입 변수 전용 SetCtrig1X 액션
+6456: TSetCSVA1(SVA1,Type,Value,Mask) ## : (Set)CSVA1 조건/액션의 변수 삽입형 함수
+6460: TTCSVA1(SVA1,Type,Value,Mask) ## : CSVA1 조건의 특수조건/변수 삽입형 함수
+6473: CAPrint(iStrid,DisplayPlayer,Preset,CAfunc,PlayerID,Condition,PerAction,CpAction,Action) ## : iStr 데이터를 실시간 변수 스트링 출력 트리거로 변환하는 함수 (변수 삽입 가능)
+6530: CA__InputSVA1(Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceDistance) ## : SVA1에 저장된 iStr을 SVA1에 복사하는 함수
+6543: CA__InputSVA1X(Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistance,SourceDistance) ## : SVA1에 저장된 iStr을 SVA1에 복사하는 함수 (DestMask를 Dest의 Mask에 함께 복사함)
+6551: CA__OverWrite(SVA32,Index,Null,Preserve) ## : SVA32에 저장된 iStr을 iStrid에 복사하는 함수
+6574: CA__SetMask(SVA1,Mask,Start,End,Preserve) ## : SVA1의 Mask를 변경하는 함수
+6582: CA__SetNext(SVA1,DestDistance,Mode,Start,End,Preserve) ## : SVA1의 Next(다음 글자를 복사할 위치, 기본값 1)를 변경하는 함수
+6594: CA__MoveXY(SVA1,Line,Mul,Mode,Fix,PathData,Preserve) ## : SVA1의 Next를 변경하여 다음글자 복사위치를 상하좌우로 움직이는 함수
+6616: CA__SetValue(SVA1,String,Mask,Index,Preserve,utf8flag) ## : SVA1에 스트링을 복사하는 함수 (String입력으로 iStr으로 저장)
+6625: CA__Mov(SVA1,Output,Mask,RecoverMask) ## : SVA1의 값을 Output에 복사하는 함수 (Output << SVA1)
+6632: CA__Movcpy(SVA1,Output,Size,Mask,RecoverMask,DestDistance) ## : SVA1의 값을 Output에 Size개 만큼 복사하는 함수 (Output << SVA1)
+6643: CA__Read(Index,Output,Mask) ## : iStrid의 Index번째 글자를 Output에 읽어오는 함수
+6656: CA__ReadX(Index,Output,Multiplier,Mask) ## : iStrid의 Index번째 글자를 Output에 읽어오는 함수 (*Multiplier)
+6663: CA__SetMemoryX(index,Value,Mask,utf8flag) ## : iStrid의 Index번째 글자에 Value값을 복사하는 함수
+6671: CA__SetColor(index,ColorCode) ## : iStrid의 Index번째 글자에 컬러코드 값을 변경하는 함수
+6677: CA__SetLetter(index,Letter,utf8flag) ## : iStrid의 Index번째 글자를 변경하는 함수 (컬러코드 제외)
+6684: CA__Encode(Dest,Source,Size,cp949flag) - ＃STRCtrig 필수 ## : SVA1의 글자를 인코딩하는 함수 (cp949 ↔ utf8, iStr형식)
+6703: CA__ConvertColor(SVA1,ConvertData,MaskData,Start,End) ## : SVA1의 컬러코드를 변환하는 함수
+6714: CA__ConvertLetter(SVA1,ConvertData,MaskData,Start,End,utf8flag) ## : SVA1의 글자를 변환하는 함수
+6732: CA__ItoName(SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag) ## : SVA1에 플레이어의 아이디를 iStr타입으로 출력하는 함수
+6748: CA__ItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,utf8flag) ## : SVA1에 4바이트 변수를 iStr타입으로 출력하는 함수
+6774: CA__lItoCustom(SVA1,Input,Output,Mask,Base,Length,Init,Sign,ColorArr,IndexArr,DataArr,ClearArr,utf8flag) ## : SVA1에 8바이트 변수를 iStr타입으로 출력하는 함수
+6788: CA__GetName(SVA1,TargetPlayer,Output) ## : SVA1에 TargetPlayer의 아이디를 복사하는 함수 (iString으로 자동 인코딩)
+6805: CA__epdcmp(Dest,Source,Size,Mask,CFlag) ## : SVA1 배열의 값을 EPD 단위로 Dest와 Size만큼 비교함 (Dest == Source 검사)
+6816: TTepdcmp(Dest,Source,Size,Mask) ## : CS__epdcmp를 TT조건 형태로 만든 함수 (CFlag 자동 할당됨, CStruct 조건에서 사용가능)
+6827: MakeiTblString(TBLIndex,Type,Hotkey,String,Name,Hexflag) ## : 입력받은 String를 iTBL로 변환후 저장하는 함수 (TBL단락 공간 할당용 텍스트 출력 함수)
+6839: GetiTblId(PlayerId,TBLIndex,Size) ## : 입력받은 TBLIndex를 iTBL로 패치하는 함수 (TBL단락 공간 할당 및 패치용)
+6848: MakeButtonTypeValue(String) ## : 입력한 버튼의 타입의 헥스값을 구하는 함수 (CB__SetButtonType에 사용됨)
+6854: MakeHotkeyValue(String) ## : 입력한 버튼의 단축키의 헥스값을 구하는 함수 (CB__SetHotkey에 사용됨)
+6873: CBPrint(iTblId,Preset,CBfunc,PlayerID,Condition,PerAction,Action) ## : iTbl 데이터를 실시간 변수 스트링 출력 트리거로 변환하는 함수 (변수 삽입 가능)
+6920: CB__SetButtonType(Value) ## : iTbl의 버튼의 타입을 바꾸는 함수
+6927: CB__SetHotkey(Value) ## : iTbl의 버튼의 단축키를 바꾸는 함수
+6951: CreateSVA32X(iStrArr,Size,PlayerID) ## : 입력받은 iStr을 SVA32 변수에 저장하는 함수 (utf8 전용)
+6957: SaveiStrArrX(PlayerID,String,SVA32) ## : 입력받은 스트링을 iStr로 변환 후 변수에 저장하는 함수 (utf8 전용)
+6965: SaveiStrptrX(PlayerID,String,SVA32) - ＃STRCtrig 필수 & 반드시 CJump 사이에서만 사용해야함 ## : 입력받은 스트링을 iStr로 변환 후 변수에 저장하는 함수 (파일로 저장함, utf8 전용)
+6972: MakeiStrDataX(Letter,Fill) ## : 입력한 문자의 헥스값을 구하는 함수 (utf8 전용)
+6978: MakeiStrDiffX(Start,End) ## : 입력한 문자들의 헥스값의 차를 구하는 함수 (utf8 전용)
+6993: Display(Line,Status) ## : 디스플레이 텍스트의 표시여부를 감지하는 조건
+6998: TTDisplay(Line,Status) ## : 디스플레이 텍스트의 표시여부를 감지하는 조건 (변수 삽입형 조건)
+7005: DisplayX(Line,Index,Value,Mask) ## : 디스플레이 텍스트의 Line번째 줄의 Index가 Value와 일치하는지 검사하는 조건
+7012: TTDisplayX(Line,Index,Type,Value,Mask) ## : 디스플레이 텍스트의 Line번째 줄의 Index가 Value와 일치하는지 검사하는 조건
+7031: f_Strlen(PlayerID,Line,Output,EPDXOutput) ## : 디스플레이 텍스트의 길이를 구하는 함수 (CDPrint기준 Line번째 줄의 Index 0~53영역을 검사함)
+7040: MakeChatOffset(Line,Offset) ## : 디스플레이 텍스트의 오프셋을 구하는 함수 (상수전용)
+7046: f_ChatOffset(PlayerID,Line,Offset,Output) ## : 디스플레이 텍스트의 오프셋을 구하는 함수 (변수전용)
+7053: _Chat(Line,Offset) ## : f_ChatOffset의 중간 연산자 함수
+7070: CDPrint(Line,Size,Init,DisplayPlayer,Preset,CDfunc,PlayerID,Condition,PerAction,Action) ## : 변수 스트링 데이터를 실시간 디스플레이 출력 트리거로 변환하는 함수 (변수 삽입 가능, utf8 전용)
+7122: CDPrint(Line,Size,ClearLetter,DisplayPlayer,Preset,CDfunc,PlayerID,Condition,PerAction,Action) ## : 변수 스트링 데이터를 실시간 디스플레이 출력 트리거로 변환하는 함수 (변수 삽입 가능, utf8 전용)
+7159: CD__GetDisplayLine(Line,Output) ## : Line(주소위치)을 DisplayLine(절대위치)로 변환하는 함수
+7164: CD__GetLine(DisplayLine,Output) ## : DisplayLine(절대위치)을 Line(주소위치)로 변환하는 함수
+7168: CD__GetIndex(Index,Output) ## : Index를 CDPrint의 인덱스로 변환하는 함수
+7172: CD__GetIndex2(Line,Index,Output) ## : Line과 Index를 CDPrint의 인덱스로 변환하는 함수
+7177: _GIndex(Index) ## : CD__GetIndex의 중간 연산자 함수
+7181: _GIndex2(Line,Index) ## : CD__GetIndex2의 중간 연산자 함수
+7194: CD__GetMask(Index,Output) ## : Index를 CDPrint의 Mask 인덱스로 변환하는 함수
+7197: CD__GetMask2(Line,Index,Output) ## : Line과 Index를 CDPrint의 Mask 인덱스로 변환하는 함수
+7200: _MIndex(Index) ## : CD__GetMask의 중간 연산자 함수
+7204: _MIndex2(Line,Index) ## : CD__GetMask2의 중간 연산자 함수
+7208: CD__SetMaskX(index,Mask) ## : index의 Mask를 변경하는 함수
+7221: CD__InputVAX(Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) ## : SVA1에 저장된 iStr을 디스플레이 출력 트리거에 복사하는 함수 (DestMask를 Dest의 Mask에 함께 복사함)
+7235: CD__InputMask(Line,Mask,Start,End) ## : Line번째 줄의 Mask를 변경하는 함수
+7243: CD__Resize(Line,Status) ## : Line번째 줄에 입력된 텍스트의 폰트 크기를 변경하는 함수 (맨 앞글자(Index=0)에 0x0D0D0D0A 삽입 방식)
+7258: CD__ScanV(SVA1,Size,Variable,Output,Base,Sign) ## : SVA1에 저장된 스트링을 4바이트 값(V)으로 변환하는 함수
+7269: CD__ScanW(SVA1,Size,Wariable,Output,Base,Sign) ## : SVA1에 저장된 스트링을 8바이트 값(W)으로 변환하는 함수
+7279: CD__ScanChat(SVA1,Offset,Size,Output,Null,SkipInit) ## : Offset에서 SVA1에 글자를 복사 및 인코딩하는 함수 (utf8 → iutf8)
+7304: CreateSV54(PlayerID,String) ## : 입력받은 String을 SV54 변수에 저장하는 함수 (C13Print 전용)
+7309: C13Print(SV54,DisplayPlayer,Preset,C13func,PlayerID,Condition,PerAction,CpAction,Action) ## : 변수 스트링 데이터를 실시간 오류줄 출력 트리거로 변환하는 함수 (변수 삽입 가능, utf8 전용)
+7352: CS__InputVA(PlayerID,iStrid,Index,SVA1,Size,Mask,Start,End,SourceDistance) ## : CA__InputVA의 외부 함수 (CA/CB/C13Print 전용)
+7358: CS__InputSVA1(PlayerID,Dest,Source,Size,Mask,Start,End,Next,DestDistance,SourceDistance) ## : CA__InputSVA1의 외부 함수
+7363: CS__InputSVA1X(PlayerID,Dest,Source,Size,Mask,DestMask,Start,End,Next,DestDistance,SourceDistance) ## : CA__InputSVA1X의 외부 함수
+7367: CS__OverWrite(PlayerID,iStrid,SVA32,Index,Null,Preserve) ## : CA__OverWrite의 외부 함수 (CA/CB/C13Print 전용)
+7373: CS__Input(PlayerID,Input,SVA1,Mask) ## : CA__Input의 외부 함수
+7378: CS__SetMask(PlayerID,SVA1,Mask,Start,End,Preserve) ## : CA__SetMask의 외부 함수
+7390: CS__SetNext(PlayerID,SVA1,DestDistance,Mode,Start,End,Preserve) ## : CA__SetNext의 외부 함수
+7394: CS__MoveXY(PlayerID,SVA1,Line,Mul,Mode,Fix,PathData,Preserve) ## : CA__MoveXY의 외부 함수
+7398: CS__SetValue(PlayerID,SVA1,String,Mask,Index,Preserve,utf8flag) ## : CA__SetValue의 외부 함수
+7402: CS__Mov(PlayerID,SVA1,Output,Mask,RecoverMask) ## : CA__Mov의 외부 함수
+7406: CS__Movcpy(PlayerID,SVA1,Output,Size,Mask,RecoverMask,DestDistance) ## : CA__Movcpy의 외부 함수
+7417: CS__ReadX(PlayerID,iStrid,Index,Output,Multiplier,Mask) ## : CA__ReadX의 외부 함수 (CA/CB/C13Print 전용)
+7431: CS__SetMemoryX(PlayerID,iStrid,index,Value,Mask,utf8flag) ## : CA__SetMemoryX의 외부 함수 (CA/CB/C13Print 전용)
+7437: CS__SetColor(PlayerID,iStrid,index,ColorCode) ## : CA__SetColor의 외부 함수 (CA/CB/C13Print 전용)
+7443: CS__SetLetter(PlayerID,iStrid,index,Letter,utf8flag) ## : CA__SetLetter의 외부 함수 (CA/CB/C13Print 전용)
+7449: CS__Encode(PlayerID,Dest,Source,Size,cp949flag) - ＃STRCtrig 필수 ## : CA__Encode의 외부 함수
+7453: CS__ConvertColor(PlayerID,SVA1,ConvertData,MaskData,Start,End) ## : CA__ConvertColor의 외부 함수
+7458: CS__ConvertLetter(PlayerID,SVA1,ConvertData,MaskData,Start,End,utf8flag) ## : CA__ConvertLetter의 외부 함수
+7470: CS__ItoName(PlayerID,SVA1,TargetPlayer,Output,Init,ColorArr,FullWidth,utf8flag) ## : CA__ItoName의 외부 함수
+7486: CS__SetHotkey(PlayerID,iTBLid,Value) ## : CB__SetHotkey의 외부 함수 (CBPrint 전용)
+7491: CS__SetButtonType(PlayerID,iTBLid,Value) ## : CB__SetButtonType의 외부 함수 (CBPrint 전용)
+7505: CS__GetDisplayLine(PlayerID,Line,Output) ## : CD__GetDisplayLine의 외부 함수 (CD/C13Print 전용)
+7509: CS__GetLine(PlayerID,DisplayLine,Output) ## : CD__GetLine의 외부 함수 (CD/C13Print 전용)
+7513: CS__GetIndex(PlayerID,Index,Output) ## : CD__GetIndex의 외부 함수 (CD/C13Print 전용)
+7517: CS__GetIndex2(PlayerID,Line,Index,Output) ## : CD__GetIndex2의 외부 함수 (CD/C13Print 전용)
+7521: CS__GetMask(PlayerID,Index,Output) ## : CD__GetMask의 외부 함수 (CD/C13Print 전용)
+7538: CS__InputVAX(PlayerID,SV54,Index,SVA1,Size,Mask,DestMask,Start,End,SourceDistance) ## : CD__InputVAX의 외부 함수 (C13Print 전용)
+7543: CS__InputMask(PlayerID,SV54,Line,Mask,Start,End) ## : CD__InputMask의 외부 함수 (C13Print 전용)
+7549: CS__Resize(PlayerID,SV54,Line,Status) ## : CD__Resize의 외부 함수 (C13Print 전용)
+7554: CS__ScanChat(PlayerID,SVA1,Offset,Size,Output,SkipInit) ## : CD__ScanChat의 외부 함수 (CD/C13Print 전용)
+7558: CS__ScanV(PlayerID,SVA1,Size,Variable,Output,Base,Sign) ## : CD__ScanV의 외부 함수 (CD/C13Print 전용)
+7563: CS__ScanW(PlayerID,SVA1,Size,Variable,Output,Base,Sign) ## : CD__ScanW의 외부 함수 (CD/C13Print 전용)
+7575: CS__epdcpy(PlayerID,SVA1,Value,Mask,Start,End,Preserve) ## : CA__epdcpy의 외부 함수
+7579: CS__epdcmp(PlayerID,Dest,Source,Size,Mask,CFlag) ## : CA__epdcmp의 외부 함수
+7583: CS__GetName(PlayerID,SVA1,TargetPlayer,Output) ## : CA__GetName의 외부 함수
+7587: CS__SetMaskX(PlayerID,SV54,index,Mask) ## : CD__SetMaskX의 외부 함수 (C13Print 전용)
+7833: NSQCSend(PlayerID,SourceVA,Size,Mask,Offset,ErrorCode,ResetCond,ResetAct) ## : 비공유 데이터를 VA단위로 전송하는 함수 (Size+1틱동안 전송함)
+7871: ScanInitSetting(PlayerID,Preserve) ## : ScanSprite 사용전 필요한 스캔 초기화 함수
+7877: ScanSprite(PlayerID,Number,Owner,RemoveScan,Location,Conditions,Actions,Preserve) ## : 스캔(33번 유닛)으로 스프라이트 이미지를 생성하는 함수 (생성된 스프라이트의 높이는 4로 고정됨)
+7891: UnitSprite(PlayerID,Owner,UnitId,Height,Time,Location,Conditions,Actions,Preserve) ## : 스프라이트 표시용 유닛을 생성하는 함수 (해당유닛의 구조오프셋+0xE4를 0으로 고정하면 드래그방지 적용됨)
+7913: RecallSprite(PlayerID,Owner,UnitId,Location,X,Y,Conditions,Actions,Preserve) ## : 리콜로 스프라이트 이미지를 생성하는 함수 (아비터로 리콜을 시전하는 방식, 0틱연산 불가)
+7928: ,BulletNumber,DamageType,Special,Splash,Preserve) ## : 스프라이트 표시용 유닛을 생성하는 함수 (해당유닛의 구조오프셋+0xE4를 0으로 고정하면 드래그방지 적용됨)
+7956: CreateBullet(PlayerID,Owner,UnitId,Height,Angle,Speed,Time,Location,Conditions,Actions,Preserve) ## : 유닛 생성으로 순수 총알을 생성하는 함수 (생성된 총알은 언리미터의 적용을 받음)
+8003: CreateStorm(PlayerID,Owner,UnitId,Height,Angle,ImageID,Time,Location,Conditions,Actions,Preserve) ## : 유닛 생성으로 순수 스톰을 생성하는 함수 (생성된 총알은 언리미터의 적용을 받음)
+8021: CreateSprite(PlayerID,Owner,UnitId,Height,Angle,Speed,Location,Conditions,Actions,Preserve) ## : 유닛 생성으로 순수 총알(영구 스프라이트)을 생성하는 함수 (생성된 총알은 언리미터의 적용을 받음)
+8048: TSetImageColor(ImageID,Code) - 변수 삽입 가능 ## : 화면출력 정보 기능 설정 함수
+8054: TSetImageScript(ImageID,ScriptID) - 변수 삽입 가능 ## : 이미지 스크립트ID 설정 함수
+8059: TSetImageAllScript(ImageID,Value) - 변수 삽입 가능 ## : 이미지 일반정보 - 모든 스크립트 설정 함수
+8064: TSetRecallImage(ImageID) - 변수 삽입 가능 ## : 리콜 스프라이트(379)의 이미지 설정 함수
+8069: TSetScanImage(ImageID) - 변수 삽입 가능 ## : 스캔 스프라이트(380)의 이미지 설정 함수
+8086: TSetBulletDamage(WeaponID,Type,Damage) - 변수 삽입 가능 ## : 총알의 공격력 설정 함수
+8093: TSetBulletDamageUp(WeaponID,Type,Damage) - 변수 삽입 가능 ## : 총알의 추가공격력 설정 함수
+8099: TSetBulletNumber(WeaponID,Number) - 변수 삽입 가능 ## : 총알의 투사체 수 설정 함수
+8104: TSetBulletUpgrade(WeaponID,UpgradeID) - 변수 삽입 가능 ## : 총알의 무기 업그레이드 설정 함수
+8110: TSetBulletDamageType(WeaponID,DamageType) - 변수 삽입 가능 ## : 총알의 데미지 형식 설정 함수
+8115: TSetBulletDamageSpecial(WeaponID,DamageSpecial) - 변수 삽입 가능 ## : 총알의 폭발형 타입 설정 함수
+8126: TSetBulletSpin(WeaponID,Type,Angle) - 변수 삽입 가능 ## : 총알의 발사회전값 설정 함수
+8133: TSetBulletSplash100(WeaponID,Type,Radius) - 변수 삽입 가능 ## : 총알의 스플레쉬 범위(안쪽) 설정 함수
+8139: TSetBulletSplash50(WeaponID,Type,Radius) - 변수 삽입 가능 ## : 총알의 스플레쉬 범위(중간) 설정 함수
+8145: TSetBulletSplash25(WeaponID,Type,Radius) - 변수 삽입 가능 ## : 총알의 스플레쉬 범위(외각) 설정 함수
+8152: TSetDimension(UnitId,Value) - 변수 삽입 가능 ## : 유닛의 생산크기 설정 함수
+8164: f_GetVArrptr(PlayerID,Size) - ＃STRCtrig 필수 ## : VArray를 파일 삽입식으로 생성하는 함수
+8170: f_GetWArrptr(PlayerID,Size) - ＃STRCtrig 필수 ## : WArray를 파일 삽입식으로 생성하는 함수
+8176: f_GetSVArrptr(PlayerID,Size,Number) - ＃STRCtrig 필수 ## : SVArray를 파일 삽입식으로 생성하는 함수
+8183: f_GetFileVArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : VArray를 파일생성 후 파일 삽입식으로 생성하는 함수 (FileArray의 값을 Value에 저장함)
+8200: f_GetFileWArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : WArray를 파일생성 후 파일 삽입식으로 생성하는 함수 (FileArray의 값을 Value에 저장함)
+8209: f_GetFileSVArrptrN(PlayerID,FileArray,ElementSize,Number,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : SVArray를 파일생성 후 파일 삽입식으로 생성하는 함수 (FileArray의 값을 Value에 저장함)
+8218: FArr(Fileptr,Index,Player) ## : File타입(Void 포함) 메모리 배열의 주소를 입력하는 함수
+8234: f_GetVoidptr(PlayerID,Size) - ＃STRCtrig 필수 ## : Array를 파일 삽입식으로 생성하는 함수 (빈칸 없는 순수 공메모리를 생성함)
+8240: f_GetFileptr(PlayerID,FileName,LoadCheck) - ＃STRCtrig 필수 ## : AbsolutePath에 이름이 FileName인 파일을 맵에 삽입하는 함수 (파일내용이 그대로 복사됨)
+8246: f_GetFileptrN(PlayerID,FileName,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : AbsolutePath에 이름이 FileName인 파일을 맵에 삽입하는 함수 (반복 복사 가능)
+8261: SaveFileArr(FileArray,ElementSize,FileName) ## : FileArray의 값으로 AbsolutePath에 파일을 생성하는 함수
+8267: f_GetFileArrptr(PlayerID,FileArray,ElementSize,LoadCheck) - ＃STRCtrig 필수 ## : FileArray의 값으로 파일생성 후 파일을 맵에 삽입하는 함수
+8275: f_GetFileArrptrN(PlayerID,FileArray,ElementSize,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : FileArray의 값으로 파일생성 후 파일을 맵에 삽입하는 함수 (반복 복사 가능)
+8292: f_GetFileSize(FileName) ## : AbsolutePath에 이름이 FileName인 파일의 크기를 구하는 함수
+8297: f_GetTRIGptrN(PlayerID,FileName,Repeat,LoadCheck) - ＃STRCtrig 필수 ## : AbsolutePath에 이름이 FileName인 파일을 맵에 삽입하는 함수 (파일 내용을 Ctrig로 받음)
