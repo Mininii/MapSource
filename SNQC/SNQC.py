@@ -4,7 +4,7 @@
 
 MSQC(Murakami Shiina QueueCommand, plugins/MSQC.py)를 대신하는 "로컬 입력 → 모든 PC 동기화" 플러그인.
 .eds 의 [SNQC] 단락은 [MSQC] 와 같은 줄 문법을 쓴다 - 단락 이름만 바꾸면 그대로 옮겨진다.
-설계·실측 근거: MapSource/SNQC/DESIGN.md. CtrigAsm(Lua) 판은 MapSource/SNQC/SNQC.lua. 작업 내역: HISTORY.md.
+설계·실측 근거: MapSource/SNQC/DESIGN.md. CtrigAsm(Lua) 판은 MapSource/SNQC/SNQC.lua. 작업 내역: HISTORY.md, 판별 변경: CHANGELOG.md.
 정본은 MapSource/SNQC/SNQC.py - euddraft 에서 쓰려면 C:/euddraft0.9.2.0/plugins/SNQC.py 로 복사한다.
 
 무엇이 다른가
@@ -22,6 +22,10 @@ MSQC(Murakami Shiina QueueCommand, plugins/MSQC.py)를 대신하는 "로컬 입�
   SNQCPlayer    = P11          채널 건물을 넘겨 둘 플레이어 (QCPlayer 도 받음)
   SNQCLoc       = 0            만들 때 잠깐 쓰는 로케이션 (QCLoc 도 받음). 쓰고 나면 되돌린다
   SNQC_XY       = 128, 128     첫 채널 자리 (QC_XY 도 받음). 채널마다 x 로 32, 플레이어마다 y 로 32 씩 (맵 끝이면 반대 방향)
+  SNQC_XY1 ~ SNQC_XY8 = x, y   (1.1) 플레이어 P1~P8 의 첫 채널 자리. 하나라도 주면 사람 슬롯 전부 줘야 하고 SNQC_XY 대신 쓴다.
+                               채널 건물은 시야 0 이어도 자기 칸 주변을 밝혀(주인이 사람이라 못 끈다) 시야 공유로 남에게 보이므로,
+                               플레이어가 원래 보는 곳(예: 자기 배럭 밑)에 두려는 것
+  SNQCColumns   = 0            (1.1) 한 줄에 놓을 채널 수. 0 = 한 줄. 넘치면 y 로 32 씩 다음 줄. 채널 간격은 늘 32 (넘길 때 옆 채널이 안 잡히게)
   SNQCBuildSize = 1, 0         건설크기(픽셀) - (1,0)/(0,1)/(0,0) 이 가려진다
   SNQCMerge     = true         아직 안 나간 자기 패킷이 버퍼에 있으면 좌표만 고친다 (키 = 비트 합치기, 값 = 덮어쓰기)
   SNQCBufferLimit = 400        턴 버퍼가 이보다 길면 붙이지 않는다
@@ -45,9 +49,14 @@ from math import ceil
 
 from eudplib import *
 
+# 판 번호 - CHANGELOG.md 의 "플러그인 판" 과 맞춘다
+SNQC_VERSION = "1.1"
+
 # fmt: off
 SNQCUnit, SNQCPlayer, SNQCLoc = 106, 10, 0
 SNQC_X, SNQC_Y = 128, 128
+PlayerXY = {}          # 1.1: 플레이어 번호(0부터) → (x, y). 비어 있으면 SNQC_XY 방식
+Columns = 0            # 1.1: 한 줄 채널 수 (0 = 한 줄)
 BuildW, BuildH = 1, 0
 UseMerge, QCDebug = True, True
 BufferLimit, CheckInterval = 400, 34
@@ -237,7 +246,7 @@ def _encode_unit_or_int(s):
 
 
 def onInit():
-    global SNQCUnit, SNQCPlayer, SNQCLoc, SNQC_X, SNQC_Y, BuildW, BuildH, UseMerge, QCDebug, BufferLimit
+    global SNQCUnit, SNQCPlayer, SNQCLoc, SNQC_X, SNQC_Y, BuildW, BuildH, UseMerge, QCDebug, BufferLimit, Columns
     global humans, W, H, KX, KY, VX, VY, key_bits
     chkt = GetChkTokenized()
     dim, ownr = chkt.getsection("DIM"), chkt.getsection("OWNR")
@@ -269,6 +278,15 @@ def onInit():
             continue
         if kl in ("SNQCPlayer", "QCPlayer"):
             SNQCPlayer = EncPlayer(v)
+            continue
+        m = re.fullmatch(r"SNQC_XY([1-8])", kl)
+        if m:
+            c = v.split(",")
+            PlayerXY[int(m.group(1)) - 1] = (int(c[0], 0), int(c[1], 0))
+            continue
+        if kl == "SNQCColumns":
+            Columns = int(v, 0)
+            ep_assert(Columns >= 0, "[SNQC] SNQCColumns 는 0 이상")
             continue
         if kl in ("SNQC_XY", "QC_XY"):
             c = v.split(",")
@@ -349,8 +367,8 @@ def onInit():
             val_lines.append((con_final, ret_final))
 
     ep_assert(key_lines or val_lines, "[SNQC] 줄이 하나도 없다")
-    print("[SNQC] map %dx%d, humans %s, channel unit %d, key bits/channel %d, value range 0..%d"
-          % (dim_x, dim_y, [p + 1 for p in humans], SNQCUnit, len(key_bits), 2 ** (VX + VY) - 1))
+    print("[SNQC %s] map %dx%d, humans %s, channel unit %d, key bits/channel %d, value range 0..%d"
+          % (SNQC_VERSION, dim_x, dim_y, [p + 1 for p in humans], SNQCUnit, len(key_bits), 2 ** (VX + VY) - 1))
 
 
 def _ret_target(s):
@@ -393,10 +411,19 @@ PB_EPD = EPD(PB)
 
 
 def _xyfor(pi, c):
-    step_x = 32 if SNQC_X + 32 * (NCh - 1) < W else -32
-    step_y = 32 if SNQC_Y + 32 * (len(humans) - 1) < H else -32
-    x, y = SNQC_X + step_x * c, SNQC_Y + step_y * pi
-    ep_assert(0 <= x < W and 0 <= y < H, "[SNQC] 채널 건물 자리가 맵 밖 - SNQC_XY 를 바꿀 것")
+    cols = Columns or NCh
+    rows = (NCh + cols - 1) // cols
+    col, row = c % cols, c // cols
+    if PlayerXY:
+        p = humans[pi]
+        ep_assert(p in PlayerXY, "[SNQC] SNQC_XY%d 가 없다 (SNQC_XY1~8 은 사람 슬롯 전부 줘야 한다)" % (p + 1))
+        bx, by = PlayerXY[p]
+        x, y = bx + 32 * col, by + 32 * row
+    else:
+        step_x = 32 if SNQC_X + 32 * (cols - 1) < W else -32
+        step_y = 32 if SNQC_Y + 32 * (rows * len(humans) - 1) < H else -32
+        x, y = SNQC_X + step_x * col, SNQC_Y + step_y * (row + rows * pi)
+    ep_assert(0 <= x < W and 0 <= y < H, "[SNQC] 채널 건물 자리가 맵 밖 (%d, %d) - SNQC_XY / SNQC_XYn / SNQCColumns 를 볼 것" % (x, y))
     return x, y
 
 
@@ -432,11 +459,16 @@ def onPluginStart():
 @EUDFunc
 def CreateChannels():
     loc_epd = EPD(0x58DC60) + SNQCLoc * 5
+    taken = {}
     for pi, p in enumerate(humans):
         for c in range(NCh):
             idx = p * NCh + c
             px, py = _xyfor(pi, c)
             sx, sy = _snap(px, BuildW), _snap(py, BuildH)
+            ep_assert(sx >= 16 and sy >= 16, "[SNQC] 채널 자리가 맵 가장자리에 너무 붙었다 (%d, %d)" % (sx, sy))
+            ep_assert((sx, sy) not in taken, "[SNQC] 채널 자리가 겹친다 (%d, %d): P%d 채널 %d 와 %s"
+                      % (sx, sy, p + 1, c + 1, taken.get((sx, sy))))
+            taken[(sx, sy)] = "P%d 채널 %d" % (p + 1, c + 1)
             if EUDIf()([MemoryEPD(EPD(ChEPD) + idx, Exactly, 0), Memory(0x628438, AtLeast, 1)]):
                 if EUDIf()(f_playerexist(p)):
                     saved = [f_dwread_epd(loc_epd + i) for i in range(5)]
@@ -730,6 +762,9 @@ def beforeTriggerExec():
         CheckChannels()
     CreateChannels()
     if EUDIf()(MyValid == 1):
+        # 보내는 쪽 조건의 CurrentPlayer = 이 PC 플레이어 (MSQC 와 같다). 1.0 은 이걸 안 해서 Deaths(CurrentPlayer, ...) 줄이
+        # 앞 트리거가 남긴 CP 로 읽혔다 - CtrigAsm 맵은 CP 에 EPD 를 남기므로 엉뚱한 주소를 읽어 EUD 오류 (MSF_UE_RE, 1.1 에서 고침)
+        f_setcurpl(f_getuserplayerid())
         SendQC()
     EUDEndIf()
     ReceiveQC()

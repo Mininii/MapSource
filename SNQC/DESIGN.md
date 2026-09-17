@@ -8,8 +8,8 @@ MSQC(Murakami Shiina QueueCommand)를 대신하는 **로컬 입력 → 모든 PC
 | euddraft 플러그인 | `MapSource/SNQC/SNQC.py` (설치: `C:\euddraft0.9.2.0\plugins\SNQC.py` 로 복사) | .eds `[SNQC]` 단락 - **MSQC 와 같은 줄 문법** | eudplib 맵 (DPS_eud 등), MSQC 를 쓰던 모든 맵 |
 | CtrigAsm 라이브러리 | `MapSource/SNQC/SNQC.lua` (자동으로 안 읽힘 - 맵이 직접 dofile) | Lua 표 / 함수 (`SNQC_Key` 등), MSQC 줄 문법도 받음 (`SNQC_Line`) | TEP/CtrigAsm 맵 (DPS_Enhance, theSeed) |
 
-**확인 상태 (2026-09-17)**: 플러그인 판은 theSeed 싱글·LAN 2인 인게임 통과 (아래 7번 1~5, 150프레임 소실 없음, 디싱크 없음). 합치기·버퍼 한계와 Lua 판은 아직.
-Lua 판은 가짜 CtrigAsm 환경 실행까지. 아래 "7. 확인 목록".
+**확인 상태 (2026-09-17)**: 플러그인 판(1.0)은 theSeed 싱글·LAN 2인 인게임 통과 (아래 7번 1~5, 150프레임 소실 없음, 디싱크 없음). 합치기·버퍼 한계는 아직.
+Lua 판(1.2)은 MSF_UE_RE 싱글 인게임 통과 (키, SCR_DB 불러오기 0.4초, 8채널 동시 전송). 멀티(LAN)는 아직. 아래 "7. 확인 목록". 판별 변경은 `CHANGELOG.md`.
 
 ---
 
@@ -130,7 +130,7 @@ SNQC_Install()   -- 받은 데스값을 읽는 트리거보다 앞에서 한 번
 | --- | --- | --- |
 | `MapTiles` | (필수) | 맵 크기(타일) |
 | `Humans` | (필수) | 채널을 만들 플레이어 번호 (0부터) |
-| `WorkAddr` | nil → CreateVoids(13) | 로컬 작업 공간 52바이트. **맵이 0x58F500 부터를 CreateVoid 없이 쓰면 꼭 준다** (DPS 는 0x58F500~0x58F527 을 직접 씀) |
+| `WorkAddr` | nil → CreateVoids(13) | 로컬 작업 공간 52바이트. **맵이 0x58F500 부터를 CreateVoid 없이 쓰면 꼭 준다** (DPS 는 0x58F500~0x58F527 을 직접 씀). 1.1 부터 패킷 틀을 매 사이클 다시 써서 맵이 이 자리를 지워도 된다 |
 | `Unit` `Player` `Loc` `XY` `Step` `BuildSize` `Order` `Merge` `BufferLimit` `Check` `CheckInterval` | 플러그인과 같음 | |
 
 줄 함수
@@ -139,23 +139,28 @@ SNQC_Install()   -- 받은 데스값을 읽는 트리거보다 앞에서 한 번
   `Hold` = 안 받은 사이클에 값을 그대로 둔다, `NewDeath` = 받은 사이클에 1 (새 값 표시), `Change` = 바뀐 사이클에만 보낸다 (Lua 판에만 있음)
 - `SNQC_Point(Conds, SrcX, SrcY, DeathX, DeathY, {Hold, NewDeath})`
 - `SNQC_Mouse(Conds, DeathX, DeathY, {Loc, Hold(기본 true), NewDeath})`
-- `SNQC_Line("MSQC 줄")`
-- 조건: `SNQC_KeyDown/KeyUp/KeyPress(k)`, `SNQC_MouseDown/MouseUp/MousePress(b)`, `SNQC_NotTyping()`, TEP/CtrigAsm 조건 (평평한 목록),
-  또는 MSQC 문법 문자열.
+- `SNQC_Line("MSQC 줄")` - `mouse : 로케이션` 은 MSQC 처럼 1부터 센 번호 또는 이름
+- 조건: `SNQC_KeyDown/KeyUp/KeyPress(k)`, `SNQC_MouseDown/MouseUp/MousePress(b)`, `SNQC_NotTyping()`,
+  `SNQC_MyDeaths(비교, 값, 유닛)` (1.1, 이 PC 플레이어의 데스값), TEP/CtrigAsm 조건 (평평한 목록), 또는 MSQC 문법 문자열.
+  **보내는 트리거는 FP 소유라 `Deaths(CurrentPlayer, ...)` 를 표로 넣으면 FP 의 데스를 본다.** 문자열로 주면 `SNQC_MyDeaths` 로 바뀐다.
 
 주의
 - `MapSource/Library` 가 아니라서 **자동으로 읽히지 않는다** - 쓰는 맵이 `dofile(Curdir .. "MapSource/SNQC/SNQC.lua")` 로 읽는다.
   읽기만 해서는 아무 트리거도 안 만든다. `SNQC_Install` 을 부른 맵에서만 동작한다.
 - 변수는 `SNQC_Install` 안에서 만든다 (FP 가 정해진 뒤). 줄 등록은 그 전 어디서든.
 - CtrigAsm 은 "모든 트리거 앞" 시점이 없다 - 메인 흐름에서 받은 데스값을 읽는 곳보다 **앞에** 부를 것.
+- `Include_CtrigPlib` 뒤에서 부를 것 (`f_Read` 가 요구한다). `MapSource/Library/LibraryFor322.lua` 의 `SetCall` / `CallTrigger(X)` / `def_sIndex` 를 쓴다.
+- **CtrigAsm 인덱스 한도** (0xC000~0xEFFF, `CIf` 하나에 2개): 1.0 은 (플레이어 × 채널 × 비트)마다 `CIf` 를 펼쳐 MSF_UE_RE(16채널 × 7명)에서
+  6990개를 써 컴파일이 안 됐다. 1.1 은 본체를 `SetCall` 함수로 두고 `CTrigger` 만 펼쳐 112개 (tepc 실측). 줄을 늘려도 거의 늘지 않는다.
 
 ## 6. MSQC 에서 옮기기
 
 | 맵 | 지금 | 옮기는 법 |
 | --- | --- | --- |
 | theSeed | `MapLogic/EUDEditorEdsGen.lua` 가 `[MSQC]` 줄을 만든다 (euddraft) | 단락 이름을 `[SNQC]` 로 (플러그인 판). 106 은 이미 비웠다. 큐 커맨드 실험기(`QueueCommandLabEnable`)는 106 을 같이 쓰므로 끈다 |
-| DPS_eud | `build/eudplibData/EUDEditor.eds` `[MSQC]` + `build_eud.py` 가 SCR_DB 줄 8개를 더함 | `[MSQC]` → `[SNQC]`. `QCUnit = Zerg Scourge` 는 자동으로 무시된다. 106 은 코드·미리 놓인 유닛에 없다 (2026-09-17 확인. `SCA.FXEPer = 106` 은 아이템 번호). **EUD Editor 3 dat 편집에서 106 을 바꿨는지는 미확인** |
+| DPS_eud | **적용함 (2026-09-17, 플러그인 판)**. `eud/build_eud.py` 의 `QC_PLUGIN = "SNQC"` 로 `write_eds` 가 단락 이름을 바꾼다 (SCR_DB 줄 8개는 그대로). euddraft 빌드 통과, 인게임 미확인 | `[MSQC]` → `[SNQC]`. `QCUnit = Zerg Scourge` 는 자동으로 무시된다. 106 은 코드·미리 놓인 유닛에 없다 (2026-09-17 확인. `SCA.FXEPer = 106` 은 아이템 번호). **EUD Editor 3 dat 편집에서 106 을 바꿨는지는 미확인** |
 | DPS_Enhance | EUD Editor 3 프로젝트(.e3s) 안의 `[MSQC]` | 플러그인 판이면 위와 같음. Lua 판이면 `Variables.lua` 의 `MSQC_KeySet` 표로 `SNQC_Key` 를 만들고 `WorkAddr` 를 줄 것 |
+| MSF_UE_RE | **적용함 (2026-09-17, Lua 판)**. `MSF_UE_RE/QCInput.lua` 가 줄의 정본이고 `QCInput_Plugin` 으로 `SNQC_LUA` / `SNQC_PY` / `MSQC` 를 고른다 (`tools/build_scrdb.py` 가 따라 eds 단락을 만든다) | 106 은 맵에서 안 쓴다(코드·버튼·맵 데이터 확인). 한 일: EUDinit 의 전 유닛 루프 3곳(건설크기 1x1 덮기·미리 놓인 유닛 재배치·RemoveUnit)이 106 을 건너뜀, 보스 클리어의 `KillUnit("Any unit", P11)` 을 P11 에 넘기는 유닛만으로, `@칭호` 결과를 EUDArray 대신 데스 191 로 (Lua 판은 데스만 받는다), 작업 공간 0x593C00, 채널 자리 (2512, 3312) |
 
 SCR_DB(런처 저장) 쪽: MSQC 는 매 프레임 다시 보내서 토글 비트를 쓴다(`docs/SCR_DB_PORTING.md`). SNQC 도 조건이 참인 동안 매 사이클 보내므로
 프로토콜은 그대로 쓸 수 있다. 150프레임 소실이 없어지는 만큼 재전송이 줄어드는지 볼 것.
@@ -169,7 +174,10 @@ SCR_DB(런처 저장) 쪽: MSQC 는 매 프레임 다시 보내서 토글 비트
 5. 멀티(LAN 2인)에서 동기화가 깨지지 않는지. — **확인** (64비트+32비트, 20940사이클 = 150프레임 주기 139번, 디싱크 없음. 한 턴에 두 사이클이 실린 것으로 보이는 1사이클 빈칸이 P2 에 2번, P2 가 나갈 때 P1 에 1번)
 6. 합치기(Merge): 턴이 여러 사이클에 한 번 나가는 방에서 키가 사라지지 않는지 (이 방은 아직 못 만들었다).
 7. 버퍼 한계 - 줄이 많을 때 `BufferLimit` 에 걸려 빠지는 입력이 없는지.
-8. Lua 판: 실제 TEP 컴파일, `WorkAddr` 없이 CreateVoid 로 동작하는지.
+8. Lua 판: 실제 TEP 컴파일 — **MSF_UE_RE 빌드 통과 (1.1)**. 인게임 1~5 를 MSF_UE_RE 로 (`마린키우기_UnLimit_ExceeD_SCR_DB_out.scx`).
+   `WorkAddr` 없이 CreateVoid 로 동작하는지는 아직 (MSF_UE_RE 는 WorkAddr 를 준다).
+   MSF_UE_RE 에서 더 볼 것: 채널 건물 자리 (2512, 3312) 에 16×7 개가 다 만들어지는지(지형 자료 없이 고른 자리), 보스 클리어 뒤 입력이 계속 되는지,
+   `@칭호 N`·기부 채팅·멀티 커맨드 우클릭·SCR_DB 불러오기/저장.
 
 ## 8. 알려진 한계
 
