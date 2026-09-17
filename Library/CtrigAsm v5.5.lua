@@ -13341,7 +13341,7 @@ function TSetMemory(Offset,Type,Value)
 end
 
 function TMemoryX(Offset,Type,Value,Mask)
-	if Value == nil or Mask == nil then
+	if Value == nil then -- Mask 는 생략 가능(nil = 마스크 없이 전체 비교). Mask 를 안 넘기는 TCtrigX 호출부가 있다
 		TMemoryX_InputData_Error()
 	end
 	local PushLine = 0
@@ -18921,7 +18921,7 @@ function TTMemory(Offset,Type,Value)
 end
 
 function TTMemoryX(Offset,Type,Value,Mask)
-	if Value == nil or Mask == nil then
+	if Value == nil then -- Mask 는 생략 가능(nil = 마스크 없이 전체 비교). Mask 를 안 넘기는 TTCtrigX 호출부가 있다
 		TTMemoryX_InputData_Error()
 	end
 	local Mode

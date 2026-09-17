@@ -1,0 +1,72 @@
+
+/* ===== v2 : 제작·편집기 ===== */
+.addbar{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.addbar select{max-width:220px}
+.srcrow{
+  display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap;
+  padding:0 14px 10px 44px;
+}
+.srcrow .ctl-label{margin-right:0; padding-top:5px}
+.srcbox{
+  flex:1 1 240px; min-width:0; display:flex; flex-wrap:wrap; gap:6px 8px; align-items:center;
+  background:var(--panel-2); border:1px solid var(--line-soft); border-radius:8px; padding:8px 10px;
+}
+.srcbox.gen{border-color:color-mix(in srgb, var(--accent) 32%, var(--line-soft))}
+.srcbox.pts{border-color:color-mix(in srgb, var(--fam-U) 32%, var(--line-soft))}
+.srcbox > select{font-size:12.5px; font-weight:600}
+.srcbox input[type="text"]{
+  flex:1 1 200px; min-width:120px; font-family:"IBM Plex Mono",monospace; font-size:12px; padding:4px 7px;
+}
+.arg.wide input{width:118px}
+.arg input.exprin{
+  width:132px; font-family:"IBM Plex Mono",monospace; font-size:11.5px;
+}
+.arg input.ptsin{width:180px}
+.arg .lvin{
+  width:46px; font-family:"IBM Plex Mono",monospace; font-size:11.5px; padding:4px 5px;
+  border-color:color-mix(in srgb, var(--accent) 34%, var(--line));
+}
+.arg .lvtag{
+  font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent);
+  background:var(--accent-soft); border-radius:4px; padding:1px 4px;
+}
+.arg.pair input{width:58px}
+.arg select.shapein{max-width:150px}
+.ptsnote{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
+}
+.histbar{display:flex; gap:2px; margin-left:auto}
+
+/* 점 편집기 */
+#ptdlg{max-width:min(1080px,96vw)}
+.pt-body{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:0}
+.pt-main{padding:14px 16px; display:flex; flex-direction:column; gap:10px; min-width:0}
+.pt-tools{display:flex; gap:8px 12px; flex-wrap:wrap; align-items:center}
+.pt-canvas-wrap{position:relative; border:1px solid var(--line); border-radius:9px; overflow:hidden; background:var(--plot-bg)}
+#ptplot{display:block; width:100%; aspect-ratio:1/1; touch-action:none; cursor:crosshair}
+#ptplot.mode-sel{cursor:default}
+.pt-hint{
+  position:absolute; left:10px; bottom:8px; font-family:"IBM Plex Mono",monospace;
+  font-size:11px; color:var(--ink-3); background:color-mix(in srgb, var(--plot-bg) 82%, transparent);
+  border-radius:5px; padding:2px 6px; pointer-events:none;
+}
+.pt-side{border-left:1px solid var(--line); background:var(--panel-2); display:flex; flex-direction:column; min-width:0}
+.pt-side-hd{padding:12px 14px; border-bottom:1px solid var(--line); display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.pt-rows{flex:1 1 auto; max-height:min(460px,54vh); overflow:auto}
+.pt-rows table{width:100%; border-collapse:collapse; font-family:"IBM Plex Mono",monospace; font-size:11.5px}
+.pt-rows th{
+  position:sticky; top:0; background:var(--panel-2); text-align:right; padding:6px 10px;
+  font-weight:600; color:var(--ink-3); font-size:10px; letter-spacing:.05em; border-bottom:1px solid var(--line);
+}
+.pt-rows td{padding:3px 10px; text-align:right; border-bottom:1px solid var(--line-soft); font-variant-numeric:tabular-nums}
+.pt-rows tr.sel td{background:var(--accent-soft); color:var(--ink)}
+.pt-rows tr{cursor:pointer}
+.pt-rows tr:hover td{background:var(--sunk)}
+.pt-foot{padding:12px 14px; border-top:1px solid var(--line); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.pt-foot input[type="text"]{flex:1 1 110px; min-width:90px; font-family:"IBM Plex Mono",monospace; font-size:12.5px; padding:5px 9px}
+.numin{width:60px; font-family:"IBM Plex Mono",monospace; font-size:12px; padding:4px 7px; font-variant-numeric:tabular-nums}
+@media (max-width:860px){
+  .pt-body{grid-template-columns:minmax(0,1fr)}
+  .pt-side{border-left:0; border-top:1px solid var(--line)}
+}

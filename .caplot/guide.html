@@ -1,0 +1,583 @@
+<title>CAPlot 아틀라스 사용법</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#F1F5FA; --panel:#FFFFFF; --sunk:#E7EDF5;
+  --ink:#101A24; --ink-2:#51637A; --ink-3:#7C8CA1;
+  --line:#D2DBE7; --line-soft:#E4EBF3;
+  --accent:#2A5FC4; --accent-soft:#DEE8FA;
+  --mine:#A8317E; --mine-soft:#F8E3F1;
+  --warn:#A2610F; --warn-soft:#FBEEDC;
+  --ok:#12775A;
+  --measure:44rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1119; --panel:#141D28; --sunk:#0E1620;
+    --ink:#E6EDF7; --ink-2:#95A6BC; --ink-3:#71829A;
+    --line:#22303F; --line-soft:#1A2532;
+    --accent:#7BA6FF; --accent-soft:#17253C;
+    --mine:#E884C0; --mine-soft:#2C1929;
+    --warn:#D89A4A; --warn-soft:#2A2115;
+    --ok:#4FC49C;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1119; --panel:#141D28; --sunk:#0E1620;
+  --ink:#E6EDF7; --ink-2:#95A6BC; --ink-3:#71829A;
+  --line:#22303F; --line-soft:#1A2532;
+  --accent:#7BA6FF; --accent-soft:#17253C;
+  --mine:#E884C0; --mine-soft:#2C1929;
+  --warn:#D89A4A; --warn-soft:#2A2115;
+  --ok:#4FC49C;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"IBM Plex Sans KR","IBM Plex Sans",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:16px; line-height:1.75; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── 툴바 (붙여넣기 대상 아님) ── */
+.toolbar{
+  position:sticky; top:0; z-index:20;
+  background:var(--panel); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:10px 20px;
+}
+.toolbar .who{
+  font-family:"Archivo",sans-serif; font-weight:600; font-size:11px;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+  margin-right:auto;
+}
+.toolbar button{
+  font:600 13px/1 "IBM Plex Sans KR",sans-serif; cursor:pointer;
+  background:var(--accent); color:#fff; border:1px solid var(--accent);
+  border-radius:7px; padding:8px 14px;
+}
+.toolbar button.ghost{background:transparent; color:var(--ink-2); border-color:var(--line)}
+.toolbar button:hover{filter:brightness(1.07)}
+.toolbar button:focus-visible,a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.toolbar .said{font-size:12.5px; color:var(--ok); font-weight:500}
+
+/* ── 문서 ── */
+article{
+  max-width:var(--measure); margin:0 auto; padding:44px 20px 96px;
+}
+article > *{margin-inline:auto}
+.eyebrow{
+  font-family:"Archivo",sans-serif; font-weight:600; font-size:11.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+  margin:0 0 10px;
+}
+h1{
+  font-size:clamp(28px,5.2vw,40px); line-height:1.22; font-weight:700;
+  letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance;
+}
+.standfirst{font-size:17px; color:var(--ink-2); margin:0 0 28px; text-wrap:pretty}
+h2{
+  font-size:22px; font-weight:700; line-height:1.35; letter-spacing:-.01em;
+  margin:52px 0 4px; padding-top:18px; border-top:1px solid var(--line);
+  text-wrap:balance;
+}
+h2 .num{
+  font-family:"IBM Plex Mono",monospace; font-size:14px; font-weight:600;
+  color:var(--accent); margin-right:10px; font-variant-numeric:tabular-nums;
+}
+h3{font-size:16.5px; font-weight:600; margin:28px 0 2px; color:var(--ink)}
+h4{font-size:14px; font-weight:600; margin:20px 0 0; color:var(--ink-2)}
+p{margin:12px 0}
+ul,ol{margin:12px 0; padding-left:1.35em}
+li{margin:5px 0}
+li::marker{color:var(--ink-3)}
+strong{font-weight:600}
+code{
+  font-family:"IBM Plex Mono",monospace; font-size:.88em;
+  background:var(--sunk); border-radius:4px; padding:1px 5px;
+  overflow-wrap:break-word;
+}
+a{color:var(--accent)}
+hr{border:0; border-top:1px solid var(--line); margin:36px 0}
+
+/* 목차 */
+.toc{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:18px 22px; margin:28px 0 8px;
+}
+.toc h2{all:unset; font:600 11.5px/1 "Archivo",sans-serif; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:10px}
+.toc ol{columns:2; column-gap:28px; margin:0; padding-left:1.3em; font-size:14.5px}
+.toc li{margin:3px 0; break-inside:avoid}
+.toc a{text-decoration:none; color:var(--ink-2)}
+.toc a:hover{color:var(--accent); text-decoration:underline}
+@media (max-width:560px){.toc ol{columns:1}}
+
+/* 표 */
+.tw{overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:9px; background:var(--panel)}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:min(100%,460px)}
+th,td{text-align:left; padding:8px 14px; border-bottom:1px solid var(--line-soft); vertical-align:top}
+thead th{
+  background:var(--sunk); font:600 11px/1.5 "Archivo",sans-serif;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--ink-2);
+  border-bottom:1px solid var(--line); white-space:nowrap;
+}
+tbody tr:last-child td{border-bottom:0}
+td code{background:transparent; padding:0; color:var(--ink-2)}
+td.mono{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap}
+th.k{width:9.5em; font-weight:600}
+
+/* 콜아웃 */
+aside{
+  border-left:3px solid var(--accent); background:var(--accent-soft);
+  border-radius:0 8px 8px 0; padding:12px 16px; margin:18px 0; font-size:14.5px;
+}
+aside.warn{border-left-color:var(--warn); background:var(--warn-soft)}
+aside.mine{border-left-color:var(--mine); background:var(--mine-soft)}
+aside p{margin:6px 0}
+aside p:first-child{margin-top:0}
+aside p:last-child{margin-bottom:0}
+
+/* 코드 블록 */
+pre{
+  background:var(--panel); border:1px solid var(--line); border-radius:9px;
+  padding:14px 16px; overflow-x:auto; margin:16px 0;
+  font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.65;
+  color:var(--ink);
+}
+pre code{background:none; padding:0; font-size:inherit}
+
+/* 흐름 단계 */
+.flow{list-style:none; padding:0; margin:16px 0; counter-reset:st}
+.flow li{
+  counter-increment:st; position:relative; padding-left:38px; margin:12px 0;
+}
+.flow li::before{
+  content:counter(st); position:absolute; left:0; top:2px;
+  width:25px; height:25px; border-radius:50%;
+  background:var(--accent); color:#fff;
+  font:600 12px/25px "IBM Plex Mono",monospace; text-align:center;
+}
+
+/* 좌표계 그림 */
+figure{margin:20px 0; padding:0}
+figcaption{font-size:13px; color:var(--ink-3); margin-top:8px}
+.axis-fig{
+  background:var(--panel); border:1px solid var(--line); border-radius:9px;
+  padding:16px; display:flex; gap:22px; align-items:center; flex-wrap:wrap;
+}
+.axis-fig svg{flex:none}
+
+footer.doc{
+  margin-top:56px; padding-top:20px; border-top:1px solid var(--line);
+  font-size:13.5px; color:var(--ink-3);
+}
+@media print{.toolbar{display:none}}
+</style>
+
+<header class="toolbar">
+  <span class="who">CAPlot 아틀라스 · 사용 설명서</span>
+  <span class="said" id="said" hidden>본문을 복사했습니다</span>
+  <button type="button" id="copy">본문 전체 복사</button>
+  <button type="button" class="ghost" id="select">본문만 선택</button>
+</header>
+
+<article id="doc">
+
+<p class="eyebrow">44TRIG · CAPlot Shape Set</p>
+<h1>CAPlot 아틀라스 사용법</h1>
+<p class="standfirst">스타크래프트 좌표 도형 563개를 찾아보고, CB Paint v2.5의 <code>CSMake</code>·<code>CS_</code> 함수를 브라우저에서 그대로 돌려 새 도형을 만들고, 점 하나까지 손으로 고쳐서 Lua 코드로 뽑아내는 도구입니다. 설치 없이 링크만 열면 됩니다.</p>
+
+<nav class="toc">
+  <h2>목차</h2>
+  <ol>
+    <li><a href="#s1">이게 뭔가요</a></li>
+    <li><a href="#s2">화면 구성</a></li>
+    <li><a href="#s3">도형 찾기</a></li>
+    <li><a href="#s4">도형 자세히 보기</a></li>
+    <li><a href="#s5">좌표계 — +Y는 아래</a></li>
+    <li><a href="#s6">작업대 기본 흐름</a></li>
+    <li><a href="#s7">레이어 소스 네 가지</a></li>
+    <li><a href="#s8">CS 생성기 22종</a></li>
+    <li><a href="#s9">수식 자리와 곡선 94종</a></li>
+    <li><a href="#s10">연산 38종</a></li>
+    <li><a href="#s11">레이어 합치는 법</a></li>
+    <li><a href="#s12">점 편집기</a></li>
+    <li><a href="#s13">Lua 코드 내보내기</a></li>
+    <li><a href="#s14">새 도형 직접 추가</a></li>
+    <li><a href="#s15">저장·백업과 한계</a></li>
+    <li><a href="#s16">따라 해보기</a></li>
+  </ol>
+</nav>
+
+<h2 id="s1"><span class="num">01</span>이게 뭔가요</h2>
+<p>맵에 유닛을 원·별·꽃 모양으로 뿌릴 때 쓰는 <strong>좌표 도형</strong>을 다루는 웹 도구입니다. 세 가지를 합쳐 놨습니다.</p>
+<ul>
+  <li><strong>아틀라스</strong> — 44TRIG 135개, 마린키우기 4vs4 428개, 모두 <strong>563개 도형(좌표점 36,285개)</strong>을 눈으로 훑어보고 좌표를 그대로 가져다 씁니다.</li>
+  <li><strong>제작 작업대</strong> — CB Paint v2.5의 CS 함수를 JS로 옮겨 놨습니다. 생성기 22종 · 연산 38종 · 합치기 5종을 폼으로 조립하면 결과가 실시간으로 그려집니다.</li>
+  <li><strong>점 편집기</strong> — 계산 결과를 점 목록으로 굽고, 격자 위에서 점을 하나씩 찍고 끌어서 고칩니다.</li>
+</ul>
+<p>결과는 <strong>CB Paint에 그대로 붙여 넣으면 도는 Lua 코드</strong>로 나옵니다. 작업대에서 보이는 모양이 곧 인게임에서 그 Lua 식을 돌린 결과입니다 — 같은 함수를 같은 순서로 계산하기 때문입니다.</p>
+
+<h2 id="s2"><span class="num">02</span>화면 구성</h2>
+<p>맨 위에 <strong>도형 / 좌표점 / 내 도형 / 최다 점</strong> 네 숫자가 있고, 그 아래 탭이 둘입니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">탭</th><th>하는 일</th></tr></thead>
+<tbody>
+<tr><th class="k">아틀라스</th><td>있는 도형을 찾아보고, 좌표를 확인하고, 작업대나 점 편집기로 보냅니다.</td></tr>
+<tr><th class="k">제작 · 편집 작업대</th><td>새 도형을 만듭니다. 탭 옆 숫자는 지금 올라가 있는 레이어 수입니다.</td></tr>
+</tbody>
+</table></div>
+
+<h2 id="s3"><span class="num">03</span>도형 찾기</h2>
+<p>아틀라스 탭 위쪽 줄에서 걸러냅니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><th class="k">검색</th><td>도형 이름으로 찾습니다. 예: <code>SHA49a</code></td></tr>
+<tr><th class="k">계열</th><td>이름 세 번째 글자로 묶은 그룹입니다. A 161개 · B 145개 · C 141개 · T 66개 · X 17개 · E 12개 · D 8개 · P 8개 · 기타 5개</td></tr>
+<tr><th class="k">출처</th><td>44TRIG / 마린키우기 4vs4 / 내 도형</td></tr>
+<tr><th class="k">난이도</th><td>Easy · Normal · Hard · Lunatic. 4vs4 소스의 <code>Void(41)</code> 조건에서 뽑았고 425개에 붙어 있습니다.</td></tr>
+<tr><th class="k">정렬</th><td>원본 순서 / 난이도순 / 같은 도형끼리 / 이름순 / 점 많은순 / 점 적은순 / 크기순</td></tr>
+</tbody>
+</table></div>
+<h3>보기 옵션</h3>
+<div class="tw"><table>
+<thead><tr><th class="k">토글</th><th>효과</th></tr></thead>
+<tbody>
+<tr><th class="k">점 크기</th><td>찍히는 점의 지름. 점이 많은 도형은 줄여야 형태가 보입니다.</td></tr>
+<tr><th class="k">그리는 순서</th><td>1번 점부터 마지막 점까지 선으로 잇고, 색을 옅은 쪽에서 진한 쪽으로 칠합니다. 유닛이 <strong>생성되는 순서</strong>를 볼 때 씁니다.</td></tr>
+<tr><th class="k">격자</th><td>배경 눈금</td></tr>
+<tr><th class="k">원점 중심</th><td>(0,0)을 화면 정중앙에 고정합니다. 도형이 원점에서 얼마나 치우쳐 있는지 볼 때 켭니다.</td></tr>
+<tr><th class="k">Y축 뒤집기</th><td>수학 좌표계(+Y 위쪽)로 바꿔 봅니다. 기본은 꺼짐입니다 — 5번 항목 참고.</td></tr>
+<tr><th class="k">숨긴 도형</th><td>숨겨 둔 도형을 다시 보여줍니다.</td></tr>
+</tbody>
+</table></div>
+
+<h2 id="s4"><span class="num">04</span>도형 자세히 보기</h2>
+<p>카드를 누르면 큰 그림과 <strong>X·Y 좌표표</strong>가 열립니다. 위쪽 버튼은 다섯 개입니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">버튼</th><th>하는 일</th></tr></thead>
+<tbody>
+<tr><th class="k">작업대에 추가</th><td>이 도형을 레이어로 얹고 작업대로 넘어갑니다.</td></tr>
+<tr><th class="k">점 편집</th><td>이 도형의 점을 그대로 복사해서 점 편집기를 엽니다. 원본은 그대로입니다.</td></tr>
+<tr><th class="k">Lua 복사</th><td><code>이름 = {개수,{x,y},…}</code> 형태로 클립보드에 넣습니다.</td></tr>
+<tr><th class="k">숨기기</th><td>목록에서 감춥니다. 안 쓰는 도형을 치울 때만 쓰세요 — 지우는 게 아닙니다.</td></tr>
+<tr><th class="k">이름 변경 · 삭제</th><td>내가 만든 도형에만 나옵니다.</td></tr>
+</tbody>
+</table></div>
+<h3>“같은 도형” 줄</h3>
+<p>같은 스테이지·슬롯의 A·B·C 계열처럼 <strong>모양은 같고 밀도만 다른</strong> 도형들이 한 줄로 뜹니다. 사이의 숫자는 크기를 지운 뒤 점 구름끼리 회전을 맞춰 잰 <strong>챔퍼 거리</strong>로, 0에 가까울수록 같은 모양입니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">표시</th><th>거리</th><th>뜻</th></tr></thead>
+<tbody>
+<tr><th class="k">동일</th><td class="mono">≤ 0.02</td><td>사실상 같은 모양</td></tr>
+<tr><th class="k">매우 유사</th><td class="mono">≤ 0.12</td><td>밀도만 다름</td></tr>
+<tr><th class="k">유사</th><td class="mono">≤ 0.25</td><td>비슷하지만 차이 있음</td></tr>
+<tr><th class="k">다름</th><td class="mono">&gt; 0.25</td><td>다른 도형</td></tr>
+</tbody>
+</table></div>
+
+<h2 id="s5"><span class="num">05</span>좌표계 — +Y는 아래쪽</h2>
+<figure>
+  <div class="axis-fig">
+    <svg width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="스타크래프트 좌표계: X는 오른쪽, Y는 아래쪽">
+      <line x1="16" y1="20" x2="16" y2="104" stroke="var(--line)" stroke-width="1.5"></line>
+      <line x1="10" y1="26" x2="110" y2="26" stroke="var(--line)" stroke-width="1.5"></line>
+      <line x1="16" y1="26" x2="100" y2="26" stroke="var(--accent)" stroke-width="2"></line>
+      <path d="M100 22 L108 26 L100 30 Z" fill="var(--accent)"></path>
+      <line x1="16" y1="26" x2="16" y2="96" stroke="var(--mine)" stroke-width="2"></line>
+      <path d="M12 96 L16 104 L20 96 Z" fill="var(--mine)"></path>
+      <circle cx="16" cy="26" r="3" fill="var(--ink)"></circle>
+      <text x="86" y="18" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--accent)">+X</text>
+      <text x="24" y="100" font-family="IBM Plex Mono, monospace" font-size="11" fill="var(--mine)">+Y</text>
+      <text x="22" y="40" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-3)">(0,0)</text>
+    </svg>
+    <p style="margin:0; flex:1 1 16rem">스타크래프트는 <strong>+Y가 화면 아래쪽</strong>입니다. 이 도구는 Y를 뒤집지 <strong>않고</strong> 원본 좌표를 그대로 찍습니다. 그래서 <strong>보이는 모양이 곧 인게임 배치 모양</strong>입니다.</p>
+  </div>
+  <figcaption>수학 좌표계와 비교하고 싶을 때만 <strong>Y축 뒤집기</strong>를 켜세요. 각도도 마찬가지로 12시 방향이 0도, 시계 방향이 +입니다.</figcaption>
+</figure>
+
+<h2 id="s6"><span class="num">06</span>작업대 기본 흐름</h2>
+<p>작업대는 위에서 아래로 흐릅니다.</p>
+<ol class="flow">
+  <li><strong>레이어를 쌓습니다.</strong> 왼쪽 위에서 종류를 고르고 <strong>＋ 레이어</strong>를 누릅니다.</li>
+  <li><strong>레이어마다 연산을 겁니다.</strong> 회전·대칭·오려내기 같은 <code>CS_</code> 함수를 위에서 아래 순서로 적용합니다.</li>
+  <li><strong>레이어끼리 합칩니다.</strong> 두 번째 레이어부터 “합치는 법”이 붙습니다. 위에서 아래로 차례차례 합쳐집니다.</li>
+  <li><strong>결과에 후처리를 겁니다.</strong> 합쳐진 전체에 연산을 한 번 더 겁니다.</li>
+  <li><strong>이름을 적고 저장하거나, Lua를 복사합니다.</strong></li>
+</ol>
+<p>오른쪽 미리보기와 <strong>Lua 코드</strong>는 값을 바꿀 때마다 즉시 다시 계산됩니다. 레이어마다 <strong>◉ 끄기</strong>로 잠깐 빼 보거나, <strong>⧉</strong>로 복제할 수 있습니다.</p>
+<aside>
+  <p><strong>되돌리기가 있습니다.</strong> 레이어 줄 오른쪽 <strong>↶ ↷</strong> 버튼, 또는 <code>Ctrl</code>+<code>Z</code> / <code>Ctrl</code>+<code>Shift</code>+<code>Z</code>. 작업대 상태는 브라우저에 자동 저장돼서 창을 닫았다 열어도 그대로입니다.</p>
+</aside>
+
+<h2 id="s7"><span class="num">07</span>레이어 소스 네 가지</h2>
+<div class="tw"><table>
+<thead><tr><th class="k">종류</th><th>내용</th></tr></thead>
+<tbody>
+<tr><th class="k">아틀라스 도형</th><td>이미 있는 563개 + 내가 만든 도형에서 고릅니다.</td></tr>
+<tr><th class="k">CS 생성기</th><td><code>CSMake…</code> · <code>CS_Fill…</code> 22종을 폼으로 채웁니다. 8번 항목.</td></tr>
+<tr><th class="k">직접 찍기</th><td>빈 레이어로 시작해 점 편집기에서 직접 찍습니다. 12번 항목.</td></tr>
+<tr><th class="k">Lua 식</th><td>한 줄짜리 CS 식을 씁니다. 예: <code>CSMakeCircle(12, 32, 0, CS_Level("Circle", 12, 4), 0)</code></td></tr>
+</tbody>
+</table></div>
+<aside class="mine">
+  <p><strong>점으로 굽기.</strong> 어떤 레이어든 <strong>점으로 굽기</strong>를 누르면 지금 계산된 결과가 <strong>좌표 목록</strong>으로 바뀝니다. 그때부터는 생성기·연산이 아니라 점 하나하나를 손으로 고치는 레이어가 됩니다. “거의 맞는데 두세 점만 어긋난” 도형을 다듬을 때 이 순서로 씁니다.</p>
+</aside>
+
+<h2 id="s8"><span class="num">08</span>CS 생성기 22종</h2>
+<div class="tw"><table>
+<thead><tr><th class="k">묶음</th><th>생성기</th></tr></thead>
+<tbody>
+<tr><th class="k">도형 (12)</th><td>정다각형 · 원 · 별 · 오목별 · 방사 직선 · 나선, 그리고 각각의 <strong>테두리형</strong>(<code>…X</code>) — <code>CSMakePolygon(X)</code> <code>CSMakeCircle(X)</code> <code>CSMakeStar(X)</code> <code>CSMakeCStar(X)</code> <code>CSMakeLine(X)</code> <code>CSMakeSpiral(X)</code></td></tr>
+<tr><th class="k">그래프 (5)</th><td>y = f(x) · x = f(y) · 극좌표 r = f(a) · 극좌표 a = f(r) · 매개변수 (x(t), y(t))</td></tr>
+<tr><th class="k">채우기 (4)</th><td>격자 채우기 XY · 격자 채우기 RA · 벌집 채우기 · 무작위 채우기</td></tr>
+<tr><th class="k">직접 (1)</th><td>좌표 직접 적기 — <code>{0,-32},{28,16},{-28,16}</code> 처럼 씁니다</td></tr>
+</tbody>
+</table></div>
+<h3>Lv 칸 — 겹 수로 점 개수 정하기</h3>
+<p>정다각형·원·별 계열에는 <code>Number</code>(점 개수)와 <code>Hollow</code>(안쪽부터 비울 개수) 옆에 <strong>Lv</strong> 칸이 있습니다. 여기에 <strong>겹 수</strong>를 넣으면 점 개수를 대신 계산해 줍니다.</p>
+<ul>
+  <li>정육각형 <code>Lv 3</code> → 가운데 1점 + 1겹 6점 + 2겹 12점 = <strong>19점</strong></li>
+  <li><code>Hollow</code>의 Lv를 2로 주면 안쪽 2겹을 비워 <strong>테두리만</strong> 남습니다.</li>
+</ul>
+<p>내보낸 코드에도 숫자가 아니라 <code>CS_Level("Polygon", 6, 3)</code> 으로 나가서, 나중에 겹 수만 바꾸기 쉽습니다.</p>
+<h3>채우기 인자</h3>
+<ul>
+  <li><strong>범위</strong>는 <code>최소 / 최대</code> 두 칸입니다. <code>-96 ~ 96</code> 이면 192px 폭입니다.</li>
+  <li><strong>Edge</strong>가 “가장자리 포함”이면 양 끝 선 위에도 점이 놓입니다.</li>
+  <li><strong>벌집 채우기</strong>는 줄마다 반 칸씩 밀어 육각 배열을 만듭니다. 유닛이 덜 겹칩니다.</li>
+  <li><strong>무작위 채우기</strong>의 “겹침 X·Y”는 이 거리 안에는 다른 점을 두지 않으려고 100번까지 다시 뽑는다는 뜻입니다.</li>
+</ul>
+
+<h2 id="s9"><span class="num">09</span>수식 자리와 곡선 94종</h2>
+<p>그래프·극좌표·매개변수 생성기와 벡터 변환·식으로 오려내기 연산에는 <strong>식을 적는 칸</strong>이 있습니다. 뭘 적어야 할지 모를 때 쓰라고 칸마다 두 가지를 붙여 놨습니다.</p>
+<ul>
+  <li><strong>고르기</strong> 드롭다운 — 곡선을 고르면 식뿐 아니라 <code>Start</code> · <code>StepSize</code> · <code>StepRange</code> · <code>Number</code> 까지 그 곡선에 맞게 같이 바뀝니다. 고른 즉시 그려지니 숫자만 만지면서 다듬으면 됩니다.</li>
+  <li><strong>?</strong> 버튼 — 그 자리에서 쓸 수 있는 값, 돌려줘야 하는 값, 쓸 수 있는 <code>math</code> 함수, 그리고 그 자리의 식 전부를 표로 보여줍니다.</li>
+</ul>
+<div class="tw"><table>
+<thead><tr><th class="k">자리</th><th>쓰는 값</th><th>담긴 곡선</th></tr></thead>
+<tbody>
+<tr><th class="k">y = f(x)</th><td class="mono">x</td><td>11종 — 포물선, 세제곱, 절댓값 V, 반원, 현수선, 쌍곡선, 사인파, 감쇠 진동, 삼각파, 가우시안 언덕, 맥놀이</td></tr>
+<tr><th class="k">x = f(y)</th><td class="mono">y</td><td>7종 — 위 목록을 세로로 세운 것</td></tr>
+<tr><th class="k">r = f(a)</th><td class="mono">a</td><td>17종 — 원, 타원, 정오각형, 정육각형, 둥근 사각형 / 장미 3·4·5·8잎, 꽃잎 6장, 별 5각, 톱니 기어 / 심장형, 리마송, 네잎 클로버, 아르키메데스 나선, 로그 나선</td></tr>
+<tr><th class="k">a = f(r)</th><td class="mono">r</td><td>5종 — 아르키메데스, 페르마, 쌍곡, 리투스 나선, 촘촘한 소용돌이</td></tr>
+<tr><th class="k">(x(t), y(t))</th><td class="mono">t</td><td>14종 — 원, 타원, 아스트로이드, <strong>하트</strong>, 하이포사이클로이드(5각별), 에피사이클로이드, 렘니스케이트(∞) / 리사주 1:2·3:2·3:4·5:4 / 나선, 사이클로이드, 나비</td></tr>
+<tr><th class="k">벡터 변환 XY</th><td class="mono">x, y</td><td>10종 — 회전, 뒤집기, 밀기, 물결, 부풀리기, 오목하게, 원 반전, 제곱 사상</td></tr>
+<tr><th class="k">벡터 변환 RA</th><td class="mono">r, a</td><td>9종 — 소용돌이, 각도 배율, 가운데로 모으기, 도넛, 물결·꽃 테두리</td></tr>
+<tr><th class="k">오려내기 XY</th><td class="mono">x, y</td><td>9종 — 원, 마름모, 둥근 사각형, 반쪽, 사인 띠, 줄무늬, 체크무늬, 고리</td></tr>
+<tr><th class="k">오려내기 RA</th><td class="mono">r, a</td><td>7종 — 원, 도넛, 부채꼴, 꽃, 별, 나선 띠, 부챗살</td></tr>
+<tr><th class="k">점 간격 f(i,n,c)</th><td class="mono">i, n, c</td><td>5종 — 균등, 양끝 촘촘, 앞/뒤 촘촘, 가운데 촘촘</td></tr>
+</tbody>
+</table></div>
+<h3>직접 쓸 때</h3>
+<p>숫자와 <code>+ - * / % ^</code>, 괄호, <code>{ }</code> 로 묶은 두 값을 쓸 수 있습니다. 함수는 <code>math.sin cos tan asin acos atan sqrt abs exp log floor ceil max min fmod random</code> 과 상수 <code>math.pi</code> 입니다.</p>
+<aside class="warn">
+  <p><strong>각도는 전부 라디안입니다.</strong> 도(°)로 넣고 싶으면 <code>math.rad(30)</code> 처럼 바꿔 쓰세요. 그리고 <strong>도형이 안 닫히면 <code>Number</code>를 늘리세요</strong> — 그래프 생성기는 “<code>StepSize</code> 만큼 <code>Number</code> 번 걸어간다”는 방식이라, 곱한 값이 곡선 길이보다 짧으면 중간에서 끊깁니다.</p>
+</aside>
+
+<h2 id="s10"><span class="num">10</span>연산 38종</h2>
+<p>레이어마다, 그리고 합쳐진 결과에 겁니다. 순서가 결과를 바꿉니다 — <strong>↑ ↓</strong> 로 순서를 옮기고 <strong>✕</strong> 로 지웁니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">묶음</th><th>연산</th></tr></thead>
+<tbody>
+<tr><th class="k">위치 · 크기 (12)</th><td>이동 XY / 이동 RA / 중심 맞추기 / 회전 / 3D 회전 / 배율 XY / 배율 RA / 반전 XY / 반전 RA / <strong>사다리꼴 왜곡</strong> / 벡터 변환 XY / 벡터 변환 RA</td></tr>
+<tr><th class="k">대칭 · 만화경 (9)</th><td>거울 X·Y·R·A / 대칭 X·Y·R·A / <strong>만화경</strong></td></tr>
+<tr><th class="k">오려내기 (5)</th><td>잘라내기 XY / 잘라내기 RA / <strong>도형으로 오려내기</strong> / 식으로 오려내기 XY / 식으로 오려내기 RA</td></tr>
+<tr><th class="k">점 늘리기 · 줄이기 (4)</th><td>경로 위 등간격 점 / 점 보태기 / 점 개수 바꾸기 / 겹친 점 제거</td></tr>
+<tr><th class="k">정리 · 순서 (8)</th><td>정렬 X·Y·R·A / 순서 뒤집기 / 무작위 섞기 / 좌표 반올림 / nan 좌표 0으로</td></tr>
+</tbody>
+</table></div>
+<h3>자주 쓰는 것</h3>
+<ul>
+  <li><strong>만화경</strong> — 조각 하나만 그려 놓고 <code>Point</code>를 6으로 주면 6방향 대칭 도형이 완성됩니다. 눈 결정·문양을 만들 때 가장 빠릅니다.</li>
+  <li><strong>도형으로 오려내기</strong> — 기준이 될 도형을 <strong>목록에서 고릅니다</strong>. 그 도형이 그리는 테두리 안(또는 밖)에 있는 점만 남습니다. 채우기 + 오려내기 조합이 “별 안을 유닛으로 채우기”의 정석입니다.</li>
+  <li><strong>정렬 · 순서 뒤집기</strong> — 유닛이 <strong>생성되는 순서</strong>를 바꿉니다. 바깥에서 안으로 조여드는 연출을 만들 때 <code>정렬 R</code> 을 씁니다.</li>
+  <li><strong>겹친 점 제거</strong> — <code>Size</code> 안에 겹친 점을 하나만 남깁니다. 유닛이 같은 자리에 쌓이는 걸 막습니다.</li>
+</ul>
+
+<h2 id="s11"><span class="num">11</span>레이어 합치는 법</h2>
+<div class="tw"><table>
+<thead><tr><th class="k">방식</th><th>결과</th><th>함수</th></tr></thead>
+<tbody>
+<tr><th class="k">겹치기</th><td>그냥 이어붙입니다. 가장 빠릅니다.</td><td class="mono">CS_Overlap</td></tr>
+<tr><th class="k">합치기</th><td><code>Size</code> 안에 겹친 점은 하나만 남깁니다.</td><td class="mono">CS_Merge</td></tr>
+<tr><th class="k">교집합</th><td>두 도형이 겹치는 곳만 남깁니다.</td><td class="mono">CS_Intersect</td></tr>
+<tr><th class="k">차집합</th><td>위 결과에서 이 레이어와 겹치는 부분을 뺍니다.</td><td class="mono">CS_Subtract</td></tr>
+<tr><th class="k">XOR</th><td>겹치지 <strong>않는</strong> 곳만 남깁니다.</td><td class="mono">CS_Xor</td></tr>
+</tbody>
+</table></div>
+<p>겹치기를 뺀 넷은 두 도형의 점을 전부 맞대 보기 때문에, 점이 아주 많으면 막아 둡니다. 그럴 땐 먼저 <strong>점 개수 바꾸기</strong>로 줄이세요.</p>
+
+<h2 id="s12"><span class="num">12</span>점 편집기</h2>
+<p><strong>직접 찍기</strong> 레이어의 <strong>점 편집</strong>, 아무 레이어의 <strong>점으로 굽기</strong>, 또는 아틀라스 카드의 <strong>점 편집</strong>으로 엽니다.</p>
+<h3>모드</h3>
+<div class="tw"><table>
+<thead><tr><th class="k">모드</th><th>조작</th></tr></thead>
+<tbody>
+<tr><th class="k">찍기</th><td>빈 곳을 누르면 점이 하나 생기고, 그대로 끌면 자리를 잡습니다.</td></tr>
+<tr><th class="k">고르기</th><td>끌어서 상자로 여러 점을 한꺼번에 고릅니다.</td></tr>
+</tbody>
+</table></div>
+<h3>마우스와 키</h3>
+<div class="tw"><table>
+<thead><tr><th class="k">조작</th><th>결과</th></tr></thead>
+<tbody>
+<tr><th class="k">점 끌기</th><td>옮기기 (고른 점이 여럿이면 같이 움직입니다)</td></tr>
+<tr><th class="k">Alt + 클릭</th><td>그 점 지우기</td></tr>
+<tr><th class="k">Shift + 클릭</th><td>고르기에 더하거나 빼기</td></tr>
+<tr><th class="k">휠</th><td>확대 · 축소</td></tr>
+<tr><th class="k">가운데·오른쪽 버튼 끌기</th><td>화면 이동</td></tr>
+<tr><th class="k">화살표 키</th><td>고른 점을 격자 한 칸씩 밀기</td></tr>
+<tr><th class="k">Delete</th><td>고른 점 지우기</td></tr>
+<tr><th class="k">Ctrl + Z / Ctrl + Shift + Z</th><td>되돌리기 / 다시 실행</td></tr>
+</tbody>
+</table></div>
+<h3>도구</h3>
+<ul>
+  <li><strong>격자에 맞추기</strong> + <strong>격자</strong> 값 — 찍고 옮기는 좌표가 이 배수로 딱 떨어집니다. 스타크래프트는 <strong>8 또는 16</strong>이 무난하고, 타일 하나가 32px입니다.</li>
+  <li><strong>중심을 원점으로</strong> — 도형 한가운데를 (0,0)으로 옮깁니다. 회전·대칭을 걸기 전에 눌러 두면 결과가 예상대로 나옵니다.</li>
+  <li><strong>전부 격자에</strong> — 이미 찍힌 점을 전부 격자 배수로 반올림합니다.</li>
+  <li><strong>화면 맞춤</strong> — 도형 전체가 보이도록 축척을 다시 잡습니다.</li>
+</ul>
+<p>오른쪽 좌표표에서 줄을 눌러도 점이 골라집니다. 다 고쳤으면 <strong>적용</strong>(레이어에 반영) 또는 <strong>새 도형으로 저장</strong>을 누릅니다.</p>
+
+<h2 id="s13"><span class="num">13</span>Lua 코드 내보내기</h2>
+<p>미리보기 아래 <strong>Lua 코드</strong> 상자에 항상 최신 코드가 들어 있습니다. <strong>Lua 복사</strong>를 누르면 클립보드로 갑니다. 이름 칸에 적은 이름이 변수명이 됩니다(안 적으면 <code>MyShape</code>).</p>
+<pre><code>function MyShape_f1(t) return {96*math.cos(t)^3, 96*math.sin(t)^3} end
+
+local L1 = CS_Kaleidoscope(CSMakeStar(5, 120, 32, 0, CS_Level("Star", 5, 3), 0), 6, 0, 0, 0)
+local L2 = CSMakeGraphT(1, "MyShape_f1", 0, 0, 6, 0.078, 97)
+local R = CS_Overlap(L1, L2)
+R = CS_FixShape(R) -- 극좌표 연산에서 원점이 nan 이 되는 것 방지
+MyShape = R</code></pre>
+<p>세 가지를 알아서 처리합니다.</p>
+<ul>
+  <li>식을 적은 칸은 CB Paint 규칙대로 <strong>이름 있는 전역 함수</strong>(<code>MyShape_f1</code>)로 뽑아서 위에 올려 줍니다. 그래야 <code>CSMakeGraphT</code> 가 이름으로 찾아 씁니다.</li>
+  <li>Lv 칸을 쓴 자리는 숫자 대신 <code>CS_Level(…)</code> 로 나갑니다.</li>
+  <li>극좌표 연산을 하나라도 썼으면 마지막에 <code>CS_FixShape</code> 를 붙입니다 — 원점 (0,0)에 극좌표 계산을 하면 <code>atan(0/0)</code> 이 <strong>nan</strong> 이 되기 때문입니다.</li>
+</ul>
+
+<h2 id="s14"><span class="num">14</span>새 도형 직접 추가</h2>
+<p>아틀라스 위쪽 <strong>＋ 새 도형</strong> 버튼입니다. 세 가지 방식이 있고, 옆에서 바로 미리보기가 그려집니다.</p>
+<div class="tw"><table>
+<thead><tr><th class="k">방식</th><th>넣는 것</th></tr></thead>
+<tbody>
+<tr><th class="k">Lua 식</th><td>한 줄짜리 CS 식. 아틀라스 도형 이름을 변수처럼 그대로 쓸 수 있습니다 — <code>CS_Rotate(SHA49a, 45)</code></td></tr>
+<tr><th class="k">Lua 스크립트</th><td>여러 줄. <code>local A = …</code> 대입과 <code>function f(x) return … end</code> 한 줄짜리 함수를 읽습니다. <strong>마지막 값이 결과</strong>입니다. 맵 소스의 CS 코드를 그대로 붙여 넣어 보세요.</td></tr>
+<tr><th class="k">좌표 붙여넣기</th><td>숫자만 뽑아 두 개씩 짝지어 읽습니다. <code>{n,{x,y},…}</code> · <code>{{x,y},…}</code> · 한 줄에 <code>x, y</code> 모두 됩니다.</td></tr>
+</tbody>
+</table></div>
+<pre><code>-- Lua 스크립트 예시
+function fr(a) return 72 + 28*math.cos(6*a) end
+local F = CSMakeGraphA(1, "fr", 0, 0, 10, 0.4, 72)
+F = CS_Rotate(F, 15)
+F</code></pre>
+<p>제어문(<code>if</code>·<code>for</code>)과 여러 줄짜리 함수는 아직 못 읽습니다.</p>
+
+<h2 id="s15"><span class="num">15</span>저장·백업과 한계</h2>
+<h3>내가 만든 도형은 어디에 남나</h3>
+<p>공개 링크로 여는 판은 <strong>지금 쓰는 브라우저에만</strong> 저장됩니다. 서버로 올라가지 않으니 다른 사람에게는 보이지 않고, 브라우저 데이터를 지우거나 다른 기기에서 열면 없습니다. 내장 도형 563개는 페이지 자체에 들어 있어 누가 열어도 그대로 보입니다.</p>
+<p>그래서 <strong>백업</strong> 버튼이 있습니다. <strong>내보내기</strong>를 누르면 내 도형 전체가 JSON 한 덩어리로 나오고, 그 글자를 다른 곳에 붙여 두면 됩니다. 되살릴 때는 그 JSON을 다시 붙여 넣고 <strong>합쳐서 불러오기</strong> 또는 <strong>덮어쓰기</strong>를 누릅니다. 이름이 겹치면 뒤에 번호를 붙여 줍니다.</p>
+<aside class="warn">
+  <p>페이지가 스스로 <strong>파일을 내려받게 하는 건 막혀 있습니다.</strong> 백업이 파일이 아니라 글자 복사·붙여넣기인 건 그 때문입니다. 시크릿 모드에서는 저장 자체가 막히니, 그때는 작업 중간중간 JSON을 복사해 두세요.</p>
+</aside>
+<h3>알아 둘 한계</h3>
+<div class="tw"><table>
+<thead><tr><th class="k">항목</th><th>내용</th></tr></thead>
+<tbody>
+<tr><th class="k">점 개수</th><td>한 도형에 <strong>6,000점</strong>까지 다룹니다. 넘으면 미리 막고 알려 줍니다.</td></tr>
+<tr><th class="k">원점의 nan</th><td>(0,0)에 극좌표 연산을 걸면 <code>atan(0/0)</code> 이 nan 이 됩니다. 화면에서는 0으로 고쳐 그리고, 내보낸 코드에는 <code>CS_FixShape</code> 를 붙여 줍니다.</td></tr>
+<tr><th class="k">Hollow</th><td>원본 <code>CSMake*</code> 는 <code>Hollow</code>를 주면 선언한 개수보다 많은 점이 배열 뒤에 남습니다. 이 도구는 선언 개수까지만 잘라 씁니다.</td></tr>
+<tr><th class="k">못 옮긴 것</th><td><code>SHAW1</code> 은 함수 이름을 받는 <code>CS_FillGradR</code> 로 만들어져 좌표로 펼칠 수 없어 뺐습니다. 두 출처에 같은 이름이 있으면 44TRIG 쪽을 남겼습니다.</td></tr>
+</tbody>
+</table></div>
+
+<h2 id="s16"><span class="num">16</span>따라 해보기</h2>
+
+<h3>① 꽃 모양 30초 만에 만들기</h3>
+<ol>
+  <li>작업대 → 종류를 <strong>CS 생성기</strong> → <strong>＋ 레이어</strong></li>
+  <li>생성기를 <strong>극좌표 r = f(a)</strong> 로 바꿉니다.</li>
+  <li>식 칸 옆 <strong>고르기</strong> → <strong>꽃잎 6장</strong></li>
+  <li>이름을 적고 <strong>저장</strong>, 또는 <strong>Lua 복사</strong></li>
+</ol>
+
+<h3>② 별 안쪽을 유닛으로 채우기</h3>
+<ol>
+  <li>먼저 별을 만들어 둡니다 — <strong>CS 생성기 → 별</strong>, <code>Point 5</code>, <code>Radius 112</code>, <code>Number 11</code>, <code>Hollow 0</code>. 이름을 <code>SHStar</code> 로 저장합니다.</li>
+  <li>작업대를 비우고 새 레이어 <strong>CS 생성기 → 격자 채우기 XY</strong>. 범위 <code>-112 ~ 112</code>, 간격 14.</li>
+  <li>그 레이어에 연산 <strong>도형으로 오려내기</strong> 를 추가하고, 기준 도형으로 <code>SHStar</code> 를 고릅니다.</li>
+</ol>
+<p>별 테두리 안쪽에 있는 점만 남습니다. 기준 도형을 바꾸면 같은 채우기를 다른 모양으로 오려낼 수 있습니다.</p>
+
+<h3>③ 있는 도형 비틀어 새로 만들기</h3>
+<ol>
+  <li>아틀라스에서 마음에 드는 도형을 열고 <strong>작업대에 추가</strong></li>
+  <li>연산 <strong>벡터 변환 RA</strong> 추가 → <strong>고르기 → 소용돌이</strong></li>
+  <li><code>a + r/400</code> 의 400을 줄일수록 세게 감깁니다.</li>
+</ol>
+
+<h3>④ 눈 결정 만들기</h3>
+<ol>
+  <li><strong>CS 생성기 → 그래프 y = f(x)</strong> → 고르기 <strong>포물선</strong></li>
+  <li>연산 <strong>이동 XY</strong> 로 <code>Y</code> 를 −48 만큼 옮겨 원점에서 띄웁니다.</li>
+  <li>연산 <strong>만화경</strong>, <code>Point</code> 6</li>
+</ol>
+
+<h3>⑤ 손으로 찍은 로고 다듬기</h3>
+<ol>
+  <li>종류를 <strong>직접 찍기</strong> → <strong>＋ 레이어</strong> (점 편집기가 바로 열립니다)</li>
+  <li><strong>격자</strong> 를 16으로 두고 왼쪽 절반만 찍습니다.</li>
+  <li><strong>적용</strong> 후 연산 <strong>거울 X</strong> 를 걸면 오른쪽이 자동으로 만들어집니다.</li>
+</ol>
+
+<footer class="doc">
+  <p>이 문서는 CAPlot 아틀라스 현재 버전 기준입니다. 내장 도형 563개 · 좌표점 36,285개 · 생성기 22종 · 연산 38종 · 수식 프리셋 94종.</p>
+</footer>
+
+</article>
+
+<script>
+(function(){
+  "use strict";
+  var doc = document.getElementById('doc');
+  var said = document.getElementById('said');
+  function flash(t){
+    said.textContent = t;
+    said.hidden = false;
+    setTimeout(function(){ said.hidden = true; }, 2600);
+  }
+  function selectDoc(){
+    var sel = window.getSelection();
+    if(!sel) return false;
+    var r = document.createRange();
+    r.selectNodeContents(doc);
+    sel.removeAllRanges();
+    sel.addRange(r);
+    return true;
+  }
+  document.getElementById('select').addEventListener('click', function(){
+    if(selectDoc()) flash('본문을 선택했습니다 — Ctrl+C 를 누르세요');
+  });
+  document.getElementById('copy').addEventListener('click', function(){
+    var html = doc.innerHTML;
+    var text = doc.innerText;
+    function fallback(){
+      if(selectDoc()) flash('Ctrl+C 를 눌러 복사하세요');
+      else flash('본문을 직접 선택해 복사해 주세요');
+    }
+    if(!(navigator.clipboard && window.ClipboardItem)){ fallback(); return; }
+    try{
+      navigator.clipboard.write([new ClipboardItem({
+        'text/html': new Blob([html], {type:'text/html'}),
+        'text/plain': new Blob([text], {type:'text/plain'})
+      })]).then(function(){ flash('본문을 복사했습니다'); }, fallback);
+    }catch(e){ fallback(); }
+  });
+})();
+</script>
