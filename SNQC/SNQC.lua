@@ -13,6 +13,10 @@
 	    - 받는 쪽이 매 사이클 칸을 기준값 (0,0) 으로 되돌리므로 같은 값을 두 번 보내도 두 번 받는다.
 	    - 채널 건물은 건설크기 (1,0) 이라 아무에게도 안 보이고 드래그로도 안 골라지는데 큐 명령은 받는다.
 	  (위 세 가지는 2026-09-17 SC:R 실측으로 확인했다 - DESIGN.md "실측")
+	  1.3: 채널 건물이 **시야도 밝히지 않는다** (OpenBW 소스 근거, MSF_UE_RE 싱글 인게임 확인 - DESIGN.md "시야").
+	    - 게임은 100프레임마다 모든 유닛의 시야를 다시 밝히는데(주인 바이트 < 8 이면, 시야 0 이어도 3x3 칸),
+	      이동 상태(+0x97)가 UM_Hidden(6) 인 유닛은 건너뛴다 → 채널 건물의 이동 상태를 6 으로 고정한다.
+	    - 만드는 순간에도 한 번 밝힌다 → 만드는 플레이어(Creator)의 공유 시야 칸(0x57F1EC)을 그 순간만 0 으로.
 
 	■ 쓰는 법
 	    SNQC_Config{ MapTiles = {192, 96}, Humans = {0,1,2,3,4,5,6} }   -- 필수 두 칸. 나머지는 SNQC_DefaultConfig
@@ -51,11 +55,15 @@
 	  ★ 보내는 트리거는 FP 소유라 CurrentPlayer 가 이 PC 플레이어가 아니다 - Deaths(CurrentPlayer, ...) 를 표로 직접 넣지 말 것.
 	    문자열 "Deaths(CurrentPlayer, ...)" 는 SNQC_MyDeaths 로 바꿔 읽고, 그 밖에 CurrentPlayer 가 든 문자열 조건은 에러로 멈춘다.
 
-	⚠ 버전 기록: CHANGELOG.md (같은 폴더). 1.2 는 MSF_UE_RE 인게임 시험에서 나온 유닛 ID 문제를 고친 판. 인게임 재확인 전.
+	⚠ 버전 기록: CHANGELOG.md (같은 폴더). 1.2 는 MSF_UE_RE 인게임 시험에서 나온 유닛 ID 문제를 고친 판,
+	  1.3 은 채널 건물의 시야를 끈 판 (1.2 의 플레이어별 자리 PlayerXY / Columns 는 없앴다). MSF_UE_RE 싱글 인게임 이상 없음, 멀티는 아직.
 	  (같은 설계의 플러그인 판 SNQC.py 는 theSeed 인게임 통과.) 확인할 것은 DESIGN.md "확인 목록".
 ]]
 
-SNQC_Version = "1.2"
+SNQC_Version = "1.3"
+
+-- 이동 상태 UM_Hidden (OpenBW bwenums.h movement_states 7번째). 이 상태의 유닛은 시야 갱신에서 빠진다
+SNQC_UM_Hidden = 6
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 설정
@@ -65,18 +73,19 @@ SNQC_DefaultConfig = {
 	                            -- 스타게이트·로보틱스) 중 **맵에서 안 쓰는 종류**여야 한다 - 아래 units.dat 패치가 종류 전체에 걸린다
 	Player        = 10,         -- 채널 건물을 넘겨 둘 플레이어 (0부터, 10 = P11). 사람의 유닛 수에 안 잡히게 (MSQC 의 QCPlayer)
 	Loc           = 0,          -- 만들 때 잠깐 옮겨 쓰는 로케이션 (0부터). 쓰고 나면 원래 자리로 되돌린다
-	XY            = {128, 128}, -- 첫 채널 건물 자리 (픽셀). PlayerXY 가 없을 때 플레이어마다 y 로 Step[2] 씩 내려간다
-	Step          = {32, 32},   -- 채널 사이 간격 (x = 같은 줄, y = 다음 줄 / 다음 플레이어). 32 보다 줄이지 말 것 -
+	Creator       = nil,        -- 1.3: 채널 건물을 만드는 플레이어 (0부터, 보통 컴퓨터 슬롯). nil = 그 채널의 사람이 직접 만든다.
+	                            -- 만든 건물은 Player 에게 넘기고 주인 바이트만 사람으로 바꾸므로 누가 만들어도 결과는 같다.
+	                            -- 게임 내내 있는 슬롯이어야 한다 (없는 플레이어로는 못 만들어서 채널이 안 생긴다)
+	XY            = {128, 128}, -- 첫 채널 건물 자리 (픽셀). 채널마다 x 로 Step[1], 플레이어마다 y 로 Step[2] 씩 옮긴다
+	Step          = {32, 32},   -- 채널 사이 간격. 32 보다 줄이지 말 것 -
 	                            -- 만든 건물을 P11 로 넘길 때 ±16 상자로 고르므로 옆 채널이 상자에 들어오면 엉뚱한 건물을 넘긴다
-	PlayerXY      = nil,        -- 1.2: 플레이어별 첫 채널 자리 {[플레이어 번호] = {x, y}, ...}. 주면 XY 대신 쓴다 (예: 각자 배럭 밑)
-	Columns       = nil,        -- 1.2: 한 줄에 놓을 채널 수 (기본 = 채널 수, 한 줄). 4 면 4열로 접어 쌓는다
 	BuildSize     = {1, 0},     -- 건설크기(픽셀). (1,0)/(0,1)/(0,0) 이 가려진다 (실측)
 	Order         = 40,         -- Rally to Ground Tile
 	Merge         = true,       -- 아직 안 나간 자기 패킷이 버퍼에 있으면 새로 붙이지 않고 그 좌표를 고친다 (키 = 비트 합치기, 값 = 덮어쓰기)
 	BufferLimit   = 400,        -- 턴 버퍼 길이가 이보다 크면 붙이지 않는다 (상한 0x57F0D8 = 496, Sync 7 + 선택 되돌리기 26 여유)
 	Check         = true,       -- 채널 건물이 없어졌는지 CheckInterval 사이클마다 보고 없어졌으면 다시 만든다
 	CheckInterval = 34,
-	DebugAddr     = nil,        -- 시험용: 주면 매 사이클 이 PC 의 채널 상태를 여기 복사한다 (16 + 채널 수 × 12 dword, 로컬 메모리).
+	DebugAddr     = nil,        -- 시험용: 주면 매 사이클 이 PC 의 채널 상태를 여기 복사한다 (16 + 채널 수 × 13 dword, 로컬 메모리).
 	                            -- 외부 리더(MSF_UE_RE/tools/snqc_probe.py)가 읽는다. 맵 로직은 이 칸을 읽으면 안 된다
 	WorkAddr      = nil,        -- 로컬 작업 공간 52바이트의 주소 (패킷 조립용). nil 이면 CreateVoids(13).
 	                            -- ⚠ 맵이 0x58F500 부터를 CreateVoid 없이 직접 쓰고 있으면(DPS 의 0x58F500~) 반드시 비어 있는 주소를 준다
@@ -95,9 +104,9 @@ end
 SNQC_Reset()
 
 -- 설정 이름 (기본값이 nil 인 칸도 있어서 따로 적는다)
-local SNQC_ConfigKeys = {Unit = true, Player = true, Loc = true, XY = true, Step = true, BuildSize = true, Order = true,
-	Merge = true, BufferLimit = true, Check = true, CheckInterval = true, WorkAddr = true, DebugAddr = true,
-	PlayerXY = true, Columns = true, MapTiles = true, Humans = true}
+local SNQC_ConfigKeys = {Unit = true, Player = true, Loc = true, Creator = true, XY = true, Step = true, BuildSize = true,
+	Order = true, Merge = true, BufferLimit = true, Check = true, CheckInterval = true, WorkAddr = true, DebugAddr = true,
+	MapTiles = true, Humans = true}
 
 function SNQC_Config(T)
 	for k, v in pairs(T or {}) do
@@ -316,6 +325,10 @@ function SNQC_Install()
 		return
 	end
 	if #SNQC_Lines == 0 then PushErrorMsg("SNQC: 줄이 하나도 없다") return end
+	if Cfg.Creator ~= nil and (type(Cfg.Creator) ~= "number" or Cfg.Creator < 0 or Cfg.Creator > 7) then
+		PushErrorMsg("SNQC_Config: Creator 는 0~7 (트리거는 P9 이상 소유로 유닛을 못 만든다)")
+		return
+	end
 	local LY = Layout()
 	local Unit, QCPlayer, Loc = Cfg.Unit, Cfg.Player, Cfg.Loc
 	local LocAddr = 0x58DC60 + 20 * Loc
@@ -457,6 +470,7 @@ function SNQC_Install()
 	end
 	-- 공유 함수의 인자·결과·임시
 	local CrP, CrPX, CrPY, CrL, CrT, CrR, CrB, CrDone, CrEpd, CrHdr2, CrOK = CreateVars(11, FP)
+	local CrC, VisEpd, VisSave = CreateVars(3, FP)   -- 1.3: 만드는 플레이어, 그 플레이어의 공유 시야 칸 EPD 와 원래 값
 	local NewPtr, NewEpd, NewPtr2, Typ, OwnOrd, Own, ST = CreateVars(7, FP)
 	local LocSave = {CreateVars(5, FP)}   -- 로케이션 20바이트 (좌표 4칸 + 이름·고도 플래그 칸)
 	local ChkEpd, ChkP, ChkOK = CreateVars(3, FP)
@@ -472,7 +486,8 @@ function SNQC_Install()
 	local EmRes = CreateVar(FP)   -- 이번 Emit 결과: 0 안 함, 1 새로 붙임, 2 고침(합치기)
 	local DA = Cfg.DebugAddr
 	local DbgMagic = {0x514E5344, 0x55424544, 0x31303047, 0x7F4A7C15, 0x2545F491, 0x9E3779B9, 0x85EBCA6B, 0xC2B2AE35}
-	local function DSlot(c, k) return DA + (16 + (c - 1) * 12 + k) * 4 end
+	local DSlots = 13   -- 채널 하나의 칸 수 (MSF_UE_RE/tools/snqc_probe.py 와 같게)
+	local function DSlot(c, k) return DA + (16 + (c - 1) * DSlots + k) * 4 end
 	local DbgT = CreateVar(FP)
 	local SelN = CreateVar(FP)
 	local SelAlpha = {}
@@ -553,8 +568,12 @@ function SNQC_Install()
 		CAdd(FP, AOut, AGen)
 	SetCallEnd()
 
-	-- (공유) 채널 건물 하나 만들기. 인자 CrP, 만들 점 CrPX/CrPY, 넘길 때 상자 CrL/CrT/CrR/CrB.
-	-- 결과 CrEpd / CrHdr2 (실패하면 0). 부르는 쪽이 CrDone = 1 로 둔다.
+	-- (공유) 채널 건물 하나 만들기. 인자 CrP (채널 주인 = 사람), CrC (만드는 플레이어), 만들 점 CrPX/CrPY,
+	-- 넘길 때 상자 CrL/CrT/CrR/CrB. 결과 CrEpd / CrHdr2 (실패하면 0). 부르는 쪽이 CrDone = 1 로 둔다.
+	-- ★ 1.3 시야: 만드는 순간 게임이 만든 플레이어의 공유 시야(0x57F1EC + 4×플레이어)대로 3x3 칸을 밝힌다
+	--   (OpenBW initialize_unit → refresh_unit_vision). 그 칸을 CreateUnit 동안만 0 으로 두어 아무에게도 안 밝힌다.
+	--   맵이 사람에게 컴퓨터 시야를 나눠 주는 중이어도(Turn ON Shared Vision for Player 8) 안 보인다.
+	--   그 뒤의 주기적 시야는 이동 상태 UM_Hidden 으로 막는다 (아래와 Call_Recv).
 	local Call_Create = SetCallForward()
 	SetCall(FP)
 		CMov(FP, CrEpd, 0)
@@ -565,13 +584,15 @@ function SNQC_Install()
 			TSetMemory(LocAddr + 8, SetTo, CrPX), TSetMemory(LocAddr + 12, SetTo, CrPY),
 			SetMemoryX(LocAddr + 16, SetTo, 0, 0xFFFF0000),                 -- 고도 플래그 끄기 (SNQC.py·MSQC 와 같다)
 		})
+		CAdd(FP, VisEpd, CrC, 0xFFFFD3A2)                                     -- EPD(0x57F1EC) = -11358 (32비트) + 만드는 플레이어
+		f_Read(FP, VisEpd, VisSave)
 		f_Read(FP, 0x628438, NewPtr, NewEpd, 0xFFFFFF)
-		CDoActions(FP, {TCreateUnit(1, Unit, Loc + 1, CrP)})
-		-- 성공 = 빈 유닛 포인터가 움직였고, 그 자리 유닛이 이 종류·이 플레이어 (1.0 은 포인터를 안 봐서 실패해도 옛 유닛을 잡을 수 있었다)
+		CDoActions(FP, {TSetMemory(VisEpd, SetTo, 0), TCreateUnit(1, Unit, Loc + 1, CrC), TSetMemory(VisEpd, SetTo, VisSave)})
+		-- 성공 = 빈 유닛 포인터가 움직였고, 그 자리 유닛이 이 종류·만든 플레이어 (1.0 은 포인터를 안 봐서 실패해도 옛 유닛을 잡을 수 있었다)
 		f_Read(FP, 0x628438, NewPtr2, nil, 0xFFFFFF)
 		f_Read(FP, _Add(NewEpd, 25), Typ, nil, 0xFFFF)
 		f_Read(FP, _Add(NewEpd, 19), Own, nil, 0xFF)
-		CiSub(FP, ST, Own, CrP)
+		CiSub(FP, ST, Own, CrC)
 		CMov(FP, CrOK, 0)
 		When({VEq(Typ, Unit), VEq(ST, 0)}, {Set(CrOK, SetTo, 1)})
 		CiSub(FP, ST, NewPtr2, NewPtr)
@@ -580,10 +601,11 @@ function SNQC_Install()
 			CDoActions(FP, {
 				TSetMemory(LocAddr, SetTo, CrL), TSetMemory(LocAddr + 4, SetTo, CrT),
 				TSetMemory(LocAddr + 8, SetTo, CrR), TSetMemory(LocAddr + 12, SetTo, CrB),
-				TGiveUnits(1, Unit, CrP, Loc + 1, QCPlayer),
+				TGiveUnits(1, Unit, CrC, Loc + 1, QCPlayer),
 			})
 			CDoActions(FP, {
-				TSetMemoryX(_Add(NewEpd, 19), SetTo, CrP, 0xFF),                -- 소유자 바이트만 사람으로
+				TSetMemoryX(_Add(NewEpd, 19), SetTo, CrP, 0xFF),                -- 소유자 바이트만 사람으로 (명령을 받게)
+				TSetMemoryX(_Add(NewEpd, 37), SetTo, SNQC_UM_Hidden * 0x1000000, 0xFF000000), -- +0x97 이동 상태 → 시야 갱신에서 빠짐
 				TSetMemoryX(_Add(NewEpd, 55), SetTo, 0x04200000, 0x04200000),   -- 무적 + 충돌 없음
 				TSetMemory(_Add(NewEpd, 62), SetTo, 0),                         -- 랠리 칸 = 기준값
 			})
@@ -612,10 +634,14 @@ function SNQC_Install()
 	SetCallEnd()
 
 	-- (공유) 채널 랠리 칸 읽기. 인자 RvEpd. 결과 R (0 = 안 받음), 받았으면 X / Y (좌표 줄), V (값 줄) 도.
+	-- 1.3: 매 사이클 이동 상태를 UM_Hidden 으로 다시 고정한다 (그 칸이 아직 채널 종류일 때만 - 죽은 채널 칸이
+	--   다른 유닛에 다시 쓰였으면 그 유닛을 멈추게 되므로. 없어진 채널은 Check 가 CheckInterval 안에 지운다).
 	local Call_Recv = SetCallForward()
 	SetCall(FP)
 		CMov(FP, R, 0)
 		CIf(FP, {VGe(RvEpd, 1)})
+			When({TMemoryX(_Add(RvEpd, 25), Exactly, Unit, 0xFFFF)},
+				{TSetMemoryX(_Add(RvEpd, 37), SetTo, SNQC_UM_Hidden * 0x1000000, 0xFF000000)})
 			f_Read(FP, _Add(RvEpd, 62), R)
 			CIf(FP, {VGe(R, 1)})
 				CDoActions(FP, {TSetMemory(_Add(RvEpd, 62), SetTo, 0)})
@@ -718,31 +744,17 @@ function SNQC_Install()
 		local half = math.floor(s / 2)
 		return math.floor((v - half) / 32) * 32 + half
 	end
-	-- 채널 자리: 플레이어 기준점 + (열 × Step[1], 줄 × Step[2]). 같은 자리에 두 건물이 오면 멈춘다.
-	local Cols = Cfg.Columns or #Channels
-	if Cols < 1 then PushErrorMsg("SNQC_Config: Columns 는 1 이상") end
+	-- 채널 자리: XY + (채널 × Step[1], 플레이어 × Step[2]). 같은 자리에 두 건물이 오면 멈춘다.
+	-- (1.2 의 플레이어별 자리 PlayerXY / Columns 는 1.3 에서 없앴다 - 시야를 끈 뒤로는 자리를 가릴 까닭이 없다)
 	if Cfg.Step[1] < 32 or Cfg.Step[2] < 32 then PushErrorMsg("SNQC_Config: Step 은 32 이상 (넘길 때 옆 채널이 같이 잡힌다)") end
-	local Rows = math.floor((#Channels - 1) / Cols) + 1
 	local Taken = {}
-	local function ChannelXY(pi, p, c)
-		local col, row = (c - 1) % Cols, math.floor((c - 1) / Cols)
-		local bx, by
-		if Cfg.PlayerXY then
-			local B = Cfg.PlayerXY[p]
-			if B == nil then PushErrorMsg("SNQC_Config: PlayerXY 에 플레이어 " .. p .. " 자리가 없다") return 0, 0 end
-			bx, by = B[1], B[2]
-		else
-			bx, by = Cfg.XY[1], Cfg.XY[2] + Cfg.Step[2] * Rows * (pi - 1)
-		end
-		return bx + Cfg.Step[1] * col, by + Cfg.Step[2] * row
-	end
 	for pi, p in ipairs(Cfg.Humans) do
 		local NotExist = Memory(0x51A280 + p * 12 + 8, Exactly, 0xFFFFFFFF - (0x51A280 + p * 12 + 4))
 		CIfX(FP, {NotExist})
 		CElseX()
 			for c = 1, #Channels do
-				local px, py = ChannelXY(pi, p, c)
-				if px >= LY.W or py >= LY.H then PushErrorMsg("SNQC: 채널 건물 자리가 맵 밖 (XY/PlayerXY/Step/Columns 를 볼 것)") end
+				local px, py = Cfg.XY[1] + Cfg.Step[1] * (c - 1), Cfg.XY[2] + Cfg.Step[2] * (pi - 1)
+				if px >= LY.W or py >= LY.H then PushErrorMsg("SNQC: 채널 건물 자리가 맵 밖 (XY/Step 을 줄일 것)") end
 				local sx, sy = Snap(px, Cfg.BuildSize[1]), Snap(py, Cfg.BuildSize[2])
 				if sx < 16 or sy < 16 then PushErrorMsg("SNQC: 채널 건물 자리가 맵 가장자리에 너무 붙었다 (16 이상으로)") end
 				local Key = sx .. "," .. sy
@@ -751,7 +763,7 @@ function SNQC_Install()
 				end
 				Taken[Key] = string.format("P%d 채널 %d", p + 1, c)
 				CallTriggerX(FP, Call_Create, {VEq(InitDone, 1), VEq(ChEpd[p][c], 0), Memory(0x628438, AtLeast, 1)}, {
-					Set(CrP, SetTo, p), Set(CrPX, SetTo, px), Set(CrPY, SetTo, py),
+					Set(CrP, SetTo, p), Set(CrC, SetTo, Cfg.Creator or p), Set(CrPX, SetTo, px), Set(CrPY, SetTo, py),
 					Set(CrL, SetTo, sx - 16), Set(CrT, SetTo, sy - 16), Set(CrR, SetTo, sx + 16), Set(CrB, SetTo, sy + 16),
 					Set(CrDone, SetTo, 1),
 				})
@@ -788,8 +800,9 @@ function SNQC_Install()
 				When({VEq(ChEpd[p][c], 0)}, {Set(MyValid, SetTo, 0)})
 				if DA then
 					-- 채널 건물 칸: 종류(+0x64) / 주인·오더(+0x4C) / 상태(+0xDC) / 랠리(+0xF8, 받기 전) / 좌표(+0x28) / 세대(+0xA4)
+					-- / 이동 상태(+0x94 의 맨 위 바이트 = +0x97, 1.3)
 					CDoActions(FP, {TSetMemory(DSlot(c, 0), SetTo, ChEpd[p][c]), TSetMemory(DSlot(c, 1), SetTo, ChHdr2[p][c])})
-					for k, off in ipairs({25, 19, 55, 62, 10, 41}) do
+					for k, off in ipairs({25, 19, 55, 62, 10, 41, 37}) do
 						f_Read(FP, _Add(ChEpd[p][c], off), DbgT)
 						CDoActions(FP, {TSetMemory(DSlot(c, 5 + k), SetTo, DbgT)})
 					end

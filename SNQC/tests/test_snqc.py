@@ -9,6 +9,7 @@ settings 를 넣고 모듈 실행 → onPluginStart → 매 사이클 beforeTrig
   (eudplib 0.76.14 가 깔린 파이썬, 예: C:\\Users\\whatd\\.venvs\\eud076\\Scripts\\python.exe)
   python test_snqc.py theseed   theSeed 의 [SNQC] (없으면 [MSQC]) 줄 (C:\\euddraft0.9.2.0\\theSeed.eds)
   python test_snqc.py dps       DPS_eud 의 [MSQC] 줄 (build_eud.py 처럼 SCA 줄을 빼고 SCR_DB 채널 8줄을 더함)
+  python test_snqc.py theseed SNQCCreator=P8   뒤에 "이름=값" 을 주면 설정에 더한다 (1.2 의 SNQCCreator 시험)
 
 2026-09-17: 두 설정 모두 통과 (theSeed 7명 x 9채널, DPS 4명 x 11채널).
 """
@@ -66,6 +67,9 @@ def main():
         lines += ["Memory(0x%X,AtLeast,1);val, 0x%X: %d" % (0x58F508 + 4 * k, 0x58F508 + 4 * k, 21 + k)
                   for k in range(8)]
     settings = to_settings(lines)
+    for extra in sys.argv[2:]:
+        k, _, v = extra.partition("=")
+        settings[k.strip()] = v.strip()
     print("[test] %s: %d settings" % (which, len(settings)))
 
     LoadMap(base)
@@ -81,7 +85,7 @@ def main():
             EUDDoEvents()
         EUDEndInfLoop()
 
-    out = os.path.join(WORK, "out_%s.scx" % which)
+    out = os.path.join(WORK, "out_%s%s.scx" % (which, "_extra" if sys.argv[2:] else ""))
     t = time.time()
     SaveMap(out, root)
     print("[test] %s -> %s (%d B, %.1fs)" % (which, out, os.path.getsize(out), time.time() - t))

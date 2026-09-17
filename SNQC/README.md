@@ -14,7 +14,7 @@ MSQC 는 숨긴 QC 유닛의 **이동 목표**에 값을 실어 보내는데, �
 | `SNQC.lua` | CtrigAsm(TEP) 판. Lua 함수로 설정 (MSQC 줄 문법도 받음) |
 | `DESIGN.md` | 설계, 실측 근거, 설정표, MSQC 에서 옮기는 법, 확인 목록 |
 | `HISTORY.md` | 작업 내역 (조사 → 실험 → 구현 → 시험) |
-| `CHANGELOG.md` | 판별 변경 기록 (플러그인 판 1.0, CtrigAsm 판 1.2) |
+| `CHANGELOG.md` | 판별 변경 기록 (플러그인 판 1.2, CtrigAsm 판 1.3) |
 | `tests/test_snqc.py` | 플러그인 오프라인 컴파일 시험 (eudplib 0.76.14) |
 | `tests/stub_test.lua` | Lua 판을 가짜 CtrigAsm 환경에서 끝까지 실행하는 시험 |
 
@@ -39,10 +39,13 @@ SNQC_Install()   -- 받은 데스값을 읽는 트리거보다 앞에서
 
 ## 상태 (2026-09-17)
 
-| | 플러그인 판 1.0 | CtrigAsm 판 1.2 |
+| | 플러그인 판 1.2 | CtrigAsm 판 1.3 |
 | --- | --- | --- |
-| 문법·컴파일 | eudplib 0.76.14 오프라인 컴파일 (theSeed·DPS 설정), MSF_UE_RE 빌드 | **MSF_UE_RE 실제 빌드** (tepc → euddraft → CPLP) + 가짜 환경 실행 |
-| 인게임 | **theSeed 싱글·LAN 2인(64비트+32비트) 통과** - 150프레임 소실 없음, 디싱크 없음, 선택 꼬임 없음 | **MSF_UE_RE 싱글 통과 (1.2)** - 키 입력, SCR_DB 불러오기 0.4초, 8채널 동시 전송 - MSF_UE_RE 시험 맵 `마린키우기_UnLimit_ExceeD_SCR_DB_out.scx` |
-| 남은 확인 | 합치기(턴이 여러 사이클인 방), 버퍼 한계. 1.1: DPS강화하기 인게임 정상, MSF_UE_RE 재확인 | 인게임 (DESIGN.md 7절 1~5 를 MSF_UE_RE 로) |
+| 문법·컴파일 | eudplib 0.76.14 오프라인 컴파일 (theSeed·DPS 설정), **MSF_UE_RE 풀 빌드 (1.2)** | **MSF_UE_RE 실제 tepc 컴파일 (1.3)** + 가짜 환경 실행 |
+| 인게임 | **theSeed 싱글·LAN 2인(64비트+32비트) 통과 (1.0)** - 150프레임 소실 없음, 디싱크 없음, 선택 꼬임 없음. **MSF_UE_RE 싱글 통과 (1.2)** - 시야 꺼짐, 키·SCR_DB 불러오기 | **MSF_UE_RE 싱글 통과 (1.3)** - 시야 꺼짐, 키·SCR_DB 불러오기 (1.2 때 0.4초, 8채널 동시 전송) |
+| 남은 확인 | 1.2 멀티(디싱크), 합치기(턴이 여러 사이클인 방), 버퍼 한계. 1.1: DPS강화하기 인게임 정상 | 멀티(디싱크) - DESIGN.md 7절 5·9. MSF_UE_RE 는 지금 이 판(`SNQC_LUA`)으로 되어 있다 |
+
+채널 건물의 시야: 시야 0 이어도 자기 자리를 밝히던 것을 Lua 1.3 / 플러그인 1.2 에서 껐다 (이동 상태 고정 + 만드는 순간 공유 시야 끄기, DESIGN.md "1-1. 시야").
+두 판 모두 MSF_UE_RE 싱글에서 확인했다 (시험 맵 `마린키우기_UnLimit_ExceeD_SCR_DB_out.scx`).
 
 적용한 맵: theSeed (플러그인 판), DPS_eud (플러그인 판, 인게임 확인 전), MSF_UE_RE (CtrigAsm 판 - `MSF_UE_RE/QCInput.lua` 에서 세 방식 중 고른다).

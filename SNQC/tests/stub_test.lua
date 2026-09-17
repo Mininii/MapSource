@@ -1,5 +1,5 @@
 -- SNQC.lua 를 가짜 CtrigAsm 환경에서 끝까지 실행해 본다 (Lua 쪽 오류만 잡는다 - 트리거 의미는 못 본다)
--- 실행 (Lua 5.3 이상): lua stub_test.lua [SNQC.lua 경로]   2026-09-17 통과 (1.1: LuaLS 실행 파일의 Lua 5.5 로)
+-- 실행 (Lua 5.3 이상): lua stub_test.lua [SNQC.lua 경로]   2026-09-17 통과 (1.1~1.3: LuaLS 실행 파일의 Lua 5.5 로)
 local calls = {}
 local varidx = 0
 local function V() varidx = varidx + 1 return {"X", varidx, 0, "V"} end
@@ -18,7 +18,8 @@ function SetCallForward() return 0x3000 + callCount * 2 end
 function SetCall(p) assert(not callOpen, "SetCall already open") callOpen = true callCount = callCount + 1 end
 function SetCallEnd() assert(callOpen, "SetCallEnd without SetCall") callOpen = false end
 function CallTrigger(p, idx, addon) assert(type(idx) == "number", "CallTrigger index") assert(type(addon) == "table", "CallTrigger addon") end
-function CallTriggerX(p, idx, conds, addon) assert(type(idx) == "number", "CallTriggerX index") assert(type(conds) == "table" and type(addon) == "table", "CallTriggerX args") end
+CallXAddons = {}
+function CallTriggerX(p, idx, conds, addon) assert(type(idx) == "number", "CallTriggerX index") assert(type(conds) == "table" and type(addon) == "table", "CallTriggerX args") table.insert(CallXAddons, addon) end
 function CTrigger(p, conds, acts, flags)
 	assert(type(conds) == "table" and #conds <= 15, "CTrigger conds")
 	for _, x in ipairs(conds) do assert(type(x) == "table", "CTrigger cond not table") end
@@ -84,13 +85,24 @@ assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Human
 -- MSF_UE_RE 크기 (16채널 × 7명) 의 인덱스 어림: 키 34줄 + 값 13줄 + 마우스 1줄
 SNQC_Reset()
 IndexUsed = 0
-SNQC_Config{MapTiles = {96, 192}, Humans = {0, 1, 2, 3, 4, 5, 6}, WorkAddr = 0x593C00, DebugAddr = 0x592100, Columns = 4, PlayerXY = (function() local T = {} for i = 0, 6 do T[i] = {720 + 256 * i, 5936} end return T end)()}
+SNQC_Config{MapTiles = {96, 192}, Humans = {0, 1, 2, 3, 4, 5, 6}, WorkAddr = 0x593C00, DebugAddr = 0x592100, XY = {2512, 3312}, Creator = 7}
 for i = 1, 34 do SNQC_Key({SNQC_KeyDown("F" .. ((i % 12) + 1)), SNQC_MyDeaths(AtLeast, 1, 441)}, 200 + i, 1) end
 for i = 1, 13 do SNQC_Value({}, 0x58F600 + 4 * i, 150 + i) end
 SNQC_Line('Deaths(CurrentPlayer,AtLeast,1,40);mouse: Location74')
 SNQC_Install()
 assert(IndexUsed < 400, "인덱스를 너무 많이 쓴다: " .. IndexUsed)
 print("OK 1.1 checks, MSF_UE_RE size index~", IndexUsed)
--- 1.2: 채널 자리가 겹치면 멈춘다
-assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Humans = {0, 1}, PlayerXY = {[0] = {720, 5936}, [1] = {720, 5936}}} SNQC_Key({"A"}, 200, 1) SNQC_Install() end), "겹친 자리는 에러")
-print("OK 1.2 checks")
+-- 1.3: 채널 건물을 만드는 플레이어(Creator)가 만들기 호출마다 들어간다 (SetCVar 의 값 칸 = 7)
+local creatorSets = 0
+for _, addon in ipairs(CallXAddons) do
+	for _, a in ipairs(addon) do
+		if a[1] == "SetCVar" and a[5] == 7 then creatorSets = creatorSets + 1 end
+	end
+end
+assert(creatorSets >= 7, "Creator 가 만들기 호출에 안 들어갔다: " .. creatorSets)
+-- 1.3: 플레이어별 자리(PlayerXY / Columns)는 없앴다 - 모르는 설정으로 멈춘다. Creator 는 0~7. Step 은 32 이상.
+assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Humans = {0}, PlayerXY = {[0] = {720, 5936}}} end), "PlayerXY 는 에러")
+assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Humans = {0}, Columns = 4} end), "Columns 는 에러")
+assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Humans = {0}, Creator = 10} SNQC_Key({"A"}, 200, 1) SNQC_Install() end), "Creator 10 은 에러")
+assert(not pcall(function() SNQC_Reset() SNQC_Config{MapTiles = {96, 192}, Humans = {0, 1}, Step = {16, 32}} SNQC_Key({"A"}, 200, 1) SNQC_Install() end), "Step 16 은 에러")
+print("OK 1.3 checks, creator sets", creatorSets)

@@ -10,6 +10,8 @@ MSQC(Murakami Shiina QueueCommand)를 대신하는 **로컬 입력 → 모든 PC
 
 **확인 상태 (2026-09-17)**: 플러그인 판(1.0)은 theSeed 싱글·LAN 2인 인게임 통과 (아래 7번 1~5, 150프레임 소실 없음, 디싱크 없음). 합치기·버퍼 한계는 아직.
 Lua 판(1.2)은 MSF_UE_RE 싱글 인게임 통과 (키, SCR_DB 불러오기 0.4초, 8채널 동시 전송). 멀티(LAN)는 아직. 아래 "7. 확인 목록". 판별 변경은 `CHANGELOG.md`.
+**채널 건물 시야 끄기 (Lua 1.3 / 플러그인 1.2)** 는 두 판 모두 MSF_UE_RE 싱글 인게임 확인 (채널 자리가 미니맵에 안 보임, 키·SCR_DB 불러오기 정상).
+멀티(디싱크)는 아직 (아래 "1-1. 시야", 확인 목록 9번).
 
 ---
 
@@ -40,6 +42,39 @@ theSeed `QUEUE_COMMAND_RESEARCH.md` (T1~T3) 요약.
 근거 소스: OpenBW `actions.h`(`action_order`), `bwgame.h`(`unit_is_factory`, `unit_can_receive_order`, `update_thingy_visibility`).
 주의: OpenBW 는 (0,0) 을 "보임" 으로 계산하지만 SC:R 에서는 가려졌다.
 
+## 1-1. 시야 (2026-09-17, OpenBW 소스 근거 - 두 판 모두 MSF_UE_RE 싱글 인게임 확인)
+
+문제: 채널 건물은 가려져 있어도 **자기 자리 주변을 밝혔다.** 사람끼리 시야를 나누는 맵에서는 남의 채널 자리까지 보이고,
+미니맵에도 드러났다 (MSF_UE_RE 시험). 시야(units.dat)를 0 으로 해도 소용없었다.
+
+| 소스에서 확인한 것 (`bwgame.h`) | 뜻 |
+| --- | --- |
+| `process_frame`: `update_tiles_countdown` 이 100프레임마다 모든 칸을 "안 보임" 으로 되돌린다 | 시야는 100프레임마다 다시 밝힌다 |
+| `update_unit_movement`: `execute_movement` 가 참을 내면 `refresh_unit_vision` | 다시 밝히는 곳은 유닛마다 이동 처리 안 |
+| `execute_movement`: `ems.refresh_vision = update_tiles` 로 시작, **`UM_Hidden`·`UM_Bunker`·`UM_Turret` 만 false 로 바꾼다** | 건물의 보통 상태(`UM_Lump`)는 밝힌다 |
+| `refresh_unit_vision`: 주인(+0x4C)이 8 이상이면 건너뜀. 아니면 `reveal_sight_at(위치, 시야/32, 공유 시야[주인])` | 주인 바이트가 사람이라 밝힌다 |
+| `generate_sight_values`: 시야 0 도 3x3 칸 (`max_width = 3 + 2×시야`) | **시야 0 으로는 못 끈다** |
+| `unit_can_receive_order`: 주인 ≠ 보낸 플레이어면 거절 | 주인 바이트를 사람이 아닌 값으로 두면 명령을 못 받는다 |
+| `initialize_unit` (CreateUnit): 만든 직후 `refresh_unit_vision` 한 번 | 만드는 순간에도 밝힌다 (다음 100프레임 갱신까지 보임, "탐색함" 표시는 남음) |
+| 트리거 AI 스크립트 `Turn ON Shared Vision for Player N` (`+ViN`): `공유 시야[N] \|= 1 << 실행 플레이어` | 사람마다 돌리면 사람이 N 의 시야를 받는다 |
+| `reset_movement_state` 를 부르는 곳: 수송 태우기·내리기, 버로우, 이륙·착륙, 리콜, 아콘, 스파이더 마인, ResetCollision 오더, 트리거 MoveUnit(`refresh_unit_position`) | 랠리 명령·GiveUnits 는 이동 상태를 안 건드린다 |
+| 이동 상태 `UM_Hidden` = 6 (`bwenums.h` 7번째), CUnit +0x97 (theSeed `CunitSystem.lua` 표: SC:R 지원 칸) | |
+
+그래서 두 가지를 한다.
+
+1. **이동 상태 고정** - 채널 건물의 +0x97 을 `UM_Hidden`(6) 으로 만들 때 쓰고, **매 사이클 다시 쓴다**(그 칸이 아직 채널 종류일 때만).
+   `UM_Hidden` 은 스프라이트 숨김(`flag_hidden`)과 다른 것이라 선택·랠리 명령에는 영향이 없다. 건물은 움직이지 않으므로 이동 처리를 건너뛰어도 잃는 것이 없다.
+2. **만드는 순간** - 만드는 플레이어(`Creator`, MSF_UE_RE 는 P8 컴퓨터)의 공유 시야 칸(0x57F1EC + 4×플레이어, CtrigAsm `SetSharedVision` 과 같은 칸)을
+   CreateUnit 동안만 0 으로 두고 되돌린다. 0 이면 `reveal_sight_at` 이 아무 칸도 안 바꾼다.
+   컴퓨터로 만드는 것만으로는 부족할 때가 있다 - 맵이 사람에게 컴퓨터 시야를 나눠 주는 중일 수 있다.
+   MSF_UE_RE 는 일반 레벨에서는 안 나누지만 보스전 동안(roka7·Sans·Destr0yer·DemonicEmperor, 매 사이클)과 보스 클리어 때
+   `Turn ON Shared Vision for Player 8` 을 사람마다 돌린다. 게임 시작(채널을 처음 만들 때)은 해당하지 않으므로
+   실제로 걸리는 것은 보스전 중에 채널을 다시 만드는 경우뿐이다.
+
+제작자가 처음 낸 두 안과의 관계:
+- "컴퓨터로 만들고 GiveUnit 뒤 플레이어 번호를 넘긴다" - 만드는 순간의 한 번만 막는다. 주인 바이트를 사람으로 되돌리면(명령을 받으려면 필요) 100프레임마다 다시 밝힌다. → `Creator` 로 넣고 2번과 함께 쓴다.
+- "그 유닛의 시야를 매 틱 0 으로 고정" - 시야 0 도 3x3 을 밝혀서 시야 칸으로는 안 된다. **매 틱 고정할 칸을 이동 상태로 바꾼 것**이 1번이다.
+
 ## 2. 구조
 
 ```
@@ -50,11 +85,13 @@ theSeed `QUEUE_COMMAND_RESEARCH.md` (T1~T3) 요약.
 ```
 
 **채널 건물** - 사람 플레이어 × 채널 수만큼, 게임 시작에 만든다.
-1. 사람 소유로 CreateUnit (트리거는 P9 이상 소유로는 못 만든다)
+1. `Creator`(기본 = 그 채널의 사람, P1~P8 만 된다 - 트리거는 P9 이상 소유로는 못 만든다) 소유로 CreateUnit.
+   그 동안만 `Creator` 의 공유 시야 칸을 0 으로 (1-1 절)
 2. GiveUnits → P11(기본) : 사람의 유닛 수(Command 조건 등)에 안 잡히게
 3. 소유자 바이트(+0x4C)만 사람으로 되돌림 : 명령을 받게
-4. 상태 +0xDC |= 0x04200000 (무적 + 충돌 없음), 랠리 칸 = 0
-5. 자리: `XY` 에서 채널마다 x+32, 플레이어마다 y+32 (맵 끝이면 반대로). 넘길 때 옆 건물이 안 걸리게 하려는 것
+4. 상태 +0xDC |= 0x04200000 (무적 + 충돌 없음), 랠리 칸 = 0, **이동 상태 +0x97 = 6 (매 사이클 다시)** : 시야를 안 밝히게 (1-1 절)
+5. 자리: `XY` 에서 채널마다 x+32, 플레이어마다 y+32 (플러그인 판은 맵 끝이면 반대로). 넘길 때 옆 건물이 안 걸리게 하려는 것.
+   (Lua 1.2 / 플러그인 1.1 에 잠깐 있던 플레이어별 자리 `PlayerXY`·`Columns` / `SNQC_XY1~8`·`SNQCColumns` 는 시야를 끈 뒤 없앴다)
 6. 종류 전체의 units.dat: 건설크기 (1,0), 유닛 크기 1,1,1,1, 시야·탐색 0, 그룹 플래그 0, 서플라이 공급 0, 자원 반환 끔
    → **채널 종류(기본 106 커맨드센터)는 맵의 다른 곳에서 쓰면 안 된다.** theSeed 는 2티어 "커맨드센터" 건작을 사이언스
    퍼실리티(116)로 바꿔 106 을 비웠다 (theSeed PROGRESS §42).
@@ -71,6 +108,7 @@ theSeed `QUEUE_COMMAND_RESEARCH.md` (T1~T3) 요약.
 
 **받기 (공유)** - 사람 플레이어마다
 - 받는 데스값을 먼저 비운다 (MSQC 와 같다: 키 0, 값 0).
+- 채널 건물의 이동 상태를 6 으로 다시 쓴다 (그 칸의 유닛 종류가 채널 종류일 때만).
 - 채널 건물의 랠리 칸이 0 이 아니면 풀고, 칸을 0 으로.
 
 ## 3. 비트 배치
@@ -100,7 +138,8 @@ theSeed `QUEUE_COMMAND_RESEARCH.md` (T1~T3) 요약.
 | `SNQCUnit` | 106 | `QCUnit` - 단, 12종이 아니면 **무시하고 106** (MSQC 의 QC 유닛은 보통 12종이 아니다. 로그에 찍힌다) |
 | `SNQCPlayer` | P11 | `QCPlayer` |
 | `SNQCLoc` | 0 (0부터, 편집기의 Location 1) | `QCLoc` |
-| `SNQC_XY` | 128, 128 | `QC_XY` (DPS 의 `8064, 128` 도 된다 - 맵 끝이면 x 를 반대로 늘어놓는다) |
+| `SNQCCreator` (1.2) | 없음 = 그 채널의 사람 | 채널 건물을 만드는 플레이어 `P1`~`P8`. 컴퓨터 슬롯이 아니면 빌드 로그에 주의를 찍는다 |
+| `SNQC_XY` | 128, 128 | `QC_XY` (DPS 의 `8064, 128` 도 된다 - 맵 끝이면 x 를 반대로 늘어놓는다). 1.1 의 `SNQC_XY1~8`·`SNQCColumns` 는 1.2 에서 없앴다 (주면 빌드가 멈춘다) |
 | `SNQCBuildSize` | 1, 0 | |
 | `SNQCMerge` | true | |
 | `SNQCBufferLimit` | 400 | |
@@ -131,7 +170,8 @@ SNQC_Install()   -- 받은 데스값을 읽는 트리거보다 앞에서 한 번
 | `MapTiles` | (필수) | 맵 크기(타일) |
 | `Humans` | (필수) | 채널을 만들 플레이어 번호 (0부터) |
 | `WorkAddr` | nil → CreateVoids(13) | 로컬 작업 공간 52바이트. **맵이 0x58F500 부터를 CreateVoid 없이 쓰면 꼭 준다** (DPS 는 0x58F500~0x58F527 을 직접 씀). 1.1 부터 패킷 틀을 매 사이클 다시 써서 맵이 이 자리를 지워도 된다 |
-| `Unit` `Player` `Loc` `XY` `Step` `BuildSize` `Order` `Merge` `BufferLimit` `Check` `CheckInterval` | 플러그인과 같음 | |
+| `Creator` (1.3) | nil = 그 채널의 사람 | 채널 건물을 만드는 플레이어 (0~7). 게임 내내 있는 슬롯이어야 한다 |
+| `Unit` `Player` `Loc` `XY` `Step` `BuildSize` `Order` `Merge` `BufferLimit` `Check` `CheckInterval` | 플러그인과 같음 | 1.2 의 `PlayerXY`·`Columns` 는 1.3 에서 없앴다 (주면 "모르는 설정" 으로 멈춘다) |
 
 줄 함수
 - `SNQC_Key(Conds, Death, Add)`
@@ -160,7 +200,7 @@ SNQC_Install()   -- 받은 데스값을 읽는 트리거보다 앞에서 한 번
 | theSeed | `MapLogic/EUDEditorEdsGen.lua` 가 `[MSQC]` 줄을 만든다 (euddraft) | 단락 이름을 `[SNQC]` 로 (플러그인 판). 106 은 이미 비웠다. 큐 커맨드 실험기(`QueueCommandLabEnable`)는 106 을 같이 쓰므로 끈다 |
 | DPS_eud | **적용함 (2026-09-17, 플러그인 판)**. `eud/build_eud.py` 의 `QC_PLUGIN = "SNQC"` 로 `write_eds` 가 단락 이름을 바꾼다 (SCR_DB 줄 8개는 그대로). euddraft 빌드 통과, 인게임 미확인 | `[MSQC]` → `[SNQC]`. `QCUnit = Zerg Scourge` 는 자동으로 무시된다. 106 은 코드·미리 놓인 유닛에 없다 (2026-09-17 확인. `SCA.FXEPer = 106` 은 아이템 번호). **EUD Editor 3 dat 편집에서 106 을 바꿨는지는 미확인** |
 | DPS_Enhance | EUD Editor 3 프로젝트(.e3s) 안의 `[MSQC]` | 플러그인 판이면 위와 같음. Lua 판이면 `Variables.lua` 의 `MSQC_KeySet` 표로 `SNQC_Key` 를 만들고 `WorkAddr` 를 줄 것 |
-| MSF_UE_RE | **적용함 (2026-09-17, Lua 판)**. `MSF_UE_RE/QCInput.lua` 가 줄의 정본이고 `QCInput_Plugin` 으로 `SNQC_LUA` / `SNQC_PY` / `MSQC` 를 고른다 (`tools/build_scrdb.py` 가 따라 eds 단락을 만든다) | 106 은 맵에서 안 쓴다(코드·버튼·맵 데이터 확인). 한 일: EUDinit 의 전 유닛 루프 3곳(건설크기 1x1 덮기·미리 놓인 유닛 재배치·RemoveUnit)이 106 을 건너뜀, 보스 클리어의 `KillUnit("Any unit", P11)` 을 P11 에 넘기는 유닛만으로, `@칭호` 결과를 EUDArray 대신 데스 191 로 (Lua 판은 데스만 받는다), 작업 공간 0x593C00, 채널 자리 (2512, 3312) |
+| MSF_UE_RE | **적용함 (2026-09-17, Lua 판)**. `MSF_UE_RE/QCInput.lua` 가 줄의 정본이고 `QCInput_Plugin` 으로 `SNQC_LUA` / `SNQC_PY` / `MSQC` 를 고른다 (`tools/build_scrdb.py` 가 따라 eds 단락을 만든다). 지금은 Lua 판 점검용으로 `SNQC_LUA` (시험판 `DebugAddr` 켜짐, 플러그인 판은 싱글 확인을 마쳤다) | 106 은 맵에서 안 쓴다(코드·버튼·맵 데이터 확인). 한 일: EUDinit 의 전 유닛 루프 3곳(건설크기 1x1 덮기·미리 놓인 유닛 재배치·RemoveUnit)이 106 을 건너뜀, 보스 클리어의 `KillUnit("Any unit", P11)` 을 P11 에 넘기는 유닛만으로, `@칭호` 결과를 EUDArray 대신 데스 191 로 (Lua 판은 데스만 받는다), 작업 공간 0x593C00, 채널 자리 (2512, 3312), 만드는 플레이어 P8(컴퓨터, `QCInput_Creator`) |
 
 SCR_DB(런처 저장) 쪽: MSQC 는 매 프레임 다시 보내서 토글 비트를 쓴다(`docs/SCR_DB_PORTING.md`). SNQC 도 조건이 참인 동안 매 사이클 보내므로
 프로토콜은 그대로 쓸 수 있다. 150프레임 소실이 없어지는 만큼 재전송이 줄어드는지 볼 것.
@@ -178,10 +218,18 @@ SCR_DB(런처 저장) 쪽: MSQC 는 매 프레임 다시 보내서 토글 비트
    `WorkAddr` 없이 CreateVoid 로 동작하는지는 아직 (MSF_UE_RE 는 WorkAddr 를 준다).
    MSF_UE_RE 에서 더 볼 것: 채널 건물 자리 (2512, 3312) 에 16×7 개가 다 만들어지는지(지형 자료 없이 고른 자리), 보스 클리어 뒤 입력이 계속 되는지,
    `@칭호 N`·기부 채팅·멀티 커맨드 우클릭·SCR_DB 불러오기/저장.
+9. **시야 (Lua 1.3 / 플러그인 1.2)** - 채널 자리 (2512~2992, 3312~3504) 가 게임 시작부터 끝까지 **어느 플레이어에게도 밝혀지지 않는지**
+   (미니맵 오른쪽 가운데, 사람끼리 시야 공유 중, 보스전의 P8 시야 공유 중 모두). 100프레임(약 4초)마다 깜빡이지 않는지.
+   입력(1~5)이 그대로 되는지 - 이동 상태를 바꿔도 명령은 받아야 한다. Lua 판이면 `tools/snqc_probe.py` 의 `mv` 칸이 6 인지.
+   멀티에서 디싱크가 없는지 (공유 시야 칸을 잠깐 바꾸는 것이 모든 PC 에서 같게 도는지).
+   — **플러그인 판·Lua 판 모두 MSF_UE_RE 싱글 확인 (2026-09-17, 제작자)**: 채널 자리가 미니맵에 안 보임, 키 입력·SCR_DB 불러오기 정상.
+   멀티(디싱크)는 제작자가 나중에 멀티플레이 때 잰다 (노트북 사양으로는 이 환경에서 어렵다).
 
 ## 8. 알려진 한계
 
 - 채널 종류(기본 106)는 맵 전체에서 그 용도로만 써야 한다 (units.dat 가 종류 단위).
+- `Creator` 로 준 슬롯이 게임에 없으면 채널을 못 만든다 (입력이 전혀 안 간다). 컴퓨터 슬롯은 맵에 정해져 있어 보통 늘 있다.
+- 맵 트리거가 채널 건물을 MoveUnit 으로 옮기면 그 순간 이동 상태가 풀리고 한 번 밝힌다 (다음 사이클에 다시 고정). 채널 자리를 트리거 로케이션과 겹치지 말 것.
 - 한 턴에 한 채널은 값 하나 - 여러 사이클이 한 턴에 합쳐지면 값 줄은 마지막 값만 남는다 (키는 합치기로 보존).
 - 채널 수 × 사람 수만큼 유닛을 쓴다 (theSeed 9×7 = 63, DPS 11×4 = 44).
 - 좌표 줄의 맨 오른쪽 한 줄은 x 가 1 작게 온다.

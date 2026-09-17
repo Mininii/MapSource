@@ -15,17 +15,20 @@ MSQC(Murakami Shiina QueueCommand, plugins/MSQC.py)를 대신하는 "로컬 입�
           - 받는 쪽이 매 사이클 칸을 (0,0) 으로 되돌린다 → 같은 값을 두 번 보내도 두 번 받는다
           - 안 보이고 안 골라지는데 명령은 받는다
           (2026-09-17 SC:R 실측, DESIGN.md "실측")
+          - (1.2) 시야도 밝히지 않는다: 이동 상태(+0x97)를 UM_Hidden(6) 으로 매 사이클 고정해 100프레임마다의
+            시야 갱신에서 빼고, 만드는 순간은 만드는 플레이어의 공유 시야 칸(0x57F1EC)을 잠깐 0 으로 둔다
+            (OpenBW 소스 근거, MSF_UE_RE 싱글 인게임 확인 - DESIGN.md "시야")
 
 .eds 설정 (전부 생략 가능)
   SNQCUnit      = 106          채널 건물 종류. 랠리를 받는 12종 중 맵에서 안 쓰는 것 (종류 전체의 units.dat 를 고친다)
                                QCUnit 도 받지만 12종이 아니면 무시하고 106 을 쓴다 (MSQC 의 QC 유닛은 보통 12종이 아니다)
   SNQCPlayer    = P11          채널 건물을 넘겨 둘 플레이어 (QCPlayer 도 받음)
   SNQCLoc       = 0            만들 때 잠깐 쓰는 로케이션 (QCLoc 도 받음). 쓰고 나면 되돌린다
+  SNQCCreator   = (없음)       (1.2) 채널 건물을 만드는 플레이어 (P1~P8, 보통 컴퓨터 슬롯). 없으면 그 채널의 사람이 만든다.
+                               만든 건물은 SNQCPlayer 에게 넘기고 주인 바이트만 사람으로 바꾸므로 누가 만들어도 결과는 같다.
+                               게임 내내 있는 슬롯이어야 한다 (없는 플레이어로는 못 만든다)
   SNQC_XY       = 128, 128     첫 채널 자리 (QC_XY 도 받음). 채널마다 x 로 32, 플레이어마다 y 로 32 씩 (맵 끝이면 반대 방향)
-  SNQC_XY1 ~ SNQC_XY8 = x, y   (1.1) 플레이어 P1~P8 의 첫 채널 자리. 하나라도 주면 사람 슬롯 전부 줘야 하고 SNQC_XY 대신 쓴다.
-                               채널 건물은 시야 0 이어도 자기 칸 주변을 밝혀(주인이 사람이라 못 끈다) 시야 공유로 남에게 보이므로,
-                               플레이어가 원래 보는 곳(예: 자기 배럭 밑)에 두려는 것
-  SNQCColumns   = 0            (1.1) 한 줄에 놓을 채널 수. 0 = 한 줄. 넘치면 y 로 32 씩 다음 줄. 채널 간격은 늘 32 (넘길 때 옆 채널이 안 잡히게)
+                               (1.1 의 SNQC_XY1~8 / SNQCColumns 는 1.2 에서 없앴다 - 시야를 끈 뒤로는 자리를 가릴 까닭이 없다)
   SNQCBuildSize = 1, 0         건설크기(픽셀) - (1,0)/(0,1)/(0,0) 이 가려진다
   SNQCMerge     = true         아직 안 나간 자기 패킷이 버퍼에 있으면 좌표만 고친다 (키 = 비트 합치기, 값 = 덮어쓰기)
   SNQCBufferLimit = 400        턴 버퍼가 이보다 길면 붙이지 않는다
@@ -41,7 +44,8 @@ MSQC(Murakami Shiina QueueCommand, plugins/MSQC.py)를 대신하는 "로컬 입�
         0x주소,비교,값  0x주소,마스크  그 밖의 eudplib 조건식
   결과 자리에 EUDArray 이름을 쓰면 데스값 대신 그 배열[플레이어] 에 쓴다 (MSQC 와 같음)
 
-확인 (2026-09-17): theSeed 싱글·LAN 2인(64비트+32비트) 인게임 통과 - 150프레임 소실 없음, 디싱크 없음.
+확인 (2026-09-17): theSeed 싱글·LAN 2인(64비트+32비트) 인게임 통과 (1.0) - 150프레임 소실 없음, 디싱크 없음.
+  1.2 의 시야 끄기는 MSF_UE_RE 싱글 인게임 확인 (채널 자리 안 보임, 키·SCR_DB 정상). 멀티는 아직.
   합치기(턴이 여러 사이클인 방)·버퍼 한계는 아직 (DESIGN.md "확인 목록").
 """
 import re
@@ -50,17 +54,17 @@ from math import ceil
 from eudplib import *
 
 # 판 번호 - CHANGELOG.md 의 "플러그인 판" 과 맞춘다
-SNQC_VERSION = "1.1"
+SNQC_VERSION = "1.2"
 
 # fmt: off
 SNQCUnit, SNQCPlayer, SNQCLoc = 106, 10, 0
 SNQC_X, SNQC_Y = 128, 128
-PlayerXY = {}          # 1.1: 플레이어 번호(0부터) → (x, y). 비어 있으면 SNQC_XY 방식
-Columns = 0            # 1.1: 한 줄 채널 수 (0 = 한 줄)
+SNQCCreator = None     # 1.2: 채널 건물을 만드는 플레이어 (None = 그 채널의 사람)
 BuildW, BuildH = 1, 0
 UseMerge, QCDebug = True, True
 BufferLimit, CheckInterval = 400, 34
 RALLY_ORDER = 40
+UM_HIDDEN = 6          # 이동 상태 UM_Hidden (OpenBW bwenums.h). 이 상태의 유닛은 시야 갱신에서 빠진다
 FACTORY_UNITS = {106, 111, 113, 114, 130, 131, 132, 133, 154, 155, 160, 167}
 
 key_lines, val_lines, deathsUnits = [], [], set()   # key_lines: (conds, ret) / val_lines: (conds, ret)
@@ -246,7 +250,7 @@ def _encode_unit_or_int(s):
 
 
 def onInit():
-    global SNQCUnit, SNQCPlayer, SNQCLoc, SNQC_X, SNQC_Y, BuildW, BuildH, UseMerge, QCDebug, BufferLimit, Columns
+    global SNQCUnit, SNQCPlayer, SNQCLoc, SNQCCreator, SNQC_X, SNQC_Y, BuildW, BuildH, UseMerge, QCDebug, BufferLimit
     global humans, W, H, KX, KY, VX, VY, key_bits
     chkt = GetChkTokenized()
     dim, ownr = chkt.getsection("DIM"), chkt.getsection("OWNR")
@@ -279,15 +283,12 @@ def onInit():
         if kl in ("SNQCPlayer", "QCPlayer"):
             SNQCPlayer = EncPlayer(v)
             continue
-        m = re.fullmatch(r"SNQC_XY([1-8])", kl)
-        if m:
-            c = v.split(",")
-            PlayerXY[int(m.group(1)) - 1] = (int(c[0], 0), int(c[1], 0))
+        if kl == "SNQCCreator":
+            SNQCCreator = EncPlayer(v)
+            ep_assert(0 <= SNQCCreator < 8, "[SNQC] SNQCCreator 는 P1~P8 (트리거는 P9 이상 소유로 유닛을 못 만든다)")
             continue
-        if kl == "SNQCColumns":
-            Columns = int(v, 0)
-            ep_assert(Columns >= 0, "[SNQC] SNQCColumns 는 0 이상")
-            continue
+        if re.fullmatch(r"SNQC_XY[1-8]|SNQCColumns", kl):
+            raise EPError("[SNQC] %s 는 1.2 에서 없앴다 (플레이어별 채널 자리) - SNQC_XY 하나만 쓴다" % kl)
         if kl in ("SNQC_XY", "QC_XY"):
             c = v.split(",")
             SNQC_X, SNQC_Y = int(c[0], 0), int(c[1], 0)
@@ -367,8 +368,12 @@ def onInit():
             val_lines.append((con_final, ret_final))
 
     ep_assert(key_lines or val_lines, "[SNQC] 줄이 하나도 없다")
-    print("[SNQC %s] map %dx%d, humans %s, channel unit %d, key bits/channel %d, value range 0..%d"
-          % (SNQC_VERSION, dim_x, dim_y, [p + 1 for p in humans], SNQCUnit, len(key_bits), 2 ** (VX + VY) - 1))
+    if SNQCCreator is not None and ownr[SNQCCreator] != 5:
+        print("[SNQC] 주의: SNQCCreator P%d 가 컴퓨터 슬롯이 아니다 (OWNR %d) - 게임에 없으면 채널을 못 만든다"
+              % (SNQCCreator + 1, ownr[SNQCCreator]))
+    print("[SNQC %s] map %dx%d, humans %s, channel unit %d, creator %s, key bits/channel %d, value range 0..%d"
+          % (SNQC_VERSION, dim_x, dim_y, [p + 1 for p in humans], SNQCUnit,
+             "P%d" % (SNQCCreator + 1) if SNQCCreator is not None else "owner", len(key_bits), 2 ** (VX + VY) - 1))
 
 
 def _ret_target(s):
@@ -411,19 +416,10 @@ PB_EPD = EPD(PB)
 
 
 def _xyfor(pi, c):
-    cols = Columns or NCh
-    rows = (NCh + cols - 1) // cols
-    col, row = c % cols, c // cols
-    if PlayerXY:
-        p = humans[pi]
-        ep_assert(p in PlayerXY, "[SNQC] SNQC_XY%d 가 없다 (SNQC_XY1~8 은 사람 슬롯 전부 줘야 한다)" % (p + 1))
-        bx, by = PlayerXY[p]
-        x, y = bx + 32 * col, by + 32 * row
-    else:
-        step_x = 32 if SNQC_X + 32 * (cols - 1) < W else -32
-        step_y = 32 if SNQC_Y + 32 * (rows * len(humans) - 1) < H else -32
-        x, y = SNQC_X + step_x * col, SNQC_Y + step_y * (row + rows * pi)
-    ep_assert(0 <= x < W and 0 <= y < H, "[SNQC] 채널 건물 자리가 맵 밖 (%d, %d) - SNQC_XY / SNQC_XYn / SNQCColumns 를 볼 것" % (x, y))
+    step_x = 32 if SNQC_X + 32 * (NCh - 1) < W else -32
+    step_y = 32 if SNQC_Y + 32 * (len(humans) - 1) < H else -32
+    x, y = SNQC_X + step_x * c, SNQC_Y + step_y * pi
+    ep_assert(0 <= x < W and 0 <= y < H, "[SNQC] 채널 건물 자리가 맵 밖 (%d, %d) - SNQC_XY 를 바꿀 것" % (x, y))
     return x, y
 
 
@@ -456,11 +452,17 @@ def onPluginStart():
     CreateChannels()
 
 
+# 만드는 순간의 시야 (1.2): 게임은 만든 플레이어의 공유 시야(0x57F1EC + 4 * 플레이어)대로 3x3 칸을 밝힌다
+# (OpenBW initialize_unit -> refresh_unit_vision). CreateUnit 동안만 그 칸을 0 으로 두어 아무에게도 안 밝힌다.
+# 맵이 사람에게 컴퓨터 시야를 나눠 주는 중(Turn ON Shared Vision for Player 8)이어도 안 보인다.
+# 그 뒤 100프레임마다의 시야 갱신은 이동 상태 UM_Hidden 으로 막는다 (여기와 ReceiveQC).
 @EUDFunc
 def CreateChannels():
     loc_epd = EPD(0x58DC60) + SNQCLoc * 5
     taken = {}
     for pi, p in enumerate(humans):
+        maker = p if SNQCCreator is None else SNQCCreator
+        vis_epd = EPD(0x57F1EC) + maker
         for c in range(NCh):
             idx = p * NCh + c
             px, py = _xyfor(pi, c)
@@ -475,13 +477,19 @@ def CreateChannels():
                     DoActions(SetMemoryXEPD(loc_epd + 4, SetTo, 0, 0xFFFF0000))   # 로케이션 고도 플래그 끄기 (MSQC 와 같다)
                     f_setloc(SNQCLoc + 1, px, py)   # f_setloc 은 1부터 센다
                     ptr, epd = f_cunitepdread_epd(EPD(0x628438))
-                    DoActions(CreateUnit(1, SNQCUnit, SNQCLoc + 1, p))
+                    vis = f_dwread_epd(vis_epd)
+                    DoActions([
+                        SetMemoryEPD(vis_epd, SetTo, 0),
+                        CreateUnit(1, SNQCUnit, SNQCLoc + 1, maker),
+                    ])
+                    f_dwwrite_epd(vis_epd, vis)
                     if EUDIf()([MemoryXEPD(epd + 0x64 // 4, Exactly, SNQCUnit, 0xFFFF),
-                                MemoryXEPD(epd + 0x4C // 4, Exactly, p, 0xFF)]):
+                                MemoryXEPD(epd + 0x4C // 4, Exactly, maker, 0xFF)]):
                         f_setloc(SNQCLoc + 1, sx - 16, sy - 16, sx + 16, sy + 16)
                         DoActions([
-                            GiveUnits(1, SNQCUnit, p, SNQCLoc + 1, SNQCPlayer),
-                            SetMemoryXEPD(epd + 0x4C // 4, SetTo, p, 0xFF),                  # 소유자 바이트만 사람으로
+                            GiveUnits(1, SNQCUnit, maker, SNQCLoc + 1, SNQCPlayer),
+                            SetMemoryXEPD(epd + 0x4C // 4, SetTo, p, 0xFF),                  # 소유자 바이트만 사람으로 (명령을 받게)
+                            SetMemoryXEPD(epd + 0x94 // 4, SetTo, UM_HIDDEN << 24, 0xFF000000),  # +0x97 이동 상태 → 시야 갱신에서 빠짐
                             SetMemoryXEPD(epd + 0xDC // 4, SetTo, 0x04200000, 0x04200000),   # 무적 + 충돌 없음
                             SetMemoryXEPD(epd + 0xA5 // 4, SetTo, 0, 0xFF00),                # 세대 0 (알파ID = 인덱스+1, MSQC 와 같다)
                             SetMemoryEPD(epd + 0xF8 // 4, SetTo, 0),                         # 랠리 칸 = 기준값
@@ -726,6 +734,11 @@ def ReceiveQC():
             idx = p * NCh + c
             epd = ChEPD[idx]
             if EUDIf()(epd >= 1):
+                # 1.2: 매 사이클 이동 상태를 UM_Hidden 으로 다시 고정 (그 칸이 아직 채널 종류일 때만 - 죽은 채널 칸이
+                # 다른 유닛에 다시 쓰였으면 그 유닛을 멈추게 되므로. 없어진 채널은 CheckChannels 가 지운다)
+                if EUDIf()(MemoryXEPD(epd + 0x64 // 4, Exactly, SNQCUnit, 0xFFFF)):
+                    DoActions(SetMemoryXEPD(epd + 0x94 // 4, SetTo, UM_HIDDEN << 24, 0xFF000000))
+                EUDEndIf()
                 rally = epd + 0xF8 // 4
                 if EUDIfNot()(MemoryEPD(rally, Exactly, 0)):
                     if ch[0] == "key":
