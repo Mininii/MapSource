@@ -213,10 +213,10 @@ def qc_input():
         "lines": [l.strip() for l in block.splitlines() if l.strip()],
         "chat_death": one("QCInput_ChatTitleDeath", r"(\d+)"),
         "unit": one("QCInput_ChannelUnit", r"(\d+)"),
-        # 플레이어(0부터) -> (x, y). 한 줄 표 {[0] = {x, y}, ...}
-        "player_xy": [(int(p), x, y) for p, x, y in re.findall(
-            r"\[(\d+)\]\s*=\s*\{\s*(\d+)\s*,\s*(\d+)\s*\}", one("QCInput_PlayerXY", r"(\{.*\})"))],
-        "columns": one("QCInput_Columns", r"(\d+)"),
+        # P1 의 첫 채널 자리 {x, y}
+        "xy": one("QCInput_ChannelXY", r"\{\s*(\d+)\s*,\s*(\d+)\s*\}"),
+        # 채널 건물을 만드는 플레이어 (0부터)
+        "creator": int(one("QCInput_Creator", r"(\d+)")),
     }
 
 
@@ -259,9 +259,9 @@ def qc_section(doc, qc):
     if qc["mode"] == "MSQC":
         head = ["[MSQC]", "QCDebug = false"]
     else:
-        # 채널 자리: 플레이어별 첫 자리 (SNQC_XY1 = P1) + 한 줄 채널 수. Lua 판의 PlayerXY / Columns 와 같은 표
-        head = ["[SNQC]", "SNQCUnit = %s" % qc["unit"], "SNQCColumns = %s" % qc["columns"]]
-        head += ["SNQC_XY%d = %s, %s" % (p + 1, x, y) for p, x, y in qc["player_xy"]]
+        # Lua 판의 Unit / Creator / XY 와 같은 값 (QCInput_Install)
+        head = ["[SNQC]", "SNQCUnit = %s" % qc["unit"], "SNQCCreator = P%d" % (qc["creator"] + 1),
+                "SNQC_XY = %s, %s" % qc["xy"]]
     return "\n".join(head + [body] + scrdb) + "\n"
 
 
@@ -364,9 +364,13 @@ def stash_manifest(doc):
 
 
 def main():
+    global TEPC
     ap = argparse.ArgumentParser(description="MSF_UE_RE SCR_DB 판 헤드리스 빌드")
     ap.add_argument("--tepc-only", action="store_true", help="1단계(tepc)만 돌린다")
+    ap.add_argument("--tepc", default=TEPC,
+                    help="tepc 실행 파일 (기본: %(default)s). 그 파일이 없는 PC 에서 같은 트리거를 내는 판을 줄 때")
     args = ap.parse_args()
+    TEPC = os.path.abspath(args.tepc)
     build_started = time.time()
 
     qc = qc_input()
