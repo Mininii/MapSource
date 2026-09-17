@@ -149,3 +149,23 @@
   `tools/snqc_probe.py` 가 이 PC 에 없는 `DPS_Enhance/tools/debugbridge` 만 보던 것을 `DPS_eud/tools/debugbridge`·`theSeed/diag` 도 찾게 고쳤다
   (게임에 붙는 것까지 확인. 그때 떠 있던 맵은 플러그인 판이라 디버그 블록은 없었다).
 - **Lua 판 인게임 (제작자, 싱글): 이상 없음.** 두 판 모두 시야 끄기·입력이 확인됐다. 남은 것은 멀티(디싱크) - 제작자가 나중에 멀티플레이 때 잰다.
+
+## 12. 플러그인 판 1.3 - eudplib 0.81 호환·합치기 판정 (2026-09-17)
+
+- 계기: MSF_UE_RE eudplib 이식 평가(다른 세션)에서 두 가지를 지적 - (1) eudplib 0.81 에서 키 배열이 배열 밖에 쓴다,
+  0.81 컴파일에 "EPD on EPD value of ConstExpr is no-op" 경고, (2) 합치기 판정 뺄셈이 wrap 이라 틀린다 (0.76 에도).
+  브랜치 `fix/snqc-081` (작업 트리는 세션 임시 폴더)에서 검증하고 고쳤다.
+- 검증 방법: DPS_eud·eudext 의 트리거 에뮬레이터를 합친 사본(`tests/emu.py`)과 턴 모델(버퍼의 09/0A/0B/15 명령을 K 사이클마다 실행)로
+  `tests/t_snqc_emu.py` 를 만들어 1.2 와 1.3 을 eudplib 0.76.14·0.81.0 에서 각각 돌렸다.
+  - (1) 맞음. 0.81 의 `EUDArray` 값은 EPD 라 `KeyArray + 키 // 8` 이 dword 색인 → A·B +32바이트, F12 +60, ` +96.
+    적층 페이로드라 빌드마다 겹치는 것이 달라, 같은 설정 4번 중 2번이 실행 트리거(플래그 칸·쓰이는 액션 칸·플레이어 칸)와 겹쳤다.
+    경고의 474줄 `EPD(ChEPD)` 자체는 0.81 에서도 값이 맞았다(경고만). 곁들여 `isUnproxyInstance(v, EUDVArray(8))` 이
+    0.81 에서 `TypeError` 라 배열 결과 줄이 있으면 빌드가 멈추는 것을 찾았다.
+  - (2) 맞음. eudplib 의 `-=` 는 두 판 모두 `self + 1 + (0xFFFFFFFF - other)` (wrap). `pend == L` 일 때만 합치는데 패킷 뒤에 늘
+    선택 되돌리기가 붙어 사실상 안 합쳤다. 3사이클 턴에서 1사이클 A · 2사이클 B → B 만 도착, 키 패킷 2개·값 패킷 3개.
+- 고친 것은 CHANGELOG 1.3. 평가 세션의 수정판(`port_eval\ue_re\sync_scrdb\snqc\SNQC_p081.py`)도 같은 시험으로 돌렸다:
+  키 칸은 두 판에서 맞지만(주소를 4의 배수로 만들지 않고 EPD 내림에 기댄다), 합치기는 그대로 틀리고,
+  0.81 에서 EUDVArray 결과 줄이 있으면 `_write_target` 의 `isUnproxyInstance(array, EUDVArray(8))` 에서 여전히 빌드가 멈춘다.
+  그래서 그 판을 옮기지 않고, 주소를 명시한 두 판 공통 코드로 다시 짰다.
+- 사본: `C:\euddraft0.9.2.0\plugins\SNQC.py`(0.76, theSeed 다음 판·DPS_eud 가 씀)와 `ue_eud\MapSource`(MSF_UE_RE 이식 작업 트리)의 SNQC.py 는
+  1.2 그대로다 (고치지 않았다). 인게임은 아직.

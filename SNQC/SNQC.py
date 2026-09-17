@@ -44,9 +44,14 @@ MSQC(Murakami Shiina QueueCommand, plugins/MSQC.py)를 대신하는 "로컬 입�
         0x주소,비교,값  0x주소,마스크  그 밖의 eudplib 조건식
   결과 자리에 EUDArray 이름을 쓰면 데스값 대신 그 배열[플레이어] 에 쓴다 (MSQC 와 같음)
 
+eudplib 판 (1.3): 0.76.14 (euddraft 0.9.x, C:/euddraft0.9.2.0) 와 0.81 (euddraft 0.11) 에서 같은 트리거 뜻이 되게 쓴다.
+  0.81 은 EUDArray 의 값이 주소가 아니라 EPD 다 - 배열 값에 주소 산술(`배열 + n`)을 하지 말고, EPD 는 _arr_epd() 로 얻는다.
+  eudplib 의 `-` / `-=` 는 0 에서 멈추지 않는다(wrap). 크기 비교는 뺄셈 결과를 부호 있는 수로 본다 (Emit 의 합치기 판정).
+
 확인 (2026-09-17): theSeed 싱글·LAN 2인(64비트+32비트) 인게임 통과 (1.0) - 150프레임 소실 없음, 디싱크 없음.
   1.2 의 시야 끄기는 MSF_UE_RE 싱글 인게임 확인 (채널 자리 안 보임, 키·SCR_DB 정상). 멀티는 아직.
-  합치기(턴이 여러 사이클인 방)·버퍼 한계는 아직 (DESIGN.md "확인 목록").
+  1.3 의 두 수정(키 배열, 합치기 판정)은 에뮬레이터 시험(tests/t_snqc_emu.py, 두 판)까지. 인게임은 아직.
+  합치기(턴이 여러 사이클인 방)·버퍼 한계의 인게임은 아직 (DESIGN.md "확인 목록").
 """
 import re
 from math import ceil
@@ -54,7 +59,7 @@ from math import ceil
 from eudplib import *
 
 # 판 번호 - CHANGELOG.md 의 "플러그인 판" 과 맞춘다
-SNQC_VERSION = "1.2"
+SNQC_VERSION = "1.3"
 
 # fmt: off
 SNQCUnit, SNQCPlayer, SNQCLoc = 106, 10, 0
@@ -69,8 +74,11 @@ FACTORY_UNITS = {106, 111, 113, 114, 130, 131, 132, 133, 154, 155, 160, 167}
 
 key_lines, val_lines, deathsUnits = [], [], set()   # key_lines: (conds, ret) / val_lines: (conds, ret)
 
-KeyArray, KeyOffset = EUDArray(8), set()
-MouseArray, MouseOffset = EUDArray(1), set()
+# 로컬 눌림 기억 (1.3: EUDArray → 바이트 배열). KeyArray 는 가상 키 256개의 비트 (_keybit), MouseArray 는 버튼 비트.
+# 1.2 는 EUDArray(8) 에 `KeyArray + 키 // 8` 로 주소를 만들었다. eudplib 0.76 은 EUDArray 값이 주소라 EPD 내림으로
+# (키 // 32) 번째 칸이 되었지만, 0.81 은 값이 EPD 라 (키 // 8) 번째 칸 = 키 0x40 이상에서 배열 밖(다른 트리거·변수)에 썼다.
+KeyArray, KeyOffset = Db(32), set()
+MouseArray, MouseOffset = Db(4), set()
 
 MouseButtonDict = {"L": 2, "LEFT": 2, "R": 8, "RIGHT": 8, "M": 32, "MIDDLE": 32}
 KeyCodeDict = {
@@ -144,6 +152,30 @@ def EncPlayer(s):
 
 
 # ─── 조건 (MSQC 와 같은 뜻) ──────────────────────────────────────────────────
+def _keybit(offset):
+    """가상 키 offset 의 눌림 기억 칸 (주소, 비트) = KeyArray 의 (offset // 32) 번째 dword, (offset % 32) 번째 비트.
+    주소는 늘 4의 배수로 만든다 (두 eudplib 판에서 같은 칸)."""
+    return KeyArray + 4 * (offset // 32), 2 ** (offset % 32)
+
+
+def _arr_epd(arr):
+    """EUDArray / EUDVArray 첫 칸의 EPD (판 무관).
+    eudplib 0.76 은 배열 값이 주소라 EPD() 가 필요하고, 0.81 의 EUDArray 는 값이 이미 EPD 라 EPD() 가
+    "EPD on EPD value of ConstExpr is no-op" 경고만 내고 그대로 둔다. 두 판 모두 배열 객체가 EPD 를 _epd 로 들고 있다."""
+    return arr._epd
+
+
+def _is_varray8(v):
+    """EUDVArray(8) 인스턴스인가 (MSQC 와 같이 8칸만 받는다).
+    eudplib 0.76 은 EUDVArray(8) 이 크기별 **클래스**라 isinstance 로 본다.
+    0.81 은 EUDVArray(8) 이 클래스가 아닌 공장 객체라 isinstance 에 넣으면 TypeError (1.2 는 배열 결과 줄이 있으면 빌드가 멈췄다) -
+    인스턴스 클래스(또는 부모, PVariable 등)가 _EUDVArray 이고 크기 _size 가 8 인지로 본다."""
+    kind = EUDVArray(8)
+    if isinstance(kind, type):
+        return isUnproxyInstance(v, kind)
+    return any(c.__name__ == "_EUDVArray" for c in type(v).__mro__) and getattr(v, "_size", None) == 8
+
+
 def _keyoffset(k):
     try:
         return KeyCodeDict[k.strip().upper()]
@@ -161,22 +193,24 @@ def _mousebit(k):
 def KeyDown(k):
     offset = _keyoffset(k)
     KeyOffset.add(offset)
-    r, n = offset % 4, 2 ** (offset % 32)
+    r = offset % 4
     m = 256 ** r
+    ka, n = _keybit(offset)
     return [
         MemoryX(0x596A18 + offset - r, Exactly, m, m),
-        MemoryX(KeyArray + offset // 8, Exactly, 0, n),
+        MemoryX(ka, Exactly, 0, n),
     ]
 
 
 def KeyUp(k):
     offset = _keyoffset(k)
     KeyOffset.add(offset)
-    r, n = offset % 4, 2 ** (offset % 32)
+    r = offset % 4
     m = 256 ** r
+    ka, n = _keybit(offset)
     return [
         MemoryX(0x596A18 + offset - r, Exactly, 0, m),
-        MemoryX(KeyArray + offset // 8, Exactly, n, n),
+        MemoryX(ka, Exactly, n, n),
     ]
 
 
@@ -209,23 +243,24 @@ def NotTyping():
 
 
 def KeyUpdate():
-    for offset in KeyOffset:
-        r, n = offset % 4, 2 ** (offset % 32)
+    for offset in sorted(KeyOffset):
+        r = offset % 4
         m = 256 ** r
+        ka, n = _keybit(offset)
         RawTrigger(
             conditions=[MemoryX(0x596A18 + offset - r, Exactly, m, m),
-                        MemoryX(KeyArray + offset // 8, Exactly, 0, n)],
-            actions=SetMemoryX(KeyArray + offset // 8, SetTo, n, n),
+                        MemoryX(ka, Exactly, 0, n)],
+            actions=SetMemoryX(ka, SetTo, n, n),
         )
         RawTrigger(
             conditions=[MemoryX(0x596A18 + offset - r, Exactly, 0, m),
-                        MemoryX(KeyArray + offset // 8, Exactly, n, n)],
-            actions=SetMemoryX(KeyArray + offset // 8, SetTo, 0, n),
+                        MemoryX(ka, Exactly, n, n)],
+            actions=SetMemoryX(ka, SetTo, 0, n),
         )
 
 
 def MouseUpdate():
-    for k in MouseOffset:
+    for k in sorted(MouseOffset):
         RawTrigger(
             conditions=[MemoryX(0x6CDDC0, Exactly, k, k), MemoryX(MouseArray, Exactly, 0, k)],
             actions=SetMemoryX(MouseArray, SetTo, k, k),
@@ -471,7 +506,7 @@ def CreateChannels():
             ep_assert((sx, sy) not in taken, "[SNQC] 채널 자리가 겹친다 (%d, %d): P%d 채널 %d 와 %s"
                       % (sx, sy, p + 1, c + 1, taken.get((sx, sy))))
             taken[(sx, sy)] = "P%d 채널 %d" % (p + 1, c + 1)
-            if EUDIf()([MemoryEPD(EPD(ChEPD) + idx, Exactly, 0), Memory(0x628438, AtLeast, 1)]):
+            if EUDIf()([MemoryEPD(_arr_epd(ChEPD) + idx, Exactly, 0), Memory(0x628438, AtLeast, 1)]):
                 if EUDIf()(f_playerexist(p)):
                     saved = [f_dwread_epd(loc_epd + i) for i in range(5)]
                     DoActions(SetMemoryXEPD(loc_epd + 4, SetTo, 0, 0xFFFF0000))   # 로케이션 고도 플래그 끄기 (MSQC 와 같다)
@@ -579,12 +614,15 @@ def Emit(c, C, is_key, appended):
     done = EUDVariable()
     done << 0
     if UseMerge:
-        # 지난번 붙인 패킷이 아직 버퍼에 있나: 길이가 그때 이상 + 그 자리에 "09 01 내 채널"
+        # 지난번 붙인 패킷이 아직 버퍼에 있나: 길이가 그때 이상(L >= pend) + 그 자리에 "09 01 내 채널"
+        # 1.3: eudplib 의 `-=` 는 0 에서 멈추지 않는다(wrap, 두 판 같음). 1.2 는 `t = pend - L; t == 0` 이라 pend == L 일 때만
+        # 합쳤고, 패킷 뒤에는 늘 선택 되돌리기가 붙으므로 사실상 합치기가 한 번도 안 됐다 (턴이 여러 사이클인 방에서 앞 사이클의 키가 사라짐).
+        # Lua 판(CiSub + VLe 0x7FFFFFFF)과 같게 t = L - pend 를 부호 있는 수로 본다. 둘 다 버퍼 길이(≤ 0x57F0D8 값)라 넘치지 않는다.
         pend = PendLen[c]
         t = EUDVariable()
-        t << pend
-        t -= L                      # SC 뺄셈은 0 밑으로 안 내려간다 → t == 0 이면 pend <= L
-        if EUDIf()([pend >= 1, t == 0]):
+        t << L
+        t -= pend
+        if EUDIf()([pend >= 1, t <= 0x7FFFFFFF]):
             P = PendOff[c] + 0x654880
             hdr = f_dwread(P)
             if EUDIf()(f_bitxor(hdr, MyHdr[c]) == 0):
@@ -689,7 +727,7 @@ def SendQC():
 def _parse_array(s):
     _ns = GetEUDNamespace()
     for k, v in _ns.items():
-        if (isUnproxyInstance(v, EUDArray) or isUnproxyInstance(v, EUDVArray(8))) and k in s:
+        if k in s and (isUnproxyInstance(v, EUDArray) or _is_varray8(v)):
             s = re.sub(r"\b{}\b".format(k), "_ns['\\g<0>']", s)
     return s
 
@@ -701,9 +739,10 @@ def _write_target(p, target, value, add=False):
     _ns = GetEUDNamespace()
     array = eval(_parse_array(target))
     if isUnproxyInstance(array, EUDArray):
-        (f_dwadd_epd if add else f_dwwrite_epd)(EPD(array) + p, value)
-    elif isUnproxyInstance(array, EUDVArray(8)):
-        (f_dwadd_epd if add else f_dwwrite_epd)(EPD(array) + 328 // 4 + 5 + 18 * p, value)
+        (f_dwadd_epd if add else f_dwwrite_epd)(_arr_epd(array) + p, value)
+    elif _is_varray8(array):
+        # 값 칸 = 변수 트리거(72바이트)마다 +348 (두 판 같음: 0.76 `18 * i + 348 // 4`, 0.81 `87 + _epd + 18 * i`)
+        (f_dwadd_epd if add else f_dwwrite_epd)(_arr_epd(array) + 348 // 4 + 18 * p, value)
     else:
         raise EPError("%s 는 데스유닛도 EUDArray 도 아니다" % target)
 
