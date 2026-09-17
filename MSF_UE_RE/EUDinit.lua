@@ -143,6 +143,9 @@ function onInit_EUD()
 	CMov(FP,CurrentUID,0)
 	CWhile(FP,CVar(FP,CurrentUID[2],AtMost,227)) --  모든 유닛의 스패셜 어빌리티 플래그 설정
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,58)},{SetCVar(FP,CurrentUID[2],Add,1),SetCVar(FP,QCUnits[2],Add,1)},{preserved}) -- 아 발키리 좀 저리가요
+	for _, U in ipairs(QCInput_ChannelUnits()) do -- SNQC 채널 건물 (건설크기를 1x1 로 덮으면 보이게 된다. QCInput.lua)
+		TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,U)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved})
+	end
 	TriggerX(FP,{CVar(FP,CurrentUID[2],Exactly,181)},{SetCVar(FP,CurrentUID[2],Add,1)},{preserved}) -- Cantina = nil
 	CMov(FP,VRet,CurrentUID,EPDF(0x664080)) -- SpecialAdvFlag
 	CMov(FP,VRet2,CurrentUID,EPDF(0x662860)) --BdDim
@@ -685,7 +688,11 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 			-- 0xYYYYXXXX 0xLLIIPPUU
 			-- X = 좌표 X, Y = 좌표 Y, L = 유닛 식별자, I = 무적 플래그, P = 플레이어ID, U = 유닛ID
 			CunitHP = CreateVar(FP)
-			CIf(FP,{TTMemoryX(_Add(BackupCp,6),NotSame,58,0xFF)}) -- 발키리 저리가
+			local SkipQC = {TTMemoryX(_Add(BackupCp,6),NotSame,58,0xFF)} -- 발키리 저리가
+			for _, U in ipairs(QCInput_ChannelUnits()) do -- SNQC 채널 건물도 (QCInput.lua)
+				table.insert(SkipQC, TTMemoryX(_Add(BackupCp,6),NotSame,U,0xFF))
+			end
+			CIf(FP,SkipQC)
 				f_Read(FP,_Sub(BackupCp,9),CPos)
 				f_Read(FP,_Sub(BackupCp,17),CunitHP)
 				f_Div(FP,CunitHP,_Mov(256))
@@ -728,6 +735,9 @@ UnitSizePatch(12,5) -- 마린 크기 5*5 설정
 	CWhile(FP,CVar(FP,RepHeroIndex[2],AtMost,227))
 	--
 	TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,58)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{preserved}) -- 발키리 나가
+	for _, U in ipairs(QCInput_ChannelUnits()) do -- SNQC 채널 건물도 (QCInput.lua)
+		TriggerX(FP,{CVar(FP,RepHeroIndex[2],Exactly,U)},{SetCVar(FP,RepHeroIndex[2],Add,1)},{preserved})
+	end
 	CDoActions(FP,{
 		TModifyUnitEnergy(All,RepHeroIndex,AllPlayers,64,0),
 		TRemoveUnit(RepHeroIndex,AllPlayers),

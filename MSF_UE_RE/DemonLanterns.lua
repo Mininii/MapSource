@@ -2500,7 +2500,8 @@ function Install_DLBoss()
 	Void(3, Exactly, 41);})
 	CElseIfX(CVar(FP,VResetSw4[2],Exactly,0),SetCVar(FP,VResetSw4[2],SetTo,1))
 	CallTrigger(FP,Call_VoidReset)
-	DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P11),KillUnit("Any unit",P12),
+	DoActionsX(FP,QCInput_KillP11BossUnits()) -- P11 은 "Any unit" 대신 넘긴 유닛만 (SNQC 채널 건물을 살린다. QCInput.lua)
+	DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P12),
 	SetCDeaths(FP,SetTo,1,DLClear);
 	SetCDeaths(FP,SetTo,0,WaitT);
 		DL_Recover;

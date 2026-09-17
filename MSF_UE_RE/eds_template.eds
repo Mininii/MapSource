@@ -10,50 +10,7 @@ Path : {{CTEMP}}
 [freeze]
 prompt: 1
 freeze: 0
-[MSQC]
-0x58D900, Exactly, 2 : VChatIndex, 1
-0x58D900, Exactly, 3 : VChatIndex, 2
-0x58D900, Exactly, 4 : VChatIndex, 3
-0x58D900, Exactly, 5 : VChatIndex, 4
-
-QCDebug = false
-Switch("Switch 240",Set); val, 0x58F500 : 180
-Switch("Switch 240",Set);ESC = 199,1
-Switch("Switch 240",Set);F12 = 202,1
-Switch("Switch 240",Set);F9 = 203,1
-Switch("Switch 240",Set);HOME = 197,1
-Deaths(CurrentPlayer,Exactly,1,441);RIGHT = 200,1
-Deaths(CurrentPlayer,Exactly,1,441);LEFT = 201,1
-Deaths(CurrentPlayer,Exactly,1,441);Switch("Switch 240",Cleared);Y = 221,1
-Deaths(CurrentPlayer,Exactly,1,441);B = 204,1
-Deaths(CurrentPlayer,AtLeast,1,443);1 = 205,1
-Deaths(CurrentPlayer,AtLeast,1,443);2 = 206,1
-Deaths(CurrentPlayer,AtLeast,1,443);3 = 207,1
-Deaths(CurrentPlayer,AtLeast,1,443);4 = 208,1
-Deaths(CurrentPlayer,AtLeast,1,443);5 = 209,1
-Deaths(CurrentPlayer,AtLeast,1,443);6 = 210,1
-Deaths(CurrentPlayer,AtLeast,1,443);7 = 211,1
-Deaths(CurrentPlayer,AtLeast,1,442);1 = 212,1
-Deaths(CurrentPlayer,AtLeast,1,442);2 = 213,1
-Deaths(CurrentPlayer,AtLeast,1,442);3 = 214,1
-Deaths(CurrentPlayer,AtLeast,1,442);4 = 215,1
-Deaths(CurrentPlayer,AtLeast,1,442);5 = 216,1
-Deaths(CurrentPlayer,AtLeast,1,442);6 = 217,1
-Deaths(CurrentPlayer,AtLeast,1,442);7 = 218,1
-Deaths(CurrentPlayer,AtLeast,1,442);` = 219,1
-Deaths(CurrentPlayer,AtLeast,1,442);Q = 102,1
-Deaths(CurrentPlayer,AtLeast,1,442);KeyPress(E) = 102,1
-Switch("Switch 230",Set);TAB = 222,1
-Switch("Switch 230",Set);Z = 225,1
-Switch("Switch 230",Set);KeyPress(LSHIFT);LEFT = 223,1
-Switch("Switch 230",Set);KeyPress(LSHIFT);RIGHT = 224,1
-Switch("Switch 231",Set);F12 = 226,1
-Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f610 : 150
-Always();val, 0x58f614 : 101
-Deaths(CurrentPlayer,AtLeast,1,442);val, 0x58f618 : 152
-Deaths(CurrentPlayer,AtLeast,1,40);Deaths(CurrentPlayer,AtLeast,1,41);Deaths(CurrentPlayer,AtLeast,1,42);mouse: Location74
-Memory(0x68C14C,Exactly,{{MULTICMD_SET}});val, 0x68C14C : {{MULTICMD_FLAG_DEATH}}
-{{SCRDB_MSQC}}
+{{QC_SECTION}}
 [chatEvent]
 __addr__ : 0x58D900
 __ptrAddr__ : 0x58D904

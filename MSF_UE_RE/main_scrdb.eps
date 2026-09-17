@@ -1,16 +1,16 @@
-import PluginVariables as msqcvar;
 	// SCR_DB 판 TE 메인 (EUD Editor 트리거 에디터의 main 파일로 들어간다).
 	// 원본(sca.eps)에서 SCArchive 를 걷어 낸 것이다. 불러오기/저장은 이제 Lua(SCR_DB_MSF.lua)가
 	// 하고, 여기에는 SCA 와 상관없는 기능만 남았다.
-	//   - 채팅 숫자 입력 -> 0x58f610 / 0x58f618 (미네랄 기부 금액. MSQC val 로 데스 150/152 에 실린다)
+	//   - 채팅 숫자 입력 -> 0x58f610 / 0x58f618 (미네랄 기부 금액. 입력 동기화의 val 줄로 데스 150/152 에 실린다)
 	//   - @칭호 1~4 채팅 명령과 칭호 표시(SetPNamef)
 	// 칭호의 GUEST 표시는 예전엔 SCA 불러오기 여부(SCA_LLoadCheck)를 봤다. 지금은 불러오기 상태
 	// 데스 23 이 2(불러옴)인지 본다.
-	// 이 파일을 build_scrdb.py 가 그대로 TriggerEditor\main.eps 로 싣는다 (EUD Editor 3 없이, 2026-09-15).
-	// 예전의 EUD Editor 매크로 <?ChatEvent("cp","@칭호 N")?> 는 EUD Editor 가 풀던 모양 그대로 적어 두었다:
-	//   MemoryEPD(EPD(msqcvar.VChatIndex) + cp, Exactly, N)
-	// "@칭호 N" 채팅 -> [chatEvent] 가 0x58D900 에 N+1 -> [MSQC] 가 VChatIndex[플레이어] = N (eds_template.eds).
-	// VChatIndex 는 옆의 PluginVariables.py 가 만든다.
+	// 이 파일을 build_scrdb.py 가 {{...}} 만 채워 TriggerEditor\main.eps 로 싣는다 (EUD Editor 3 없이, 2026-09-15).
+	// "@칭호 N" 채팅 -> [chatEvent] 가 0x58D900 에 N+1 -> 입력 동기화(QCInput.lua)가 그 플레이어의 데스 {{CHAT_TITLE_DEATH}} = N.
+	// 예전에는 EUD Editor 매크로 <?ChatEvent("cp","@칭호 N")?> 로 PluginVariables.py 의 VChatIndex[플레이어] 를 봤다
+	// (MSQC 전용 - SNQC CtrigAsm 판은 데스값만 받는다). 데스 번호는 build_scrdb.py 가 QCInput.lua 의 QCInput_ChatTitleDeath 로 채운다.
+	// 데스값은 받은 사이클 한 번만 N 이다 (다음 사이클 0). 플러그인 판은 이 함수보다 먼저, CtrigAsm 판은 지난 프레임
+	// 트리거에서 받으므로 어느 쪽이든 여기서 한 번 보인다.
 
 	function beforeTriggerExec(){
 		const Nick1 = PVariable(list(1,1,1,1,1,1,1,1)); // 칭호 식별자
@@ -27,12 +27,12 @@ import PluginVariables as msqcvar;
 
 			var OldPLV = dwread_epd(72+cp);
 			var NewPLV = dwread_epd(216+cp);
-			if(MemoryEPD(EPD(msqcvar.VChatIndex) + cp, Exactly, 1)){
+			if(Deaths(CurrentPlayer, Exactly, 1, {{CHAT_TITLE_DEATH}})){
 					Nick1[cp] = 1;
 					f_eprintln("\x03칭호\x04가 \x07",1," \x04번으로 변경되었습니다.");
 					SetDeaths(CurrentPlayer,SetTo,5000,15);
 			}
-			if(MemoryEPD(EPD(msqcvar.VChatIndex) + cp, Exactly, 2)){
+			if(Deaths(CurrentPlayer, Exactly, 2, {{CHAT_TITLE_DEATH}})){
 			if (OldPLV>=2) {
 					Nick1[cp] = 2;
 					f_eprintln("\x03칭호\x04가 \x07",2," \x04번으로 변경되었습니다.");
@@ -42,7 +42,7 @@ import PluginVariables as msqcvar;
 					f_eprintln("\x03구 레벨데이터\x04가 존재하지 않습니다.");
 			}
 			}
-			if(MemoryEPD(EPD(msqcvar.VChatIndex) + cp, Exactly, 3)){
+			if(Deaths(CurrentPlayer, Exactly, 3, {{CHAT_TITLE_DEATH}})){
 			if(Deaths(CurrentPlayer,AtLeast,1,11)){
 					Nick1[cp] = 3;
 					f_eprintln("\x03칭호\x04가 \x07",3," \x04번으로 변경되었습니다.");
@@ -54,7 +54,7 @@ import PluginVariables as msqcvar;
 			}
 			}
 
-			if(MemoryEPD(EPD(msqcvar.VChatIndex) + cp, Exactly, 4)){
+			if(Deaths(CurrentPlayer, Exactly, 4, {{CHAT_TITLE_DEATH}})){
 			if(Deaths(CurrentPlayer,AtLeast,1,38)){
 					Nick1[cp] = 4;
 					f_eprintln("\x03칭호\x04가 \x07",4," \x04번으로 변경되었습니다.");

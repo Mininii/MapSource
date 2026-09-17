@@ -6,7 +6,7 @@ REM  MSF_UE_RE (SCR_DB edition) build  --  just double-click this file.
 REM
 REM  It runs all three stages and writes a playable map:
 REM      1) tepc     : main.lua -> triggers   (base map: MSF_UE_RE_base.scx)
-REM      2) euddraft : MSQC / chatEvent / STRCtrig / stat_txt / sounds
+REM      2) euddraft : input sync (QCInput.lua) / chatEvent / STRCtrig / stat_txt / sounds
 REM                    (sounds come from C:\euddraft0.9.2.0\MSF_UE_RE_BGM)
 REM      3) CPLP     : protector  ->  *_out.scx
 REM  EUD Editor 3 and the .e3s file are not used any more.

@@ -13,8 +13,8 @@
 	  [ExtraDataEditor.py] 버튼셋                EUDEditorButtonSets.lua  -> RegisterButtonSetData()/ApplyButtonSetData()
 	  [ExtraDataEditor.py] 와이어프레임 4줄      EUDEditorWireframe() (아래)  Library 의 ChangeWireframe
 	  custom_txt.tbl -> [dataDumper]             stat_txt.tbl + EUDEditorStatTxt.lua -> WriteStatTxtTbl() (컴파일 때 파일로)
-	  TriggerEditor\main.eps (칭호·기부 채팅)     main_scrdb.eps + PluginVariables.py   (build_scrdb.py 가 싣는다)
-	  EUDEditor.eds (MSQC 키·chatEvent 등)       eds_template.eds                       (build_scrdb.py 가 채운다)
+	  TriggerEditor\main.eps (칭호·기부 채팅)     main_scrdb.eps                         (build_scrdb.py 가 싣는다)
+	  EUDEditor.eds (MSQC 키·chatEvent 등)       eds_template.eds + QCInput.lua         (build_scrdb.py 가 채운다)
 
 	■ 시점
 	  EUD Editor 의 플러그인은 onPluginStart(첫 프레임, 트리거보다 먼저)와 beforeTriggerExec(매 프레임, 트리거보다 먼저)에서

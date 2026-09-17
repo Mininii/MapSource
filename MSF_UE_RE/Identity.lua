@@ -1872,7 +1872,8 @@ Trigger { -- No comment (4347C6C8)
 }
 
 CElseIfX({CVar(FP,VResetSw2[2],Exactly,0),Bring(FP,AtMost,0,"Tarim, Lord Of Regal Castle",64)},SetCVar(FP,VResetSw2[2],SetTo,1))
-DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P11),KillUnit("Any unit",P12),SetCDeaths(FP,Add,1,IdenClear)})
+DoActionsX(FP,QCInput_KillP11BossUnits()) -- P11 은 "Any unit" 대신 넘긴 유닛만 (SNQC 채널 건물을 살린다. QCInput.lua)
+DoActionsX(FP,{KillUnit("Any unit",FP),KillUnit("Any unit",P9),KillUnit("Any unit",P10),KillUnit("Any unit",P12),SetCDeaths(FP,Add,1,IdenClear)})
 DoActions2X(FP,{SetMemory(0x58F568,SetTo,0);
 SetMemory(0x58F564,SetTo,0);
 SetMemory(0x58F570,SetTo,0);

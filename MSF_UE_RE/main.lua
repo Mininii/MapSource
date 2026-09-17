@@ -123,6 +123,9 @@ end
 			DataInput()
 			Install_CallTriggers()
 		CJumpEnd(AllPlayers,init_func)
+		-- 입력 동기화 (QCInput.lua). SNQC_LUA 판이면 여기서 트리거를 만든다. f_Read 등이 위 Include_CtrigPlib 를 요구해서
+		-- 이 자리다. 받은 데스값을 읽는 아래 트리거들(BGMManager, OPTrig, SCRMSF_Exec ...)보다 앞이어야 한다.
+		QCInput_Install()
 		
 		--CT_Prev()
 		
