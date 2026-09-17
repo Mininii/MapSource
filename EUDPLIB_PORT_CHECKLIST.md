@@ -54,7 +54,7 @@ C9-1 은 헤드리스 TEP 로 261칸 일치(원본 32비트 플러그인 확인�
 | Respect V | `Mininii/MSF_Respect_V_eud` | `Documents\MSF_Respect_V_eud` | `build.bat` | 해당 없음(순수 eudplib) |
 | UE_RE | `Mininii/MSF_UE_RE_eud` | `Documents\MSF_UE_RE_eud` | `build.bat` | **통과 (07:00)** — 아래 |
 | Memory 2 | `Mininii/MSF_Memory_2_eud` | `Documents\MSF_Memory_2_eud` | `build.bat` | **통과 (07:2x)** — 아래 |
-| Memory 1 | `Mininii/MSF_Memory_eud` | `Documents\MSF_Memory_eud` | `build.bat` | 진행 중 (A 판 TRIG 62,395 확인 예정) |
+| Memory 1 | `Mininii/MSF_Memory_eud` | `Documents\MSF_Memory_eud` | `build.bat` | **통과 (07:5x)** — 아래 |
 
 **TEP 컴파일이 다른 작업을 덮어쓰지 않는가 — 실측으로 확인됨.** 예전에는 tepc 가 공용 `C:\Temp\temp\SCTRIGASMFILE*` 를 써서 두 맵을 동시에 컴파일할 수 없었습니다. 새 저장소는 그 파일이 전부 저장소 안 `eud\work\…\temp\` 로 떨어집니다.
 
@@ -65,6 +65,21 @@ C9-1 은 헤드리스 TEP 로 261칸 일치(원본 32비트 플러그인 확인�
 - **Memory 2** (2026-09-18, UE_RE 다음): `temp\SCTRIGASMFILE*` 320개, 쓰기 가드 324건 중 **작업 폴더 밖 0·차단 0**, `C:\Temp\temp` 파일 수 3,883 그대로. 공용 자리 diff 무변경(`C:\euddraft0.11.0.1\vcheckpoint.dat` 19B 만 euddraft 자신이 갱신). **TRIGP 합 48,653 / TRIG 41,049 일치**, sha256 대조에서 TRIGP0~7·stat_txt 합본 완전 동일, 다른 곳은 TRIGP8 레코드 15620 과 stage1 트리거 0 **두 자리뿐**(예전 두 판 비교의 '워터마크' 와 같은 자리 — 조건·꼬리 동일, 액션 칸 데이터만 밀림). euddraft rc=0 11.6초, chk 130,068,504 B, 맵 77,786,003 B, 음원 641개 대조 0 불일치, CPLP `_out` 77,808,995 B. 기준값 `eud/tepc_baseline.json` + `build.py checktep` 으로 다음부터 자동 판정.
   - 첫 시도 실패 1건: 껍데기가 `.lua` 만 옮겨 `WriteStatTxtTbl()` 이 `stat_txt.tbl` 을 못 찾아 tepc rc=1 — 폴더의 모든 파일을 옮기도록 고쳐 해결(로드는 `dir /b`+`.lua` 로 고르므로 순서 영향 없음).
 - 맵 크기는 같은 입력이라도 빌드마다 수백 바이트 흔들립니다(eudplib 배치). 트리거 수·chk 크기로 판정합니다.
+- **Memory 1** (2026-09-18, Memory 2 다음, `build.bat lib-release` 22.0초): tepc rc=0 6.0초, **TRIGP0 61,842**(A 판 기대값), **맵 트리거 62,395 = 출시판과 같음**. 맵 49,329,443 B(CPLP 뒤 49,354,787 B), chk 172,287,944 B, 음원 **463개 다른 것 0·없는 것 0**. 컴파일 중 파일은 전부 `eud\work\tepc_lib_d85db5d\` 안, 가드 차단 0. 공용 자리는 **크기·시각까지 무변경**(`C:\Temp` 5,621항목 그대로).
+  - 이 맵은 `temp\SCTRIGASMFILE*` 를 **하나도 만들지 않습니다**(Lua 가 `SaveFileArr` 를 안 쓰고 tepc 가 TRIGP 를 직접 씀). 맵마다 컴파일 흔적 모양이 다르므로, 격리 판정은 파일 개수가 아니라 '작업 폴더 밖 쓰기 0' 으로 봅니다.
+
+**옛 작업 폴더·브랜치 정리 (2026-09-18, 제작자 허락)** — 내용이 새 저장소에 그대로 들어갔음을 파일 대조로 확인한 뒤 지웠습니다(Memory 1 의 섹션 Lua 44개는 md5 까지 동일).
+
+| 지운 것 | 지울 때 팁 | 지금 어디에 있나 |
+|---|---|---|
+| theSeed `eudplib-port` + `ScmDraft 2\theSeed_eud` | 4718e68 | `Mininii/theSeed_eud` |
+| MSF_Respect_V `eudplib-port` + `ScmDraft 2\MSF_Respect_V_eud` | 89d956a | `Mininii/MSF_Respect_V_eud` |
+| MapSource `eudplib-port` + `ScmDraft 2\ue_eud` | 0c72d8c | `Mininii/MSF_UE_RE_eud` |
+| MapSource `eudplib-port-mem2` + `ScmDraft 2\mem2_eud` | a2cd8b8 | `Mininii/MSF_Memory_2_eud` |
+| MapSource `eudplib-port-mem1` + `ScmDraft 2\mem1_eud` | a89c754 | `Mininii/MSF_Memory_eud` (`eud/`) |
+| MapSource `refactor/memory1-split` + `ScmDraft 2\mem1_split` | 17c4576 | `Mininii/MSF_Memory_eud` (`src_lua/`) |
+
+`fix/snqc-081`(43d6aba)은 남겼습니다 — Q-2 결정 대기. 인게임 판정 결과 파일은 지우기 전에 따로 갈무리했습니다.
 
 ## 1. eudext 확인 맵 (`Maps\eudext_check\`, 번호 순서대로)
 
